@@ -1,0 +1,196 @@
+---
+title: 'Data from: Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal'
+author: Jeff Walker
+date: '2018-04-30'
+slug: data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal
+categories: []
+tags:
+  - ecology
+  - physiology
+  - replicates
+  - red flag
+  - linear mixed model
+  - regression
+  - anova
+---
+```{r prep, echo=FALSE, message=FALSE}
+file_path <- "../" #knitr
+#file_path <- "content/"  # console
+library(ggplot2)
+library(emmeans)
+library(data.table)
+library(lme4)
+```
+
+# Source
+Dantzer, B., Newman, A.E., Boonstra, R., Palme, R., Boutin, S., Humphries, M.M. and McAdam, A.G., 2013. Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal. Science, p.1235765.
+
+[Data are archived at Dryad Digital Repository](https://datadryad.org/resource/doi:10.5061/dryad.b3h4q)
+
+# Background
+The study showed that North American red squirrel (*Tamiasciurus hudsonicus*) mothers from Yukon, Alaska produce faster growing pups in years with increased squirrel density. Remarkably, the researchers even showed that perceived (but not actual) density results in faster growing pups.
+
+# Fig. 3/Table S4
+## Replication
+To begin to investigate how squirrel density during pregnancy could control the future growth rate of pups, Dantzer et al measured the relationship between local squirrel density (the variable $Density$) and the amount of fecal cortisol metabolites from pregnant mothers (the variable $FCM$). Cortisol is a hormone that is secreted as part of stress response. Dantzer et al were interested in cortisol because it is known that, in mammals, blood cortisol levels in pregnant mothers have numerous effects on offspring long past birth. If increased squirrel density causes increased blood cortisol levels, then we would expect to find a positive relationship between $Density$ and $FCM$.
+
+Dantzer et al analyzed effect of $Density$ on $FCM$ with three different analyses.
+
+1. $Density$ as continuous $X$. Modeled with a linear mixed model. The data are from individual, tagged squirrels from different populations and different years. About 1/2 the data is from experimental populations with supplemented food (peanut butter) to increase density. The model includes days post conception as a covariate and squirrel $ID$ and $Year$ are modeled with random intercepts.
+
+2. Density as levels of $Treatment$. The two levels are N (control) and Y (supplemental peanut butter). The data are the same as in part 1 so this is not a replication or alternative probing.
+
+3. Density as perceived density $Treatment$ with two levels: control (including both no manipulation and chickadee call manipulation) and rattle (rattle sound mimicking neighbor squirrels)
+
+```{r repS4part1}
+# Dantzer, B., Newman, A.E., Boonstra, R., Palme, R., Boutin, S., Humphries, M.M. and McAdam, A.G., 2013. Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal. Science, p.1235765.
+# https://datadryad.org/resource/doi:10.5061/dryad.b3h4q
+# data for Fig 3A/Table S4
+# 
+fn <- paste(file_path,'data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/FCM data dryad.csv',sep='')
+fcmA <- data.table(read.table(fn, sep=',', header=TRUE))
+# replace labels with more codeable names. Separate to insure match
+setnames(fcmA, old=c('Squirrel.ID'), new=c('ID'))
+setnames(fcmA, old=c('Year.Sample.Collected'), new=c('Year'))
+setnames(fcmA, old=c('FCM.ng.g.dry'), new=c('FCM'))
+setnames(fcmA, old=c('Food.Add.Grid'), new=c('Treatment'))
+setnames(fcmA, old=c('Raw.Squirrel.Density'), new=c('Density'))
+setnames(fcmA, old=c('scaled.days.postconception'), new=c('Days_pc'))
+fcmA[,Treatment:=factor(Treatment)]
+
+#lmm - replicates! but weird as uses experimental data in this without Treatment as a variable
+fit_A <- lmer(log(FCM) ~ Days_pc + Density + (1|Year) + (1|ID), data=fcmA, na.action="na.exclude")
+table_part1 <- coefficients(summary(fit_A))
+```
+
+Part II
+```{r repS4part2}
+# categorical model as in Table S4 and Figure 3B - replicates!
+# data same as in part 1 but re-analyzed as categorical
+fit_B <- lmer(log(FCM) ~ Days_pc + Treatment + (1|Year) + (1|ID), data=fcmA)
+table_part2 <- coefficients(summary(fit_B))
+
+```
+
+Part III
+
+```{r repS4part3, eval=TRUE}
+#Table S4, figure 3C - replicates
+fn <- paste(file_path,'data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S4 - playback FCM data.csv',sep='')
+fcmC <- data.table(read.table(fn, sep=',', header=TRUE))
+fcmC[,Treatment:=factor(Treatment)]
+setnames(fcmC, old=c('Squirrel.Taglft'), new=c('ID'))
+setnames(fcmC, old=c('FCM.ng.g.dry'), new=c('FCM'))
+setnames(fcmC, old=c('scaled.days.postconception'), new=c('Days_pc'))
+fit_C <- lmer(log(FCM) ~ Days_pc + Treatment + (1|ID), data=fcmC)
+table_part3 <- coefficients(summary(fit_C))
+
+```
+
+Figure S3, which is the FCM as a function of treatment level (chickadee vs. rattle) *prior* to playback
+```{r repS3}
+#Supplement page 7 - methods in text, page 11 - Figure S3
+fn <- paste(file_path,'data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/before.playback.fcm.data.csv',sep='')
+fcmC_pre <- data.table(read.table(fn, sep=',', header=TRUE))
+setnames(fcmC_pre, old=c('Raw.FCM.ng.g.dry'), new=c('FCM'))
+setnames(fcmC_pre, old=c('Squirrel.Taglft'), new=c('ID'))
+setnames(fcmC_pre, old=c('Days.Post.Conception'), new=c('Days_pc'))
+fcmC_pre[,Treatment:=factor(Treatment)]
+# model - why interaction here but not elsewhere? Note treatment effect bigger in additive model
+fit3 <- lmer(log(FCM) ~ Days_pc*Treatment + (1|ID), data=fcmC_pre)
+tableS3_rep <- coefficients(summary(fit3))
+# compare to (t97 = -0.93, P = 0.17) from p. 11 of supplement
+qplot(x=Treatment, y=log(FCM), data=fcmC_pre) + geom_boxplot() + geom_point()
+```
+
+**Replicated results**
+```{r TableS4rep}
+table_part1
+table_part2
+table_part3
+```
+
+```{r TableS4_image, echo=FALSE}
+fn <- "images/2018-04-30-images-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/tableS4.png"
+image_path <- paste("../../" , fn, sep="")
+knitr::include_graphics(image_path)
+
+```
+
+## Red flags
+### Forking paths
+There is variation among the analyses. Sometimes $Days_pc$ includes a quadratic component sometimes not. Some analysis are factorial $Treatment \times Days_pc$ while others are additive.
+
+Effect of $Density$ in Table S4 part 1 is robust to forking. Effect of $Treatment$ is robust to forking.
+```{r forking}
+# part 1
+coefficients(summary(lmer(log(FCM) ~ Days_pc + Density + (1|Year) + (1|ID), data=fcmA)))
+coefficients(summary(lmer(log(FCM) ~ Days_pc*Density + (1|Year) + (1|ID), data=fcmA)))
+coefficients(summary(lmer(log(FCM) ~ Days_pc + I(Days_pc^2) + Density + (1|Year) + (1|ID), data=fcmA)))
+
+# part 2
+coefficients(summary(lmer(log(FCM) ~ Days_pc + Treatment + (1|Year) + (1|ID), data=fcmA)))
+coefficients(summary(lmer(log(FCM) ~ Days_pc*Treatment + (1|Year) + (1|ID), data=fcmA)))
+coefficients(summary(lmer(log(FCM) ~ Days_pc + I(Days_pc^2) + Treatment + (1|Year) + (1|ID), data=fcmA)))
+
+```
+
+### Confounding Density and Treatment in Fig 3A,B/Table S4
+
+```{r explorefig3a, warning=FALSE, fig.cap="Re-plot of Figure 3A. Data color coded by Treatment level"}
+# residuals from Days_pc
+fcmA[, FCM_residuals:=residuals(lm(log(FCM) ~ Days_pc, data=fcmA))]
+qplot(x=Density, y=FCM_residuals, color=Treatment, data=fcmA) + geom_point() + geom_smooth(method='lm')
+
+# residuals from lmm
+fcmA[, FCM_p1_residuals:=residuals(fit_A)]
+# qplot(x=Density, y=FCM_p1_residuals, color=Treatment, data=fcmA) + geom_point() + geom_smooth(method='lm')
+
+
+```
+
+Parts 1 and 2 are not independent tests of the hypothesis that density causes increased plasma cortisol, as these are the same data. Worse, $Treatment$ confounds part 1 and $Density$ confounds part 2. The effects of this confounding are seen with a simple scatterplot of the $FCM$ against $Density$ with points colored by $Treatment$ and separate regressions fit to each level (Figure \@ref(fig:explorefig3a)). If it were simply a density effect, the treated fit should not be elevated relative to the control data.
+
+To unconfound these, instead of two models (parts 1 and 2), both $Density$ and $Treatment$ could be combined into the same model. (note: Does this raise colinearity issues? No the correlation is only moderate)
+
+```{r tableS4part1Flags}
+cor(fcmA$Density, as.integer(fcmA$Treatment), use='complete.obs')
+fit2 <- lmer(log(FCM) ~ Days_pc + Density + Treatment + (1|Year) + (1|ID), data=fcmA)
+tableS4_part1 <- coefficients(summary(fit2))
+tableS4_part1
+```
+
+**Conclusion** from the red-flag analysis.
+
+$Density$ has effect of .21 log(fcm)/squirrel-per-ha, which is 40% smaller effect than in model confounded by Treatment. The effect has a wide error relative to signal. Can this effect account for growth rate variation? $Treatment$ has a detectable effect but this includes aspects of $Treatment$ that are *independent* of $Density$. This should be rigorously probed in follow-up experiments.
+
+### What is effect of ignoring Chickadee manipulation in Fig 3C/Table S4
+The data for Figure 3C/Table S4 part 3 has Treatment levels "Control" and "Rattle" but the Control level includes squirrels that were given a Chickadee playback. In fact, very little of the data is control. The coding of which were truly Control and which were Chickadee is in the File for Figure S3, which is the data for FCM for *pre-playback* squirrels in Chickadee and Rattle treatment levels. I used the tag data to identify the "Controls" in the Table S4 data that were actually "Chickadee".
+
+**red flag #1** ID F3007/F3008 is coded as "Control" in the playback (Table S4) data but as "Rattle" in the pre-playback data (Figure S3)
+
+```{r chickadee}
+
+# combine into single file with three treatment levels (control + chickadee + rattle) and two time levels (before, after)
+# note that days_pc is scaled in fcmC but raw in fcmC_pre
+fcmC_post <- copy(fcmC)
+fcmC_pre[, Days_pc:=scale(Days_pc)]
+temp <- match(fcmC_post$ID, fcmC_pre$ID)
+fcmC_post[, Treatment_pre:=fcmC_pre[temp, Treatment]]
+fcmC_post[, Treatment_pre:=factor(ifelse(is.na(Treatment_pre), as.character(Treatment), as.character(Treatment_pre)), c('Control', 'Chickadee', 'Rattle'))]
+# RED FLAG - ID F3007/F3008 is coded as "Control" in the playback data but as "Rattle" in the pre-playback data
+fcmC_post[, logFCM_residuals:=residuals(lm(log(FCM)~Days_pc, data=fcmC_post), na.action="na.exclude")]
+qplot(x=Treatment_pre, y=logFCM_residuals, data=fcmC_post) + geom_point()
+qplot(x=Treatment_pre, y=logFCM_residuals, data=fcmC_post) + geom_point() + geom_point(data=fcmC_post[ID=="F3007"], color='red')
+
+fit3 <- lmer(log(FCM) ~ Days_pc + Treatment_pre + (1|ID), data=fcmC_post)
+tableS4_part3_rf <- coefficients(summary(fit3))
+tableS4_part3_rf
+
+```
+
+**Red flag #2**
+The plot and table show that the effect of playback on $FCM$ seems to be a manipulation factor and not the type of maniupulation (Chickadee vs. Rattle)
+
+### Summary of Figure 3/Table S4
+The results for Figure 3A,B/Table S4 parts 1 and 2 are confounded and a re-analysis adjusting for confounding finds that much of the "difference" is due to Treatment effects that are independent of Density. The results for Figure 3C/Table S4 part 3 mask the chickadee treatment level. A re-analysis with this coded as a level indicates that the effect is common for both treatment manipulations and increased FCM is probably due to manipulation rather than "perception of density."

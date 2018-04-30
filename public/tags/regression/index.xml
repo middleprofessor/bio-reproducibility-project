@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Regression on The Biological Reproducibility Project</title>
+    <link>/tags/regression/</link>
+    <description>Recent content in Regression on The Biological Reproducibility Project</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
+    <lastBuildDate>Mon, 30 Apr 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/regression/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Data from: Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal</title>
+      <link>/post/data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/</link>
+      <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/</guid>
+      <description>Source Dantzer, B., Newman, A.E., Boonstra, R., Palme, R., Boutin, S., Humphries, M.M. and McAdam, A.G., 2013. Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal. Science, p.1235765.
+Data are archived at Dryad Digital Repository
+ Background The study showed that North American red squirrel (Tamiasciurus hudsonicus) mothers from Yukon, Alaska produce faster growing pups in years with increased squirrel density. Remarkably, the researchers even showed that perceived (but not actual) density results in faster growing pups.</description>
+    </item>
+    
+  </channel>
+</rss>
