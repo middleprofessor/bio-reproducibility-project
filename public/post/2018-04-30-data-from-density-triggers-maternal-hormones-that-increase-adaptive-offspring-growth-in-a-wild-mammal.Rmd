@@ -12,6 +12,9 @@ tags:
   - linear mixed model
   - regression
   - anova
+output:
+  blogdown::html_page:
+    toc: true
 ---
 ```{r prep, echo=FALSE, message=FALSE}
 file_path <- "../" #knitr
@@ -30,7 +33,7 @@ Dantzer, B., Newman, A.E., Boonstra, R., Palme, R., Boutin, S., Humphries, M.M. 
 # Background
 The study showed that North American red squirrel (*Tamiasciurus hudsonicus*) mothers from Yukon, Alaska produce faster growing pups in years with increased squirrel density. Remarkably, the researchers even showed that perceived (but not actual) density results in faster growing pups.
 
-# Fig. 3/Table S4
+# Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)
 ## Replication
 To begin to investigate how squirrel density during pregnancy could control the future growth rate of pups, Dantzer et al measured the relationship between local squirrel density (the variable $Density$) and the amount of fecal cortisol metabolites from pregnant mothers (the variable $FCM$). Cortisol is a hormone that is secreted as part of stress response. Dantzer et al were interested in cortisol because it is known that, in mammals, blood cortisol levels in pregnant mothers have numerous effects on offspring long past birth. If increased squirrel density causes increased blood cortisol levels, then we would expect to find a positive relationship between $Density$ and $FCM$.
 
@@ -119,7 +122,7 @@ knitr::include_graphics(image_path)
 
 ## Red flags
 ### Forking paths
-There is variation among the analyses. Sometimes $Days_pc$ includes a quadratic component sometimes not. Some analysis are factorial $Treatment \times Days_pc$ while others are additive.
+There is variation among the analyses. Sometimes $Days_{pc}$ includes a quadratic component sometimes not. Some analysis are factorial $Treatment \times Days_{pc}$ while others are additive.
 
 Effect of $Density$ in Table S4 part 1 is robust to forking. Effect of $Treatment$ is robust to forking.
 ```{r forking}
@@ -146,7 +149,6 @@ qplot(x=Density, y=FCM_residuals, color=Treatment, data=fcmA) + geom_point() + g
 fcmA[, FCM_p1_residuals:=residuals(fit_A)]
 # qplot(x=Density, y=FCM_p1_residuals, color=Treatment, data=fcmA) + geom_point() + geom_smooth(method='lm')
 
-
 ```
 
 Parts 1 and 2 are not independent tests of the hypothesis that density causes increased plasma cortisol, as these are the same data. Worse, $Treatment$ confounds part 1 and $Density$ confounds part 2. The effects of this confounding are seen with a simple scatterplot of the $FCM$ against $Density$ with points colored by $Treatment$ and separate regressions fit to each level (Figure \@ref(fig:explorefig3a)). If it were simply a density effect, the treated fit should not be elevated relative to the control data.
@@ -167,30 +169,49 @@ $Density$ has effect of .21 log(fcm)/squirrel-per-ha, which is 40% smaller effec
 ### What is effect of ignoring Chickadee manipulation in Fig 3C/Table S4
 The data for Figure 3C/Table S4 part 3 has Treatment levels "Control" and "Rattle" but the Control level includes squirrels that were given a Chickadee playback. In fact, very little of the data is control. The coding of which were truly Control and which were Chickadee is in the File for Figure S3, which is the data for FCM for *pre-playback* squirrels in Chickadee and Rattle treatment levels. I used the tag data to identify the "Controls" in the Table S4 data that were actually "Chickadee".
 
-**red flag #1** ID F3007/F3008 is coded as "Control" in the playback (Table S4) data but as "Rattle" in the pre-playback data (Figure S3)
-
-```{r chickadee}
+```{r recodeTableS4Treatment}
 
 # combine into single file with three treatment levels (control + chickadee + rattle) and two time levels (before, after)
 # note that days_pc is scaled in fcmC but raw in fcmC_pre
 fcmC_post <- copy(fcmC)
 fcmC_pre[, Days_pc:=scale(Days_pc)]
 temp <- match(fcmC_post$ID, fcmC_pre$ID)
-fcmC_post[, Treatment_pre:=fcmC_pre[temp, Treatment]]
-fcmC_post[, Treatment_pre:=factor(ifelse(is.na(Treatment_pre), as.character(Treatment), as.character(Treatment_pre)), c('Control', 'Chickadee', 'Rattle'))]
-# RED FLAG - ID F3007/F3008 is coded as "Control" in the playback data but as "Rattle" in the pre-playback data
-fcmC_post[, logFCM_residuals:=residuals(lm(log(FCM)~Days_pc, data=fcmC_post), na.action="na.exclude")]
-qplot(x=Treatment_pre, y=logFCM_residuals, data=fcmC_post) + geom_point()
-qplot(x=Treatment_pre, y=logFCM_residuals, data=fcmC_post) + geom_point() + geom_point(data=fcmC_post[ID=="F3007"], color='red')
+fcmC_post[, Treatment_chick:=fcmC_pre[temp, Treatment]]
+fcmC_post[, Treatment_chick:=factor(ifelse(is.na(Treatment_chick), as.character(Treatment), as.character(Treatment_chick)), c('Control', 'Chickadee', 'Rattle'))]
 
-fit3 <- lmer(log(FCM) ~ Days_pc + Treatment_pre + (1|ID), data=fcmC_post)
+```
+
+#### red flag: ID F3007/F3008 is coded as "Control" in the playback (Table S4) data but as "Rattle" in the pre-playback data (Figure S3)
+
+```{r TableS4C_redflag1}
+# RED FLAG - ID F3007/F3008 is coded as "Control" in the playback data but as "Rattle" in the pre-playback data
+fcmC_post[ID=='F3007']
+fcmC_pre[ID=='F3007']
+
+# original coefficient table that replicates
+coefficients(summary(lmer(log(FCM) ~ Days_pc + Treatment + (1|ID), data=fcmC_post)))
+
+# recoded coefficient table with smaller effect
+fcmC_post[, Treatment_F3007:=Treatment]
+fcmC_post[ID=='F3007', Treatment_F3007:='Rattle']
+coefficients(summary(lmer(log(FCM) ~ Days_pc + Treatment_F3007 + (1|ID), data=fcmC_post)))
+
+```
+
+#### Red Flag: The plot and table show that the effect of playback on $FCM$ seems to be a manipulation factor that is not specific to Rattle
+
+```{r TableS4C_redflag2}
+fcmC_post[, logFCM_residuals:=residuals(lm(log(FCM)~Days_pc, data=fcmC_post), na.action="na.exclude")]
+qplot(x=Treatment_chick, y=logFCM_residuals, data=fcmC_post) + geom_point()
+qplot(x=Treatment_chick, y=logFCM_residuals, data=fcmC_post) + geom_point() + geom_point(data=fcmC_post[ID=="F3007"], color='red')
+
+fit3 <- lmer(log(FCM) ~ Days_pc + Treatment_chick + (1|ID), data=fcmC_post)
 tableS4_part3_rf <- coefficients(summary(fit3))
 tableS4_part3_rf
 
 ```
 
-**Red flag #2**
-The plot and table show that the effect of playback on $FCM$ seems to be a manipulation factor and not the type of maniupulation (Chickadee vs. Rattle)
-
-### Summary of Figure 3/Table S4
-The results for Figure 3A,B/Table S4 parts 1 and 2 are confounded and a re-analysis adjusting for confounding finds that much of the "difference" is due to Treatment effects that are independent of Density. The results for Figure 3C/Table S4 part 3 mask the chickadee treatment level. A re-analysis with this coded as a level indicates that the effect is common for both treatment manipulations and increased FCM is probably due to manipulation rather than "perception of density."
+### Summary of Red Flags for Figure 3/Table S4
+1. The results for Figure 3A,B/Table S4 parts 1 and 2 are confounded and a re-analysis adjusting for confounding finds that much of the "difference" is due to Treatment effects that are independent of Density.
+2. The results for Figure 3C/Table S4 part 3 have a coding error. I don't know the correct code. If re-coded using pre-playback codes, then effect of Rattle playback is smaller.
+3. The result in Figure 3C/Table S4 part 3 masks a chickadee treatment level. A re-analysis with this coded as a distinct level indicates that the effect is common for both treatment manipulations and increased FCM is probably due to manipulation rather than "perception of density."
