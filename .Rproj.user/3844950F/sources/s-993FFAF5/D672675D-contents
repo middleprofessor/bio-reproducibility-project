@@ -1,5 +1,5 @@
 baseurl = "/"
-title = "The Biological Reproducibility Project"
+title = "The Biology Reproducibility Project"
 theme = "whiteplain"
 languageCode = "en"
 # Disqus shortname
