@@ -17,21 +17,42 @@ output:
     toc: true
 ---
 ```{r prep, echo=FALSE, message=FALSE}
-file_path <- "../" #knitr
-#file_path <- "content/"  # console
 library(ggplot2)
-library(emmeans)
 library(data.table)
 library(lme4)
+library(lmerTest)
+
+base_path <- "../" #knitr
+#base_path <- "content/"  # console
+folder <- '2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal'
 ```
 
-# Source
-Dantzer, B., Newman, A.E., Boonstra, R., Palme, R., Boutin, S., Humphries, M.M. and McAdam, A.G., 2013. Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal. Science, p.1235765.
+# Sources
+Dantzer, B., Newman, A.E., Boonstra, R., Palme, R., Boutin, S., Humphries, M.M. and McAdam, A.G., 2013. Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal. Science, p.1235765. [Google Scholar](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C20&q=Density+triggers+maternal+hormones+that+increase+adaptive+offspring+growth+in+a+wild+mammal&btnG=){target="_blank"}
 
-[Data are archived at Dryad Digital Repository](https://datadryad.org/resource/doi:10.5061/dryad.b3h4q)
+Dantzer B, Newman AEM, Boonstra R, Palme R, Boutin S, Humphries MM, McAdam AG (2013) Data from: Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal. Dryad Digital Repository. [https://doi.org/10.5061/dryad.b3h4q](https://doi.org/10.5061/dryad.b3h4q){target="_blank"}
 
 # Background
-The study showed that North American red squirrel (*Tamiasciurus hudsonicus*) mothers from Yukon, Alaska produce faster growing pups in years with increased squirrel density. Remarkably, the researchers even showed that perceived (but not actual) density results in faster growing pups.
+The study showed that North American red squirrel (*Tamiasciurus hudsonicus*) mothers from Yukon, Alaska produce faster growing pups in years with increased squirrel density. The researchers showed this mechanism is through increased plasma levels of the stress hormone cortisol, as measured by fecal cortisol metabolites ($FCM$) Remarkably, the researchers even showed that perceived (but not actual) density results in increased $FCM$ and faster growing pups.
+
+# Effect of spruce cone availability on local density (Fig. 1B)
+## Replication
+```{r cones}
+# https://datadryad.org/resource/doi:10.5061/dryad.b3h4q
+# data for Fig 1B/Table Sxxx
+# 
+fn <- 'Spruce cone and density data.csv'
+file_path <- paste(base_path, "data/", folder, "/",fn, sep="")
+cone <- data.table(read.table(file_path, sep=',', header=TRUE))
+fit1B <- lm(Raw.Spring.Squirrel.Density ~ Previous.Year.Cones + Study.Area, data=cone[Treatment=='Control'])
+coefficients(summary(fit1B))
+fit1B <- lmer(Raw.Spring.Squirrel.Density ~ Previous.Year.Cones + (1|Study.Area), data=cone[Treatment=='Control'])
+coefficients(summary(fit1B))
+fit1B <- lmer(Raw.Spring.Squirrel.Density ~ Treatment*Previous.Year.Cones + (1|Study.Area), data=cone)
+coefficients(summary(fit1B))
+
+```
+
 
 # Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)
 ## Replication
@@ -49,9 +70,10 @@ Dantzer et al analyzed effect of $Density$ on $FCM$ with three different analyse
 # Dantzer, B., Newman, A.E., Boonstra, R., Palme, R., Boutin, S., Humphries, M.M. and McAdam, A.G., 2013. Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal. Science, p.1235765.
 # https://datadryad.org/resource/doi:10.5061/dryad.b3h4q
 # data for Fig 3A/Table S4
-# 
-fn <- paste(file_path,'data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/FCM data dryad.csv',sep='')
-fcmA <- data.table(read.table(fn, sep=',', header=TRUE))
+# fn <- 'Spruce cone and density data.csv'
+fn <- 'FCM data dryad.csv'
+file_path <- paste(base_path, "data/", folder, "/",fn, sep="")
+fcmA <- data.table(read.table(file_path, sep=',', header=TRUE))
 # replace labels with more codeable names. Separate to insure match
 setnames(fcmA, old=c('Squirrel.ID'), new=c('ID'))
 setnames(fcmA, old=c('Year.Sample.Collected'), new=c('Year'))
@@ -79,8 +101,9 @@ Part III
 
 ```{r repS4part3, eval=TRUE}
 #Table S4, figure 3C - replicates
-fn <- paste(file_path,'data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S4 - playback FCM data.csv',sep='')
-fcmC <- data.table(read.table(fn, sep=',', header=TRUE))
+fn <- 'Table S4 - playback FCM data.csv'
+file_path <- paste(base_path, "data/", folder, "/",fn, sep="")
+fcmC <- data.table(read.table(file_path, sep=',', header=TRUE))
 fcmC[,Treatment:=factor(Treatment)]
 setnames(fcmC, old=c('Squirrel.Taglft'), new=c('ID'))
 setnames(fcmC, old=c('FCM.ng.g.dry'), new=c('FCM'))
@@ -93,8 +116,9 @@ table_part3 <- coefficients(summary(fit_C))
 Figure S3, which is the FCM as a function of treatment level (chickadee vs. rattle) *prior* to playback
 ```{r repS3}
 #Supplement page 7 - methods in text, page 11 - Figure S3
-fn <- paste(file_path,'data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/before.playback.fcm.data.csv',sep='')
-fcmC_pre <- data.table(read.table(fn, sep=',', header=TRUE))
+fn <- 'before.playback.fcm.data.csv'
+file_path <- paste(base_path, "data/", folder, "/",fn, sep="")
+fcmC_pre <- data.table(read.table(file_path, sep=',', header=TRUE))
 setnames(fcmC_pre, old=c('Raw.FCM.ng.g.dry'), new=c('FCM'))
 setnames(fcmC_pre, old=c('Squirrel.Taglft'), new=c('ID'))
 setnames(fcmC_pre, old=c('Days.Post.Conception'), new=c('Days_pc'))
@@ -114,8 +138,9 @@ table_part3
 ```
 
 ```{r TableS4_image, echo=FALSE}
-fn <- "images/2018-04-30-images-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/tableS4.png"
-image_path <- paste("../../" , fn, sep="")
+fn <- 'tableS4.png'
+file_path <- paste("images", folder, fn, sep="/")
+image_path <- paste("../../" , file_path, sep="")
 knitr::include_graphics(image_path)
 
 ```
@@ -164,7 +189,7 @@ tableS4_part1
 
 **Conclusion** from the red-flag analysis.
 
-$Density$ has effect of .21 log(fcm)/squirrel-per-ha, which is 40% smaller effect than in model confounded by Treatment. The effect has a wide error relative to signal. Can this effect account for growth rate variation? $Treatment$ has a detectable effect but this includes aspects of $Treatment$ that are *independent* of $Density$. This should be rigorously probed in follow-up experiments.
+$Density$ has effect of .21 log(fcm)/squirrel-per-ha, which is 40% smaller effect than in model confounded by Treatment. Can this effect account for growth rate variation? $Treatment$ has a 50% bigger effect than $Density$ but this includes aspects of $Treatment$ that are *independent* of $Density$. The p-values for both are not strong evidence against a trivially small effect. This should be rigorously probed in follow-up experiments.
 
 ### What is effect of ignoring Chickadee manipulation in Fig 3C/Table S4
 The data for Figure 3C/Table S4 part 3 has Treatment levels "Control" and "Rattle" but the Control level includes squirrels that were given a Chickadee playback. In fact, very little of the data is control. The coding of which were truly Control and which were Chickadee is in the File for Figure S3, which is the data for FCM for *pre-playback* squirrels in Chickadee and Rattle treatment levels. I used the tag data to identify the "Controls" in the Table S4 data that were actually "Chickadee".
