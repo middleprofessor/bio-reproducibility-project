@@ -228,3 +228,25 @@ remote: Resolving deltas:   0% (0/80)   [Kremote: Resolving deltas:  10% (8/80
 To github.com:middleprofessor/bio-reproducibility-project.git
    d5cc758..792a2f8  master -> master
 ]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git push origin master # we push the changes from  the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo
+]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added too the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit messageup[K[K
+[master 96e2072] init site
+ 12 files changed, 219 insertions(+), 2886 deletions(-)
+ create mode 100644 public/post/.DS_Store
+ delete mode 100644 public/post/2015-07-23-r-rmarkdown.Rmd
+ delete mode 100644 public/post/2015-07-23-r-rmarkdown/index.html
+ delete mode 100644 public/post/2015-07-23-r-rmarkdown_files/figure-html/pie-1.png
+ delete mode 100644 public/post/creating-a-new-theme/index.html
+ delete mode 100644 public/post/data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/index.html
+ delete mode 100644 public/post/goisforlovers/index.html
+ delete mode 100644 public/post/hugoisforlovers/index.html
+ delete mode 100644 public/post/migrate-from-jekyll/index.html
+]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git commit -m "init site" # adds all files to the  local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to 
+Counting objects: 11, done.
+Delta compression using up to 4 threads.
+Compressing objects:   9% (1/11)   Compressing objects:  18% (2/11)   Compressing objects:  27% (3/11)   Compressing objects:  36% (4/11)   Compressing objects:  45% (5/11)   Compressing objects:  54% (6/11)   Compressing objects:  63% (7/11)   Compressing objects:  72% (8/11)   Compressing objects:  81% (9/11)   Compressing objects:  90% (10/11)   Compressing objects: 100% (11/11)   Compressing objects: 100% (11/11), done.
+Writing objects:   9% (1/11)   Writing objects:  18% (2/11)   Writing objects:  27% (3/11)   Writing objects:  36% (4/11)   Writing objects:  45% (5/11)   Writing objects:  54% (6/11)   Writing objects:  63% (7/11)   Writing objects:  72% (8/11)   Writing objects:  90% (10/11)   Writing objects: 100% (11/11)   Writing objects: 100% (11/11), 4.70 KiB | 4.70 MiB/s, done.
+Total 11 (delta 6), reused 0 (delta 0)
+remote: Resolving deltas:   0% (0/6)   [Kremote: Resolving deltas:  16% (1/6)   [Kremote: Resolving deltas:  33% (2/6)   [Kremote: Resolving deltas:  50% (3/6)   [Kremote: Resolving deltas:  66% (4/6)   [Kremote: Resolving deltas:  83% (5/6)   [Kremote: Resolving deltas: 100% (6/6)   [Kremote: Resolving deltas: 100% (6/6), completed with 5 local objects.[K
+To github.com:middleprofessor/bio-reproducibility-project.git
+   792a2f8..96e2072  master -> master
+]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git push origin master # we push the changes from  the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo

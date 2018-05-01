@@ -1,4 +1,4 @@
-baseurl = ""
+baseurl = "/"
 title = "The Biological Reproducibility Project"
 theme = "whiteplain"
 languageCode = "en"
