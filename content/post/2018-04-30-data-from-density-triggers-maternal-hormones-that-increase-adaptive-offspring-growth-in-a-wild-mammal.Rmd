@@ -131,6 +131,9 @@ qplot(x=Treatment, y=log(FCM), data=fcmC_pre) + geom_boxplot() + geom_point()
 ```
 
 **Replicated results**
+
+The effects, SE, and t replicate but the my $p$-values are twice those of the authors, who must be reporting 1-tailed (directional) tests. I don't see that they have reported that they are using 1-tailed tests. My opinion is that one-tail tests are p-hacking.
+
 ```{r TableS4rep}
 table_part1
 table_part2
@@ -146,8 +149,11 @@ knitr::include_graphics(image_path)
 ```
 
 ## Red flags
+### one-tailed tests
+The authors reported p-values from one-tailed tests, apparently without reporting that these are one-tailed tests (at least I cannot find this with a search). As stated above, I think one-tailed tests are p-hacking -- Conclusions or a decision to publish a paper in *Science* shouldn't rest on a p-value of 0.03 or 0.06. It also assumes that effects in the opposite direction cannot exist. If one has prior information on the direction of an effect then use this in a Bayesian model.
+
 ### Forking paths
-There is variation among the analyses. Sometimes $Days_{pc}$ includes a quadratic component sometimes not. Some analysis are factorial $Treatment \times Days_{pc}$ while others are additive.
+There is variation among the analyses. Sometimes $Days_{pc}$ includes a quadratic component sometimes not. Some analysis are factorial $Treatment \times Days_{pc}$ while others are additive. The analysis below shows no real consequences of obvious forking paths.
 
 Effect of $Density$ in Table S4 part 1 is robust to forking. Effect of $Treatment$ is robust to forking.
 ```{r forking}
@@ -207,6 +213,7 @@ fcmC_post[, Treatment_chick:=factor(ifelse(is.na(Treatment_chick), as.character(
 ```
 
 #### red flag: ID F3007/F3008 is coded as "Control" in the playback (Table S4) data but as "Rattle" in the pre-playback data (Figure S3)
+I don't know the correct code but if re-coded as in the pre-playback file, there is a 10% reduction in the estimated effect and the p-value is even less evidence against a trivially small effect.
 
 ```{r TableS4C_redflag1}
 # RED FLAG - ID F3007/F3008 is coded as "Control" in the playback data but as "Rattle" in the pre-playback data

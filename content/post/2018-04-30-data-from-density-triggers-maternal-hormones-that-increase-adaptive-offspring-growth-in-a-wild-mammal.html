@@ -28,6 +28,7 @@ output:
 <li><a href="#effect-of-density-on-fecal-cortisol-metabolites-fig.-3table-s4">Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)</a><ul>
 <li><a href="#replication-1">Replication</a></li>
 <li><a href="#red-flags">Red flags</a><ul>
+<li><a href="#one-tailed-tests">one-tailed tests</a></li>
 <li><a href="#forking-paths">Forking paths</a></li>
 <li><a href="#confounding-density-and-treatment-in-fig-3abtable-s4">Confounding Density and Treatment in Fig 3A,B/Table S4</a></li>
 <li><a href="#what-is-effect-of-ignoring-chickadee-manipulation-in-fig-3ctable-s4">What is effect of ignoring Chickadee manipulation in Fig 3C/Table S4</a></li>
@@ -143,6 +144,7 @@ tableS3_rep &lt;- coefficients(summary(fit3))
 qplot(x=Treatment, y=log(FCM), data=fcmC_pre) + geom_boxplot() + geom_point()</code></pre>
 <p><img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/repS3-1.png" width="672" /></p>
 <p><strong>Replicated results</strong></p>
+<p>The effects, SE, and t replicate but the my <span class="math inline">\(p\)</span>-values are twice those of the authors, who must be reporting 1-tailed (directional) tests. I don’t see that they have reported that they are using 1-tailed tests. My opinion is that one-tail tests are p-hacking.</p>
 <pre class="r"><code>table_part1</code></pre>
 <pre><code>##               Estimate Std. Error         df   t value     Pr(&gt;|t|)
 ## (Intercept)  6.4524936 0.28003048   7.541837 23.042112 2.891608e-08
@@ -162,9 +164,13 @@ qplot(x=Treatment, y=log(FCM), data=fcmC_pre) + geom_boxplot() + geom_point()</c
 </div>
 <div id="red-flags" class="section level2">
 <h2>Red flags</h2>
+<div id="one-tailed-tests" class="section level3">
+<h3>one-tailed tests</h3>
+<p>The authors reported p-values from one-tailed tests, apparently without reporting that these are one-tailed tests (at least I cannot find this with a search). As stated above, I think one-tailed tests are p-hacking – Conclusions or a decision to publish a paper in <em>Science</em> shouldn’t rest on a p-value of 0.03 or 0.06. It also assumes that effects in the opposite direction cannot exist. If one has prior information on the direction of an effect then use this in a Bayesian model.</p>
+</div>
 <div id="forking-paths" class="section level3">
 <h3>Forking paths</h3>
-<p>There is variation among the analyses. Sometimes <span class="math inline">\(Days_{pc}\)</span> includes a quadratic component sometimes not. Some analysis are factorial <span class="math inline">\(Treatment \times Days_{pc}\)</span> while others are additive.</p>
+<p>There is variation among the analyses. Sometimes <span class="math inline">\(Days_{pc}\)</span> includes a quadratic component sometimes not. Some analysis are factorial <span class="math inline">\(Treatment \times Days_{pc}\)</span> while others are additive. The analysis below shows no real consequences of obvious forking paths.</p>
 <p>Effect of <span class="math inline">\(Density\)</span> in Table S4 part 1 is robust to forking. Effect of <span class="math inline">\(Treatment\)</span> is robust to forking.</p>
 <pre class="r"><code># part 1
 coefficients(summary(lmer(log(FCM) ~ Days_pc + Density + (1|Year) + (1|ID), data=fcmA)))</code></pre>
@@ -249,6 +255,7 @@ fcmC_post[, Treatment_chick:=fcmC_pre[temp, Treatment]]
 fcmC_post[, Treatment_chick:=factor(ifelse(is.na(Treatment_chick), as.character(Treatment), as.character(Treatment_chick)), c(&#39;Control&#39;, &#39;Chickadee&#39;, &#39;Rattle&#39;))]</code></pre>
 <div id="red-flag-id-f3007f3008-is-coded-as-control-in-the-playback-table-s4-data-but-as-rattle-in-the-pre-playback-data-figure-s3" class="section level4">
 <h4>red flag: ID F3007/F3008 is coded as “Control” in the playback (Table S4) data but as “Rattle” in the pre-playback data (Figure S3)</h4>
+<p>I don’t know the correct code but if re-coded as in the pre-playback file, there is a 10% reduction in the estimated effect and the p-value is even less evidence against a trivially small effect.</p>
 <pre class="r"><code># RED FLAG - ID F3007/F3008 is coded as &quot;Control&quot; in the playback data but as &quot;Rattle&quot; in the pre-playback data
 fcmC_post[ID==&#39;F3007&#39;]</code></pre>
 <pre><code>##    Treatment    ID Squirrel.Tagrt       FCM    Days_pc Treatment_chick
