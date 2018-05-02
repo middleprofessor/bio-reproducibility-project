@@ -13,20 +13,20 @@
     
     
     <item>
-      <title>Anova</title>
-      <link>/tags/anova/</link>
-      <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/anova/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Ecology</title>
       <link>/tags/ecology/</link>
       <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/ecology/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Experiment</title>
+      <link>/tags/experiment/</link>
+      <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/experiment/</guid>
       <description></description>
     </item>
     
@@ -58,20 +58,11 @@
     </item>
     
     <item>
-      <title>Regression</title>
-      <link>/tags/regression/</link>
+      <title>Reproducible</title>
+      <link>/tags/reproducible/</link>
       <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/regression/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Replicates</title>
-      <link>/tags/replicates/</link>
-      <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/replicates/</guid>
+      <guid>/tags/reproducible/</guid>
       <description></description>
     </item>
     
