@@ -36,7 +36,7 @@ The study showed that North American red squirrel (*Tamiasciurus hudsonicus*) mo
 
 # Effect of spruce cone availability on local density (Fig. 1B)
 ## Reproducibility
-```{r cones}
+```{r Fig1B}
 # https://datadryad.org/resource/doi:10.5061/dryad.b3h4q
 # data for Fig 1B/Table Sxxx
 # 
@@ -65,12 +65,22 @@ coefficients(summary(fit))
 
 ```
 
-## Red flags - Figure 2 doesn't make sense
+## Red flags
+### Growth rate is a change score and is confounding by the basline
+The confounding makes no difference for these data.
+
+```{r tableS2_baseline}
+refit <- lmer(Offspring.Growth.Rate ~ Offspring.Weight.1 + Scaled.Litter.Size*Treatment + (1|Mom.Squirrel.ID), data=dt.table_S2, na.action="na.exclude")
+coefficients(summary(refit))
+```
+
+### Figure 2 doesn't make sense
 Fig. 2 doesn't make sense. If these are residuals from the model, there should be no Litter size or treatment (or any other) effect. I have plotted the raw growth rate against Scaled.Litter. Note the regression lines will be slightly different because they do not account for random effect of squirrel ID. Regardless, the lines are extremely close to the linear mixed modeled growth rates for each treatment at small litter size (n=2) and large litter size (n=5). This picture suggests a very different story. At best, one might say that treated growth rates are depressed, relative to control, at small litter size, and a bit elevated at large litter size. But the data are noisy, as indicated by p-values and there is a potential outlier in the control data at litter size = 2 (scaled.litter.size = -2.302608)
 
 ```{r Fig2, warning=FALSE}
-# plot
+# plot raw litter size
 qplot(x=Raw.Litter.Size, y=Offspring.Growth.Rate, color=Treatment, data=dt.table_S2) + geom_point() + geom_smooth(method='lm')
+# scaled litter size
 qplot(x=Scaled.Litter.Size, y=Offspring.Growth.Rate, color=Treatment, data=dt.table_S2) + geom_point() + geom_smooth(method='lm')
 
 # compare modeled values from model at small and large end of scaled.litter.size
@@ -318,12 +328,150 @@ coefficients(summary(lm(FCM ~ Days_pc + Treatment, data=dt)))
 # Effect of FCM on offspring growth rate (Table S5)
 ## Reproducibility
 
+Estimate, SE, and t reproduce but p-values are 1/2 the published p-values or slightly smaller for FCM. The exception for reproducing is the SE for FCM, the published is 0.005, here is 0.006
+
 ```{r TableS5}
 fn <- 'Table S5 Results.csv'
 file_path <- paste(base_path, "data/", folder, "/",fn, sep="")
 dt.table_S5 <- data.table(read.table(file_path, sep=',', header=TRUE))
 fit <- lmer(Offspring.Growth.Rate ~ Previous.Year.Cones + Current.Year.Cones + scaled.parturition.date + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action="na.exclude")
 coefficients(summary(fit)) # what is "corrected about FCM?"
+```
+
+```{r TableS5_image, echo=FALSE}
+fn <- 'TableS5.png'
+file_path <- paste("images", folder, fn, sep="/")
+image_path <- paste("../../" , file_path, sep="")
+knitr::include_graphics(image_path)
+```
+
+## Explore
+
+```{r TableS5_Explore, fig.cap="Effect of FCM on Growth Rate"}
+# simple plot
+qplot(x=Corrected.FCM.ng.g.dry, y=Offspring.Growth.Rate, data=dt.table_S5) +
+  geom_point() + geom_smooth(method='lm')
+
+# refit without FCM to replot with FCM as only affect
+refit <- lmer(Offspring.Growth.Rate ~ Previous.Year.Cones + Current.Year.Cones + scaled.parturition.date + scaled.litter.size + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action="na.exclude")
+dt.table_S5[, GR_residual:=residuals(refit)]
+qplot(x=Corrected.FCM.ng.g.dry, y=GR_residual, data=dt.table_S5) +
+  geom_point() + geom_smooth(method='lm')
+# plot shows lots of noise but also interesting distribution of residuals. I would think resampling would not generate a p near 0.05. Look at CI of FCM in Table S5 - this suggests nothing is going on and p-value is biased
+```
+
+Simple Bootstrap of the fit
+
+```{r TableS5_bootstrap, eval=FALSE}
+n <- nrow(dt.table_S5)
+inc <- 1:n # first sample is the original
+niter <- 100
+xcols <- c('Previous.Year.Cones', 'Current.Year.Cones', 'scaled.parturition.date', 'scaled.litter.size', 'Corrected.FCM.ng.g.dry')
+b_mat <- matrix(NA, nrow=niter, ncol=length(xcols))
+colnames(b_mat) <- xcols
+for(iter in 1:niter){
+  refit <- lmer(Offspring.Growth.Rate ~ Previous.Year.Cones + Current.Year.Cones + scaled.parturition.date + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5[inc,], na.action="na.exclude")
+  b_mat[iter,] <- coefficients(summary(refit))[xcols,'Estimate'] 
+  inc <- sample(1:n, replace=TRUE)
+}
+apply(b_mat, 2, quantile, c(0.025, 0.975))
+```
+
+I don't need a big bootstrap to see that my bootstrap CIs are consistent with the p-values but not consistent with published CIs. But the published CIs do not even cover the estimates for Current.Year.Cones, scaled.parturition.date, and scaled.litter.size.
+
+From the lme4 documentation - "the new version of lme4 does not provide an mcmcsamp (post-hoc MCMC sampling) method, because this was deemed to be unreliable"
+
+The effect size relative to noise looks very small...here are absolute effect sizes
+```{r TableS5_effect}
+fit <- lmer(Offspring.Growth.Rate ~ Previous.Year.Cones + Current.Year.Cones + scaled.parturition.date + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action="na.exclude")
+b <- coefficients(summary(fit))[,'Estimate']
+# b*3 is the difference in growth rate between low FCM and high FCM. Rate is per days. Rate is measured as difference 25 days apart, so the added growth to difference in rate is:
+added_Growth <- b['Corrected.FCM.ng.g.dry']*3*25
+# growth is in dt.table_S2 
+# Growth in the control group over 25 days is
+growth <- dt.table_S2[Treatment=='Control', .(growth=mean(Offspring.Weight.2 - Offspring.Weight.1, na.rm=TRUE)), by=.(Raw.Litter.Size)]
+growth[, augmented:=growth+added_Growth]
+growth[, percent_augmented:=added_Growth/growth*100]
+
+final_weight <- dt.table_S2[Treatment=='Control', .(weight=mean(Offspring.Weight.2, na.rm=TRUE)), by=.(Raw.Litter.Size)]
+final_weight[, augmented:=weight+added_Growth]
+final_weight[, percent_augmented:=added_Growth/weight*100]
+```
+
+Forking paths. Why all the covariates? This would be easier with an all subsets style alorithm but I'm just exploring.
+
+```{r TableS5_forking}
+coefficients(summary(lmer(Offspring.Growth.Rate ~ Previous.Year.Cones + Current.Year.Cones + scaled.parturition.date + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action="na.exclude")))["Corrected.FCM.ng.g.dry",]
+
+coefficients(summary(lmer(Offspring.Growth.Rate ~  scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action="na.exclude")))["Corrected.FCM.ng.g.dry",]
+
+coefficients(summary(lmer(Offspring.Growth.Rate ~ scaled.parturition.date + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action="na.exclude")))["Corrected.FCM.ng.g.dry",]
+
+coefficients(summary(lmer(Offspring.Growth.Rate ~ Current.Year.Cones + scaled.parturition.date + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action="na.exclude")))["Corrected.FCM.ng.g.dry",]
+
+coefficients(summary(lmer(Offspring.Growth.Rate ~ Current.Year.Cones + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action="na.exclude")))["Corrected.FCM.ng.g.dry",]
+
+coefficients(summary(lmer(Offspring.Growth.Rate ~ Previous.Year.Cones + Current.Year.Cones + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action="na.exclude")))["Corrected.FCM.ng.g.dry",]
 
 ```
 
+## Red flags
+### small effect in obersvational design
+A p-value for an observational design with multiple, somewhat arbitrary covariates, that is near 0.05 just isn't very strong evidence of anything causal. The Estimate is strongly dependent on which other covariates are in the model. Certainly there are missing confounders. See Walker 2014.
+
+### Table S5 CIs
+1. The published CIs of $Currrent_cones$, $Parturtion_date$, $Litter_size$ do not even cover the estimate. How could no-one see this?
+2. The published CIs are not at all consistent with the p-value (e.g. compare for FCM)
+3. I would tend to have more confidence in bootstrap CI more than p-value but then my bootstrap p-values are much more consistent with p-value. Given #1 and #2, something must be wrong with published CI.
+4. From the lme4 documentation: "the new version of lme4 does not provide an mcmcsamp (post-hoc MCMC sampling) method, because this was deemed to be unreliable"
+5. conclusion - this doesn't effect the paper but ... I am shocked, shocked, that the reviewers didn't catch the very glaring differences in inference between the CIs and p-values.
+
+### How is FCM "corrected?"
+
+These seem to be residuals, maybe from $Days_pc$?
+
+### Evidence of FCM effect is pretty small
+The effect size is very small at least relative to the noise (figure \@ref(fig:TableS5_Explore)). The absolute magnitude of added growth (from low to high end of FCM) is 0.89 grams, which adds about 1.9-3.3% to growth over 25 days (conditional on litter size and assuming the effect is independent of litter size). Or, .89 grams adds about 1.3-2.3% to final weight (again conditional on litter size). What are the ecological consequences these estimated gains?
+
+# Effect of experiment Cortisol on growth rate (Table S6)
+## Reproducibility
+
+```{r TableS6}
+fn <- 'Table S6 Results - neonate mass and growth rate.csv'
+file_path <- paste(base_path, "data/", folder, "/",fn, sep="")
+dt.table_S6 <- data.table(read.table(file_path, sep=',', header=TRUE))
+
+# omitting rows with NA in growth rate
+inc <- which(!is.na(dt.table_S6[, Offspring.Growth.Rate]))
+dt.table_S6 <- dt.table_S6[inc, ]
+
+fit <- lmer(Offspring.Growth.Rate ~ Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action="na.exclude")
+coefficients(summary(fit)) # what is "corrected about FCM?"
+
+```
+
+## Explore
+
+Growth rate is a change score and the treatment effect is confounded by baseline
+```{r TableS6_baseline}
+# baseline covariate 
+refit <- lmer(Offspring.Growth.Rate ~ Offspring.Weight.1 + Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action="na.exclude")
+coefficients(summary(refit)) # what is "corrected about FCM?"
+```
+
+The above is interesting because adding the baseline covariate does almost nothing to the estimate but radically changes the df.
+
+```{r TableS6_baseline_plot}
+qplot(x=Treatment, y=Offspring.Weight.1, data=dt.table_S6) +
+  geom_point()
+coefficients(summary(lmer(Offspring.Weight.1 ~ Treatment + (1|Litter.ID), data=dt.table_S6, na.action="na.exclude")))
+```
+
+```{r TableS6_final_plot}
+qplot(x=Treatment, y=Offspring.Weight.2, data=dt.table_S6) +
+  geom_point()
+coefficients(summary(lmer(Offspring.Weight.2 ~ Treatment + (1|Litter.ID), data=dt.table_S6, na.action="na.exclude")))
+```
+
+
+## Red flags
