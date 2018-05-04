@@ -34,6 +34,8 @@ Dantzer B, Newman AEM, Boonstra R, Palme R, Boutin S, Humphries MM, McAdam AG (2
 # Background
 The study showed that North American red squirrel (*Tamiasciurus hudsonicus*) mothers from Yukon, Alaska produce faster growing pups in years with increased squirrel density. The researchers showed this mechanism is through increased plasma levels of the stress hormone cortisol, as measured by fecal cortisol metabolites ($FCM$) Remarkably, the researchers even showed that perceived (but not actual) density results in increased $FCM$ and faster growing pups.
 
+xxx re-arrange so that all reproducibility is first
+
 # Effect of spruce cone availability on local density (Fig. 1B)
 ## Reproducibility
 ```{r Fig1B}
