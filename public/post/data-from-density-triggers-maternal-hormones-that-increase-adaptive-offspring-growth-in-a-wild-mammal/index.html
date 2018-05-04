@@ -147,6 +147,7 @@
 fn &lt;- &#39;Spruce cone and density data.csv&#39;
 file_path &lt;- paste(base_path, &quot;data/&quot;, folder, &quot;/&quot;,fn, sep=&quot;&quot;)
 dt.fig_1B &lt;- data.table(read.table(file_path, sep=&#39;,&#39;, header=TRUE))
+# linear model
 fit1B &lt;- lm(Raw.Spring.Squirrel.Density ~ Previous.Year.Cones + Study.Area, data=dt.fig_1B[Treatment==&#39;Control&#39;])
 coefficients(summary(fit1B))</code></pre>
 <pre><code>##                      Estimate Std. Error  t value     Pr(&gt;|t|)

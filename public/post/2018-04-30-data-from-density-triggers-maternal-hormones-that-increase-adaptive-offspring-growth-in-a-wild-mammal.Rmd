@@ -44,6 +44,7 @@ The study showed that North American red squirrel (*Tamiasciurus hudsonicus*) mo
 fn <- 'Spruce cone and density data.csv'
 file_path <- paste(base_path, "data/", folder, "/",fn, sep="")
 dt.fig_1B <- data.table(read.table(file_path, sep=',', header=TRUE))
+# linear model
 fit1B <- lm(Raw.Spring.Squirrel.Density ~ Previous.Year.Cones + Study.Area, data=dt.fig_1B[Treatment=='Control'])
 coefficients(summary(fit1B))
 fit1B <- lmer(Raw.Spring.Squirrel.Density ~ Previous.Year.Cones + (1|Study.Area), data=dt.fig_1B[Treatment=='Control'])
