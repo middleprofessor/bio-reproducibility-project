@@ -457,21 +457,24 @@ Growth rate is a change score and the treatment effect is confounded by baseline
 # baseline covariate 
 refit <- lmer(Offspring.Growth.Rate ~ Offspring.Weight.1 + Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action="na.exclude")
 coefficients(summary(refit)) # what is "corrected about FCM?"
+
+# use averaged values within litters in a linear model with no random effects
+dt <- dt.table_S6[, .(Offspring.Growth.Rate=mean(Offspring.Growth.Rate), Offspring.Weight.1=mean(Offspring.Weight.1), Scaled.Litter.Size=mean(Scaled.Litter.Size)), by=.(Treatment, Litter.ID)]
+coefficients(summary(lm(Offspring.Growth.Rate ~ Scaled.Litter.Size + Offspring.Weight.1 + Treatment, data=dt)))
 ```
 
-The above is interesting because adding the baseline covariate does almost nothing to the estimate but radically changes the df.
+The above is interesting because adding the baseline covariate does almost nothing to the estimate but radically changes the df. How does this compare to the observational estimate (numerically they are almost equal but I don't what the denominator is in the experiment). On supplement P6, the authors state "females treated with cortisol had significantly higher maternal FCM concentrations during pregnancy (t29 = 1.99, P = 0.028, Fig. S1)" but a p-value isn't what we want but the effect size!
 
 ```{r TableS6_baseline_plot}
-qplot(x=Treatment, y=Offspring.Weight.1, data=dt.table_S6) +
+qplot(x=Treatment, y=Offspring.Weight.1, color=Litter.ID, data=dt.table_S6) +
   geom_point()
-coefficients(summary(lmer(Offspring.Weight.1 ~ Treatment + (1|Litter.ID), data=dt.table_S6, na.action="na.exclude")))
+coefficients(summary(lmer(Offspring.Weight.1 ~ Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action="na.exclude")))
 ```
 
 ```{r TableS6_final_plot}
-qplot(x=Treatment, y=Offspring.Weight.2, data=dt.table_S6) +
+qplot(x=Treatment, y=Offspring.Weight.2, color=Litter.ID, data=dt.table_S6) +
   geom_point()
-coefficients(summary(lmer(Offspring.Weight.2 ~ Treatment + (1|Litter.ID), data=dt.table_S6, na.action="na.exclude")))
+coefficients(summary(lmer(Offspring.Weight.2 ~ Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action="na.exclude")))
 ```
-
 
 ## Red flags

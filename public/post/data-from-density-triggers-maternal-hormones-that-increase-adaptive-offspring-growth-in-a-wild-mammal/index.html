@@ -670,21 +670,35 @@ coefficients(summary(refit)) # what is &quot;corrected about FCM?&quot;</code></
 ## Offspring.Weight.1 0.928911133
 ## Scaled.Litter.Size 0.294889973
 ## TreatmentFed GCs   0.054770087</code></pre>
-<p>The above is interesting because adding the baseline covariate does almost nothing to the estimate but radically changes the df.</p>
-<pre class="r"><code>qplot(x=Treatment, y=Offspring.Weight.1, data=dt.table_S6) +
+<pre class="r"><code># use averaged values within litters in a linear model with no random effects
+dt &lt;- dt.table_S6[, .(Offspring.Growth.Rate=mean(Offspring.Growth.Rate), Offspring.Weight.1=mean(Offspring.Weight.1), Scaled.Litter.Size=mean(Scaled.Litter.Size)), by=.(Treatment, Litter.ID)]
+coefficients(summary(lm(Offspring.Growth.Rate ~ Scaled.Litter.Size + Offspring.Weight.1 + Treatment, data=dt)))</code></pre>
+<pre><code>##                       Estimate Std. Error   t value    Pr(&gt;|t|)
+## (Intercept)         1.82547930 0.21340091  8.554225 0.001025327
+## Scaled.Litter.Size -0.12816234 0.18118507 -0.707356 0.518379316
+## Offspring.Weight.1 -0.02283849 0.01418064 -1.610539 0.182568916
+## TreatmentFed GCs    0.82592281 0.15195881  5.435175 0.005560769</code></pre>
+<p>The above is interesting because adding the baseline covariate does almost nothing to the estimate but radically changes the df. How does this compare to the observational estimate (numerically they are almost equal but I don’t what the denominator is in the experiment). On supplement P6, the authors state “females treated with cortisol had significantly higher maternal FCM concentrations during pregnancy (t29 = 1.99, P = 0.028, Fig. S1)” but a p-value isn’t what we want but the effect size!</p>
+<pre class="r"><code>qplot(x=Treatment, y=Offspring.Weight.1, color=Litter.ID, data=dt.table_S6) +
   geom_point()</code></pre>
 <p><img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/TableS6_baseline_plot-1.png" width="672" /></p>
-<pre class="r"><code>coefficients(summary(lmer(Offspring.Weight.1 ~ Treatment + (1|Litter.ID), data=dt.table_S6, na.action=&quot;na.exclude&quot;)))</code></pre>
-<pre><code>##                   Estimate Std. Error       df   t value   Pr(&gt;|t|)
-## (Intercept)      13.241667   3.700352 5.991810 3.5784888 0.01169134
-## TreatmentFed GCs  1.333802   4.683279 6.005373 0.2848008 0.78536315</code></pre>
-<pre class="r"><code>qplot(x=Treatment, y=Offspring.Weight.2, data=dt.table_S6) +
+<pre class="r"><code>coefficients(summary(lmer(Offspring.Weight.1 ~ Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action=&quot;na.exclude&quot;)))</code></pre>
+<pre><code>##                     Estimate Std. Error       df    t value   Pr(&gt;|t|)
+## (Intercept)        13.071800   3.337156 4.995984  3.9170477 0.01123291
+## Scaled.Litter.Size  7.271697   4.709326 5.021742  1.5441055 0.18296632
+## TreatmentFed GCs   -1.935274   4.723992 5.025942 -0.4096692 0.69892505</code></pre>
+<pre class="r"><code>qplot(x=Treatment, y=Offspring.Weight.2, color=Litter.ID, data=dt.table_S6) +
   geom_point()</code></pre>
 <p><img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/TableS6_final_plot-1.png" width="672" /></p>
-<pre class="r"><code>coefficients(summary(lmer(Offspring.Weight.2 ~ Treatment + (1|Litter.ID), data=dt.table_S6, na.action=&quot;na.exclude&quot;)))</code></pre>
-<pre><code>##                  Estimate Std. Error       df   t value     Pr(&gt;|t|)
-## (Intercept)      48.56667   3.034809 5.733812 16.003205 5.617644e-06
-## TreatmentFed GCs 20.80853   3.870364 5.909225  5.376376 1.785772e-03</code></pre>
+<pre class="r"><code>coefficients(summary(lmer(Offspring.Weight.2 ~ Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action=&quot;na.exclude&quot;)))</code></pre>
+<pre><code>##                       Estimate Std. Error       df     t value
+## (Intercept)        48.56823036   3.331112 4.813254 14.58018596
+## Scaled.Litter.Size -0.06693893   4.756060 5.056322 -0.01407445
+## TreatmentFed GCs   20.86875961   4.779815 5.096354  4.36601792
+##                        Pr(&gt;|t|)
+## (Intercept)        3.624371e-05
+## Scaled.Litter.Size 9.893091e-01
+## TreatmentFed GCs   6.936875e-03</code></pre>
 </div>
 <div id="red-flags-3" class="section level2">
 <h2>Red flags</h2>
@@ -723,7 +737,9 @@ coefficients(summary(refit)) # what is &quot;corrected about FCM?&quot;</code></
 </ul>
 
     <ul class="pager article-pager">
-      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-newer">
+          <a href="/post/data-from-feeding-ecology-is-the-primary-driver-of-beak-shape-diversification-in-waterfowl/" data-toggle="tooltip" data-placement="top" title="Data from: Feeding ecology is the primary driver of beak shape diversification in waterfowl">&lt; Newer</a>
+      </li>
       <li class="pager-older pager-noitem">Older &gt;</li>
     </ul>
   </div>
