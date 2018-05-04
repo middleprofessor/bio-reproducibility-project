@@ -1,562 +1,0 @@
-[KJeff-Walkers-imac:Reproducibility-project walker$ git init # initiates repo in the directory
-Initialized empty Git repository in /Users/walker/Google Drive/Research/Reproducibility-project/.git/
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git remote add origin git@github.com:middleprofes sor/bio-reproducibility-project.git # connects git local repo to remote Github repo
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git pull origin master # in case you have LICENSE  and Readme.md files in the GitHub repo, they're downloaded to your machine
-remote: Counting objects: 4, done.[K
-remote: Compressing objects:  25% (1/4)   [Kremote: Compressing objects:  50% (2/4)   [Kremote: Compressing objects:  75% (3/4)   [Kremote: Compressing objects: 100% (4/4)   [Kremote: Compressing objects: 100% (4/4), done.[K
-remote: Total 4 (delta 0), reused 0 (delta 0), pack-reused 0[K
-Unpacking objects:  25% (1/4)   Unpacking objects:  50% (2/4)   Unpacking objects:  75% (3/4)   Unpacking objects: 100% (4/4)   Unpacking objects: 100% (4/4), done.
-From github.com:middleprofessor/bio-reproducibility-project
- * branch            master     -> FETCH_HEAD
- * [new branch]      master     -> origin/master
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added t o the local repo
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git commit -m "init site" # adds all files to the  local repo, with a commit message
-[master 792a2f8] init site
- 205 files changed, 15379 insertions(+)
- create mode 100644 .DS_Store
- create mode 100644 .Rhistory
- create mode 100644 .Rproj.user/3844950F/console06/85B4B25B
- create mode 100644 .Rproj.user/3844950F/console06/85B4B25B.env
- create mode 100644 .Rproj.user/3844950F/console06/INDEX001
- create mode 100644 .Rproj.user/3844950F/pcs/files-pane.pper
- create mode 100644 .Rproj.user/3844950F/pcs/source-pane.pper
- create mode 100644 .Rproj.user/3844950F/pcs/windowlayoutstate.pper
- create mode 100644 .Rproj.user/3844950F/pcs/workbench-pane.pper
- create mode 100644 .Rproj.user/3844950F/rmd-outputs
- create mode 100644 .Rproj.user/3844950F/saved_source_markers
- create mode 100644 .Rproj.user/3844950F/sources/prop/22BF1B24
- create mode 100644 .Rproj.user/3844950F/sources/prop/4B5D4F1D
- create mode 100644 .Rproj.user/3844950F/sources/prop/6634F4AF
- create mode 100644 .Rproj.user/3844950F/sources/prop/67898CBA
- create mode 100644 .Rproj.user/3844950F/sources/prop/769F15E8
- create mode 100644 .Rproj.user/3844950F/sources/prop/84A27729
- create mode 100644 .Rproj.user/3844950F/sources/prop/BF11D783
- create mode 100644 .Rproj.user/3844950F/sources/prop/C3065E80
- create mode 100644 .Rproj.user/3844950F/sources/prop/CA067435
- create mode 100644 .Rproj.user/3844950F/sources/prop/INDEX
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/95360DF4
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/95360DF4-contents
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/D672675D
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/D672675D-contents
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/D81E929A
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/D81E929A-contents
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/lock_file
- create mode 100644 .Rproj.user/shared/notebooks/F929B816-2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/1/3844950F10CF0149/chunks.json
- create mode 100644 .Rproj.user/shared/notebooks/F929B816-2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/1/3844950F8950F44B/chunks.json
- create mode 100644 .Rproj.user/shared/notebooks/F929B816-2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/1/3844950F993FFAF5/chunks.json
- create mode 100644 .Rproj.user/shared/notebooks/F929B816-2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/1/s/chunks.json
- create mode 100644 .Rproj.user/shared/notebooks/patch-chunk-names
- create mode 100644 .Rproj.user/shared/notebooks/paths
- create mode 100644 Reproducibility-project.Rproj
- create mode 100644 config.toml
- create mode 100644 content/.DS_Store
- create mode 100644 content/about/_index.md
- create mode 100644 content/archives/_index.md
- create mode 100644 content/data/.DS_Store
- create mode 100644 content/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/.DS_Store
- create mode 100644 content/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/FCM data dryad.csv
- create mode 100644 content/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Spruce cone and density data.csv
- create mode 100644 content/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S4 - playback FCM data.csv
- create mode 100644 content/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S5 Results.csv
- create mode 100644 content/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/before.playback.fcm.data.csv
- create mode 100644 content/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/gc manip fcm data.csv
- create mode 100644 content/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/raw growth rates gc manip.csv
- create mode 100644 content/images/.DS_Store
- create mode 100644 content/images/2018-04-30-images-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/tableS4.png
- create mode 100644 content/post/.DS_Store
- create mode 100644 content/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal.Rmd
- create mode 100644 content/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal.html
- create mode 100644 index.Rmd
- create mode 100644 public/.DS_Store
- create mode 100644 public/404.html
- create mode 100644 public/about/index.html
- create mode 100644 public/about/index.xml
- create mode 100644 public/archives/index.html
- create mode 100644 public/archives/index.xml
- create mode 100644 public/archives/page/1/index.html
- create mode 100644 public/categories/development/index.html
- create mode 100644 public/categories/development/index.xml
- create mode 100644 public/categories/development/page/1/index.html
- create mode 100644 public/categories/golang/index.html
- create mode 100644 public/categories/golang/index.xml
- create mode 100644 public/categories/golang/page/1/index.html
- create mode 100644 public/categories/index.html
- create mode 100644 public/categories/index.xml
- create mode 100644 public/categories/r/index.html
- create mode 100644 public/categories/r/index.xml
- create mode 100644 public/categories/r/page/1/index.html
- create mode 100644 public/css/custom.css
- create mode 100644 public/css/style.css
- create mode 100644 public/css/syntax.css
- create mode 100644 public/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/FCM data dryad.csv
- create mode 100644 public/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Spruce cone and density data.csv
- create mode 100644 public/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S4 - playback FCM data.csv
- create mode 100644 public/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S5 Results.csv
- create mode 100644 public/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/before.playback.fcm.data.csv
- create mode 100644 public/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/gc manip fcm data.csv
- create mode 100644 public/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/raw growth rates gc manip.csv
- create mode 100644 public/images/2018-04-30-images-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/tableS4.png
- create mode 100644 public/images/fa-brands.svg
- create mode 100644 public/images/fa-solid.svg
- create mode 100644 public/index.html
- create mode 100644 public/index.xml
- create mode 100644 public/js/custom.js
- create mode 100644 public/js/script.js
- create mode 100644 public/page/1/index.html
- create mode 100644 public/post/2015-07-23-r-rmarkdown.Rmd
- create mode 100644 public/post/2015-07-23-r-rmarkdown/index.html
- create mode 100644 public/post/2015-07-23-r-rmarkdown_files/figure-html/pie-1.png
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal.Rmd
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/chickadee-1.png
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/chickadee-2.png
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/explorefig3a-1.png
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/repS3-1.png
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/unnamed-chunk-1-1.png
- create mode 100644 public/post/creating-a-new-theme/index.html
- create mode 100644 public/post/data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/index.html
- create mode 100644 public/post/fcm.txt
- create mode 100644 public/post/goisforlovers/index.html
- create mode 100644 public/post/hugoisforlovers/index.html
- create mode 100644 public/post/index.html
- create mode 100644 public/post/index.xml
- create mode 100644 public/post/migrate-from-jekyll/index.html
- create mode 100644 public/post/page/1/index.html
- create mode 100644 public/series/index.html
- create mode 100644 public/series/index.xml
- create mode 100644 public/sitemap.xml
- create mode 100644 public/tags/anova/index.html
- create mode 100644 public/tags/anova/index.xml
- create mode 100644 public/tags/anova/page/1/index.html
- create mode 100644 public/tags/development/index.html
- create mode 100644 public/tags/development/index.xml
- create mode 100644 public/tags/development/page/1/index.html
- create mode 100644 public/tags/ecology/index.html
- create mode 100644 public/tags/ecology/index.xml
- create mode 100644 public/tags/ecology/page/1/index.html
- create mode 100644 public/tags/go/index.html
- create mode 100644 public/tags/go/index.xml
- create mode 100644 public/tags/go/page/1/index.html
- create mode 100644 public/tags/golang/index.html
- create mode 100644 public/tags/golang/index.xml
- create mode 100644 public/tags/golang/page/1/index.html
- create mode 100644 public/tags/hugo/index.html
- create mode 100644 public/tags/hugo/index.xml
- create mode 100644 public/tags/hugo/page/1/index.html
- create mode 100644 public/tags/index.html
- create mode 100644 public/tags/index.xml
- create mode 100644 public/tags/linear-mixed-model/index.html
- create mode 100644 public/tags/linear-mixed-model/index.xml
- create mode 100644 public/tags/linear-mixed-model/page/1/index.html
- create mode 100644 public/tags/physiology/index.html
- create mode 100644 public/tags/physiology/index.xml
- create mode 100644 public/tags/physiology/page/1/index.html
- create mode 100644 public/tags/plot/index.html
- create mode 100644 public/tags/plot/index.xml
- create mode 100644 public/tags/plot/page/1/index.html
- create mode 100644 public/tags/r-markdown/index.html
- create mode 100644 public/tags/r-markdown/index.xml
- create mode 100644 public/tags/r-markdown/page/1/index.html
- create mode 100644 public/tags/red-flag/index.html
- create mode 100644 public/tags/red-flag/index.xml
- create mode 100644 public/tags/red-flag/page/1/index.html
- create mode 100644 public/tags/regression/index.html
- create mode 100644 public/tags/regression/index.xml
- create mode 100644 public/tags/regression/page/1/index.html
- create mode 100644 public/tags/replicates/index.html
- create mode 100644 public/tags/replicates/index.xml
- create mode 100644 public/tags/replicates/page/1/index.html
- create mode 100644 public/tags/templates/index.html
- create mode 100644 public/tags/templates/index.xml
- create mode 100644 public/tags/templates/page/1/index.html
- create mode 100644 public/tags/themes/index.html
- create mode 100644 public/tags/themes/index.xml
- create mode 100644 public/tags/themes/page/1/index.html
- create mode 100644 static/.DS_Store
- create mode 100644 static/post/2015-07-23-r-rmarkdown_files/figure-html/pie-1.png
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/chickadee-1.png
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/chickadee-2.png
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/explorefig3a-1.png
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/repS3-1.png
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/unnamed-chunk-1-1.png
- create mode 100644 themes/.DS_Store
- create mode 100644 themes/whiteplain/.DS_Store
- create mode 100644 themes/whiteplain/.circleci/config.yml
- create mode 100644 themes/whiteplain/LICENSE
- create mode 100644 themes/whiteplain/README.md
- create mode 100644 themes/whiteplain/archetypes/default.md
- create mode 100644 themes/whiteplain/exampleSite/config.toml
- create mode 100644 themes/whiteplain/exampleSite/content/about/_index.md
- create mode 100644 themes/whiteplain/exampleSite/content/archives/_index.md
- create mode 100644 themes/whiteplain/exampleSite/content/post/creating-a-new-theme.md
- create mode 100644 themes/whiteplain/exampleSite/content/post/goisforlovers.md
- create mode 100644 themes/whiteplain/exampleSite/content/post/hugoisforlovers.md
- create mode 100644 themes/whiteplain/exampleSite/content/post/migrate-from-jekyll.md
- create mode 100644 themes/whiteplain/images/screenshot.png
- create mode 100644 themes/whiteplain/images/tn.png
- create mode 100644 themes/whiteplain/layouts/.DS_Store
- create mode 100644 themes/whiteplain/layouts/404.html
- create mode 100644 themes/whiteplain/layouts/_default/baseof.html
- create mode 100644 themes/whiteplain/layouts/_default/list.html
- create mode 100644 themes/whiteplain/layouts/_default/single.html
- create mode 100644 themes/whiteplain/layouts/_default/terms.html
- create mode 100644 themes/whiteplain/layouts/partials/author.html
- create mode 100644 themes/whiteplain/layouts/partials/foot_custom.html
- create mode 100644 themes/whiteplain/layouts/partials/footer.html
- create mode 100644 themes/whiteplain/layouts/partials/head.html
- create mode 100644 themes/whiteplain/layouts/partials/header.html
- create mode 100644 themes/whiteplain/layouts/partials/share.html
- create mode 100644 themes/whiteplain/layouts/partials/social.html
- create mode 100644 themes/whiteplain/layouts/partials/toc.html
- create mode 100644 themes/whiteplain/layouts/section/about.html
- create mode 100644 themes/whiteplain/layouts/section/archives.html
- create mode 100644 themes/whiteplain/layouts/shortcodes/.gitkeep
- create mode 100644 themes/whiteplain/static/css/custom.css
- create mode 100644 themes/whiteplain/static/css/style.css
- create mode 100644 themes/whiteplain/static/css/syntax.css
- create mode 100644 themes/whiteplain/static/images/fa-brands.svg
- create mode 100644 themes/whiteplain/static/images/fa-solid.svg
- create mode 100644 themes/whiteplain/static/js/custom.js
- create mode 100644 themes/whiteplain/static/js/script.js
- create mode 100644 themes/whiteplain/theme.toml
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git push origin master # we push the changes from  the local git repo to 
-Counting objects: 294, done.
-Delta compression using up to 4 threads.
-Compressing objects:   0% (1/227)   Compressing objects:   1% (3/227)   Compressing objects:   2% (5/227)   Compressing objects:   3% (7/227)   Compressing objects:   4% (10/227)   Compressing objects:   5% (12/227)   Compressing objects:   6% (14/227)   Compressing objects:   7% (16/227)   Compressing objects:   8% (19/227)   Compressing objects:   9% (21/227)   Compressing objects:  10% (23/227)   Compressing objects:  11% (25/227)   Compressing objects:  12% (28/227)   Compressing objects:  13% (30/227)   Compressing objects:  14% (32/227)   Compressing objects:  15% (35/227)   Compressing objects:  16% (37/227)   Compressing objects:  17% (39/227)   Compressing objects:  18% (41/227)   Compressing objects:  19% (44/227)   Compressing objects:  20% (46/227)   Compressing objects:  21% (48/227)   Compressing objects:  22% (50/227)   Compressing objects:  23% (53/227)   Compressing objects:  24% (55/227)   Compressing objects:  25% (57/227)   Compressing objects:  26% (60/227)   Compressing objects:  27% (62/227)   Compressing objects:  28% (64/227)   Compressing objects:  29% (66/227)   Compressing objects:  30% (69/227)   Compressing objects:  31% (71/227)   Compressing objects:  32% (73/227)   Compressing objects:  33% (75/227)   Compressing objects:  34% (78/227)   Compressing objects:  35% (80/227)   Compressing objects:  36% (82/227)   Compressing objects:  37% (84/227)   Compressing objects:  38% (87/227)   Compressing objects:  39% (89/227)   Compressing objects:  40% (91/227)   Compressing objects:  41% (94/227)   Compressing objects:  42% (96/227)   Compressing objects:  43% (98/227)   Compressing objects:  44% (100/227)   Compressing objects:  45% (103/227)   Compressing objects:  46% (105/227)   Compressing objects:  47% (107/227)   Compressing objects:  48% (109/227)   Compressing objects:  49% (112/227)   Compressing objects:  50% (114/227)   Compressing objects:  51% (116/227)   Compressing objects:  52% (119/227)   Compressing objects:  53% (121/227)   Compressing objects:  54% (123/227)   Compressing objects:  55% (125/227)   Compressing objects:  56% (128/227)   Compressing objects:  57% (130/227)   Compressing objects:  58% (132/227)   Compressing objects:  59% (134/227)   Compressing objects:  60% (137/227)   Compressing objects:  61% (139/227)   Compressing objects:  62% (141/227)   Compressing objects:  63% (144/227)   Compressing objects:  64% (146/227)   Compressing objects:  65% (148/227)   Compressing objects:  66% (150/227)   Compressing objects:  67% (153/227)   Compressing objects:  68% (155/227)   Compressing objects:  69% (157/227)   Compressing objects:  70% (159/227)   Compressing objects:  71% (162/227)   Compressing objects:  72% (164/227)   Compressing objects:  73% (166/227)   Compressing objects:  74% (168/227)   Compressing objects:  75% (171/227)   Compressing objects:  76% (173/227)   Compressing objects:  77% (175/227)   Compressing objects:  78% (178/227)   Compressing objects:  79% (180/227)   Compressing objects:  80% (182/227)   Compressing objects:  81% (184/227)   Compressing objects:  82% (187/227)   Compressing objects:  83% (189/227)   Compressing objects:  84% (191/227)   Compressing objects:  85% (193/227)   Compressing objects:  86% (196/227)   Compressing objects:  87% (198/227)   Compressing objects:  88% (200/227)   Compressing objects:  89% (203/227)   Compressing objects:  90% (205/227)   Compressing objects:  91% (207/227)   Compressing objects:  92% (209/227)   Compressing objects:  93% (212/227)   Compressing objects:  94% (214/227)   Compressing objects:  95% (216/227)   Compressing objects:  96% (218/227)   Compressing objects:  97% (221/227)   Compressing objects:  98% (223/227)   Compressing objects:  99% (225/227)   Compressing objects: 100% (227/227)   Compressing objects: 100% (227/227), done.
-Writing objects:   0% (1/294)   Writing objects:   1% (4/294)   Writing objects:   2% (6/294)   Writing objects:   3% (9/294)   Writing objects:   4% (12/294)   Writing objects:   5% (15/294)   Writing objects:   6% (18/294)   Writing objects:   7% (21/294)   Writing objects:   8% (24/294)   Writing objects:   9% (27/294)   Writing objects:  10% (30/294)   Writing objects:  11% (33/294)   Writing objects:  12% (36/294)   Writing objects:  13% (39/294)   Writing objects:  14% (42/294)   Writing objects:  15% (45/294)   Writing objects:  16% (48/294)   Writing objects:  17% (50/294)   Writing objects:  18% (53/294)   Writing objects:  19% (56/294)   Writing objects:  20% (59/294)   Writing objects:  21% (62/294)   Writing objects:  22% (65/294)   Writing objects:  23% (68/294)   Writing objects:  24% (71/294)   Writing objects:  25% (74/294)   Writing objects:  26% (77/294)   Writing objects:  27% (81/294)   Writing objects:  28% (84/294)   Writing objects:  29% (86/294)   Writing objects:  31% (92/294)   Writing objects:  32% (95/294)   Writing objects:  33% (98/294)   Writing objects:  34% (100/294)   Writing objects:  35% (103/294)   Writing objects:  36% (106/294)   Writing objects:  37% (109/294)   Writing objects:  38% (112/294)   Writing objects:  39% (115/294)   Writing objects:  40% (118/294)   Writing objects:  41% (121/294)   Writing objects:  42% (124/294)   Writing objects:  43% (127/294)   Writing objects:  44% (130/294)   Writing objects:  45% (133/294)   Writing objects:  46% (136/294)   Writing objects:  47% (139/294)   Writing objects:  48% (142/294)   Writing objects:  49% (145/294)   Writing objects:  50% (147/294)   Writing objects:  51% (150/294)   Writing objects:  52% (153/294)   Writing objects:  53% (156/294)   Writing objects:  54% (159/294)   Writing objects:  55% (162/294)   Writing objects:  56% (165/294)   Writing objects:  57% (168/294)   Writing objects:  58% (171/294)   Writing objects:  59% (174/294)   Writing objects:  60% (177/294)   Writing objects:  61% (180/294)   Writing objects:  62% (183/294)   Writing objects:  63% (186/294)   Writing objects:  64% (189/294)   Writing objects:  65% (192/294)   Writing objects:  66% (195/294)   Writing objects:  67% (197/294)   Writing objects:  68% (200/294)   Writing objects:  69% (203/294)   Writing objects:  70% (206/294)   Writing objects:  71% (209/294)   Writing objects:  72% (212/294)   Writing objects:  73% (215/294)   Writing objects:  74% (218/294)   Writing objects:  75% (221/294)   Writing objects:  76% (224/294)   Writing objects:  77% (227/294)   Writing objects:  78% (230/294)   Writing objects:  79% (233/294)   Writing objects:  80% (236/294)   Writing objects:  81% (239/294)   Writing objects:  82% (242/294)   Writing objects:  83% (245/294)   Writing objects:  84% (247/294)   Writing objects:  85% (250/294)   Writing objects:  86% (253/294)   Writing objects:  87% (256/294)   Writing objects:  88% (259/294)   Writing objects:  89% (262/294)   Writing objects:  90% (265/294)   Writing objects:  91% (268/294)   Writing objects:  92% (271/294)   Writing objects:  93% (274/294)   Writing objects:  94% (277/294)   Writing objects:  95% (280/294)   Writing objects:  96% (283/294)   Writing objects:  97% (286/294)   Writing objects:  98% (289/294)   Writing objects:  99% (292/294)   Writing objects: 100% (294/294)   Writing objects: 100% (294/294), 1007.03 KiB | 4.42 MiB/s, done.
-Total 294 (delta 80), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/80)   [Kremote: Resolving deltas:  10% (8/80)   [Kremote: Resolving deltas:  12% (10/80)   [Kremote: Resolving deltas:  13% (11/80)   [Kremote: Resolving deltas:  15% (12/80)   [Kremote: Resolving deltas:  16% (13/80)   [Kremote: Resolving deltas:  17% (14/80)   [Kremote: Resolving deltas:  18% (15/80)   [Kremote: Resolving deltas:  48% (39/80)   [Kremote: Resolving deltas:  65% (52/80)   [Kremote: Resolving deltas:  87% (70/80)   [Kremote: Resolving deltas:  91% (73/80)   [Kremote: Resolving deltas:  92% (74/80)   [Kremote: Resolving deltas:  96% (77/80)   [Kremote: Resolving deltas:  97% (78/80)   [Kremote: Resolving deltas: 100% (80/80)   [Kremote: Resolving deltas: 100% (80/80), done.[K
-To github.com:middleprofessor/bio-reproducibility-project.git
-   d5cc758..792a2f8  master -> master
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git push origin master # we push the changes from  the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added too the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit messageup[K[K
-[master 96e2072] init site
- 12 files changed, 219 insertions(+), 2886 deletions(-)
- create mode 100644 public/post/.DS_Store
- delete mode 100644 public/post/2015-07-23-r-rmarkdown.Rmd
- delete mode 100644 public/post/2015-07-23-r-rmarkdown/index.html
- delete mode 100644 public/post/2015-07-23-r-rmarkdown_files/figure-html/pie-1.png
- delete mode 100644 public/post/creating-a-new-theme/index.html
- delete mode 100644 public/post/data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/index.html
- delete mode 100644 public/post/goisforlovers/index.html
- delete mode 100644 public/post/hugoisforlovers/index.html
- delete mode 100644 public/post/migrate-from-jekyll/index.html
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git commit -m "init site" # adds all files to the  local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to 
-Counting objects: 11, done.
-Delta compression using up to 4 threads.
-Compressing objects:   9% (1/11)   Compressing objects:  18% (2/11)   Compressing objects:  27% (3/11)   Compressing objects:  36% (4/11)   Compressing objects:  45% (5/11)   Compressing objects:  54% (6/11)   Compressing objects:  63% (7/11)   Compressing objects:  72% (8/11)   Compressing objects:  81% (9/11)   Compressing objects:  90% (10/11)   Compressing objects: 100% (11/11)   Compressing objects: 100% (11/11), done.
-Writing objects:   9% (1/11)   Writing objects:  18% (2/11)   Writing objects:  27% (3/11)   Writing objects:  36% (4/11)   Writing objects:  45% (5/11)   Writing objects:  54% (6/11)   Writing objects:  63% (7/11)   Writing objects:  72% (8/11)   Writing objects:  90% (10/11)   Writing objects: 100% (11/11)   Writing objects: 100% (11/11), 4.70 KiB | 4.70 MiB/s, done.
-Total 11 (delta 6), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/6)   [Kremote: Resolving deltas:  16% (1/6)   [Kremote: Resolving deltas:  33% (2/6)   [Kremote: Resolving deltas:  50% (3/6)   [Kremote: Resolving deltas:  66% (4/6)   [Kremote: Resolving deltas:  83% (5/6)   [Kremote: Resolving deltas: 100% (6/6)   [Kremote: Resolving deltas: 100% (6/6), completed with 5 local objects.[K
-To github.com:middleprofessor/bio-reproducibility-project.git
-   792a2f8..96e2072  master -> master
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git push origin master # we push the changes from  the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added too the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message
-[master 8e4f807] init site
- 8 files changed, 373 insertions(+), 6 deletions(-)
- create mode 100644 public/post/2015-07-23-r-rmarkdown_files/figure-html/pie-1.png
- create mode 100644 public/post/data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/index.html
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git commit -m "init site" # adds all files to the  local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to 
-Counting objects: 16, done.
-Delta compression using up to 4 threads.
-Compressing objects:   6% (1/15)   Compressing objects:  13% (2/15)   Compressing objects:  20% (3/15)   Compressing objects:  26% (4/15)   Compressing objects:  33% (5/15)   Compressing objects:  40% (6/15)   Compressing objects:  46% (7/15)   Compressing objects:  53% (8/15)   Compressing objects:  60% (9/15)   Compressing objects:  66% (10/15)   Compressing objects:  73% (11/15)   Compressing objects:  80% (12/15)   Compressing objects:  86% (13/15)   Compressing objects:  93% (14/15)   Compressing objects: 100% (15/15)   Compressing objects: 100% (15/15), done.
-Writing objects:   6% (1/16)   Writing objects:  12% (2/16)   Writing objects:  18% (3/16)   Writing objects:  25% (4/16)   Writing objects:  31% (5/16)   Writing objects:  37% (6/16)   Writing objects:  43% (7/16)   Writing objects:  50% (8/16)   Writing objects:  56% (9/16)   Writing objects:  62% (10/16)   Writing objects:  68% (11/16)   Writing objects:  75% (12/16)   Writing objects:  81% (13/16)   Writing objects:  87% (14/16)   Writing objects:  93% (15/16)   Writing objects: 100% (16/16)   Writing objects: 100% (16/16), 8.84 KiB | 905.00 KiB/s, done.
-Total 16 (delta 9), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/9)   [Kremote: Resolving deltas:  11% (1/9)   [Kremote: Resolving deltas:  22% (2/9)   [Kremote: Resolving deltas:  33% (3/9)   [Kremote: Resolving deltas:  44% (4/9)   [Kremote: Resolving deltas:  55% (5/9)   [Kremote: Resolving deltas:  66% (6/9)   [Kremote: Resolving deltas:  77% (7/9)   [Kremote: Resolving deltas:  88% (8/9)   [Kremote: Resolving deltas: 100% (9/9)   [Kremote: Resolving deltas: 100% (9/9), completed with 9 local objects.[K
-To github.com:middleprofessor/bio-reproducibility-project.git
-   96e2072..8e4f807  master -> master
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git push origin master # we push the changes from  the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[7P the local repo
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added too the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message
-[master 6372370] init site
- 50 files changed, 351 insertions(+), 186 deletions(-)
- create mode 100644 .Rproj.user/3844950F/sources/prop/4E66FB7
- create mode 100644 .Rproj.user/3844950F/sources/prop/8110793D
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/11C0E965
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/11C0E965-contents
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/43655CAC-contents
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/95360DF4
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/FFFD619-contents
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/TableS4C_redflag2-1.png
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/TableS4C_redflag2-2.png
- rewrite public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/unnamed-chunk-1-1.png (97%)
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/unnamed-chunk-1-2.png
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/TableS4C_redflag2-1.png
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/TableS4C_redflag2-2.png
- rewrite static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/unnamed-chunk-1-1.png (97%)
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/unnamed-chunk-1-2.png
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git commit -m "init site" # adds all files to the  local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to 
-Counting objects: 62, done.
-Delta compression using up to 4 threads.
-Compressing objects:   1% (1/57)   Compressing objects:   3% (2/57)   Compressing objects:   5% (3/57)   Compressing objects:   7% (4/57)   Compressing objects:   8% (5/57)   Compressing objects:  10% (6/57)   Compressing objects:  12% (7/57)   Compressing objects:  14% (8/57)   Compressing objects:  15% (9/57)   Compressing objects:  17% (10/57)   Compressing objects:  19% (11/57)   Compressing objects:  21% (12/57)   Compressing objects:  22% (13/57)   Compressing objects:  24% (14/57)   Compressing objects:  26% (15/57)   Compressing objects:  28% (16/57)   Compressing objects:  29% (17/57)   Compressing objects:  31% (18/57)   Compressing objects:  33% (19/57)   Compressing objects:  35% (20/57)   Compressing objects:  36% (21/57)   Compressing objects:  38% (22/57)   Compressing objects:  40% (23/57)   Compressing objects:  42% (24/57)   Compressing objects:  43% (25/57)   Compressing objects:  45% (26/57)   Compressing objects:  47% (27/57)   Compressing objects:  49% (28/57)   Compressing objects:  50% (29/57)   Compressing objects:  52% (30/57)   Compressing objects:  54% (31/57)   Compressing objects:  56% (32/57)   Compressing objects:  57% (33/57)   Compressing objects:  59% (34/57)   Compressing objects:  61% (35/57)   Compressing objects:  63% (36/57)   Compressing objects:  64% (37/57)   Compressing objects:  66% (38/57)   Compressing objects:  68% (39/57)   Compressing objects:  70% (40/57)   Compressing objects:  71% (41/57)   Compressing objects:  73% (42/57)   Compressing objects:  75% (43/57)   Compressing objects:  77% (44/57)   Compressing objects:  78% (45/57)   Compressing objects:  80% (46/57)   Compressing objects:  82% (47/57)   Compressing objects:  84% (48/57)   Compressing objects:  85% (49/57)   Compressing objects:  87% (50/57)   Compressing objects:  89% (51/57)   Compressing objects:  91% (52/57)   Compressing objects:  92% (53/57)   Compressing objects:  94% (54/57)   Compressing objects:  96% (55/57)   Compressing objects:  98% (56/57)   Compressing objects: 100% (57/57)   Compressing objects: 100% (57/57), done.
-Writing objects:   1% (1/62)   Writing objects:   3% (2/62)   Writing objects:   4% (3/62)   Writing objects:   6% (4/62)   Writing objects:   8% (5/62)   Writing objects:   9% (6/62)   Writing objects:  11% (7/62)   Writing objects:  12% (8/62)   Writing objects:  14% (9/62)   Writing objects:  16% (10/62)   Writing objects:  17% (11/62)   Writing objects:  19% (12/62)   Writing objects:  20% (13/62)   Writing objects:  22% (14/62)   Writing objects:  24% (15/62)   Writing objects:  25% (16/62)   Writing objects:  27% (17/62)   Writing objects:  29% (18/62)   Writing objects:  30% (19/62)   Writing objects:  32% (20/62)   Writing objects:  33% (21/62)   Writing objects:  35% (22/62)   Writing objects:  37% (23/62)   Writing objects:  40% (25/62)   Writing objects:  41% (26/62)   Writing objects:  43% (27/62)   Writing objects:  45% (28/62)   Writing objects:  50% (31/62)   Writing objects:  53% (33/62)   Writing objects:  54% (34/62)   Writing objects:  56% (35/62)   Writing objects:  58% (36/62)   Writing objects:  59% (37/62)   Writing objects:  61% (38/62)   Writing objects:  62% (39/62)   Writing objects:  64% (40/62)   Writing objects:  66% (41/62)   Writing objects:  67% (42/62)   Writing objects:  69% (43/62)   Writing objects:  70% (44/62)   Writing objects:  72% (45/62)   Writing objects:  74% (46/62)   Writing objects:  75% (47/62)   Writing objects:  77% (48/62)   Writing objects:  79% (49/62)   Writing objects:  80% (50/62)   Writing objects:  82% (51/62)   Writing objects:  83% (52/62)   Writing objects:  85% (53/62)   Writing objects:  87% (54/62)   Writing objects:  88% (55/62)   Writing objects:  90% (56/62)   Writing objects:  91% (57/62)   Writing objects:  93% (58/62)   Writing objects:  95% (59/62)   Writing objects:  96% (60/62)   Writing objects:  98% (61/62)   Writing objects: 100% (62/62)   Writing objects: 100% (62/62), 100.81 KiB | 1.60 MiB/s, done.
-Total 62 (delta 37), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/37)   [Kremote: Resolving deltas:   2% (1/37)   [Kremote: Resolving deltas:   5% (2/37)   [Kremote: Resolving deltas:   8% (3/37)   [Kremote: Resolving deltas:  10% (4/37)   [Kremote: Resolving deltas:  13% (5/37)   [Kremote: Resolving deltas:  18% (7/37)   [Kremote: Resolving deltas:  21% (8/37)   [Kremote: Resolving deltas:  24% (9/37)   [Kremote: Resolving deltas:  27% (10/37)   [Kremote: Resolving deltas:  29% (11/37)   [Kremote: Resolving deltas:  32% (12/37)   [Kremote: Resolving deltas:  37% (14/37)   [Kremote: Resolving deltas:  40% (15/37)   [Kremote: Resolving deltas:  43% (16/37)   [Kremote: Resolving deltas:  67% (25/37)   [Kremote: Resolving deltas:  91% (34/37)   [Kremote: Resolving deltas:  94% (35/37)   [Kremote: Resolving deltas:  97% (36/37)   [Kremote: Resolving deltas: 100% (37/37)   [Kremote: Resolving deltas: 100% (37/37), completed with 19 local objects.[K
-To github.com:middleprofessor/bio-reproducibility-project.git
-   8e4f807..6372370  master -> master
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git push origin master # we push the changes from  the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added too the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message
-[master 66ccd1e] init site
- 48 files changed, 611 insertions(+), 251 deletions(-)
- create mode 100644 .Rproj.user/3844950F/sources/prop/24511CF0
- create mode 100644 .Rproj.user/3844950F/sources/prop/BD1A63C9
- create mode 100644 .Rproj.user/3844950F/sources/prop/D70FEEB9
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/11C0E965
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/7B37FD92-contents
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/9D069A36-contents
- create mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/B0A2A878-contents
- create mode 100644 content/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S2 - neonate mass and growth rate.csv
- create mode 100644 content/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S2-S3.csv
- create mode 100644 content/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S6 Results - neonate mass and growth rate.csv
- create mode 100644 content/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S6-S7 Results - litter size and sex ratio.csv
- rename content/images/{2018-04-30-images-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal => 2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal}/tableS4.png (100%)
- create mode 100644 public/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S2 - neonate mass and growth rate.csv
- create mode 100644 public/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S2-S3.csv
- create mode 100644 public/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S6 Results - neonate mass and growth rate.csv
- create mode 100644 public/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/Table S6-S7 Results - litter size and sex ratio.csv
- create mode 100644 public/images/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/tableS4.png
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git commit -m "init site" # adds all files to the  local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to 
-Counting objects: 66, done.
-Delta compression using up to 4 threads.
-Compressing objects:   1% (1/64)   Compressing objects:   3% (2/64)   Compressing objects:   4% (3/64)   Compressing objects:   6% (4/64)   Compressing objects:   7% (5/64)   Compressing objects:   9% (6/64)   Compressing objects:  10% (7/64)   Compressing objects:  12% (8/64)   Compressing objects:  14% (9/64)   Compressing objects:  15% (10/64)   Compressing objects:  17% (11/64)   Compressing objects:  18% (12/64)   Compressing objects:  20% (13/64)   Compressing objects:  21% (14/64)   Compressing objects:  23% (15/64)   Compressing objects:  25% (16/64)   Compressing objects:  26% (17/64)   Compressing objects:  28% (18/64)   Compressing objects:  29% (19/64)   Compressing objects:  31% (20/64)   Compressing objects:  32% (21/64)   Compressing objects:  34% (22/64)   Compressing objects:  35% (23/64)   Compressing objects:  37% (24/64)   Compressing objects:  39% (25/64)   Compressing objects:  40% (26/64)   Compressing objects:  42% (27/64)   Compressing objects:  43% (28/64)   Compressing objects:  45% (29/64)   Compressing objects:  46% (30/64)   Compressing objects:  48% (31/64)   Compressing objects:  50% (32/64)   Compressing objects:  51% (33/64)   Compressing objects:  53% (34/64)   Compressing objects:  54% (35/64)   Compressing objects:  56% (36/64)   Compressing objects:  57% (37/64)   Compressing objects:  59% (38/64)   Compressing objects:  60% (39/64)   Compressing objects:  62% (40/64)   Compressing objects:  64% (41/64)   Compressing objects:  65% (42/64)   Compressing objects:  67% (43/64)   Compressing objects:  68% (44/64)   Compressing objects:  70% (45/64)   Compressing objects:  71% (46/64)   Compressing objects:  73% (47/64)   Compressing objects:  75% (48/64)   Compressing objects:  76% (49/64)   Compressing objects:  78% (50/64)   Compressing objects:  79% (51/64)   Compressing objects:  81% (52/64)   Compressing objects:  82% (53/64)   Compressing objects:  84% (54/64)   Compressing objects:  85% (55/64)   Compressing objects:  87% (56/64)   Compressing objects:  89% (57/64)   Compressing objects:  90% (58/64)   Compressing objects:  92% (59/64)   Compressing objects:  93% (60/64)   Compressing objects:  95% (61/64)   Compressing objects:  96% (62/64)   Compressing objects:  98% (63/64)   Compressing objects: 100% (64/64)   Compressing objects: 100% (64/64), done.
-Writing objects:   1% (1/66)   Writing objects:   3% (2/66)   Writing objects:   4% (3/66)   Writing objects:   6% (4/66)   Writing objects:   7% (5/66)   Writing objects:   9% (6/66)   Writing objects:  10% (7/66)   Writing objects:  12% (8/66)   Writing objects:  13% (9/66)   Writing objects:  15% (10/66)   Writing objects:  16% (11/66)   Writing objects:  18% (12/66)   Writing objects:  19% (13/66)   Writing objects:  21% (14/66)   Writing objects:  22% (15/66)   Writing objects:  24% (16/66)   Writing objects:  25% (17/66)   Writing objects:  27% (18/66)   Writing objects:  28% (19/66)   Writing objects:  30% (20/66)   Writing objects:  31% (21/66)   Writing objects:  33% (22/66)   Writing objects:  34% (23/66)   Writing objects:  36% (24/66)   Writing objects:  37% (25/66)   Writing objects:  39% (26/66)   Writing objects:  40% (27/66)   Writing objects:  42% (28/66)   Writing objects:  43% (29/66)   Writing objects:  45% (30/66)   Writing objects:  46% (31/66)   Writing objects:  48% (32/66)   Writing objects:  50% (33/66)   Writing objects:  51% (34/66)   Writing objects:  53% (35/66)   Writing objects:  54% (36/66)   Writing objects:  56% (37/66)   Writing objects:  59% (39/66)   Writing objects:  62% (41/66)   Writing objects:  63% (42/66)   Writing objects:  65% (43/66)   Writing objects:  66% (44/66)   Writing objects:  68% (45/66)   Writing objects:  71% (47/66)   Writing objects:  72% (48/66)   Writing objects:  74% (49/66)   Writing objects:  75% (50/66)   Writing objects:  77% (51/66)   Writing objects:  80% (53/66)   Writing objects:  81% (54/66)   Writing objects:  83% (55/66)   Writing objects:  84% (56/66)   Writing objects:  86% (57/66)   Writing objects:  87% (58/66)   Writing objects:  89% (59/66)   Writing objects:  90% (60/66)   Writing objects:  92% (61/66)   Writing objects:  93% (62/66)   Writing objects:  95% (63/66)   Writing objects:  96% (64/66)   Writing objects:  98% (65/66)   Writing objects: 100% (66/66)   Writing objects: 100% (66/66), 24.69 KiB | 236.00 KiB/s, done.
-Total 66 (delta 42), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/42)   [Kremote: Resolving deltas:   2% (1/42)   [Kremote: Resolving deltas:   4% (2/42)   [Kremote: Resolving deltas:   7% (3/42)   [Kremote: Resolving deltas:   9% (4/42)   [Kremote: Resolving deltas:  11% (5/42)   [Kremote: Resolving deltas:  14% (6/42)   [Kremote: Resolving deltas:  16% (7/42)   [Kremote: Resolving deltas:  19% (8/42)   [Kremote: Resolving deltas:  21% (9/42)   [Kremote: Resolving deltas:  23% (10/42)   [Kremote: Resolving deltas:  26% (11/42)   [Kremote: Resolving deltas:  28% (12/42)   [Kremote: Resolving deltas:  30% (13/42)   [Kremote: Resolving deltas:  35% (15/42)   [Kremote: Resolving deltas:  38% (16/42)   [Kremote: Resolving deltas:  40% (17/42)   [Kremote: Resolving deltas:  42% (18/42)   [Kremote: Resolving deltas:  45% (19/42)   [Kremote: Resolving deltas:  47% (20/42)   [Kremote: Resolving deltas:  50% (21/42)   [Kremote: Resolving deltas:  54% (23/42)   [Kremote: Resolving deltas:  64% (27/42)   [Kremote: Resolving deltas:  66% (28/42)   [Kremote: Resolving deltas:  69% (29/42)   [Kremote: Resolving deltas:  71% (30/42)   [Kremote: Resolving deltas:  83% (35/42)   [Kremote: Resolving deltas:  85% (36/42)   [Kremote: Resolving deltas:  90% (38/42)   [Kremote: Resolving deltas:  92% (39/42)   [Kremote: Resolving deltas:  95% (40/42)   [Kremote: Resolving deltas:  97% (41/42)   [Kremote: Resolving deltas: 100% (42/42)   [Kremote: Resolving deltas: 100% (42/42), completed with 32 local objects.[K
-To github.com:middleprofessor/bio-reproducibility-project.git
-   6372370..66ccd1e  master -> master
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git push origin master # we push the changes from  the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added too the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message
-[master be584c9] init site
- 26 files changed, 98 insertions(+), 33 deletions(-)
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git commit -m "init site" # adds all files to the  local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to 
-Counting objects: 45, done.
-Delta compression using up to 4 threads.
-Compressing objects:   2% (1/44)   Compressing objects:   4% (2/44)   Compressing objects:   6% (3/44)   Compressing objects:   9% (4/44)   Compressing objects:  11% (5/44)   Compressing objects:  13% (6/44)   Compressing objects:  15% (7/44)   Compressing objects:  18% (8/44)   Compressing objects:  20% (9/44)   Compressing objects:  22% (10/44)   Compressing objects:  25% (11/44)   Compressing objects:  27% (12/44)   Compressing objects:  29% (13/44)   Compressing objects:  31% (14/44)   Compressing objects:  34% (15/44)   Compressing objects:  36% (16/44)   Compressing objects:  38% (17/44)   Compressing objects:  40% (18/44)   Compressing objects:  43% (19/44)   Compressing objects:  45% (20/44)   Compressing objects:  47% (21/44)   Compressing objects:  50% (22/44)   Compressing objects:  52% (23/44)   Compressing objects:  54% (24/44)   Compressing objects:  56% (25/44)   Compressing objects:  59% (26/44)   Compressing objects:  61% (27/44)   Compressing objects:  63% (28/44)   Compressing objects:  65% (29/44)   Compressing objects:  68% (30/44)   Compressing objects:  70% (31/44)   Compressing objects:  72% (32/44)   Compressing objects:  75% (33/44)   Compressing objects:  77% (34/44)   Compressing objects:  79% (35/44)   Compressing objects:  81% (36/44)   Compressing objects:  84% (37/44)   Compressing objects:  86% (38/44)   Compressing objects:  88% (39/44)   Compressing objects:  90% (40/44)   Compressing objects:  93% (41/44)   Compressing objects:  95% (42/44)   Compressing objects:  97% (43/44)   Compressing objects: 100% (44/44)   Compressing objects: 100% (44/44), done.
-Writing objects:   2% (1/45)   Writing objects:   4% (2/45)   Writing objects:   6% (3/45)   Writing objects:   8% (4/45)   Writing objects:  11% (5/45)   Writing objects:  13% (6/45)   Writing objects:  15% (7/45)   Writing objects:  17% (8/45)   Writing objects:  20% (9/45)   Writing objects:  22% (10/45)   Writing objects:  24% (11/45)   Writing objects:  26% (12/45)   Writing objects:  28% (13/45)   Writing objects:  31% (14/45)   Writing objects:  35% (16/45)   Writing objects:  37% (17/45)   Writing objects:  40% (18/45)   Writing objects:  42% (19/45)   Writing objects:  44% (20/45)   Writing objects:  46% (21/45)   Writing objects:  48% (22/45)   Writing objects:  51% (23/45)   Writing objects:  53% (24/45)   Writing objects:  55% (25/45)   Writing objects:  57% (26/45)   Writing objects:  60% (27/45)   Writing objects:  62% (28/45)   Writing objects:  64% (29/45)   Writing objects:  66% (30/45)   Writing objects:  68% (31/45)   Writing objects:  71% (32/45)   Writing objects:  73% (33/45)   Writing objects:  75% (34/45)   Writing objects:  77% (35/45)   Writing objects:  80% (36/45)   Writing objects:  82% (37/45)   Writing objects:  84% (38/45)   Writing objects:  86% (39/45)   Writing objects:  88% (40/45)   Writing objects:  91% (41/45)   Writing objects:  93% (42/45)   Writing objects:  95% (43/45)   Writing objects:  97% (44/45)   Writing objects: 100% (45/45)   Writing objects: 100% (45/45), 6.38 KiB | 128.00 KiB/s, done.
-Total 45 (delta 32), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/32)   [Kremote: Resolving deltas:   3% (1/32)   [Kremote: Resolving deltas:   6% (2/32)   [Kremote: Resolving deltas:   9% (3/32)   [Kremote: Resolving deltas:  12% (4/32)   [Kremote: Resolving deltas:  15% (5/32)   [Kremote: Resolving deltas:  18% (6/32)   [Kremote: Resolving deltas:  21% (7/32)   [Kremote: Resolving deltas:  25% (8/32)   [Kremote: Resolving deltas:  28% (9/32)   [Kremote: Resolving deltas:  34% (11/32)   [Kremote: Resolving deltas:  37% (12/32)   [Kremote: Resolving deltas:  40% (13/32)   [Kremote: Resolving deltas:  43% (14/32)   [Kremote: Resolving deltas:  46% (15/32)   [Kremote: Resolving deltas:  50% (16/32)   [Kremote: Resolving deltas:  53% (17/32)   [Kremote: Resolving deltas:  56% (18/32)   [Kremote: Resolving deltas:  59% (19/32)   [Kremote: Resolving deltas:  62% (20/32)   [Kremote: Resolving deltas:  68% (22/32)   [Kremote: Resolving deltas:  71% (23/32)   [Kremote: Resolving deltas:  75% (24/32)   [Kremote: Resolving deltas:  78% (25/32)   [Kremote: Resolving deltas:  81% (26/32)   [Kremote: Resolving deltas:  84% (27/32)   [Kremote: Resolving deltas:  87% (28/32)   [Kremote: Resolving deltas:  90% (29/32)   [Kremote: Resolving deltas:  93% (30/32)   [Kremote: Resolving deltas:  96% (31/32)   [Kremote: Resolving deltas: 100% (32/32)   [Kremote: Resolving deltas: 100% (32/32), completed with 30 local objects.[K
-To github.com:middleprofessor/bio-reproducibility-project.git
-   66ccd1e..be584c9  master -> master
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git push origin master # we push the changes from  the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added too the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message
-[master 8b19be6] init site
- 36 files changed, 157 insertions(+), 144 deletions(-)
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git commit -m "init site" # adds all files to the  local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to[18P the local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to 
-Counting objects: 58, done.
-Delta compression using up to 4 threads.
-Compressing objects:   1% (1/57)   Compressing objects:   3% (2/57)   Compressing objects:   5% (3/57)   Compressing objects:   7% (4/57)   Compressing objects:   8% (5/57)   Compressing objects:  10% (6/57)   Compressing objects:  12% (7/57)   Compressing objects:  14% (8/57)   Compressing objects:  15% (9/57)   Compressing objects:  17% (10/57)   Compressing objects:  19% (11/57)   Compressing objects:  21% (12/57)   Compressing objects:  22% (13/57)   Compressing objects:  24% (14/57)   Compressing objects:  26% (15/57)   Compressing objects:  28% (16/57)   Compressing objects:  29% (17/57)   Compressing objects:  31% (18/57)   Compressing objects:  33% (19/57)   Compressing objects:  35% (20/57)   Compressing objects:  36% (21/57)   Compressing objects:  38% (22/57)   Compressing objects:  40% (23/57)   Compressing objects:  42% (24/57)   Compressing objects:  43% (25/57)   Compressing objects:  45% (26/57)   Compressing objects:  47% (27/57)   Compressing objects:  49% (28/57)   Compressing objects:  50% (29/57)   Compressing objects:  52% (30/57)   Compressing objects:  54% (31/57)   Compressing objects:  56% (32/57)   Compressing objects:  57% (33/57)   Compressing objects:  59% (34/57)   Compressing objects:  61% (35/57)   Compressing objects:  63% (36/57)   Compressing objects:  64% (37/57)   Compressing objects:  66% (38/57)   Compressing objects:  68% (39/57)   Compressing objects:  70% (40/57)   Compressing objects:  71% (41/57)   Compressing objects:  73% (42/57)   Compressing objects:  75% (43/57)   Compressing objects:  77% (44/57)   Compressing objects:  78% (45/57)   Compressing objects:  80% (46/57)   Compressing objects:  82% (47/57)   Compressing objects:  84% (48/57)   Compressing objects:  85% (49/57)   Compressing objects:  87% (50/57)   Compressing objects:  89% (51/57)   Compressing objects:  91% (52/57)   Compressing objects:  92% (53/57)   Compressing objects:  94% (54/57)   Compressing objects:  96% (55/57)   Compressing objects:  98% (56/57)   Compressing objects: 100% (57/57)   Compressing objects: 100% (57/57), done.
-Writing objects:   1% (1/58)   Writing objects:   3% (2/58)   Writing objects:   5% (3/58)   Writing objects:   6% (4/58)   Writing objects:   8% (5/58)   Writing objects:  10% (6/58)   Writing objects:  12% (7/58)   Writing objects:  13% (8/58)   Writing objects:  15% (9/58)   Writing objects:  17% (10/58)   Writing objects:  18% (11/58)   Writing objects:  20% (12/58)   Writing objects:  22% (13/58)   Writing objects:  24% (14/58)   Writing objects:  25% (15/58)   Writing objects:  27% (16/58)   Writing objects:  29% (17/58)   Writing objects:  31% (18/58)   Writing objects:  32% (19/58)   Writing objects:  34% (20/58)   Writing objects:  36% (21/58)   Writing objects:  37% (22/58)   Writing objects:  39% (23/58)   Writing objects:  41% (24/58)   Writing objects:  43% (25/58)   Writing objects:  44% (26/58)   Writing objects:  46% (27/58)   Writing objects:  48% (28/58)   Writing objects:  50% (29/58)   Writing objects:  51% (30/58)   Writing objects:  53% (31/58)   Writing objects:  55% (32/58)   Writing objects:  56% (33/58)   Writing objects:  58% (34/58)   Writing objects:  60% (35/58)   Writing objects:  62% (36/58)   Writing objects:  63% (37/58)   Writing objects:  65% (38/58)   Writing objects:  67% (39/58)   Writing objects:  68% (40/58)   Writing objects:  70% (41/58)   Writing objects:  72% (42/58)   Writing objects:  74% (43/58)   Writing objects:  75% (44/58)   Writing objects:  77% (45/58)   Writing objects:  79% (46/58)   Writing objects:  81% (47/58)   Writing objects:  82% (48/58)   Writing objects:  84% (49/58)   Writing objects:  86% (50/58)   Writing objects:  87% (51/58)   Writing objects:  89% (52/58)   Writing objects:  91% (53/58)   Writing objects:  93% (54/58)   Writing objects:  94% (55/58)   Writing objects:  96% (56/58)   Writing objects:  98% (57/58)   Writing objects: 100% (58/58)   Writing objects: 100% (58/58), 6.39 KiB | 62.00 KiB/s, done.
-Total 58 (delta 39), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/39)   [Kremote: Resolving deltas:   2% (1/39)   [Kremote: Resolving deltas:   5% (2/39)   [Kremote: Resolving deltas:   7% (3/39)   [Kremote: Resolving deltas:  10% (4/39)   [Kremote: Resolving deltas:  12% (5/39)   [Kremote: Resolving deltas:  15% (6/39)   [Kremote: Resolving deltas:  17% (7/39)   [Kremote: Resolving deltas:  20% (8/39)   [Kremote: Resolving deltas:  23% (9/39)   [Kremote: Resolving deltas:  25% (10/39)   [Kremote: Resolving deltas:  28% (11/39)   [Kremote: Resolving deltas:  30% (12/39)   [Kremote: Resolving deltas:  33% (13/39)   [Kremote: Resolving deltas:  38% (15/39)   [Kremote: Resolving deltas:  41% (16/39)   [Kremote: Resolving deltas:  43% (17/39)   [Kremote: Resolving deltas:  46% (18/39)   [Kremote: Resolving deltas:  48% (19/39)   [Kremote: Resolving deltas:  51% (20/39)   [Kremote: Resolving deltas:  53% (21/39)   [Kremote: Resolving deltas:  56% (22/39)   [Kremote: Resolving deltas:  58% (23/39)   [Kremote: Resolving deltas:  61% (24/39)   [Kremote: Resolving deltas:  64% (25/39)   [Kremote: Resolving deltas:  69% (27/39)   [Kremote: Resolving deltas:  71% (28/39)   [Kremote: Resolving deltas:  74% (29/39)   [Kremote: Resolving deltas:  76% (30/39)   [Kremote: Resolving deltas:  79% (31/39)   [Kremote: Resolving deltas:  82% (32/39)   [Kremote: Resolving deltas:  84% (33/39)   [Kremote: Resolving deltas:  87% (34/39)   [Kremote: Resolving deltas:  89% (35/39)   [Kremote: Resolving deltas:  92% (36/39)   [Kremote: Resolving deltas:  94% (37/39)   [Kremote: Resolving deltas:  97% (38/39)   [Kremote: Resolving deltas: 100% (39/39)   [Kremote: Resolving deltas: 100% (39/39), completed with 37 local objects.[K
-To github.com:middleprofessor/bio-reproducibility-project.git
-   be584c9..8b19be6  master -> master
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ [KJeff-Walkers-imac:Reproducibility-project walker$ git push origin master # we push the changes from thee local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to th[18Pe local repo
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added to thhe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message
-[master 8e6cabd] init site
- 61 files changed, 915 insertions(+), 445 deletions(-)
- rewrite .Rproj.user/3844950F/console06/INDEX001 (60%)
- create mode 100644 public/post/2015-07-23-r-rmarkdown_files/.DS_Store
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/.DS_Store
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/Fig2-1.png
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/Fig2-2.png
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/mysteryStatistic-1.png
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/tableS2-1.png
- create mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/tableS2-2.png
- rewrite public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/unnamed-chunk-1-1.png (97%)
- rewrite public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/unnamed-chunk-1-2.png (96%)
- delete mode 100644 public/post/fcm.txt
- create mode 100644 public/tags/experiment/index.html
- create mode 100644 public/tags/experiment/index.xml
- create mode 100644 public/tags/experiment/page/1/index.html
- create mode 100644 public/tags/reproducible/index.html
- create mode 100644 public/tags/reproducible/index.xml
- create mode 100644 public/tags/reproducible/page/1/index.html
- create mode 100644 static/post/.DS_Store
- create mode 100644 static/post/2015-07-23-r-rmarkdown_files/.DS_Store
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/.DS_Store
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/Fig2-1.png
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/Fig2-2.png
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/mysteryStatistic-1.png
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/tableS2-1.png
- create mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/tableS2-2.png
- rewrite static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/unnamed-chunk-1-1.png (97%)
- rewrite static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/unnamed-chunk-1-2.png (96%)
-]0;~/Google Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git commit -m "init site" # adds all files to the loccal repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to th[18Pe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to 
-Counting objects: 76, done.
-Delta compression using up to 4 threads.
-Compressing objects:   1% (1/71)   Compressing objects:   2% (2/71)   Compressing objects:   4% (3/71)   Compressing objects:   5% (4/71)   Compressing objects:   7% (5/71)   Compressing objects:   8% (6/71)   Compressing objects:   9% (7/71)   Compressing objects:  11% (8/71)   Compressing objects:  12% (9/71)   Compressing objects:  14% (10/71)   Compressing objects:  15% (11/71)   Compressing objects:  16% (12/71)   Compressing objects:  18% (13/71)   Compressing objects:  19% (14/71)   Compressing objects:  21% (15/71)   Compressing objects:  22% (16/71)   Compressing objects:  23% (17/71)   Compressing objects:  25% (18/71)   Compressing objects:  26% (19/71)   Compressing objects:  28% (20/71)   Compressing objects:  29% (21/71)   Compressing objects:  30% (22/71)   Compressing objects:  32% (23/71)   Compressing objects:  33% (24/71)   Compressing objects:  35% (25/71)   Compressing objects:  36% (26/71)   Compressing objects:  38% (27/71)   Compressing objects:  39% (28/71)   Compressing objects:  40% (29/71)   Compressing objects:  42% (30/71)   Compressing objects:  43% (31/71)   Compressing objects:  45% (32/71)   Compressing objects:  46% (33/71)   Compressing objects:  47% (34/71)   Compressing objects:  49% (35/71)   Compressing objects:  50% (36/71)   Compressing objects:  52% (37/71)   Compressing objects:  53% (38/71)   Compressing objects:  54% (39/71)   Compressing objects:  56% (40/71)   Compressing objects:  57% (41/71)   Compressing objects:  59% (42/71)   Compressing objects:  60% (43/71)   Compressing objects:  61% (44/71)   Compressing objects:  63% (45/71)   Compressing objects:  64% (46/71)   Compressing objects:  66% (47/71)   Compressing objects:  67% (48/71)   Compressing objects:  69% (49/71)   Compressing objects:  70% (50/71)   Compressing objects:  71% (51/71)   Compressing objects:  73% (52/71)   Compressing objects:  74% (53/71)   Compressing objects:  76% (54/71)   Compressing objects:  77% (55/71)   Compressing objects:  78% (56/71)   Compressing objects:  80% (57/71)   Compressing objects:  81% (58/71)   Compressing objects:  83% (59/71)   Compressing objects:  84% (60/71)   Compressing objects:  85% (61/71)   Compressing objects:  87% (62/71)   Compressing objects:  88% (63/71)   Compressing objects:  90% (64/71)   Compressing objects:  91% (65/71)   Compressing objects:  92% (66/71)   Compressing objects:  94% (67/71)   Compressing objects:  95% (68/71)   Compressing objects:  97% (69/71)   Compressing objects:  98% (70/71)   Compressing objects: 100% (71/71)   Compressing objects: 100% (71/71), done.
-Writing objects:   1% (1/76)   Writing objects:   2% (2/76)   Writing objects:   3% (3/76)   Writing objects:   5% (4/76)   Writing objects:   6% (5/76)   Writing objects:   7% (6/76)   Writing objects:   9% (7/76)   Writing objects:  10% (8/76)   Writing objects:  11% (9/76)   Writing objects:  13% (10/76)   Writing objects:  14% (11/76)   Writing objects:  15% (12/76)   Writing objects:  17% (13/76)   Writing objects:  18% (14/76)   Writing objects:  19% (15/76)   Writing objects:  21% (16/76)   Writing objects:  22% (17/76)   Writing objects:  23% (18/76)   Writing objects:  25% (19/76)   Writing objects:  26% (20/76)   Writing objects:  27% (21/76)   Writing objects:  30% (23/76)   Writing objects:  32% (25/76)   Writing objects:  34% (26/76)   Writing objects:  35% (27/76)   Writing objects:  36% (28/76)   Writing objects:  38% (29/76)   Writing objects:  39% (30/76)   Writing objects:  40% (31/76)   Writing objects:  42% (32/76)   Writing objects:  43% (33/76)   Writing objects:  44% (34/76)   Writing objects:  46% (35/76)   Writing objects:  47% (36/76)   Writing objects:  48% (37/76)   Writing objects:  50% (38/76)   Writing objects:  51% (39/76)   Writing objects:  52% (40/76)   Writing objects:  53% (41/76)   Writing objects:  55% (42/76)   Writing objects:  57% (44/76)   Writing objects:  60% (46/76)   Writing objects:  61% (47/76)   Writing objects:  63% (48/76)   Writing objects:  64% (49/76)   Writing objects:  65% (50/76)   Writing objects:  67% (51/76)   Writing objects:  68% (52/76)   Writing objects:  69% (53/76)   Writing objects:  71% (54/76)   Writing objects:  73% (56/76)   Writing objects:  75% (57/76)   Writing objects:  76% (58/76)   Writing objects:  77% (59/76)   Writing objects:  78% (60/76)   Writing objects:  80% (61/76)   Writing objects:  81% (62/76)   Writing objects:  82% (63/76)   Writing objects:  84% (64/76)   Writing objects:  85% (65/76)   Writing objects:  86% (66/76)   Writing objects:  88% (67/76)   Writing objects:  89% (68/76)   Writing objects:  90% (69/76)   Writing objects:  92% (70/76)   Writing objects:  93% (71/76)   Writing objects:  94% (72/76)   Writing objects:  96% (73/76)   Writing objects:  97% (74/76)   Writing objects:  98% (75/76)   Writing objects: 100% (76/76)   Writing objects: 100% (76/76), 283.94 KiB | 2.68 MiB/s, done.
-Total 76 (delta 48), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/48)   [Kremote: Resolving deltas:   2% (1/48)   [Kremote: Resolving deltas:   4% (2/48)   [Kremote: Resolving deltas:   6% (3/48)   [Kremote: Resolving deltas:   8% (4/48)   [Kremote: Resolving deltas:  10% (5/48)   [Kremote: Resolving deltas:  12% (6/48)   [Kremote: Resolving deltas:  14% (7/48)   [Kremote: Resolving deltas:  16% (8/48)   [Kremote: Resolving deltas:  18% (9/48)   [Kremote: Resolving deltas:  20% (10/48)   [Kremote: Resolving deltas:  22% (11/48)   [Kremote: Resolving deltas:  25% (12/48)   [Kremote: Resolving deltas:  27% (13/48)   [Kremote: Resolving deltas:  29% (14/48)   [Kremote: Resolving deltas:  31% (15/48)   [Kremote: Resolving deltas:  33% (16/48)   [Kremote: Resolving deltas:  54% (26/48)   [Kremote: Resolving deltas:  77% (37/48)   [Kremote: Resolving deltas:  79% (38/48)   [Kremote: Resolving deltas:  85% (41/48)   [Kremote: Resolving deltas:  87% (42/48)   [Kremote: Resolving deltas:  89% (43/48)   [Kremote: Resolving deltas:  91% (44/48)   [Kremote: Resolving deltas:  93% (45/48)   [Kremote: Resolving deltas:  95% (46/48)   [Kremote: Resolving deltas:  97% (47/48)   [Kremote: Resolving deltas: 100% (48/48)   [Kremote: Resolving deltas: 100% (48/48), completed with 26 local objects.[K
-To github.com:middleprofessor/bio-reproducibility-project.git
-   8b19be6..8e6cabd  master -> master
-[KJeff-Walkers-imac:Reproducibility-project walker$ git push origin master # we push the changes from thee local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to th[18Pe local repo
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added to thhe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message
-[master 1ffa781] init site
- 53 files changed, 770 insertions(+), 867 deletions(-)
- delete mode 100644 .DS_Store
- rewrite .Rproj.user/3844950F/console06/INDEX001 (86%)
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/11C0E965-contents
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/43655CAC-contents
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/7B37FD92-contents
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/95360DF4-contents
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/9D069A36-contents
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/B0A2A878-contents
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/D672675D
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/D672675D-contents
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/D81E929A
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/D81E929A-contents
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/FFFD619-contents
- delete mode 100644 .Rproj.user/3844950F/sources/s-993FFAF5/lock_file
- delete mode 100644 content/.DS_Store
- delete mode 100644 content/data/.DS_Store
- delete mode 100644 content/data/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/.DS_Store
- delete mode 100644 content/images/.DS_Store
- delete mode 100644 content/post/.DS_Store
- delete mode 100644 public/.DS_Store
- delete mode 100644 public/post/.DS_Store
- delete mode 100644 public/post/2015-07-23-r-rmarkdown_files/.DS_Store
- delete mode 100644 public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/.DS_Store
- delete mode 100644 static/.DS_Store
- delete mode 100644 static/post/.DS_Store
- delete mode 100644 static/post/2015-07-23-r-rmarkdown_files/.DS_Store
- delete mode 100644 static/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/.DS_Store
- delete mode 100644 themes/.DS_Store
- delete mode 100644 themes/whiteplain/.DS_Store
- delete mode 100644 themes/whiteplain/layouts/.DS_Store
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git commit -m "init site" # adds all files to the loccal repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to th[18Pe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to 
-Counting objects: 50, done.
-Delta compression using up to 4 threads.
-Compressing objects:   2% (1/44)   Compressing objects:   4% (2/44)   Compressing objects:   6% (3/44)   Compressing objects:   9% (4/44)   Compressing objects:  11% (5/44)   Compressing objects:  13% (6/44)   Compressing objects:  15% (7/44)   Compressing objects:  18% (8/44)   Compressing objects:  20% (9/44)   Compressing objects:  22% (10/44)   Compressing objects:  25% (11/44)   Compressing objects:  27% (12/44)   Compressing objects:  29% (13/44)   Compressing objects:  31% (14/44)   Compressing objects:  34% (15/44)   Compressing objects:  36% (16/44)   Compressing objects:  38% (17/44)   Compressing objects:  40% (18/44)   Compressing objects:  43% (19/44)   Compressing objects:  45% (20/44)   Compressing objects:  47% (21/44)   Compressing objects:  50% (22/44)   Compressing objects:  52% (23/44)   Compressing objects:  54% (24/44)   Compressing objects:  56% (25/44)   Compressing objects:  59% (26/44)   Compressing objects:  61% (27/44)   Compressing objects:  63% (28/44)   Compressing objects:  65% (29/44)   Compressing objects:  68% (30/44)   Compressing objects:  70% (31/44)   Compressing objects:  72% (32/44)   Compressing objects:  75% (33/44)   Compressing objects:  77% (34/44)   Compressing objects:  79% (35/44)   Compressing objects:  81% (36/44)   Compressing objects:  84% (37/44)   Compressing objects:  86% (38/44)   Compressing objects:  88% (39/44)   Compressing objects:  90% (40/44)   Compressing objects:  93% (41/44)   Compressing objects:  95% (42/44)   Compressing objects:  97% (43/44)   Compressing objects: 100% (44/44)   Compressing objects: 100% (44/44), done.
-Writing objects:   2% (1/50)   Writing objects:   4% (2/50)   Writing objects:   6% (3/50)   Writing objects:   8% (4/50)   Writing objects:  10% (5/50)   Writing objects:  12% (6/50)   Writing objects:  14% (7/50)   Writing objects:  16% (8/50)   Writing objects:  18% (9/50)   Writing objects:  20% (10/50)   Writing objects:  22% (11/50)   Writing objects:  24% (12/50)   Writing objects:  26% (13/50)   Writing objects:  28% (14/50)   Writing objects:  30% (15/50)   Writing objects:  34% (17/50)   Writing objects:  36% (18/50)   Writing objects:  40% (20/50)   Writing objects:  46% (23/50)   Writing objects:  48% (24/50)   Writing objects:  50% (25/50)   Writing objects:  52% (26/50)   Writing objects:  54% (27/50)   Writing objects:  56% (28/50)   Writing objects:  58% (29/50)   Writing objects:  60% (30/50)   Writing objects:  62% (31/50)   Writing objects:  66% (33/50)   Writing objects:  68% (34/50)   Writing objects:  70% (35/50)   Writing objects:  72% (36/50)   Writing objects:  74% (37/50)   Writing objects:  76% (38/50)   Writing objects:  78% (39/50)   Writing objects:  80% (40/50)   Writing objects:  82% (41/50)   Writing objects:  84% (42/50)   Writing objects:  86% (43/50)   Writing objects:  88% (44/50)   Writing objects:  90% (45/50)   Writing objects:  92% (46/50)   Writing objects:  94% (47/50)   Writing objects:  96% (48/50)   Writing objects:  98% (49/50)   Writing objects: 100% (50/50)   Writing objects: 100% (50/50), 13.02 KiB | 138.00 KiB/s, done.
-Total 50 (delta 33), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/33)   [Kremote: Resolving deltas:   3% (1/33)   [Kremote: Resolving deltas:   6% (2/33)   [Kremote: Resolving deltas:   9% (3/33)   [Kremote: Resolving deltas:  12% (4/33)   [Kremote: Resolving deltas:  15% (5/33)   [Kremote: Resolving deltas:  18% (6/33)   [Kremote: Resolving deltas:  21% (7/33)   [Kremote: Resolving deltas:  24% (8/33)   [Kremote: Resolving deltas:  27% (9/33)   [Kremote: Resolving deltas:  33% (11/33)   [Kremote: Resolving deltas:  36% (12/33)   [Kremote: Resolving deltas:  60% (20/33)   [Kremote: Resolving deltas:  78% (26/33)   [Kremote: Resolving deltas:  81% (27/33)   [Kremote: Resolving deltas:  84% (28/33)   [Kremote: Resolving deltas:  90% (30/33)   [Kremote: Resolving deltas:  93% (31/33)   [Kremote: Resolving deltas:  96% (32/33)   [Kremote: Resolving deltas: 100% (33/33)   [Kremote: Resolving deltas: 100% (33/33), completed with 19 local objects.[K
-To github.com:middleprofessor/bio-reproducibility-project.git
-   8e6cabd..1ffa781  master -> master
-[KJeff-Walkers-imac:Reproducibility-project walker$ git pull origin mastersh origin master # we push the changes from thee local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[30Pll origin master
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Csh origin master # we push the changes from thee local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to th[18Pe local repo
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added to thhe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[30Ppull origin master
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Csh origin master # we push the changes from thee local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[30Pll origin master
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Csh origin master # we push the changes from thee local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message
-[master cc19d9f] init site
- 20 files changed, 408 insertions(+), 50 deletions(-)
- rewrite .Rproj.user/3844950F/console06/INDEX001 (87%)
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git commit -m "init site" # adds all files to the loccal repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to th[18Pe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[30Ppull origin master
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Csh origin master # we push the changes from thee local git repo to 
-Counting objects: 34, done.
-Delta compression using up to 4 threads.
-Compressing objects:   3% (1/32)   Compressing objects:   6% (2/32)   Compressing objects:   9% (3/32)   Compressing objects:  12% (4/32)   Compressing objects:  15% (5/32)   Compressing objects:  18% (6/32)   Compressing objects:  21% (7/32)   Compressing objects:  25% (8/32)   Compressing objects:  28% (9/32)   Compressing objects:  31% (10/32)   Compressing objects:  34% (11/32)   Compressing objects:  37% (12/32)   Compressing objects:  40% (13/32)   Compressing objects:  43% (14/32)   Compressing objects:  46% (15/32)   Compressing objects:  50% (16/32)   Compressing objects:  53% (17/32)   Compressing objects:  56% (18/32)   Compressing objects:  59% (19/32)   Compressing objects:  62% (20/32)   Compressing objects:  65% (21/32)   Compressing objects:  68% (22/32)   Compressing objects:  71% (23/32)   Compressing objects:  75% (24/32)   Compressing objects:  78% (25/32)   Compressing objects:  81% (26/32)   Compressing objects:  84% (27/32)   Compressing objects:  87% (28/32)   Compressing objects:  90% (29/32)   Compressing objects:  93% (30/32)   Compressing objects:  96% (31/32)   Compressing objects: 100% (32/32)   Compressing objects: 100% (32/32), done.
-Writing objects:   2% (1/34)   Writing objects:   5% (2/34)   Writing objects:   8% (3/34)   Writing objects:  11% (4/34)   Writing objects:  14% (5/34)   Writing objects:  17% (6/34)   Writing objects:  20% (7/34)   Writing objects:  23% (8/34)   Writing objects:  26% (9/34)   Writing objects:  29% (10/34)   Writing objects:  32% (11/34)   Writing objects:  35% (12/34)   Writing objects:  38% (13/34)   Writing objects:  41% (14/34)   Writing objects:  44% (15/34)   Writing objects:  47% (16/34)   Writing objects:  50% (17/34)   Writing objects:  52% (18/34)   Writing objects:  55% (19/34)   Writing objects:  61% (21/34)   Writing objects:  64% (22/34)   Writing objects:  67% (23/34)   Writing objects:  70% (24/34)   Writing objects:  73% (25/34)   Writing objects:  76% (26/34)   Writing objects:  82% (28/34)   Writing objects:  88% (30/34)   Writing objects:  91% (31/34)   Writing objects:  94% (32/34)   Writing objects:  97% (33/34)   Writing objects: 100% (34/34)   Writing objects: 100% (34/34), 8.99 KiB | 195.00 KiB/s, done.
-Total 34 (delta 24), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/24)   [Kremote: Resolving deltas:   4% (1/24)   [Kremote: Resolving deltas:   8% (2/24)   [Kremote: Resolving deltas:  12% (3/24)   [Kremote: Resolving deltas:  16% (4/24)   [Kremote: Resolving deltas:  20% (5/24)   [Kremote: Resolving deltas:  25% (6/24)   [Kremote: Resolving deltas:  29% (7/24)   [Kremote: Resolving deltas:  33% (8/24)   [Kremote: Resolving deltas:  37% (9/24)   [Kremote: Resolving deltas:  41% (10/24)   [Kremote: Resolving deltas:  45% (11/24)   [Kremote: Resolving deltas:  50% (12/24)   [Kremote: Resolving deltas:  58% (14/24)   [Kremote: Resolving deltas:  62% (15/24)   [Kremote: Resolving deltas:  66% (16/24)   [Kremote: Resolving deltas:  70% (17/24)   [Kremote: Resolving deltas:  83% (20/24)   [Kremote: Resolving deltas:  91% (22/24)   [Kremote: Resolving deltas:  95% (23/24)   [Kremote: Resolving deltas: 100% (24/24)   [Kremote: Resolving deltas: 100% (24/24), completed with 20 local objects.[K
-To github.com:middleprofessor/bio-reproducibility-project.git
-   1ffa781..cc19d9f  master -> master
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git status
-On branch master
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
-
-	[31mmodified:   .Rproj.user/3844950F/console06/85B4B25B[m
-	[31mmodified:   .Rproj.user/3844950F/console06/85B4B25B.env[m
-
-no changes added to commit (use "git add" and/or "git commit -a")
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git statuspush origin master # we push the changes from thee local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to th[18Pe local repo
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git status
-On branch master
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-
-	[32mmodified:   .Rproj.user/3844950F/console06/85B4B25B[m
-	[32mmodified:   .Rproj.user/3844950F/console06/85B4B25B.env[m
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
-
-	[31mmodified:   .Rproj.user/3844950F/console06/85B4B25B[m
-
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git statusadd . # indexes all files that wil be added to thhe local repo
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added to thhe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cstatus[K
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
-On branch master
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-
-	[32mmodified:   .Rproj.user/3844950F/console06/85B4B25B[m
-	[32mmodified:   .Rproj.user/3844950F/console06/85B4B25B.env[m
-	[32mmodified:   content/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal.Rmd[m
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
-
-	[31mmodified:   .Rproj.user/3844950F/console06/85B4B25B[m
-
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git statusadd . # indexes all files that wil be added to thhe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cstatus[K
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to thhe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cstatus[K
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from thee local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message
-[master a678878] init site
- 3 files changed, 46 insertions(+), 2 deletions(-)
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git commit -m "init site" # adds all files to the loccal repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cstatus[K
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to thhe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cstatus[K
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to thhe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cstatus[K
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from thee local git repo to 
-Counting objects: 10, done.
-Delta compression using up to 4 threads.
-Compressing objects:  10% (1/10)   Compressing objects:  20% (2/10)   Compressing objects:  30% (3/10)   Compressing objects:  40% (4/10)   Compressing objects:  50% (5/10)   Compressing objects:  60% (6/10)   Compressing objects:  70% (7/10)   Compressing objects:  80% (8/10)   Compressing objects:  90% (9/10)   Compressing objects: 100% (10/10)   Compressing objects: 100% (10/10), done.
-Writing objects:  10% (1/10)   Writing objects:  20% (2/10)   Writing objects:  30% (3/10)   Writing objects:  40% (4/10)   Writing objects:  50% (5/10)   Writing objects:  60% (6/10)   Writing objects:  70% (7/10)   Writing objects:  80% (8/10)   Writing objects:  90% (9/10)   Writing objects: 100% (10/10)   Writing objects: 100% (10/10), 1.93 KiB | 131.00 KiB/s, done.
-Total 10 (delta 7), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/7)   [Kremote: Resolving deltas:  14% (1/7)   [Kremote: Resolving deltas:  28% (2/7)   [Kremote: Resolving deltas:  42% (3/7)   [Kremote: Resolving deltas:  57% (4/7)   [Kremote: Resolving deltas:  71% (5/7)   [Kremote: Resolving deltas:  85% (6/7)   [Kremote: Resolving deltas: 100% (7/7)   [Kremote: Resolving deltas: 100% (7/7), completed with 7 local objects.[K
-To github.com:middleprofessor/bio-reproducibility-project.git
-   cc19d9f..a678878  master -> master
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git push origin master # we push the changes from thee local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cstatus[K
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to thhe local repo
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added to thhe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message
-[master 024a97b] init site
- 8 files changed, 48 insertions(+), 3 deletions(-)
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git commit -m "init site" # adds all files to the loccal repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to th[18Pe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the[11P local git repo to 
-Counting objects: 17, done.
-Delta compression using up to 4 threads.
-Compressing objects:   6% (1/16)   Compressing objects:  12% (2/16)   Compressing objects:  18% (3/16)   Compressing objects:  25% (4/16)   Compressing objects:  31% (5/16)   Compressing objects:  37% (6/16)   Compressing objects:  43% (7/16)   Compressing objects:  50% (8/16)   Compressing objects:  56% (9/16)   Compressing objects:  62% (10/16)   Compressing objects:  68% (11/16)   Compressing objects:  75% (12/16)   Compressing objects:  81% (13/16)   Compressing objects:  87% (14/16)   Compressing objects:  93% (15/16)   Compressing objects: 100% (16/16)   Compressing objects: 100% (16/16), done.
-Writing objects:   5% (1/17)   Writing objects:  11% (2/17)   Writing objects:  17% (3/17)   Writing objects:  23% (4/17)   Writing objects:  29% (5/17)   Writing objects:  35% (6/17)   Writing objects:  41% (7/17)   Writing objects:  47% (8/17)   Writing objects:  52% (9/17)   Writing objects:  58% (10/17)   Writing objects:  64% (11/17)   Writing objects:  70% (12/17)   Writing objects:  76% (13/17)   Writing objects:  82% (14/17)   Writing objects:  88% (15/17)   Writing objects:  94% (16/17)   Writing objects: 100% (17/17)   Writing objects: 100% (17/17), 2.03 KiB | 115.00 KiB/s, done.
-Total 17 (delta 13), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/13)   [Kremote: Resolving deltas:   7% (1/13)   [Kremote: Resolving deltas:  15% (2/13)   [Kremote: Resolving deltas:  23% (3/13)   [Kremote: Resolving deltas:  30% (4/13)   [Kremote: Resolving deltas:  38% (5/13)   [Kremote: Resolving deltas:  46% (6/13)   [Kremote: Resolving deltas:  53% (7/13)   [Kremote: Resolving deltas:  61% (8/13)   [Kremote: Resolving deltas:  69% (9/13)   [Kremote: Resolving deltas:  76% (10/13)   [Kremote: Resolving deltas:  84% (11/13)   [Kremote: Resolving deltas:  92% (12/13)   [Kremote: Resolving deltas: 100% (13/13)   [Kremote: Resolving deltas: 100% (13/13), completed with 13 local objects.[K
-To github.com:middleprofessor/bio-reproducibility-project.git
-   a678878..024a97b  master -> master
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git diff --cached --name-only
-[?1h=[K[?1l>]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git diff --cached --name-only
-[?1h=[K[?1l>]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git diff --cached --name-onlypush origin master # we push the changes from thee local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to th[18Pe local repo
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git diff --cached --name-only --diff-filter=A
-[?1h=[K[?1l>]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git diff --cached --name-only --diff-filter=Aadd . # indexes all files that wil be added to thhe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[23Pdiff --cached --name-only
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
-[?1h=.Rproj.user/3844950F/console06/85B4B25B[m
-public/index.html[m
-public/index.xml[m
-public/post/index.html[m
-public/post/index.xml[m
-[K[?1l>]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git diff --cached --name-only --diff-filter=Aadd . # indexes all files that wil be added to thhe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[23Pdiff --cached --name-only
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from thee local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to th[18Pe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpush origin master # we push the changes from the local git repo to [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "init site" # adds all files to the local repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cstatus[K
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to thhe local repo
-]0;/Volumes/GoogleDrive/My Drive/Research/Reproducibility-projectJeff-Walkers-imac:Reproducibility-project walker$ git add . # indexes all files that wil be added to thhe local repo[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[23Pdiff --cached --name-only
-[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
-[?1h=.Rproj.user/3844950F/console06/85B4B25B[m
-content/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-[m growth-in-a-wild-mammal.Rmd[m
-content/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-[m growth-in-a-wild-mammal.html[m
-public/index.html[m
-public/index.xml[m
-public/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-g[m rowth-in-a-wild-mammal.Rmd[m
-public/post/data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-[m wild-mammal/index.html[m
-public/post/index.html[m
-public/post/index.xml[m
-public/tags/ecology/index.html[m
-public/tags/ecology/index.xml[m
-public/tags/experiment/index.html[m
-:[K[K:[K[Kpublic/tags/experiment/index.xml[m
-:[K[Kpublic/tags/linear-mixed-model/index.html[m
-:[K[Kpublic/tags/linear-mixed-model/index.xml[m
-:[K[Kpublic/tags/physiology/index.html[m
-:[K[Kpublic/tags/physiology/index.xml[m
-:[K[Kpublic/tags/red-flag/index.html[m
-:[K[Kpublic/tags/red-flag/index.xml[m
-:[K[Kpublic/tags/reproducible/index.html[m
-:[K[Kpublic/tags/reproducible/index.xml[m
-git commit -m "init site" # adds all files to the loccal repo, with a commit message[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cadd . # indexes all files that wil be added to th[18Pe local repo

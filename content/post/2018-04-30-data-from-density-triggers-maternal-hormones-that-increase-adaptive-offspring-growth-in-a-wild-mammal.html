@@ -21,19 +21,18 @@ output:
 <ul>
 <li><a href="#sources">Sources</a></li>
 <li><a href="#background">Background</a></li>
-<li><a href="#reproducibility">Reproducibility</a></li>
-<li><a href="#effect-of-spruce-cone-availability-on-local-density-fig.-1b">Effect of spruce cone availability on local density (Fig. 1B)</a><ul>
-<li><a href="#reproducibility-1">Reproducibility</a></li>
+<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#effect-of-spruce-cone-availability-on-local-density-fig.-1b">Effect of spruce cone availability on local density (Fig. 1B)</a></li>
 </ul></li>
 <li><a href="#effect-of-density-on-growth-rate-fig.-2table-s2">Effect of Density on growth rate (Fig. 2/Table S2)</a><ul>
-<li><a href="#reproducibility-2">Reproducibility</a></li>
+<li><a href="#reproducibility-1">Reproducibility</a></li>
 <li><a href="#red-flags">Red flags</a><ul>
 <li><a href="#growth-rate-is-a-change-score-and-is-confounding-by-the-basline">Growth rate is a change score and is confounding by the basline</a></li>
 <li><a href="#figure-2-doesnt-make-sense">Figure 2 doesn’t make sense</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#effect-of-density-on-fecal-cortisol-metabolites-fig.-3table-s4">Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)</a><ul>
-<li><a href="#reproducibility-3">Reproducibility</a></li>
+<li><a href="#reproducibility-2">Reproducibility</a></li>
 <li><a href="#red-flags-1">Red flags</a><ul>
 <li><a href="#one-tailed-tests">one-tailed tests</a></li>
 <li><a href="#forking-paths">Forking paths</a></li>
@@ -44,7 +43,7 @@ output:
 </ul></li>
 </ul></li>
 <li><a href="#effect-of-fcm-on-offspring-growth-rate-table-s5">Effect of FCM on offspring growth rate (Table S5)</a><ul>
-<li><a href="#reproducibility-4">Reproducibility</a></li>
+<li><a href="#reproducibility-3">Reproducibility</a></li>
 <li><a href="#explore">Explore</a></li>
 <li><a href="#red-flags-2">Red flags</a><ul>
 <li><a href="#small-effect-in-obersvational-design">small effect in obersvational design</a></li>
@@ -54,7 +53,7 @@ output:
 </ul></li>
 </ul></li>
 <li><a href="#effect-of-experiment-cortisol-on-growth-rate-table-s6">Effect of experiment Cortisol on growth rate (Table S6)</a><ul>
-<li><a href="#reproducibility-5">Reproducibility</a></li>
+<li><a href="#reproducibility-4">Reproducibility</a></li>
 <li><a href="#explore-1">Explore</a></li>
 <li><a href="#red-flags-3">Red flags</a></li>
 </ul></li>
@@ -72,11 +71,8 @@ output:
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
-</div>
-<div id="effect-of-spruce-cone-availability-on-local-density-fig.-1b" class="section level1">
-<h1>Effect of spruce cone availability on local density (Fig. 1B)</h1>
-<div id="reproducibility-1" class="section level2">
-<h2>Reproducibility</h2>
+<div id="effect-of-spruce-cone-availability-on-local-density-fig.-1b" class="section level2">
+<h2>Effect of spruce cone availability on local density (Fig. 1B)</h2>
 <pre class="r"><code># https://datadryad.org/resource/doi:10.5061/dryad.b3h4q
 # data for Fig 1B/Table Sxxx
 # 
@@ -110,7 +106,7 @@ coefficients(summary(fit1B))</code></pre>
 </div>
 <div id="effect-of-density-on-growth-rate-fig.-2table-s2" class="section level1">
 <h1>Effect of Density on growth rate (Fig. 2/Table S2)</h1>
-<div id="reproducibility-2" class="section level2">
+<div id="reproducibility-1" class="section level2">
 <h2>Reproducibility</h2>
 <p>Estimate, t, SE, and t reproduce but reported p-values are &lt; 1/2 reproduced p-value. Is difference due to something other than lmterTest? Or are one-tailed p-values being used?</p>
 <pre class="r"><code>fn &lt;- &#39;Table S2 - neonate mass and growth rate.csv&#39;
@@ -205,7 +201,7 @@ modeled_GR # compare to plot</code></pre>
 </div>
 <div id="effect-of-density-on-fecal-cortisol-metabolites-fig.-3table-s4" class="section level1">
 <h1>Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)</h1>
-<div id="reproducibility-3" class="section level2">
+<div id="reproducibility-2" class="section level2">
 <h2>Reproducibility</h2>
 <p>To begin to investigate how squirrel density during pregnancy could control the future growth rate of pups, Dantzer et al measured the relationship between local squirrel density (the variable <span class="math inline">\(Density\)</span>) and the amount of fecal cortisol metabolites from pregnant mothers (the variable <span class="math inline">\(FCM\)</span>). Cortisol is a hormone that is secreted as part of stress response. Dantzer et al were interested in cortisol because it is known that, in mammals, blood cortisol levels in pregnant mothers have numerous effects on offspring long past birth. If increased squirrel density causes increased blood cortisol levels, then we would expect to find a positive relationship between <span class="math inline">\(Density\)</span> and <span class="math inline">\(FCM\)</span>.</p>
 <p>Dantzer et al analyzed effect of <span class="math inline">\(Density\)</span> on <span class="math inline">\(FCM\)</span> with three different analyses.</p>
@@ -449,7 +445,7 @@ qplot(x=Treatment, y=FCM_residual, data=dt) + geom_point()</code></pre>
 </div>
 <div id="effect-of-fcm-on-offspring-growth-rate-table-s5" class="section level1">
 <h1>Effect of FCM on offspring growth rate (Table S5)</h1>
-<div id="reproducibility-4" class="section level2">
+<div id="reproducibility-3" class="section level2">
 <h2>Reproducibility</h2>
 <p>Estimate, SE, and t reproduce but p-values are 1/2 the published p-values or slightly smaller for FCM. The exception for reproducing is the SE for FCM, the published is 0.005, here is 0.006</p>
 <pre class="r"><code>fn &lt;- &#39;Table S5 Results.csv&#39;
@@ -573,7 +569,7 @@ final_weight[, percent_augmented:=added_Growth/weight*100]</code></pre>
 </div>
 <div id="effect-of-experiment-cortisol-on-growth-rate-table-s6" class="section level1">
 <h1>Effect of experiment Cortisol on growth rate (Table S6)</h1>
-<div id="reproducibility-5" class="section level2">
+<div id="reproducibility-4" class="section level2">
 <h2>Reproducibility</h2>
 <pre class="r"><code>fn &lt;- &#39;Table S6 Results - neonate mass and growth rate.csv&#39;
 file_path &lt;- paste(base_path, &quot;data/&quot;, folder, &quot;/&quot;,fn, sep=&quot;&quot;)
