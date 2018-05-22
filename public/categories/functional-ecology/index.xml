@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Functional Ecology on The Biology Reproducibility Project</title>
+    <link>/categories/functional-ecology/</link>
+    <description>Recent content in Functional Ecology on The Biology Reproducibility Project</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
+    <lastBuildDate>Thu, 03 May 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/functional-ecology/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Data from: Feeding ecology is the primary driver of beak shape diversification in waterfowl</title>
+      <link>/post/data-from-feeding-ecology-is-the-primary-driver-of-beak-shape-diversification-in-waterfowl/</link>
+      <pubDate>Thu, 03 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-feeding-ecology-is-the-primary-driver-of-beak-shape-diversification-in-waterfowl/</guid>
+      <description>Source  Reproducibility  Cool morphometrics blah blah blah blah blah blah blah
+even more blah blah
+ </description>
+    </item>
+    
+  </channel>
+</rss>

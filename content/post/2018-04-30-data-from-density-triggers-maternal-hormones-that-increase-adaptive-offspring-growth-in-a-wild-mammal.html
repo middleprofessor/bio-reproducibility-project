@@ -23,17 +23,17 @@ output:
 <li><a href="#background">Background</a></li>
 <li><a href="#reproducibility">Reproducibility</a><ul>
 <li><a href="#effect-of-spruce-cone-availability-on-local-density-fig.-1b">Effect of spruce cone availability on local density (Fig. 1B)</a></li>
+<li><a href="#effect-of-density-on-growth-rate-fig.-2table-s2">Effect of Density on growth rate (Fig. 2/Table S2)</a></li>
+<li><a href="#effect-of-density-on-fecal-cortisol-metabolites-fig.-3table-s4">Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)</a></li>
+<li><a href="#effect-of-fcm-on-offspring-growth-rate-table-s5">Effect of FCM on offspring growth rate (Table S5)</a></li>
+<li><a href="#effect-of-experiment-cortisol-on-growth-rate-table-s6">Effect of experiment Cortisol on growth rate (Table S6)</a></li>
 </ul></li>
-<li><a href="#effect-of-density-on-growth-rate-fig.-2table-s2">Effect of Density on growth rate (Fig. 2/Table S2)</a><ul>
-<li><a href="#reproducibility-1">Reproducibility</a></li>
 <li><a href="#red-flags">Red flags</a><ul>
+<li><a href="#effect-of-density-on-growth-rate-fig.-2table-s2-1">Effect of Density on growth rate (Fig. 2/Table S2)</a><ul>
 <li><a href="#growth-rate-is-a-change-score-and-is-confounding-by-the-basline">Growth rate is a change score and is confounding by the basline</a></li>
 <li><a href="#figure-2-doesnt-make-sense">Figure 2 doesn’t make sense</a></li>
 </ul></li>
-</ul></li>
-<li><a href="#effect-of-density-on-fecal-cortisol-metabolites-fig.-3table-s4">Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)</a><ul>
-<li><a href="#reproducibility-2">Reproducibility</a></li>
-<li><a href="#red-flags-1">Red flags</a><ul>
+<li><a href="#effect-of-density-on-fecal-cortisol-metabolites-fig.-3table-s4-1">Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)</a><ul>
 <li><a href="#one-tailed-tests">one-tailed tests</a></li>
 <li><a href="#forking-paths">Forking paths</a></li>
 <li><a href="#confounding-density-and-treatment-in-fig-3abtable-s4">Confounding Density and Treatment in Fig 3A,B/Table S4</a></li>
@@ -41,21 +41,10 @@ output:
 <li><a href="#justification-for-using-chickadee-playback-as-control">Justification for using chickadee playback as “Control”</a></li>
 <li><a href="#summary-of-red-flags-for-figure-3table-s4">Summary of Red Flags for Figure 3/Table S4</a></li>
 </ul></li>
+<li><a href="#effect-of-fcm-on-offspring-growth-rate-table-s5-1">Effect of FCM on offspring growth rate (Table S5)</a><ul>
+<li><a href="#summary-of-red-flags">Summary of Red flags</a></li>
 </ul></li>
-<li><a href="#effect-of-fcm-on-offspring-growth-rate-table-s5">Effect of FCM on offspring growth rate (Table S5)</a><ul>
-<li><a href="#reproducibility-3">Reproducibility</a></li>
-<li><a href="#explore">Explore</a></li>
-<li><a href="#red-flags-2">Red flags</a><ul>
-<li><a href="#small-effect-in-obersvational-design">small effect in obersvational design</a></li>
-<li><a href="#table-s5-cis">Table S5 CIs</a></li>
-<li><a href="#how-is-fcm-corrected">How is FCM “corrected?”</a></li>
-<li><a href="#evidence-of-fcm-effect-is-pretty-small">Evidence of FCM effect is pretty small</a></li>
-</ul></li>
-</ul></li>
-<li><a href="#effect-of-experiment-cortisol-on-growth-rate-table-s6">Effect of experiment Cortisol on growth rate (Table S6)</a><ul>
-<li><a href="#reproducibility-4">Reproducibility</a></li>
-<li><a href="#explore-1">Explore</a></li>
-<li><a href="#red-flags-3">Red flags</a></li>
+<li><a href="#effect-of-experiment-cortisol-on-growth-rate-table-s6-1">Effect of experiment Cortisol on growth rate (Table S6)</a></li>
 </ul></li>
 </ul>
 </div>
@@ -104,12 +93,9 @@ coefficients(summary(fit1B))</code></pre>
 ## Previous.Year.Cones                    4.1939086 0.0001128609
 ## TreatmentFood-add:Previous.Year.Cones -0.1610083 0.8727479464</code></pre>
 </div>
-</div>
-<div id="effect-of-density-on-growth-rate-fig.-2table-s2" class="section level1">
-<h1>Effect of Density on growth rate (Fig. 2/Table S2)</h1>
-<div id="reproducibility-1" class="section level2">
-<h2>Reproducibility</h2>
-<p>Estimate, t, SE, and t reproduce but reported p-values are &lt; 1/2 reproduced p-value. Is difference due to something other than lmterTest? Or are one-tailed p-values being used?</p>
+<div id="effect-of-density-on-growth-rate-fig.-2table-s2" class="section level2">
+<h2>Effect of Density on growth rate (Fig. 2/Table S2)</h2>
+<p>Estimate, t, SE, and t reproduce but reported p-values are &lt; 1/2 reproduced p-value. Is difference due to something other than lmerTest? Or are one-tailed p-values being used?</p>
 <pre class="r"><code>fn &lt;- &#39;Table S2 - neonate mass and growth rate.csv&#39;
 file_path &lt;- paste(base_path, &quot;data/&quot;, folder, &quot;/&quot;,fn, sep=&quot;&quot;)
 dt.table_S2 &lt;- data.table(read.table(file_path, sep=&#39;,&#39;, header=TRUE))
@@ -130,80 +116,8 @@ coefficients(summary(fit))</code></pre>
 ## Scaled.Litter.Size:TreatmentFood    2.5420063 1.419241e-02
 ## Scaled.Litter.Size:TreatmentRattle  1.9807515 5.341028e-02</code></pre>
 </div>
-<div id="red-flags" class="section level2">
-<h2>Red flags</h2>
-<div id="growth-rate-is-a-change-score-and-is-confounding-by-the-basline" class="section level3">
-<h3>Growth rate is a change score and is confounding by the basline</h3>
-<p>The confounding makes no difference for these data.</p>
-<pre class="r"><code>refit &lt;- lmer(Offspring.Growth.Rate ~ Offspring.Weight.1 + Scaled.Litter.Size*Treatment + (1|Mom.Squirrel.ID), data=dt.table_S2, na.action=&quot;na.exclude&quot;)
-coefficients(summary(refit))</code></pre>
-<pre><code>##                                        Estimate Std. Error       df
-## (Intercept)                         1.471438633 0.12787420 56.39655
-## Offspring.Weight.1                  0.002771434 0.00606961 71.94834
-## Scaled.Litter.Size                 -0.358120930 0.07606083 46.60430
-## TreatmentFood                       0.198316040 0.13666141 44.82602
-## TreatmentRattle                    -0.041872853 0.12996149 44.10200
-## Scaled.Litter.Size:TreatmentFood    0.289923700 0.11391142 48.14319
-## Scaled.Litter.Size:TreatmentRattle  0.235421757 0.12324987 45.50565
-##                                       t value     Pr(&gt;|t|)
-## (Intercept)                        11.5069233 2.220446e-16
-## Offspring.Weight.1                  0.4566082 6.493282e-01
-## Scaled.Litter.Size                 -4.7083488 2.271085e-05
-## TreatmentFood                       1.4511488 1.537012e-01
-## TreatmentRattle                    -0.3221943 7.488279e-01
-## Scaled.Litter.Size:TreatmentFood    2.5451680 1.418099e-02
-## Scaled.Litter.Size:TreatmentRattle  1.9101177 6.243247e-02</code></pre>
-</div>
-<div id="figure-2-doesnt-make-sense" class="section level3">
-<h3>Figure 2 doesn’t make sense</h3>
-<p>Fig. 2 doesn’t make sense. If these are residuals from the model, there should be no Litter size or treatment (or any other) effect. I have plotted the raw growth rate against Scaled.Litter. Note the regression lines will be slightly different because they do not account for random effect of squirrel ID. Regardless, the lines are extremely close to the linear mixed modeled growth rates for each treatment at small litter size (n=2) and large litter size (n=5). This picture suggests a very different story. At best, one might say that treated growth rates are depressed, relative to control, at small litter size, and a bit elevated at large litter size. But the data are noisy, as indicated by p-values and there is a potential outlier in the control data at litter size = 2 (scaled.litter.size = -2.302608)</p>
-<pre class="r"><code># plot raw litter size
-qplot(x=Raw.Litter.Size, y=Offspring.Growth.Rate, color=Treatment, data=dt.table_S2) + geom_point() + geom_smooth(method=&#39;lm&#39;)</code></pre>
-<p><img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/Fig2-1.png" width="672" /></p>
-<pre class="r"><code># scaled litter size
-qplot(x=Scaled.Litter.Size, y=Offspring.Growth.Rate, color=Treatment, data=dt.table_S2) + geom_point() + geom_smooth(method=&#39;lm&#39;)</code></pre>
-<p><img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/Fig2-2.png" width="672" /></p>
-<pre class="r"><code># compare modeled values from model at small and large end of scaled.litter.size
-# mapping litter size to scaled litter size
-# 1 = -3.369161 (n=1)
-# 2 = -2.302608
-# 3 = -1.2360545
-# 4 = -0.1695011
-# 5 = 0.8970522
-# 6 = 1.9636056
-b &lt;- coefficients(summary(fit))[,&#39;Estimate&#39;]
-# at litter size = 2
-modeled_GR &lt;- data.table(Treatment=c(&#39;Control&#39;,&#39;Food&#39;,&#39;Rattle&#39;),
-              Litter.eq.2=c(
-              b[&#39;(Intercept)&#39;] + b[&#39;Scaled.Litter.Size&#39;]*-2.302608,
-              b[&#39;(Intercept)&#39;] + b[&#39;TreatmentFood&#39;] +
-              (b[&#39;Scaled.Litter.Size&#39;]+b[&#39;Scaled.Litter.Size:TreatmentFood&#39;])*-2.302608,
-              b[&#39;(Intercept)&#39;] + b[&#39;TreatmentRattle&#39;] +
-              (b[&#39;Scaled.Litter.Size&#39;]+b[&#39;Scaled.Litter.Size:TreatmentRattle&#39;])*-2.302608
-              ),
-              Litter.eq.5=c(
-               b[&#39;(Intercept)&#39;] + b[&#39;Scaled.Litter.Size&#39;]*0.8970522,
-              b[&#39;(Intercept)&#39;] + b[&#39;TreatmentFood&#39;] +
-              (b[&#39;Scaled.Litter.Size&#39;]+b[&#39;Scaled.Litter.Size:TreatmentFood&#39;])*0.8970522,
-              b[&#39;(Intercept)&#39;] + b[&#39;TreatmentRattle&#39;] +
-              (b[&#39;Scaled.Litter.Size&#39;]+b[&#39;Scaled.Litter.Size:TreatmentRattle&#39;])*0.8970522
-              ))
-modeled_GR # compare to plot</code></pre>
-<pre><code>##    Treatment Litter.eq.2 Litter.eq.5
-## 1:   Control    2.350936    1.186530
-## 2:      Food    1.918038    1.646506
-## 3:    Rattle    1.757362    1.359693</code></pre>
-<pre class="r"><code># compare to linear model
-# fit_lm &lt;- lm(Offspring.Growth.Rate ~ Scaled.Litter.Size*Treatment, data=dt.table_S2, na.action=&quot;na.exclude&quot;)
-# coefficients(summary(fit_lm))
-# so outling point is okay</code></pre>
-</div>
-</div>
-</div>
-<div id="effect-of-density-on-fecal-cortisol-metabolites-fig.-3table-s4" class="section level1">
-<h1>Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)</h1>
-<div id="reproducibility-2" class="section level2">
-<h2>Reproducibility</h2>
+<div id="effect-of-density-on-fecal-cortisol-metabolites-fig.-3table-s4" class="section level2">
+<h2>Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)</h2>
 <p>To begin to investigate how squirrel density during pregnancy could control the future growth rate of pups, Dantzer et al measured the relationship between local squirrel density (the variable <span class="math inline">\(Density\)</span>) and the amount of fecal cortisol metabolites from pregnant mothers (the variable <span class="math inline">\(FCM\)</span>). Cortisol is a hormone that is secreted as part of stress response. Dantzer et al were interested in cortisol because it is known that, in mammals, blood cortisol levels in pregnant mothers have numerous effects on offspring long past birth. If increased squirrel density causes increased blood cortisol levels, then we would expect to find a positive relationship between <span class="math inline">\(Density\)</span> and <span class="math inline">\(FCM\)</span>.</p>
 <p>Dantzer et al analyzed effect of <span class="math inline">\(Density\)</span> on <span class="math inline">\(FCM\)</span> with three different analyses.</p>
 <ol style="list-style-type: decimal">
@@ -280,8 +194,121 @@ qplot(x=Treatment, y=log(FCM), data=fcmC_pre) + geom_boxplot() + geom_point()</c
 ## TreatmentRattle  0.4148583 0.18485323 28.14263  2.244258 0.032861251</code></pre>
 <p><img src="../../images/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/tableS4.png" /><!-- --></p>
 </div>
-<div id="red-flags-1" class="section level2">
-<h2>Red flags</h2>
+<div id="effect-of-fcm-on-offspring-growth-rate-table-s5" class="section level2">
+<h2>Effect of FCM on offspring growth rate (Table S5)</h2>
+<p>Estimate, SE, and t reproduce but p-values are 1/2 the published p-values or slightly smaller for FCM. The exception for reproducing is the SE for FCM, the published is 0.005, here is 0.006</p>
+<pre class="r"><code>fn &lt;- &#39;Table S5 Results.csv&#39;
+file_path &lt;- paste(base_path, &quot;data/&quot;, folder, &quot;/&quot;,fn, sep=&quot;&quot;)
+dt.table_S5 &lt;- data.table(read.table(file_path, sep=&#39;,&#39;, header=TRUE))
+fit &lt;- lmer(Offspring.Growth.Rate ~ Previous.Year.Cones + Current.Year.Cones + scaled.parturition.date + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action=&quot;na.exclude&quot;)
+coefficients(summary(fit)) # what is &quot;corrected about FCM?&quot;</code></pre>
+<pre><code>##                            Estimate  Std. Error       df    t value
+## (Intercept)              1.77491252 0.053608563 74.94678  33.108750
+## Previous.Year.Cones     -0.01054262 0.006939105 29.38092  -1.519306
+## Current.Year.Cones      -0.13259087 0.005189815 28.81226 -25.548283
+## scaled.parturition.date -0.22654127 0.010555374 28.99473 -21.462174
+## scaled.litter.size      -0.35744641 0.010167806 29.28986 -35.154723
+## Corrected.FCM.ng.g.dry   0.01187675 0.006134902 28.28645   1.935931
+##                           Pr(&gt;|t|)
+## (Intercept)             0.00000000
+## Previous.Year.Cones     0.13937447
+## Current.Year.Cones      0.00000000
+## scaled.parturition.date 0.00000000
+## scaled.litter.size      0.00000000
+## Corrected.FCM.ng.g.dry  0.06292754</code></pre>
+<p><img src="../../images/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/TableS5.png" /><!-- --></p>
+</div>
+<div id="effect-of-experiment-cortisol-on-growth-rate-table-s6" class="section level2">
+<h2>Effect of experiment Cortisol on growth rate (Table S6)</h2>
+<pre class="r"><code>fn &lt;- &#39;Table S6 Results - neonate mass and growth rate.csv&#39;
+file_path &lt;- paste(base_path, &quot;data/&quot;, folder, &quot;/&quot;,fn, sep=&quot;&quot;)
+dt.table_S6 &lt;- data.table(read.table(file_path, sep=&#39;,&#39;, header=TRUE))
+
+# omitting rows with NA in growth rate
+inc &lt;- which(!is.na(dt.table_S6[, Offspring.Growth.Rate]))
+dt.table_S6 &lt;- dt.table_S6[inc, ]
+
+fit &lt;- lmer(Offspring.Growth.Rate ~ Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action=&quot;na.exclude&quot;)
+coefficients(summary(fit)) # what is &quot;corrected about FCM?&quot;</code></pre>
+<pre><code>##                      Estimate Std. Error       df   t value     Pr(&gt;|t|)
+## (Intercept)         1.5268119  0.1207671 4.835748 12.642612 6.877296e-05
+## Scaled.Litter.Size -0.2887911  0.1722111 5.056877 -1.676960 1.537366e-01
+## TreatmentFed GCs    0.8623885  0.1730368 5.093243  4.983845 3.954676e-03</code></pre>
+</div>
+</div>
+<div id="red-flags" class="section level1">
+<h1>Red flags</h1>
+<div id="effect-of-density-on-growth-rate-fig.-2table-s2-1" class="section level2">
+<h2>Effect of Density on growth rate (Fig. 2/Table S2)</h2>
+<div id="growth-rate-is-a-change-score-and-is-confounding-by-the-basline" class="section level3">
+<h3>Growth rate is a change score and is confounding by the basline</h3>
+<p>The confounding makes no difference for these data.</p>
+<pre class="r"><code>refit &lt;- lmer(Offspring.Growth.Rate ~ Offspring.Weight.1 + Scaled.Litter.Size*Treatment + (1|Mom.Squirrel.ID), data=dt.table_S2, na.action=&quot;na.exclude&quot;)
+coefficients(summary(refit))</code></pre>
+<pre><code>##                                        Estimate Std. Error       df
+## (Intercept)                         1.471438633 0.12787420 56.39655
+## Offspring.Weight.1                  0.002771434 0.00606961 71.94834
+## Scaled.Litter.Size                 -0.358120930 0.07606083 46.60430
+## TreatmentFood                       0.198316040 0.13666141 44.82602
+## TreatmentRattle                    -0.041872853 0.12996149 44.10200
+## Scaled.Litter.Size:TreatmentFood    0.289923700 0.11391142 48.14319
+## Scaled.Litter.Size:TreatmentRattle  0.235421757 0.12324987 45.50565
+##                                       t value     Pr(&gt;|t|)
+## (Intercept)                        11.5069233 2.220446e-16
+## Offspring.Weight.1                  0.4566082 6.493282e-01
+## Scaled.Litter.Size                 -4.7083488 2.271085e-05
+## TreatmentFood                       1.4511488 1.537012e-01
+## TreatmentRattle                    -0.3221943 7.488279e-01
+## Scaled.Litter.Size:TreatmentFood    2.5451680 1.418099e-02
+## Scaled.Litter.Size:TreatmentRattle  1.9101177 6.243247e-02</code></pre>
+</div>
+<div id="figure-2-doesnt-make-sense" class="section level3">
+<h3>Figure 2 doesn’t make sense</h3>
+<p>Fig. 2 doesn’t make sense. If these are residuals from the model, there should be no Litter size or treatment (or any other) effect. I have plotted the raw growth rate against Scaled.Litter. Note the regression lines will be slightly different because they do not account for random effect of squirrel ID. Regardless, the lines are extremely close to the linear mixed modeled growth rates for each treatment at small litter size (n=2) and large litter size (n=5). This picture suggests a very different story. At best, one might say that treated growth rates are depressed, relative to control, at small litter size, and a bit elevated at large litter size. But the data are noisy, as indicated by p-values and there is a potential outlier in the control data at litter size = 2 (scaled.litter.size = -2.302608)</p>
+<pre class="r"><code># plot raw litter size
+qplot(x=Raw.Litter.Size, y=Offspring.Growth.Rate, color=Treatment, data=dt.table_S2) + geom_point() + geom_smooth(method=&#39;lm&#39;)</code></pre>
+<p><img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/Fig2-1.png" width="672" /></p>
+<pre class="r"><code># scaled litter size
+qplot(x=Scaled.Litter.Size, y=Offspring.Growth.Rate, color=Treatment, data=dt.table_S2) + geom_point() + geom_smooth(method=&#39;lm&#39;)</code></pre>
+<p><img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/Fig2-2.png" width="672" /></p>
+<pre class="r"><code># compare modeled values from model at small and large end of scaled.litter.size
+# mapping litter size to scaled litter size
+# 1 = -3.369161 (n=1)
+# 2 = -2.302608
+# 3 = -1.2360545
+# 4 = -0.1695011
+# 5 = 0.8970522
+# 6 = 1.9636056
+b &lt;- coefficients(summary(fit))[,&#39;Estimate&#39;]
+# at litter size = 2
+modeled_GR &lt;- data.table(Treatment=c(&#39;Control&#39;,&#39;Food&#39;,&#39;Rattle&#39;),
+              Litter.eq.2=c(
+              b[&#39;(Intercept)&#39;] + b[&#39;Scaled.Litter.Size&#39;]*-2.302608,
+              b[&#39;(Intercept)&#39;] + b[&#39;TreatmentFood&#39;] +
+              (b[&#39;Scaled.Litter.Size&#39;]+b[&#39;Scaled.Litter.Size:TreatmentFood&#39;])*-2.302608,
+              b[&#39;(Intercept)&#39;] + b[&#39;TreatmentRattle&#39;] +
+              (b[&#39;Scaled.Litter.Size&#39;]+b[&#39;Scaled.Litter.Size:TreatmentRattle&#39;])*-2.302608
+              ),
+              Litter.eq.5=c(
+               b[&#39;(Intercept)&#39;] + b[&#39;Scaled.Litter.Size&#39;]*0.8970522,
+              b[&#39;(Intercept)&#39;] + b[&#39;TreatmentFood&#39;] +
+              (b[&#39;Scaled.Litter.Size&#39;]+b[&#39;Scaled.Litter.Size:TreatmentFood&#39;])*0.8970522,
+              b[&#39;(Intercept)&#39;] + b[&#39;TreatmentRattle&#39;] +
+              (b[&#39;Scaled.Litter.Size&#39;]+b[&#39;Scaled.Litter.Size:TreatmentRattle&#39;])*0.8970522
+              ))
+modeled_GR # compare to plot</code></pre>
+<pre><code>##    Treatment Litter.eq.2 Litter.eq.5
+## 1:   Control    2.191785    1.267751
+## 2:      Food          NA          NA
+## 3:    Rattle          NA          NA</code></pre>
+<pre class="r"><code># compare to linear model
+# fit_lm &lt;- lm(Offspring.Growth.Rate ~ Scaled.Litter.Size*Treatment, data=dt.table_S2, na.action=&quot;na.exclude&quot;)
+# coefficients(summary(fit_lm))
+# so outling point is okay</code></pre>
+</div>
+</div>
+<div id="effect-of-density-on-fecal-cortisol-metabolites-fig.-3table-s4-1" class="section level2">
+<h2>Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)</h2>
 <div id="one-tailed-tests" class="section level3">
 <h3>one-tailed tests</h3>
 <p>The authors reported p-values from one-tailed tests, apparently without reporting that these are one-tailed tests (at least I cannot find this with a search). As stated above, I think one-tailed tests are p-hacking – Conclusions or a decision to publish a paper in <em>Science</em> shouldn’t rest on a p-value of 0.03 or 0.06. It also assumes that effects in the opposite direction cannot exist. If one has prior information on the direction of an effect then use this in a Bayesian model.</p>
@@ -443,35 +470,8 @@ qplot(x=Treatment, y=FCM_residual, data=dt) + geom_point()</code></pre>
 </ol>
 </div>
 </div>
-</div>
-<div id="effect-of-fcm-on-offspring-growth-rate-table-s5" class="section level1">
-<h1>Effect of FCM on offspring growth rate (Table S5)</h1>
-<div id="reproducibility-3" class="section level2">
-<h2>Reproducibility</h2>
-<p>Estimate, SE, and t reproduce but p-values are 1/2 the published p-values or slightly smaller for FCM. The exception for reproducing is the SE for FCM, the published is 0.005, here is 0.006</p>
-<pre class="r"><code>fn &lt;- &#39;Table S5 Results.csv&#39;
-file_path &lt;- paste(base_path, &quot;data/&quot;, folder, &quot;/&quot;,fn, sep=&quot;&quot;)
-dt.table_S5 &lt;- data.table(read.table(file_path, sep=&#39;,&#39;, header=TRUE))
-fit &lt;- lmer(Offspring.Growth.Rate ~ Previous.Year.Cones + Current.Year.Cones + scaled.parturition.date + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action=&quot;na.exclude&quot;)
-coefficients(summary(fit)) # what is &quot;corrected about FCM?&quot;</code></pre>
-<pre><code>##                            Estimate  Std. Error       df    t value
-## (Intercept)              1.77491252 0.053608563 74.94678  33.108750
-## Previous.Year.Cones     -0.01054262 0.006939105 29.38092  -1.519306
-## Current.Year.Cones      -0.13259087 0.005189815 28.81226 -25.548283
-## scaled.parturition.date -0.22654127 0.010555374 28.99473 -21.462174
-## scaled.litter.size      -0.35744641 0.010167806 29.28986 -35.154723
-## Corrected.FCM.ng.g.dry   0.01187675 0.006134902 28.28645   1.935931
-##                           Pr(&gt;|t|)
-## (Intercept)             0.00000000
-## Previous.Year.Cones     0.13937447
-## Current.Year.Cones      0.00000000
-## scaled.parturition.date 0.00000000
-## scaled.litter.size      0.00000000
-## Corrected.FCM.ng.g.dry  0.06292754</code></pre>
-<p><img src="../../images/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/TableS5.png" /><!-- --></p>
-</div>
-<div id="explore" class="section level2">
-<h2>Explore</h2>
+<div id="effect-of-fcm-on-offspring-growth-rate-table-s5-1" class="section level2">
+<h2>Effect of FCM on offspring growth rate (Table S5)</h2>
 <pre class="r"><code># simple plot
 qplot(x=Corrected.FCM.ng.g.dry, y=Offspring.Growth.Rate, data=dt.table_S5) +
   geom_point() + geom_smooth(method=&#39;lm&#39;)</code></pre>
@@ -541,15 +541,14 @@ final_weight[, percent_augmented:=added_Growth/weight*100]</code></pre>
 <pre class="r"><code>coefficients(summary(lmer(Offspring.Growth.Rate ~ Previous.Year.Cones + Current.Year.Cones + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action=&quot;na.exclude&quot;)))[&quot;Corrected.FCM.ng.g.dry&quot;,]</code></pre>
 <pre><code>##    Estimate  Std. Error          df     t value    Pr(&gt;|t|) 
 ## -0.02114604  0.02154577 44.09898692 -0.98144704  0.33172635</code></pre>
-</div>
-<div id="red-flags-2" class="section level2">
-<h2>Red flags</h2>
-<div id="small-effect-in-obersvational-design" class="section level3">
-<h3>small effect in obersvational design</h3>
+<div id="summary-of-red-flags" class="section level3">
+<h3>Summary of Red flags</h3>
+<div id="small-effect-in-obersvational-design" class="section level4">
+<h4>small effect in obersvational design</h4>
 <p>A p-value for an observational design with multiple, somewhat arbitrary covariates, that is near 0.05 just isn’t very strong evidence of anything causal. The Estimate is strongly dependent on which other covariates are in the model. Certainly there are missing confounders. See Walker 2014.</p>
 </div>
-<div id="table-s5-cis" class="section level3">
-<h3>Table S5 CIs</h3>
+<div id="table-s5-cis" class="section level4">
+<h4>Table S5 CIs</h4>
 <ol style="list-style-type: decimal">
 <li>The published CIs of <span class="math inline">\(Currrent_cones\)</span>, <span class="math inline">\(Parturtion_date\)</span>, <span class="math inline">\(Litter_size\)</span> do not even cover the estimate. How could no-one see this?</li>
 <li>The published CIs are not at all consistent with the p-value (e.g. compare for FCM)</li>
@@ -558,37 +557,18 @@ final_weight[, percent_augmented:=added_Growth/weight*100]</code></pre>
 <li>conclusion - this doesn’t effect the paper but … I am shocked, shocked, that the reviewers didn’t catch the very glaring differences in inference between the CIs and p-values.</li>
 </ol>
 </div>
-<div id="how-is-fcm-corrected" class="section level3">
-<h3>How is FCM “corrected?”</h3>
+<div id="how-is-fcm-corrected" class="section level4">
+<h4>How is FCM “corrected?”</h4>
 <p>These seem to be residuals, maybe from <span class="math inline">\(Days_pc\)</span>?</p>
 </div>
-<div id="evidence-of-fcm-effect-is-pretty-small" class="section level3">
-<h3>Evidence of FCM effect is pretty small</h3>
+<div id="evidence-of-fcm-effect-is-pretty-small" class="section level4">
+<h4>Evidence of FCM effect is pretty small</h4>
 <p>The effect size is very small at least relative to the noise (figure @ref(fig:TableS5_Explore)). The absolute magnitude of added growth (from low to high end of FCM) is 0.89 grams, which adds about 1.9-3.3% to growth over 25 days (conditional on litter size and assuming the effect is independent of litter size). Or, .89 grams adds about 1.3-2.3% to final weight (again conditional on litter size). What are the ecological consequences these estimated gains?</p>
 </div>
 </div>
 </div>
-<div id="effect-of-experiment-cortisol-on-growth-rate-table-s6" class="section level1">
-<h1>Effect of experiment Cortisol on growth rate (Table S6)</h1>
-<div id="reproducibility-4" class="section level2">
-<h2>Reproducibility</h2>
-<pre class="r"><code>fn &lt;- &#39;Table S6 Results - neonate mass and growth rate.csv&#39;
-file_path &lt;- paste(base_path, &quot;data/&quot;, folder, &quot;/&quot;,fn, sep=&quot;&quot;)
-dt.table_S6 &lt;- data.table(read.table(file_path, sep=&#39;,&#39;, header=TRUE))
-
-# omitting rows with NA in growth rate
-inc &lt;- which(!is.na(dt.table_S6[, Offspring.Growth.Rate]))
-dt.table_S6 &lt;- dt.table_S6[inc, ]
-
-fit &lt;- lmer(Offspring.Growth.Rate ~ Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action=&quot;na.exclude&quot;)
-coefficients(summary(fit)) # what is &quot;corrected about FCM?&quot;</code></pre>
-<pre><code>##                      Estimate Std. Error       df   t value     Pr(&gt;|t|)
-## (Intercept)         1.5268119  0.1207671 4.835748 12.642612 6.877296e-05
-## Scaled.Litter.Size -0.2887911  0.1722111 5.056877 -1.676960 1.537366e-01
-## TreatmentFed GCs    0.8623885  0.1730368 5.093243  4.983845 3.954676e-03</code></pre>
-</div>
-<div id="explore-1" class="section level2">
-<h2>Explore</h2>
+<div id="effect-of-experiment-cortisol-on-growth-rate-table-s6-1" class="section level2">
+<h2>Effect of experiment Cortisol on growth rate (Table S6)</h2>
 <p>Growth rate is a change score and the treatment effect is confounded by baseline</p>
 <pre class="r"><code># baseline covariate 
 refit &lt;- lmer(Offspring.Growth.Rate ~ Offspring.Weight.1 + Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action=&quot;na.exclude&quot;)
@@ -632,8 +612,5 @@ coefficients(summary(lm(Offspring.Growth.Rate ~ Scaled.Litter.Size + Offspring.W
 ## (Intercept)        3.624371e-05
 ## Scaled.Litter.Size 9.893091e-01
 ## TreatmentFed GCs   6.936875e-03</code></pre>
-</div>
-<div id="red-flags-3" class="section level2">
-<h2>Red flags</h2>
 </div>
 </div>

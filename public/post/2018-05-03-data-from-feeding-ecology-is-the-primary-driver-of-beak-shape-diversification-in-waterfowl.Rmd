@@ -1,0 +1,24 @@
+---
+title: 'Data from: Feeding ecology is the primary driver of beak shape diversification
+  in waterfowl'
+author: Jeff Walker
+date: '2018-05-03'
+slug: data-from-feeding-ecology-is-the-primary-driver-of-beak-shape-diversification-in-waterfowl
+categories:
+  - functional ecology
+tags: []
+---
+```{r}
+
+```
+
+# Source
+
+# Reproducibility
+
+# Cool morphometrics
+
+blah blah blah blah blah blah blah
+
+even more blah blah
+

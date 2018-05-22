@@ -7,10 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
-    <lastBuildDate>Mon, 30 Apr 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 07 May 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/ecology/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Data from: Success despite the stress- violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs</title>
+      <link>/post/data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs/</link>
+      <pubDate>Mon, 07 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs/</guid>
+      <description>Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2016) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719[Google Scholar](https://scholar.google.com/scholar?hl=en&amp;amp;as_sdt=0%2C20&amp;amp;q=%22Success+despite+the+stress%3A+violet‐green+swallows+increase+glucocorticoids+and+maintain+reproductive+output+despite+experimental+increases+in+flight+costs%22&amp;amp;btnG=){target=“_blank“}
+https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
+ Background xxx
+ Reproducibility Body Mass fn &amp;lt;- &amp;#39;RiversetalVGSWhandicappingRawData.xls&amp;#39; file_path &amp;lt;- paste(base_path, folder, fn, sep=&amp;#39;/&amp;#39;) bird &amp;lt;- data.table(read_excel(file_path, sheet = &amp;#39;Tab3 &amp;quot;a8&amp;quot;&amp;#39;)) bird[, Treatment:=factor(Treatment)] bird_wide &amp;lt;- dcast(bird, Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Nestling_Age, value.</description>
+    </item>
     
     <item>
       <title>Data from: Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal</title>
@@ -18,7 +30,7 @@
       <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/</guid>
-      <description>Sources Background Reproducibility Effect of spruce cone availability on local density (Fig. 1B)  Effect of Density on growth rate (Fig. 2/Table S2) Reproducibility Red flags Growth rate is a change score and is confounding by the basline Figure 2 doesn’t make sense   Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4) Reproducibility Red flags one-tailed tests Forking paths Confounding Density and Treatment in Fig 3A,B/Table S4 What is effect of ignoring Chickadee manipulation in Fig 3C/Table S4 Justification for using chickadee playback as “Control” Summary of Red Flags for Figure 3/Table S4   Effect of FCM on offspring growth rate (Table S5) Reproducibility Explore Red flags small effect in obersvational design Table S5 CIs How is FCM “corrected?</description>
+      <description>Sources Background Reproducibility Effect of spruce cone availability on local density (Fig. 1B) Effect of Density on growth rate (Fig. 2/Table S2) Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4) Effect of FCM on offspring growth rate (Table S5) Effect of experiment Cortisol on growth rate (Table S6)  Red flags Effect of Density on growth rate (Fig. 2/Table S2) Growth rate is a change score and is confounding by the basline Figure 2 doesn’t make sense  Effect of Density on fecal cortisol metabolites (Fig.</description>
     </item>
     
   </channel>

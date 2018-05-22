@@ -1,0 +1,63 @@
+---
+title: 'Data from: Success despite the stress- violet-green swallows increase glucocorticoids
+  and maintain reproductive output despite experimental increases in flight costs'
+author: Jeff Walker
+date: '2018-05-07'
+slug: data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs
+categories: []
+tags:
+  - ecology
+  - experiment
+  - physiology
+subtitle: ''
+---
+```{r prep, echo=FALSE, message=FALSE}
+library(readxl)
+library(ggplot2)
+library(data.table)
+library(lme4)
+library(lmerTest)
+
+base_path <- "../data" #knitr
+#base_path <- "content/data"  # console
+folder <- '2018-05-07-data-from-success-despite-the-stress'
+```
+
+# Sources
+Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2016) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719[Google Scholar](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C20&q=%22Success+despite+the+stress%3A+violet‐green+swallows+increase+glucocorticoids+and+maintain+reproductive+output+despite+experimental+increases+in+flight+costs%22&btnG=){target="_blank"}
+
+[https://datadryad.org/resource/doi:10.5061/dryad.3bc3s](https://datadryad.org/resource/doi:10.5061/dryad.3bc3s){target="_blank"}
+
+# Background
+xxx
+
+# Reproducibility
+## Body Mass
+
+```{r}
+fn <- 'RiversetalVGSWhandicappingRawData.xls'
+file_path <- paste(base_path, folder, fn, sep='/')
+bird <- data.table(read_excel(file_path, sheet = 'Tab3 "a8"'))
+bird[, Treatment:=factor(Treatment)]
+bird_wide <- dcast(bird,  Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Nestling_Age, value.var=c('Mass','Time'))
+bird_wide[, dMass:=Mass_13 - Mass_3]
+```
+
+```{r fig2}
+fit <- lm(Mass ~ Treatment*Nestling_Age, data=bird)
+anova(fit)
+```
+
+# Red Flags
+## No adjustment for initial mass in estimate of change in mass
+
+```{r }
+
+# change in mass
+fit <- lm(dMass ~ Treatment, data=bird_wide)
+fit2 <- lm(dMass ~ Mass_3 + Treatment, data=bird_wide)
+coefficients(summary(fit))
+coefficients(summary(fit2))
+
+```
+
