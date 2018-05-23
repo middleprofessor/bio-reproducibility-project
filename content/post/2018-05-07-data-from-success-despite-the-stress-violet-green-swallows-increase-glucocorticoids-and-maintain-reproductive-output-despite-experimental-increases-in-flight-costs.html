@@ -45,9 +45,9 @@ gg &lt;- ggplot(data=bird, aes(x=Treatment, y=Mass, fill=Capture_Period)) +
 gg</code></pre>
 <pre><code>## Warning: Removed 2 rows containing non-finite values (stat_boxplot).</code></pre>
 <div class="figure"><span id="fig:fig2b"></span>
-<img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/fig2b-1.png" alt="Reproduced Fig. 2b." width="672" />
+<img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/fig2b-1.png" alt="Reproduced Fig. 2b" width="672" />
 <p class="caption">
-Figure 1: Reproduced Fig. 2b.
+Figure 1: Reproduced Fig. 2b
 </p>
 </div>
 <pre class="r"><code>fit &lt;- lmer(Mass ~ Treatment*Capture_Period + (1|BandNo), data=bird)
@@ -97,20 +97,115 @@ kable(as.data.frame(anova(fit, ddf=&quot;Kenward-Roger&quot;)), digits=3)</code>
 <blockquote>
 <p>We found that female body mass significantly decreased between the two capture periods (F1,14.7 = 48.9, P &lt; 0.001; Fig. 2b), but we did not detect a significant effect of either treatment (F2,23 = 1.9, P = 0.173) or a treatment x capture period interaction (F2,15 = 2 5, P = 0.118). The mean decrease in body mass between capture periods was significant for females in the control treatment [b = -0.95 (95% CI: 1.75, 0.14), t1,16 = 3.8, P = 0 017] as well as both handicapping treatments [light clipping: b = -1.07 (95% CI: 1.88, 0.26), t1,15 3 = 4.3, P = 0.007; heavy clipping: b = -2.12 (95% CI: 3.67, 0.58), t1,14 3 = 4.5, P = 0.005; Fig. 2b]. However, the magnitude of decrease in mean body mass of females in the light and heavy clipping treatments was 1.29X (95% CI: 0.6, 2.3) and 2.29X (95% CI: 1.2, 4.5) greater, respectively, that of females in the control treatment.</p>
 </blockquote>
+<pre class="r"><code># look at coefficients of lmm in addition to the ANOVA above
+b_table &lt;- coefficients(summary(fit))
+b &lt;- b_table[, &quot;Estimate&quot;]
+kable(b_table, digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">df</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td align="right">14.922</td>
+<td align="right">0.254</td>
+<td align="right">36.319</td>
+<td align="right">58.718</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>Treatment2_4Fclip</td>
+<td align="right">0.665</td>
+<td align="right">0.350</td>
+<td align="right">34.416</td>
+<td align="right">1.899</td>
+<td align="right">0.066</td>
+</tr>
+<tr class="odd">
+<td>Treatment3_8Fclip</td>
+<td align="right">1.118</td>
+<td align="right">0.534</td>
+<td align="right">31.632</td>
+<td align="right">2.092</td>
+<td align="right">0.045</td>
+</tr>
+<tr class="even">
+<td>Capture_Period13</td>
+<td align="right">-0.950</td>
+<td align="right">0.242</td>
+<td align="right">16.311</td>
+<td align="right">-3.930</td>
+<td align="right">0.001</td>
+</tr>
+<tr class="odd">
+<td>Treatment2_4Fclip:Capture_Period13</td>
+<td align="right">-0.127</td>
+<td align="right">0.345</td>
+<td align="right">15.903</td>
+<td align="right">-0.367</td>
+<td align="right">0.718</td>
+</tr>
+<tr class="even">
+<td>Treatment3_8Fclip:Capture_Period13</td>
+<td align="right">-1.170</td>
+<td align="right">0.528</td>
+<td align="right">14.821</td>
+<td align="right">-2.215</td>
+<td align="right">0.043</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># how many X greater was the reduction (this is a confusing way to report)
+b[&#39;Treatment2_4Fclip:Capture_Period13&#39;]/b[&#39;Capture_Period13&#39;]</code></pre>
+<pre><code>## Treatment2_4Fclip:Capture_Period13 
+##                           0.133301</code></pre>
+<pre class="r"><code>b[&#39;Treatment3_8Fclip:Capture_Period13&#39;]/b[&#39;Capture_Period13&#39;]</code></pre>
+<pre><code>## Treatment3_8Fclip:Capture_Period13 
+##                           1.231322</code></pre>
+<p>Or, 1.13X and 2.23X more reduction</p>
 </div>
 </div>
 <div id="red-flags" class="section level1">
 <h1>Red Flags</h1>
-<div id="no-adjustment-for-baseline-when-comparing-change-in-mass" class="section level2">
-<h2>No adjustment for baseline when comparing change in mass</h2>
-<p>Note the inconsistency between the report of 1.29X and 2.29X greater reduction in mass with CIs that do not cover 1.0 and the ANOVA table interaction row (both are different ways of looking at the same thing). Fig 2b shows effectively zero effect of treatment for post-treatment measure. The expectation is zero if there is no effect, and the data are very consistent with this. But there is a big difference in pre-treatment mass among levels (again, the expectation is zero with randomized treatment assignment). So this is a good example of pre-post bias in the estimates of 1.29X and 2.29X greater reduction in mass. <a href="https://www.middleprofessor.com/files/quasipubs/change_scores.html">The expectation for these estimates is not 1.0 conditional on pre-treatment mass</a>. Why might pre-treatment control mass be unusually low or pre-treatment 8-clip mass be unusually high? This could simply be a function of when the birds were weighed, since bird mass oscillates during the day.</p>
+<div id="adjustment-for-baseline-when-comparing-change-in-mass" class="section level2">
+<h2>Adjustment for baseline when comparing change in mass</h2>
+<p>Note the inconsistency between the report of 2.29X greater reduction in mass with CI that does not cover 1.0 and the ANOVA table interaction row (both are different ways of looking at the same thing). Fig 2b shows effectively zero effect of treatment for post-treatment measure. The expectation is zero if there is no effect, and the data are very consistent with this. But there is a big difference in pre-treatment mass among levels (again, the expectation is zero with randomized treatment assignment). So this might be a good example of pre-post bias in the estimates of 1.29X and 2.29X greater reduction in mass. <a href="https://www.middleprofessor.com/files/quasipubs/change_scores.html">The expectation for these estimates is not 1.0 conditional on pre-treatment mass</a>.</p>
+<p>Why might? Because the interaction effects of the LMM should adjust for baseline. This should be explored. I compare the results with an ANCOVA using baseline mass as a covariate.</p>
+<p>Why might pre-treatment control mass be unusually low or pre-treatment 8-clip mass be unusually high? This could simply be a function of when the birds were weighed, since bird mass oscillates during the day.</p>
 <pre class="r"><code># change in mass
-fit2 &lt;- lm(dMass ~ Mass_3 + Treatment, data=bird_wide)
+gg &lt;- ggplot(data=bird_wide, aes(x=day3mass, y=dMass, color=Treatment)) +
+  geom_point()
+gg</code></pre>
+<pre><code>## Warning: Removed 12 rows containing missing values (geom_point).</code></pre>
+<div class="figure"><span id="fig:fig2bAncova"></span>
+<img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/fig2bAncova-1.png" alt="ANCOVA style plot. blah blah blah" width="672" />
+<p class="caption">
+Figure 2: ANCOVA style plot. blah blah blah
+</p>
+</div>
+<pre class="r"><code>fit2 &lt;- lm(dMass ~ Mass_3 + Treatment, data=bird_wide)
 coefficients(summary(fit2))</code></pre>
 <pre><code>##                     Estimate Std. Error    t value   Pr(&gt;|t|)
 ## (Intercept)        4.8126755  2.9454578  1.6339312 0.12821673
 ## Mass_3            -0.3912755  0.1972236 -1.9839176 0.07061761
 ## Treatment2_4Fclip  0.2631583  0.3330682  0.7901034 0.44480076
 ## Treatment3_8Fclip -0.6370666  0.5896500 -1.0804148 0.30119354</code></pre>
+<p>These results are inconsistent with the LMM where the decrease in mass is actually less for the 4-clip treatment.</p>
+<pre class="r"><code># sample size
+ycols &lt;- c(&#39;Treatment&#39;, &#39;day3mass&#39;, &#39;dMass&#39;)
+bird_wide[!is.na(dMass), .(N=.N), by=Treatment]</code></pre>
+<pre><code>##    Treatment N
+## 1:  2_4Fclip 7
+## 2:  3_8Fclip 2
+## 3: 1_control 7</code></pre>
+<p>Look at their fig 2b which reports sample sizes for pre and post measures. The n drops in all post measures. The ANCOVA only analyzes birds with both pre and post measures so is using less data.</p>
 </div>
 </div>
