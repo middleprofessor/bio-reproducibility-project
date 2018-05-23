@@ -18,21 +18,10 @@
       <pubDate>Mon, 07 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs/</guid>
-      <description>Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2016) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719[Google Scholar](https://scholar.google.com/scholar?hl=en&amp;amp;as_sdt=0%2C20&amp;amp;q=%22Success+despite+the+stress%3A+violet‐green+swallows+increase+glucocorticoids+and+maintain+reproductive+output+despite+experimental+increases+in+flight+costs%22&amp;amp;btnG=){target=“_blank“}
-https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
+      <description>Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719 [Google Scholar]
+Data source: https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
  Background xxx
- Reproducibility Body Mass fn &amp;lt;- &amp;#39;RiversetalVGSWhandicappingRawData.xls&amp;#39; file_path &amp;lt;- paste(base_path, folder, fn, sep=&amp;#39;/&amp;#39;) bird &amp;lt;- data.table(read_excel(file_path, sheet = &amp;#39;Tab3 &amp;quot;a8&amp;quot;&amp;#39;)) bird[, Treatment:=factor(Treatment)] bird_wide &amp;lt;- dcast(bird, Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Nestling_Age, value.</description>
-    </item>
-    
-    <item>
-      <title>Data from: Feeding ecology is the primary driver of beak shape diversification in waterfowl</title>
-      <link>/post/data-from-feeding-ecology-is-the-primary-driver-of-beak-shape-diversification-in-waterfowl/</link>
-      <pubDate>Thu, 03 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/post/data-from-feeding-ecology-is-the-primary-driver-of-beak-shape-diversification-in-waterfowl/</guid>
-      <description>Source  Reproducibility  Cool morphometrics blah blah blah blah blah blah blah
-even more blah blah
- </description>
+ Data fn &amp;lt;- &amp;#39;RiversetalVGSWhandicappingRawData.xls&amp;#39; file_path &amp;lt;- paste(base_path, folder, fn, sep=&amp;#39;/&amp;#39;) bird &amp;lt;- data.table(read_excel(file_path, sheet = &amp;#39;Tab3 &amp;quot;a8&amp;quot;&amp;#39;)) bird[, Treatment:=factor(Treatment)] bird[, Capture_Period:=factor(Nestling_Age)] bird_wide &amp;lt;- dcast(bird, Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Capture_Period, value.</description>
     </item>
     
     <item>

@@ -6,15 +6,15 @@
   <title>Data from: Success despite the stress- violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from: Success despite the stress- violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from: Success despite the stress- violet-green swallows increase …" />
-  <meta name="description" content="Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2016) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719[Google Scholar](https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C20&amp;q=%22Success&#43;despite&#43;the&#43;stress%3A&#43;violet‐green&#43;swallows&#43;increase&#43;glucocorticoids&#43;and&#43;maintain&#43;reproductive&#43;output&#43;despite&#43;experimental&#43;increases&#43;in&#43;flight&#43;costs%22&amp;btnG=){target=“_blank“}
-https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
+  <meta name="description" content="Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719 [Google Scholar]
+Data source: https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
  Background xxx
- Reproducibility Body Mass fn &lt;- &#39;RiversetalVGSWhandicappingRawData.xls&#39; file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;) bird &lt;- data.table(read_excel(file_path, sheet = &#39;Tab3 &quot;a8&quot;&#39;)) bird[, Treatment:=factor(Treatment)] bird_wide &lt;- dcast(bird, Year &#43; Treatment &#43; BandNo &#43; DOY_Initiation &#43; day3mass ~ Nestling_Age, value.">
-  <meta property="og:description" content="Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2016) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719[Google Scholar](https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C20&amp;q=%22Success&#43;despite&#43;the&#43;stress%3A&#43;violet‐green&#43;swallows&#43;increase&#43;glucocorticoids&#43;and&#43;maintain&#43;reproductive&#43;output&#43;despite&#43;experimental&#43;increases&#43;in&#43;flight&#43;costs%22&amp;btnG=){target=“_blank“}
-https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
+ Data fn &lt;- &#39;RiversetalVGSWhandicappingRawData.xls&#39; file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;) bird &lt;- data.table(read_excel(file_path, sheet = &#39;Tab3 &quot;a8&quot;&#39;)) bird[, Treatment:=factor(Treatment)] bird[, Capture_Period:=factor(Nestling_Age)] bird_wide &lt;- dcast(bird, Year &#43; Treatment &#43; BandNo &#43; DOY_Initiation &#43; day3mass ~ Capture_Period, value.">
+  <meta property="og:description" content="Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719 [Google Scholar]
+Data source: https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
  Background xxx
- Reproducibility Body Mass fn &lt;- &#39;RiversetalVGSWhandicappingRawData.xls&#39; file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;) bird &lt;- data.table(read_excel(file_path, sheet = &#39;Tab3 &quot;a8&quot;&#39;)) bird[, Treatment:=factor(Treatment)] bird_wide &lt;- dcast(bird, Year &#43; Treatment &#43; BandNo &#43; DOY_Initiation &#43; day3mass ~ Nestling_Age, value.">
-  <meta name="twitter:description" content="Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2016) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases …">
+ Data fn &lt;- &#39;RiversetalVGSWhandicappingRawData.xls&#39; file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;) bird &lt;- data.table(read_excel(file_path, sheet = &#39;Tab3 &quot;a8&quot;&#39;)) bird[, Treatment:=factor(Treatment)] bird[, Capture_Period:=factor(Nestling_Age)] bird_wide &lt;- dcast(bird, Year &#43; Treatment &#43; BandNo &#43; DOY_Initiation &#43; day3mass ~ Capture_Period, value.">
+  <meta name="twitter:description" content="Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs/" />
@@ -70,52 +70,103 @@ https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
         </li>
       </ul>
       
+<aside class="toc">
+  
+</aside>
       <div id="sources" class="section level1">
 <h1>Sources</h1>
-<p>Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2016) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. <a href="https://doi.org/10.1111/1365-2435.12719%5BGoogle" class="uri">https://doi.org/10.1111/1365-2435.12719[Google</a> Scholar](<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C20&amp;q=%22Success+despite+the+stress%3A+violet‐green+swallows+increase+glucocorticoids+and+maintain+reproductive+output+despite+experimental+increases+in+flight+costs%22&amp;btnG">https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C20&amp;q=%22Success+despite+the+stress%3A+violet‐green+swallows+increase+glucocorticoids+and+maintain+reproductive+output+despite+experimental+increases+in+flight+costs%22&amp;btnG</a>=){target=“_blank“}</p>
-<p><a href="https://datadryad.org/resource/doi:10.5061/dryad.3bc3s" class="uri" target="_blank">https://datadryad.org/resource/doi:10.5061/dryad.3bc3s</a></p>
+<p>Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. <a href="https://doi.org/10.1111/1365-2435.12719" class="uri">https://doi.org/10.1111/1365-2435.12719</a> [<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C20&amp;q=%22Success+despite+the+stress%3A+violet‐green+swallows+increase+glucocorticoids+and+maintain+reproductive+output+despite+experimental+increases+in+flight+costs%22&amp;btnG=" target="_blank">Google Scholar</a>]</p>
+<p>Data source: <a href="https://datadryad.org/resource/doi:10.5061/dryad.3bc3s" class="uri" target="_blank">https://datadryad.org/resource/doi:10.5061/dryad.3bc3s</a></p>
 </div>
 <div id="background" class="section level1">
 <h1>Background</h1>
 <p>xxx</p>
 </div>
-<div id="reproducibility" class="section level1">
-<h1>Reproducibility</h1>
-<div id="body-mass" class="section level2">
-<h2>Body Mass</h2>
+<div id="data" class="section level1">
+<h1>Data</h1>
 <pre class="r"><code>fn &lt;- &#39;RiversetalVGSWhandicappingRawData.xls&#39;
 file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
 bird &lt;- data.table(read_excel(file_path, sheet = &#39;Tab3 &quot;a8&quot;&#39;))
 bird[, Treatment:=factor(Treatment)]
-bird_wide &lt;- dcast(bird,  Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Nestling_Age, value.var=c(&#39;Mass&#39;,&#39;Time&#39;))
+bird[, Capture_Period:=factor(Nestling_Age)]
+bird_wide &lt;- dcast(bird,  Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Capture_Period, value.var=c(&#39;Mass&#39;,&#39;Time&#39;))
 bird_wide[, dMass:=Mass_13 - Mass_3]</code></pre>
-<pre class="r"><code>fit &lt;- lm(Mass ~ Treatment*Nestling_Age, data=bird)
-anova(fit)</code></pre>
-<pre><code>## Analysis of Variance Table
-## 
-## Response: Mass
-##                        Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
-## Treatment               2  6.0874  3.0437  4.6159   0.01605 *  
-## Nestling_Age            1 15.2250 15.2250 23.0894 2.436e-05 ***
-## Treatment:Nestling_Age  2  1.1183  0.5591  0.8480   0.43623    
-## Residuals              38 25.0570  0.6594                      
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="reproducibility" class="section level1">
+<h1>Reproducibility</h1>
+<div id="body-mass" class="section level2">
+<h2>Body Mass</h2>
+<blockquote>
+<p>We found that female body mass significantly decreased between the two capture periods (F1,14.7 = 48.9, P &lt; 0 001; Fig. 2b), but we did not detect a significant effect of either treatment (F2,23 = 1.9, P = 0.173) or a treatment x capture period interaction (F2,15 = 2.5, P = 0.118).</p>
+</blockquote>
+<pre class="r"><code># capture period == nestling_age
+gg &lt;- ggplot(data=bird, aes(x=Treatment, y=Mass, fill=Capture_Period)) +
+  geom_boxplot()
+gg</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_boxplot).</code></pre>
+<div class="figure"><span id="fig:fig2b"></span>
+<img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/fig2b-1.png" alt="Reproduced Fig. 2b." width="672" />
+<p class="caption">
+Figure 1: Reproduced Fig. 2b.
+</p>
+</div>
+<pre class="r"><code>fit &lt;- lmer(Mass ~ Treatment*Capture_Period + (1|BandNo), data=bird)
+kable(as.data.frame(anova(fit, ddf=&quot;Kenward-Roger&quot;)), digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Sum Sq</th>
+<th align="right">Mean Sq</th>
+<th align="right">NumDF</th>
+<th align="right">DenDF</th>
+<th align="right">F.value</th>
+<th align="right">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Treatment</td>
+<td align="right">0.944</td>
+<td align="right">0.472</td>
+<td align="right">2</td>
+<td align="right">24.461</td>
+<td align="right">2.016</td>
+<td align="right">0.155</td>
+</tr>
+<tr class="even">
+<td>Capture_Period</td>
+<td align="right">11.546</td>
+<td align="right">11.546</td>
+<td align="right">1</td>
+<td align="right">15.352</td>
+<td align="right">49.316</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td>Treatment:Capture_Period</td>
+<td align="right">1.151</td>
+<td align="right">0.575</td>
+<td align="right">2</td>
+<td align="right">15.650</td>
+<td align="right">2.457</td>
+<td align="right">0.118</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>We found that female body mass significantly decreased between the two capture periods (F1,14.7 = 48.9, P &lt; 0.001; Fig. 2b), but we did not detect a significant effect of either treatment (F2,23 = 1.9, P = 0.173) or a treatment x capture period interaction (F2,15 = 2 5, P = 0.118). The mean decrease in body mass between capture periods was significant for females in the control treatment [b = -0.95 (95% CI: 1.75, 0.14), t1,16 = 3.8, P = 0 017] as well as both handicapping treatments [light clipping: b = -1.07 (95% CI: 1.88, 0.26), t1,15 3 = 4.3, P = 0.007; heavy clipping: b = -2.12 (95% CI: 3.67, 0.58), t1,14 3 = 4.5, P = 0.005; Fig. 2b]. However, the magnitude of decrease in mean body mass of females in the light and heavy clipping treatments was 1.29X (95% CI: 0.6, 2.3) and 2.29X (95% CI: 1.2, 4.5) greater, respectively, that of females in the control treatment.</p>
+</blockquote>
 </div>
 </div>
 <div id="red-flags" class="section level1">
 <h1>Red Flags</h1>
-<div id="no-adjustment-for-initial-mass-in-estimate-of-change-in-mass" class="section level2">
-<h2>No adjustment for initial mass in estimate of change in mass</h2>
+<div id="no-adjustment-for-baseline-when-comparing-change-in-mass" class="section level2">
+<h2>No adjustment for baseline when comparing change in mass</h2>
+<p>Note the inconsistency between the report of 1.29X and 2.29X greater reduction in mass with CIs that do not cover 1.0 and the ANOVA table interaction row (both are different ways of looking at the same thing). Fig 2b shows effectively zero effect of treatment for post-treatment measure. The expectation is zero if there is no effect, and the data are very consistent with this. But there is a big difference in pre-treatment mass among levels (again, the expectation is zero with randomized treatment assignment). So this is a good example of pre-post bias in the estimates of 1.29X and 2.29X greater reduction in mass. <a href="https://www.middleprofessor.com/files/quasipubs/change_scores.html">The expectation for these estimates is not 1.0 conditional on pre-treatment mass</a>. Why might pre-treatment control mass be unusually low or pre-treatment 8-clip mass be unusually high? This could simply be a function of when the birds were weighed, since bird mass oscillates during the day.</p>
 <pre class="r"><code># change in mass
-fit &lt;- lm(dMass ~ Treatment, data=bird_wide)
 fit2 &lt;- lm(dMass ~ Mass_3 + Treatment, data=bird_wide)
-coefficients(summary(fit))</code></pre>
-<pre><code>##                     Estimate Std. Error    t value    Pr(&gt;|t|)
-## (Intercept)       -1.0128571  0.2558607 -3.9586279 0.001634708
-## Treatment2_4Fclip  0.1357143  0.3618416  0.3750654 0.713659680
-## Treatment3_8Fclip -1.2871429  0.5427624 -2.3714664 0.033843155</code></pre>
-<pre class="r"><code>coefficients(summary(fit2))</code></pre>
+coefficients(summary(fit2))</code></pre>
 <pre><code>##                     Estimate Std. Error    t value   Pr(&gt;|t|)
 ## (Intercept)        4.8126755  2.9454578  1.6339312 0.12821673
 ## Mass_3            -0.3912755  0.1972236 -1.9839176 0.07061761
@@ -158,7 +209,7 @@ coefficients(summary(fit))</code></pre>
     <ul class="pager article-pager">
       <li class="pager-newer pager-noitem">&lt; Newer</li>
       <li class="pager-older">
-        <a href="/post/data-from-feeding-ecology-is-the-primary-driver-of-beak-shape-diversification-in-waterfowl/" data-toggle="tooltip" data-placement="top" title="Data from: Feeding ecology is the primary driver of beak shape diversification in waterfowl">Older &gt;</a>
+        <a href="/post/data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/" data-toggle="tooltip" data-placement="top" title="Data from: Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal">Older &gt;</a>
       </li>
     </ul>
   </div>

@@ -66,10 +66,10 @@
           </li>
         </ul>
         <div class="article-content">
-          Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2016) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719[Google Scholar](https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C20&amp;q=%22Success+despite+the+stress%3A+violet‐green+swallows+increase+glucocorticoids+and+maintain+reproductive+output+despite+experimental+increases+in+flight+costs%22&amp;btnG=){target=“_blank“}
-https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
+          Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719 [Google Scholar]
+Data source: https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
  Background xxx
- Reproducibility Body Mass fn &lt;- &#39;RiversetalVGSWhandicappingRawData.xls&#39; file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;) bird &lt;- data.table(read_excel(file_path, sheet = &#39;Tab3 &quot;a8&quot;&#39;)) bird[, Treatment:=factor(Treatment)] bird_wide &lt;- dcast(bird, Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Nestling_Age, value.
+ Data fn &lt;- &#39;RiversetalVGSWhandicappingRawData.xls&#39; file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;) bird &lt;- data.table(read_excel(file_path, sheet = &#39;Tab3 &quot;a8&quot;&#39;)) bird[, Treatment:=factor(Treatment)] bird[, Capture_Period:=factor(Nestling_Age)] bird_wide &lt;- dcast(bird, Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Capture_Period, value.
         </div>
         <div class="article-readmore"><a href="/post/data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs/">Read more...</a></div>
         <div class="article-floatclear"></div>
