@@ -1,0 +1,145 @@
+---
+title: Data from Ontogenetic thermal tolerance and performance of ectotherms at variable
+  temperatures
+author: Jeff Walker
+date: '2018-05-26'
+slug: data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures
+categories: []
+tags:
+  - experiment
+  - 2x2
+  - physiology
+subtitle: ''
+---
+# Summary
+
+Table 1 - mostly reproducible but rounding error.
+
+Table 2 - partly reproducible but less important for inference
+
+# Reproducibility
+```{r libraries, echo=TRUE, message=FALSE}
+library(knitr)
+library(readxl)
+library(ggplot2)
+library(doBy)
+library(data.table)
+library(MuMIn)
+library(emmeans)
+library(cowplot)
+library(HarrellPlot)
+```
+
+```{r data}
+base_path <- "../data" #knitr
+#base_path <- "content/data"  # console
+
+folder <- '2018-05-26-data-from-ontogenetic-thermal-tolerance'
+fn <- 'data_cavieres et al JEB 2016.xls'
+file_path <- paste(base_path,folder, fn, sep='/')
+dt <- data.table(read_excel(file_path))
+old_colnames <- colnames(dt)
+ycols <- c('Tbar', 'Tfluc', 'Sex', 'X1', 'X2', 'OR', 'To', 'Vmax', 'Tbr', 'LTL', 'UTL')
+setnames(dt, old_colnames, ycols)
+dt[,Tbar:=factor(Tbar, c('15','28'))]
+dt[,Tfluc:=factor(Tfluc, c('0','4'))]
+# order by factor for HarrelPlot
+dt <- orderBy(~ Tbar + Tfluc, dt)
+```
+
+The authors used a model selection method to get something like minimum adequate model for the effects of $Sex$ + $Tbar$ + $Tfluc$ on 8 performance curve traits. The model selection method was
+
+>To test the potential effects of mean of temperature and daily fluctuation, we performed a linear model, with following variables: sex + mean of temperature * daily fluctuation. Model selection was performed using Akaike’s information criterion for finites sample (AICc); both delta AIC (Di) values, a measure of each model relative to the best model, and model weights (wi), a measure of the evidence supporting a specific model, were used for selections and model comparison. When there were multiple models with Di < 2, selection was based on the difference in parameters present in each model, reduction in deviance and log-likelihood values (Burnham & Anderson, 2003)
+
+"selection was based on the difference in parameters present in each model, reduction in deviance and log-likelihood" is not reproducible language.
+
+## Table 1
+
+```{r table1}
+ycols <- c('To', 'Vmax', 'Tbr', 'LTL', 'UTL', 'OR', 'X1', 'X2')
+table1 <- list()
+for(j in 1:length(ycols)){
+  full_model <- formula(paste(ycols[j], "~ Sex + Tbar*Tfluc"))
+  fit <- lm(full_model, data=dt, na.action=na.fail)
+  fit.all <- dredge(fit)
+  table1[[j]] <- round(coefficients(summary(get.models(fit.all, subset=1)[[1]])), 3)
+}
+names(table1) <- ycols
+table1
+```
+
+Table 1 reproducibility
+
+1. $T_o$ reproduces
+2. $Vmax$ cannot recover
+3. $Tbar$ reproduces
+4. $LTL$ reproduces *except* sex effect. The authors seem to have merely not reported the Sex effect -- otherwise how to explain equivalence of coefficients, SE, and T
+5. $UTL$ reproduces
+6. $OR$ reproduces
+7. $X1$ reproduces
+8. $X2$ reproduces
+ 
+## Table 2
+
+These seem to be estimated marginal means, presumably from the models in Table 1. But this can't be because 28C-15 != 28V-15V for $T_o$ and others. Also, $OR$ is not simply the intercept (and must have an interaction too).
+
+Tried various combinations. The closest that comes to reproducing is the full model ($Sex + Tbar*Tfluc$).
+
+```{r table2}
+dredge_it <- FALSE
+table2 <- list()
+for(j in 1:length(ycols)){
+  full_model <- formula(paste(ycols[j], "~ Sex + Tbar * Tfluc"))
+  fit <- lm(full_model, data=dt, na.action=na.fail)
+  if(dredge_it){
+    fit.all <- dredge(fit)
+    fit <- get.models(fit.all, subset=1)[[1]]
+    best_vars <- all.vars(formula(fit))[-1] # if using dredge
+    if(length(best_vars > 0)){
+      table2[[j]] <- emmeans(fit, specs=best_vars)
+    }else{
+      table2[[j]] <- coefficients(fit)[1]
+    }    
+  }else{
+      table2[[j]] <- emmeans(fit, specs=c('Tbar', 'Tfluc'))
+  }
+}
+names(table2) <- ycols
+table2
+
+```
+
+Table 2 reproducibility -- partial.
+
+Regardless, this makes little difference to the inference.
+
+## Table 3
+
+Is this correlated change across the trial temperatures? There is no data for this!
+
+## Figure 2
+
+The data to re-plot Figure 2 were not made available.
+
+# Explore
+## Shift in UTL
+> in variable environments the upper thermal limit of performance curve shifted to the right, but flies reared in constant environments did not exhibit changes in UTL and the curve did not shift.
+
+They don't really present evidence for this anywhere but a HarrellPlot does a good job. The first two contrasts are the $Tbar$ effect, which is the evidence for the shift to right in fluctuating environment vs. non fluctuating environment. The bottom two contrasts are the $Tfluc$ effect.
+
+```{r}
+HarrellPlot(x="Tfluc", y="UTL", g="Tbar", data=dt, add_interaction=TRUE, interaction.group = TRUE, contrasts.method='revpairwise')$gg
+
+HarrellPlot(x="Tfluc", y="UTL", g="Tbar", data=dt, add_interaction=FALSE, interaction.group = TRUE, contrasts.method='revpairwise')$gg
+
+```
+
+The HarrellPlot supports the conclusion but the conclusion is unsupported by their own presentation as it implies a $Tbar \times Tfluc$ interaction (that is, the effect of $Tbar$ depends on the level of $Tfluc$). But nowhere do they show this interaction. Their own "best model" for $UTL$ does not include the interaction but just the additve effects of $Tbar$ and $Tfluc$.
+
+```{r}
+  full_model <- formula(paste("UTL ~ Tbar*Tfluc"))
+  coefficients(summary(lm(full_model, data=dt, na.action=na.fail)))
+```
+
+# Red Flags
+1. "Nevertheless, Tbr was not affected by environmental variability." P > 0.05 != "no effect"

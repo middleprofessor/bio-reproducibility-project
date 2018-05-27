@@ -40,6 +40,40 @@
   <div class="main" role="main">
     <section class="list taxonomy-list">
       <article class="article">
+        <a href="/post/data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures/" class="article-titles">
+          <h2 class="article-title">Data from Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures</h2>
+          
+        </a>
+        <ul class="article-meta">
+          <li class="article-meta-date"><time>May 26, 2018</time></li>
+          <li class="article-meta-tags">
+            <a href="/tags/experiment/">
+              <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+              experiment
+            </a>&nbsp;
+          </li>
+          <li class="article-meta-tags">
+            <a href="/tags/2x2/">
+              <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+              2x2
+            </a>&nbsp;
+          </li>
+          <li class="article-meta-tags">
+            <a href="/tags/physiology/">
+              <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+              physiology
+            </a>&nbsp;
+          </li>
+        </ul>
+        <div class="article-content">
+          Summary Table 1 - mostly reproducible but rounding error.
+Table 2 - partly reproducible but less important for inference
+ Reproducibility library(knitr) library(readxl) library(ggplot2) library(doBy) library(data.table) library(MuMIn) library(emmeans) library(cowplot) library(HarrellPlot) base_path &lt;- &quot;../data&quot; #knitr #base_path &lt;- &quot;content/data&quot; # console folder &lt;- &#39;2018-05-26-data-from-ontogenetic-thermal-tolerance&#39; fn &lt;- &#39;data_cavieres et al JEB 2016.xls&#39; file_path &lt;- paste(base_path,folder, fn, sep=&#39;/&#39;) dt &lt;- data.table(read_excel(file_path)) old_colnames &lt;- colnames(dt) ycols &lt;- c(&#39;Tbar&#39;, &#39;Tfluc&#39;, &#39;Sex&#39;, &#39;X1&#39;, &#39;X2&#39;, &#39;OR&#39;, &#39;To&#39;, &#39;Vmax&#39;, &#39;Tbr&#39;, &#39;LTL&#39;, &#39;UTL&#39;) setnames(dt, old_colnames, ycols) dt[,Tbar:=factor(Tbar, c(&#39;15&#39;,&#39;28&#39;))] dt[,Tfluc:=factor(Tfluc, c(&#39;0&#39;,&#39;4&#39;))] # order by factor for HarrelPlot dt &lt;- orderBy(~ Tbar + Tfluc, dt) The authors used a model selection method to get something like minimum adequate model for the effects of \(Sex\) + \(Tbar\) + \(Tfluc\) on 8 performance curve traits.
+        </div>
+        <div class="article-readmore"><a href="/post/data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures/">Read more...</a></div>
+        <div class="article-floatclear"></div>
+      </article>
+      <article class="article">
         <a href="/post/data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs/" class="article-titles">
           <h2 class="article-title">Data from: Success despite the stress- violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs</h2>
           
@@ -151,6 +185,9 @@ src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
 <script src="/js/script.js"></script>
 <script src="/js/custom.js"></script>
+  <script src="/js/collapse.js"></script>
+  <script src="/js/dropdown.js"></script>
+  <script src="/js/transition.js"></script>
 
 
 </body>

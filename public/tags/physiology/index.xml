@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
-    <lastBuildDate>Mon, 07 May 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 26 May 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/physiology/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Data from Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures</title>
+      <link>/post/data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures/</link>
+      <pubDate>Sat, 26 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures/</guid>
+      <description>Summary Table 1 - mostly reproducible but rounding error.
+Table 2 - partly reproducible but less important for inference
+ Reproducibility library(knitr) library(readxl) library(ggplot2) library(doBy) library(data.table) library(MuMIn) library(emmeans) library(cowplot) library(HarrellPlot) base_path &amp;lt;- &amp;quot;../data&amp;quot; #knitr #base_path &amp;lt;- &amp;quot;content/data&amp;quot; # console folder &amp;lt;- &amp;#39;2018-05-26-data-from-ontogenetic-thermal-tolerance&amp;#39; fn &amp;lt;- &amp;#39;data_cavieres et al JEB 2016.xls&amp;#39; file_path &amp;lt;- paste(base_path,folder, fn, sep=&amp;#39;/&amp;#39;) dt &amp;lt;- data.table(read_excel(file_path)) old_colnames &amp;lt;- colnames(dt) ycols &amp;lt;- c(&amp;#39;Tbar&amp;#39;, &amp;#39;Tfluc&amp;#39;, &amp;#39;Sex&amp;#39;, &amp;#39;X1&amp;#39;, &amp;#39;X2&amp;#39;, &amp;#39;OR&amp;#39;, &amp;#39;To&amp;#39;, &amp;#39;Vmax&amp;#39;, &amp;#39;Tbr&amp;#39;, &amp;#39;LTL&amp;#39;, &amp;#39;UTL&amp;#39;) setnames(dt, old_colnames, ycols) dt[,Tbar:=factor(Tbar, c(&amp;#39;15&amp;#39;,&amp;#39;28&amp;#39;))] dt[,Tfluc:=factor(Tfluc, c(&amp;#39;0&amp;#39;,&amp;#39;4&amp;#39;))] # order by factor for HarrelPlot dt &amp;lt;- orderBy(~ Tbar + Tfluc, dt) The authors used a model selection method to get something like minimum adequate model for the effects of \(Sex\) + \(Tbar\) + \(Tfluc\) on 8 performance curve traits.</description>
+    </item>
     
     <item>
       <title>Data from: Success despite the stress- violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs</title>

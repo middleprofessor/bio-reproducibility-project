@@ -1,0 +1,269 @@
+---
+title: Data from Ontogenetic thermal tolerance and performance of ectotherms at variable
+  temperatures
+author: Jeff Walker
+date: '2018-05-26'
+slug: data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures
+categories: []
+tags:
+  - experiment
+  - 2x2
+  - physiology
+subtitle: ''
+---
+
+
+
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<p>Table 1 - mostly reproducible but rounding error.</p>
+<p>Table 2 - partly reproducible but less important for inference</p>
+</div>
+<div id="reproducibility" class="section level1">
+<h1>Reproducibility</h1>
+<pre class="r"><code>library(knitr)
+library(readxl)
+library(ggplot2)
+library(doBy)
+library(data.table)
+library(MuMIn)
+library(emmeans)
+library(cowplot)
+library(HarrellPlot)</code></pre>
+<pre class="r"><code>base_path &lt;- &quot;../data&quot; #knitr
+#base_path &lt;- &quot;content/data&quot;  # console
+
+folder &lt;- &#39;2018-05-26-data-from-ontogenetic-thermal-tolerance&#39;
+fn &lt;- &#39;data_cavieres et al JEB 2016.xls&#39;
+file_path &lt;- paste(base_path,folder, fn, sep=&#39;/&#39;)
+dt &lt;- data.table(read_excel(file_path))
+old_colnames &lt;- colnames(dt)
+ycols &lt;- c(&#39;Tbar&#39;, &#39;Tfluc&#39;, &#39;Sex&#39;, &#39;X1&#39;, &#39;X2&#39;, &#39;OR&#39;, &#39;To&#39;, &#39;Vmax&#39;, &#39;Tbr&#39;, &#39;LTL&#39;, &#39;UTL&#39;)
+setnames(dt, old_colnames, ycols)
+dt[,Tbar:=factor(Tbar, c(&#39;15&#39;,&#39;28&#39;))]
+dt[,Tfluc:=factor(Tfluc, c(&#39;0&#39;,&#39;4&#39;))]
+# order by factor for HarrelPlot
+dt &lt;- orderBy(~ Tbar + Tfluc, dt)</code></pre>
+<p>The authors used a model selection method to get something like minimum adequate model for the effects of <span class="math inline">\(Sex\)</span> + <span class="math inline">\(Tbar\)</span> + <span class="math inline">\(Tfluc\)</span> on 8 performance curve traits. The model selection method was</p>
+<blockquote>
+<p>To test the potential effects of mean of temperature and daily fluctuation, we performed a linear model, with following variables: sex + mean of temperature * daily fluctuation. Model selection was performed using Akaike’s information criterion for finites sample (AICc); both delta AIC (Di) values, a measure of each model relative to the best model, and model weights (wi), a measure of the evidence supporting a specific model, were used for selections and model comparison. When there were multiple models with Di &lt; 2, selection was based on the difference in parameters present in each model, reduction in deviance and log-likelihood values (Burnham &amp; Anderson, 2003)</p>
+</blockquote>
+<p>“selection was based on the difference in parameters present in each model, reduction in deviance and log-likelihood” is not reproducible language.</p>
+<div id="table-1" class="section level2">
+<h2>Table 1</h2>
+<pre class="r"><code>ycols &lt;- c(&#39;To&#39;, &#39;Vmax&#39;, &#39;Tbr&#39;, &#39;LTL&#39;, &#39;UTL&#39;, &#39;OR&#39;, &#39;X1&#39;, &#39;X2&#39;)
+table1 &lt;- list()
+for(j in 1:length(ycols)){
+  full_model &lt;- formula(paste(ycols[j], &quot;~ Sex + Tbar*Tfluc&quot;))
+  fit &lt;- lm(full_model, data=dt, na.action=na.fail)
+  fit.all &lt;- dredge(fit)
+  table1[[j]] &lt;- round(coefficients(summary(get.models(fit.all, subset=1)[[1]])), 3)
+}</code></pre>
+<pre><code>## Fixed term is &quot;(Intercept)&quot;
+## Fixed term is &quot;(Intercept)&quot;
+## Fixed term is &quot;(Intercept)&quot;
+## Fixed term is &quot;(Intercept)&quot;
+## Fixed term is &quot;(Intercept)&quot;
+## Fixed term is &quot;(Intercept)&quot;
+## Fixed term is &quot;(Intercept)&quot;
+## Fixed term is &quot;(Intercept)&quot;</code></pre>
+<pre class="r"><code>names(table1) &lt;- ycols
+table1</code></pre>
+<pre><code>## $To
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)   26.384      0.602  43.849    0.000
+## Tbar28         4.418      0.680   6.500    0.000
+## Tfluc4         2.132      0.680   3.137    0.002
+## 
+## $Vmax
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)    2.159      0.074  29.010    0.000
+## Tfluc4        -0.193      0.105  -1.842    0.068
+## 
+## $Tbr
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)   17.045      0.630  27.047    0.000
+## Tbar28         1.320      0.712   1.854    0.066
+## Tfluc4        -1.219      0.712  -1.712    0.089
+## 
+## $LTL
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)    3.897      0.609   6.403     0.00
+## SexM          -1.131      0.723  -1.563     0.12
+## Tbar28         5.891      0.722   8.163     0.00
+## 
+## $UTL
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)   49.463      1.108  44.638     0.00
+## Tbar28         2.212      1.252   1.767     0.08
+## Tfluc4         4.476      1.252   3.576     0.00
+## 
+## $OR
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)   13.884      0.465  29.832        0
+## 
+## $X1
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)   20.800      0.494  42.136        0
+## Tbar28         4.163      0.696   5.985        0
+## 
+## $X2
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)   33.757      0.692  48.754    0.000
+## Tbar28         3.921      0.782   5.013    0.000
+## Tfluc4         2.082      0.782   2.662    0.009</code></pre>
+<p>Table 1 reproducibility</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(T_o\)</span> reproduces</li>
+<li><span class="math inline">\(Vmax\)</span> cannot recover</li>
+<li><span class="math inline">\(Tbar\)</span> reproduces</li>
+<li><span class="math inline">\(LTL\)</span> reproduces <em>except</em> sex effect. The authors seem to have merely not reported the Sex effect – otherwise how to explain equivalence of coefficients, SE, and T</li>
+<li><span class="math inline">\(UTL\)</span> reproduces</li>
+<li><span class="math inline">\(OR\)</span> reproduces</li>
+<li><span class="math inline">\(X1\)</span> reproduces</li>
+<li><span class="math inline">\(X2\)</span> reproduces</li>
+</ol>
+</div>
+<div id="table-2" class="section level2">
+<h2>Table 2</h2>
+<p>These seem to be estimated marginal means, presumably from the models in Table 1. But this can’t be because 28C-15 != 28V-15V for <span class="math inline">\(T_o\)</span> and others. Also, <span class="math inline">\(OR\)</span> is not simply the intercept (and must have an interaction too).</p>
+<p>Tried various combinations. The closest that comes to reproducing is the full model (<span class="math inline">\(Sex + Tbar*Tfluc\)</span>).</p>
+<pre class="r"><code>dredge_it &lt;- FALSE
+table2 &lt;- list()
+for(j in 1:length(ycols)){
+  full_model &lt;- formula(paste(ycols[j], &quot;~ Sex + Tbar * Tfluc&quot;))
+  fit &lt;- lm(full_model, data=dt, na.action=na.fail)
+  if(dredge_it){
+    fit.all &lt;- dredge(fit)
+    fit &lt;- get.models(fit.all, subset=1)[[1]]
+    best_vars &lt;- all.vars(formula(fit))[-1] # if using dredge
+    if(length(best_vars &gt; 0)){
+      table2[[j]] &lt;- emmeans(fit, specs=best_vars)
+    }else{
+      table2[[j]] &lt;- coefficients(fit)[1]
+    }    
+  }else{
+      table2[[j]] &lt;- emmeans(fit, specs=c(&#39;Tbar&#39;, &#39;Tfluc&#39;))
+  }
+}
+names(table2) &lt;- ycols
+table2</code></pre>
+<pre><code>## $To
+##  Tbar Tfluc   emmean        SE  df lower.CL upper.CL
+##  15   0     26.51693 0.7066490 128 25.11870 27.91515
+##  28   0     30.75443 0.6630939 128 29.44238 32.06647
+##  15   4     28.46871 0.6630939 128 27.15667 29.78076
+##  28   4     33.02531 0.6937334 128 31.65264 34.39798
+## 
+## Results are averaged over the levels of: Sex 
+## Confidence level used: 0.95 
+## 
+## $Vmax
+##  Tbar Tfluc   emmean        SE  df lower.CL upper.CL
+##  15   0     2.023785 0.1082218 128 1.809650 2.237920
+##  28   0     2.272385 0.1015514 128 2.071448 2.473322
+##  15   4     2.050670 0.1015514 128 1.849734 2.251607
+##  28   4     1.869592 0.1062438 128 1.659370 2.079813
+## 
+## Results are averaged over the levels of: Sex 
+## Confidence level used: 0.95 
+## 
+## $Tbr
+##  Tbar Tfluc   emmean        SE  df lower.CL upper.CL
+##  15   0     17.12701 0.7438499 128 15.65518 18.59885
+##  28   0     18.31439 0.6980019 128 16.93327 19.69550
+##  15   4     15.77524 0.6980019 128 14.39413 17.15636
+##  28   4     17.21397 0.7302543 128 15.76903 18.65890
+## 
+## Results are averaged over the levels of: Sex 
+## Confidence level used: 0.95 
+## 
+## $LTL
+##  Tbar Tfluc   emmean        SE  df lower.CL  upper.CL
+##  15   0     3.509038 0.7550244 128 2.015093  5.002983
+##  28   0     9.225715 0.7084877 128 7.823851 10.627579
+##  15   4     3.174572 0.7084877 128 1.772709  4.576436
+##  28   4     9.219690 0.7412246 128 7.753050 10.686329
+## 
+## Results are averaged over the levels of: Sex 
+## Confidence level used: 0.95 
+## 
+## $UTL
+##  Tbar Tfluc   emmean       SE  df lower.CL upper.CL
+##  15   0     50.37028 1.293989 128 47.80991 52.93066
+##  28   0     51.00359 1.214232 128 48.60103 53.40616
+##  15   4     53.26788 1.214232 128 50.86531 55.67045
+##  28   4     56.95692 1.270338 128 54.44334 59.47050
+## 
+## Results are averaged over the levels of: Sex 
+## Confidence level used: 0.95 
+## 
+## $OR
+##  Tbar Tfluc   emmean        SE  df lower.CL upper.CL
+##  15   0     13.32877 0.9750995 128 11.39936 15.25817
+##  28   0     13.25938 0.9149982 128 11.44890 15.06986
+##  15   4     14.72481 0.9149982 128 12.91433 16.53529
+##  28   4     14.21115 0.9572774 128 12.31701 16.10528
+## 
+## Results are averaged over the levels of: Sex 
+## Confidence level used: 0.95 
+## 
+## $X1
+##  Tbar Tfluc   emmean        SE  df lower.CL upper.CL
+##  15   0     20.44185 0.7255346 128 19.00626 21.87745
+##  28   0     24.40399 0.6808155 128 23.05688 25.75109
+##  15   4     21.09970 0.6808155 128 19.75259 22.44681
+##  28   4     25.56372 0.7122738 128 24.15436 26.97307
+## 
+## Results are averaged over the levels of: Sex 
+## Confidence level used: 0.95 
+## 
+## $X2
+##  Tbar Tfluc   emmean        SE  df lower.CL upper.CL
+##  15   0     33.77062 0.8177011 128 32.15266 35.38858
+##  28   0     37.66337 0.7673012 128 36.14513 39.18160
+##  15   4     35.82451 0.7673012 128 34.30627 37.34275
+##  28   4     39.77486 0.8027558 128 38.18647 41.36325
+## 
+## Results are averaged over the levels of: Sex 
+## Confidence level used: 0.95</code></pre>
+<p>Table 2 reproducibility – partial.</p>
+<p>Regardless, this makes little difference to the inference.</p>
+</div>
+<div id="table-3" class="section level2">
+<h2>Table 3</h2>
+<p>Is this correlated change across the trial temperatures? There is no data for this!</p>
+</div>
+<div id="figure-2" class="section level2">
+<h2>Figure 2</h2>
+<p>The data to re-plot Figure 2 were not made available.</p>
+</div>
+</div>
+<div id="explore" class="section level1">
+<h1>Explore</h1>
+<div id="shift-in-utl" class="section level2">
+<h2>Shift in UTL</h2>
+<blockquote>
+<p>in variable environments the upper thermal limit of performance curve shifted to the right, but flies reared in constant environments did not exhibit changes in UTL and the curve did not shift.</p>
+</blockquote>
+<p>They don’t really present evidence for this anywhere but a HarrellPlot does a good job. The first two contrasts are the <span class="math inline">\(Tbar\)</span> effect, which is the evidence for the shift to right in fluctuating environment vs. non fluctuating environment. The bottom two contrasts are the <span class="math inline">\(Tfluc\)</span> effect.</p>
+<pre class="r"><code>HarrellPlot(x=&quot;Tfluc&quot;, y=&quot;UTL&quot;, g=&quot;Tbar&quot;, data=dt, add_interaction=TRUE, interaction.group = TRUE, contrasts.method=&#39;revpairwise&#39;)$gg</code></pre>
+<p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<pre class="r"><code>HarrellPlot(x=&quot;Tfluc&quot;, y=&quot;UTL&quot;, g=&quot;Tbar&quot;, data=dt, add_interaction=FALSE, interaction.group = TRUE, contrasts.method=&#39;revpairwise&#39;)$gg</code></pre>
+<p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
+<p>The HarrellPlot supports the conclusion but the conclusion is unsupported by their own presentation as it implies a <span class="math inline">\(Tbar \times Tfluc\)</span> interaction (that is, the effect of <span class="math inline">\(Tbar\)</span> depends on the level of <span class="math inline">\(Tfluc\)</span>). But nowhere do they show this interaction. Their own “best model” for <span class="math inline">\(UTL\)</span> does not include the interaction but just the additve effects of <span class="math inline">\(Tbar\)</span> and <span class="math inline">\(Tfluc\)</span>.</p>
+<pre class="r"><code>  full_model &lt;- formula(paste(&quot;UTL ~ Tbar*Tfluc&quot;))
+  coefficients(summary(lm(full_model, data=dt, na.action=na.fail)))</code></pre>
+<pre><code>##                 Estimate Std. Error    t value     Pr(&gt;|t|)
+## (Intercept)   50.2451613   1.292751 38.8668455 4.417888e-73
+## Tbar28         0.7362673   1.775223  0.4147464 6.790165e-01
+## Tfluc4         3.0005530   1.775223  1.6902401 9.339711e-02
+## Tbar28:Tfluc4  2.9264559   2.500122  1.1705255 2.439474e-01</code></pre>
+</div>
+</div>
+<div id="red-flags" class="section level1">
+<h1>Red Flags</h1>
+<ol style="list-style-type: decimal">
+<li>“Nevertheless, Tbr was not affected by environmental variability.” P &gt; 0.05 != “no effect”</li>
+</ol>
+</div>
