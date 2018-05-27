@@ -10,6 +10,9 @@ tags:
   - 2x2
   - physiology
 subtitle: ''
+output:
+  blogdown::html_page:
+    toc: true
 ---
 # Summary
 

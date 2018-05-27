@@ -6,15 +6,14 @@
   <title>Data from Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from Ontogenetic thermal tolerance and performance of ectotherms …" />
-  <meta name="description" content="Summary Table 1 - mostly reproducible but rounding error.
+  <meta name="description" content="Summary Reproducibility Table 1 Table 2 Table 3 Figure 2  Explore Shift in UTL  Red Flags   Summary Table 1 - mostly reproducible but rounding error.
 Table 2 - partly reproducible but less important for inference
- Reproducibility library(knitr) library(readxl) library(ggplot2) library(doBy) library(data.table) library(MuMIn) library(emmeans) library(cowplot) library(HarrellPlot) base_path &lt;- &quot;../data&quot; #knitr #base_path &lt;- &quot;content/data&quot; # console folder &lt;- &#39;2018-05-26-data-from-ontogenetic-thermal-tolerance&#39; fn &lt;- &#39;data_cavieres et al JEB 2016.xls&#39; file_path &lt;- paste(base_path,folder, fn, sep=&#39;/&#39;) dt &lt;- data.table(read_excel(file_path)) old_colnames &lt;- colnames(dt) ycols &lt;- c(&#39;Tbar&#39;, &#39;Tfluc&#39;, &#39;Sex&#39;, &#39;X1&#39;, &#39;X2&#39;, &#39;OR&#39;, &#39;To&#39;, &#39;Vmax&#39;, &#39;Tbr&#39;, &#39;LTL&#39;, &#39;UTL&#39;) setnames(dt, old_colnames, ycols) dt[,Tbar:=factor(Tbar, c(&#39;15&#39;,&#39;28&#39;))] dt[,Tfluc:=factor(Tfluc, c(&#39;0&#39;,&#39;4&#39;))] # order by factor for HarrelPlot dt &lt;- orderBy(~ Tbar &#43; Tfluc, dt) The authors used a model selection method to get something like minimum adequate model for the effects of \(Sex\) &#43; \(Tbar\) &#43; \(Tfluc\) on 8 performance curve traits.">
-  <meta property="og:description" content="Summary Table 1 - mostly reproducible but rounding error.
+ Reproducibility library(knitr) library(readxl) library(ggplot2) library(doBy) library(data.table) library(MuMIn) library(emmeans) library(cowplot) library(HarrellPlot) base_path &lt;- &quot;../data&quot; #knitr #base_path &lt;- &quot;content/data&quot; # console folder &lt;- &#39;2018-05-26-data-from-ontogenetic-thermal-tolerance&#39; fn &lt;- &#39;data_cavieres et al JEB 2016.xls&#39; file_path &lt;- paste(base_path,folder, fn, sep=&#39;/&#39;) dt &lt;- data.">
+  <meta property="og:description" content="Summary Reproducibility Table 1 Table 2 Table 3 Figure 2  Explore Shift in UTL  Red Flags   Summary Table 1 - mostly reproducible but rounding error.
 Table 2 - partly reproducible but less important for inference
- Reproducibility library(knitr) library(readxl) library(ggplot2) library(doBy) library(data.table) library(MuMIn) library(emmeans) library(cowplot) library(HarrellPlot) base_path &lt;- &quot;../data&quot; #knitr #base_path &lt;- &quot;content/data&quot; # console folder &lt;- &#39;2018-05-26-data-from-ontogenetic-thermal-tolerance&#39; fn &lt;- &#39;data_cavieres et al JEB 2016.xls&#39; file_path &lt;- paste(base_path,folder, fn, sep=&#39;/&#39;) dt &lt;- data.table(read_excel(file_path)) old_colnames &lt;- colnames(dt) ycols &lt;- c(&#39;Tbar&#39;, &#39;Tfluc&#39;, &#39;Sex&#39;, &#39;X1&#39;, &#39;X2&#39;, &#39;OR&#39;, &#39;To&#39;, &#39;Vmax&#39;, &#39;Tbr&#39;, &#39;LTL&#39;, &#39;UTL&#39;) setnames(dt, old_colnames, ycols) dt[,Tbar:=factor(Tbar, c(&#39;15&#39;,&#39;28&#39;))] dt[,Tfluc:=factor(Tfluc, c(&#39;0&#39;,&#39;4&#39;))] # order by factor for HarrelPlot dt &lt;- orderBy(~ Tbar &#43; Tfluc, dt) The authors used a model selection method to get something like minimum adequate model for the effects of \(Sex\) &#43; \(Tbar\) &#43; \(Tfluc\) on 8 performance curve traits.">
-  <meta name="twitter:description" content="Summary Table 1 - mostly reproducible but rounding error.
-Table 2 - partly reproducible but less important for inference
- Reproducibility library(knitr) library(readxl) library(ggplot2) library(doBy) …">
+ Reproducibility library(knitr) library(readxl) library(ggplot2) library(doBy) library(data.table) library(MuMIn) library(emmeans) library(cowplot) library(HarrellPlot) base_path &lt;- &quot;../data&quot; #knitr #base_path &lt;- &quot;content/data&quot; # console folder &lt;- &#39;2018-05-26-data-from-ontogenetic-thermal-tolerance&#39; fn &lt;- &#39;data_cavieres et al JEB 2016.xls&#39; file_path &lt;- paste(base_path,folder, fn, sep=&#39;/&#39;) dt &lt;- data.">
+  <meta name="twitter:description" content="Summary Reproducibility Table 1 Table 2 Table 3 Figure 2  Explore Shift in UTL  Red Flags   Summary Table 1 - mostly reproducible but rounding error.
+Table 2 - partly reproducible but less important …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures/" />
@@ -73,7 +72,23 @@ Table 2 - partly reproducible but less important for inference
 <aside class="toc">
   
 </aside>
-      <div id="summary" class="section level1">
+      <div id="TOC">
+<ul>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#table-1">Table 1</a></li>
+<li><a href="#table-2">Table 2</a></li>
+<li><a href="#table-3">Table 3</a></li>
+<li><a href="#figure-2">Figure 2</a></li>
+</ul></li>
+<li><a href="#explore">Explore</a><ul>
+<li><a href="#shift-in-utl">Shift in UTL</a></li>
+</ul></li>
+<li><a href="#red-flags">Red Flags</a></li>
+</ul>
+</div>
+
+<div id="summary" class="section level1">
 <h1>Summary</h1>
 <p>Table 1 - mostly reproducible but rounding error.</p>
 <p>Table 2 - partly reproducible but less important for inference</p>
@@ -361,7 +376,7 @@ table2</code></pre>
     <ul class="pager article-pager">
       <li class="pager-newer pager-noitem">&lt; Newer</li>
       <li class="pager-older">
-        <a href="/post/data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs/" data-toggle="tooltip" data-placement="top" title="Data from: Success despite the stress- violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs">Older &gt;</a>
+        <a href="/post/data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs/" data-toggle="tooltip" data-placement="top" title="Data from: Success despite the stress -- violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs">Older &gt;</a>
       </li>
     </ul>
   </div>
