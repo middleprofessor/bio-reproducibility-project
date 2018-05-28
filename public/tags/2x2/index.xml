@@ -18,9 +18,7 @@
       <pubDate>Sat, 26 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures/</guid>
-      <description>Summary Reproducibility Table 1 Table 2 Table 3 Figure 2  Explore Shift in UTL  Red Flags   Summary Table 1 - mostly reproducible but rounding error.
-Table 2 - partly reproducible but less important for inference
- Reproducibility library(knitr) library(readxl) library(ggplot2) library(doBy) library(data.table) library(MuMIn) library(emmeans) library(cowplot) library(HarrellPlot) base_path &amp;lt;- &amp;quot;../data&amp;quot; #knitr #base_path &amp;lt;- &amp;quot;content/data&amp;quot; # console folder &amp;lt;- &amp;#39;2018-05-26-data-from-ontogenetic-thermal-tolerance&amp;#39; fn &amp;lt;- &amp;#39;data_cavieres et al JEB 2016.xls&amp;#39; file_path &amp;lt;- paste(base_path,folder, fn, sep=&amp;#39;/&amp;#39;) dt &amp;lt;- data.</description>
+      <description>Background Summary of reproducibility Reproducibility Table 1 Table 2 Table 3 Figure 2  Post-publication review Use the full model to compare to Huey &amp;amp; Kinsolver Shift in UTL  Red Flags   Background Explored changes in thermal performance curve in response to rearing at 1 of 4 temperature classes (2 mean temperatures x 2 temperature fluctations). Compared to Huey &amp;amp; Kingsolver’s three evolutionary responses, so considered this an ontogenetic response.</description>
     </item>
     
   </channel>

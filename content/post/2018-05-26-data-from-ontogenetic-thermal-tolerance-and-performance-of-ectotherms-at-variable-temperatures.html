@@ -18,22 +18,29 @@ output:
 
 <div id="TOC">
 <ul>
-<li><a href="#summary">Summary</a></li>
+<li><a href="#background">Background</a></li>
+<li><a href="#summary-of-reproducibility">Summary of reproducibility</a></li>
 <li><a href="#reproducibility">Reproducibility</a><ul>
 <li><a href="#table-1">Table 1</a></li>
 <li><a href="#table-2">Table 2</a></li>
 <li><a href="#table-3">Table 3</a></li>
 <li><a href="#figure-2">Figure 2</a></li>
 </ul></li>
-<li><a href="#explore">Explore</a><ul>
+<li><a href="#post-publication-review">Post-publication review</a><ul>
+<li><a href="#use-the-full-model-to-compare-to-huey-kinsolver">Use the full model to compare to Huey &amp; Kinsolver</a></li>
 <li><a href="#shift-in-utl">Shift in UTL</a></li>
 </ul></li>
 <li><a href="#red-flags">Red Flags</a></li>
 </ul>
 </div>
 
-<div id="summary" class="section level1">
-<h1>Summary</h1>
+<div id="background" class="section level1">
+<h1>Background</h1>
+<p>Explored changes in thermal performance curve in response to rearing at 1 of 4 temperature classes (2 mean temperatures x 2 temperature fluctations). Compared to Huey &amp; Kingsolver’s three evolutionary responses, so considered this an ontogenetic response. The three kinds of responses are 1) right shift in upper thermal limit (UTL), 2) right shift in whole curve – so increase in UTL but decrease in lower thermal limit (LTL) - this is a trade-off, 3) increase in both UTL and LTL, which broadens the thermal performance (Thermal breath (Tbr) and possibly Optimal Range (OR))</p>
+<p>Just looking at their Fig. 2, the response was a right shift of the whole curve. They used a model selection procedure to reduce to a minimum adequate model but this is a case where they want estimates for LTL, UTL, TB, and OR to compare to the H&amp;K models!</p>
+</div>
+<div id="summary-of-reproducibility" class="section level1">
+<h1>Summary of reproducibility</h1>
 <p>Table 1 - mostly reproducible but rounding error.</p>
 <p>Table 2 - partly reproducible but less important for inference</p>
 </div>
@@ -257,26 +264,117 @@ table2</code></pre>
 <p>The data to re-plot Figure 2 were not made available.</p>
 </div>
 </div>
-<div id="explore" class="section level1">
-<h1>Explore</h1>
+<div id="post-publication-review" class="section level1">
+<h1>Post-publication review</h1>
+<div id="use-the-full-model-to-compare-to-huey-kinsolver" class="section level2">
+<h2>Use the full model to compare to Huey &amp; Kinsolver</h2>
+<p>To compare to H&amp;K models, we need estimates for change in <span class="math inline">\(LTL\)</span>, <span class="math inline">\(UTL\)</span>, <span class="math inline">\(Tbr\)</span> and possibly <span class="math inline">\(OR\)</span> across treatment effects. If the interation is smallish, report the pooled effects across both levels of the other treatment. Otherwise report the simple effects (differences within each level of the other treatment).</p>
+<pre class="r"><code>ycols &lt;- c(&#39;To&#39;, &#39;Vmax&#39;, &#39;Tbr&#39;, &#39;LTL&#39;, &#39;UTL&#39;, &#39;OR&#39;, &#39;X1&#39;, &#39;X2&#39;)
+full_table &lt;- list()
+gg_list &lt;- list()
+for(j in 1:length(ycols)){
+  
+  res &lt;- HarrellPlot(x=&quot;Tfluc&quot;, y=ycols[j], g=&quot;Tbar&quot;, data=dt, 
+                     add_interaction=TRUE, interaction.group = TRUE, 
+                     contrasts.method=&#39;revpairwise&#39;)
+  full_table[[j]] &lt;- res$tables$contrasts
+  gg_list[[j]] &lt;- res$gg
+}
+names(full_table) &lt;- ycols
+names(gg_list) &lt;- ycols
+full_table</code></pre>
+<pre><code>## $To
+##  contrast    estimate        SE  df   lower.CL upper.CL t.ratio p.value
+##  4,15 - 0,15 2.005530 0.9689541 129 0.08843055 3.922629   2.070  0.0405
+##  4,28 - 0,28 2.257143 0.9608918 129 0.35599487 4.158291   2.349  0.0203
+##  0,28 - 0,15 4.291244 0.9689541 129 2.37414484 6.208344   4.429  &lt;.0001
+##  4,28 - 4,15 4.542857 0.9608918 129 2.64170916 6.444005   4.728  &lt;.0001
+## 
+## Confidence level used: 0.95 
+## 
+## $Vmax
+##  contrast       estimate        SE  df    lower.CL   upper.CL t.ratio
+##  4,15 - 0,15  0.02203687 0.1478656 129 -0.27051879  0.3145925   0.149
+##  4,28 - 0,28 -0.40155357 0.1466352 129 -0.69167499 -0.1114322  -2.738
+##  0,28 - 0,15  0.24375115 0.1478656 129 -0.04880451  0.5363068   1.648
+##  4,28 - 4,15 -0.17983929 0.1466352 129 -0.46996070  0.1102821  -1.226
+##  p.value
+##   0.8818
+##   0.0070
+##   0.1017
+##   0.2223
+## 
+## Confidence level used: 0.95 
+## 
+## $Tbr
+##  contrast     estimate       SE  df   lower.CL  upper.CL t.ratio p.value
+##  4,15 - 0,15 -1.335382 1.014871 129 -3.3433306 0.6725656  -1.316  0.1906
+##  4,28 - 0,28 -1.104607 1.006427 129 -3.0958479 0.8866336  -1.098  0.2744
+##  0,28 - 0,15  1.203760 1.014871 129 -0.8041877 3.2117084   1.186  0.2378
+##  4,28 - 4,15  1.434536 1.006427 129 -0.5567050 3.4257764   1.425  0.1565
+## 
+## Confidence level used: 0.95 
+## 
+## $LTL
+##  contrast       estimate       SE  df  lower.CL upper.CL t.ratio p.value
+##  4,15 - 0,15 -0.40878341 1.039078 129 -2.464625 1.647058  -0.393  0.6947
+##  4,28 - 0,28  0.01297321 1.030432 129 -2.025762 2.051709   0.013  0.9900
+##  0,28 - 0,15  5.64235945 1.039078 129  3.586518 7.698201   5.430  &lt;.0001
+##  4,28 - 4,15  6.06411607 1.030432 129  4.025381 8.102851   5.885  &lt;.0001
+## 
+## Confidence level used: 0.95 
+## 
+## $UTL
+##  contrast     estimate       SE  df   lower.CL upper.CL t.ratio p.value
+##  4,15 - 0,15 3.0005530 1.775223 129 -0.5117690 6.512875   1.690  0.0934
+##  4,28 - 0,28 5.9270089 1.760452 129  2.4439115 9.410106   3.367  0.0010
+##  0,28 - 0,15 0.7362673 1.775223 129 -2.7760547 4.248589   0.415  0.6790
+##  4,28 - 4,15 3.6627232 1.760452 129  0.1796258 7.145821   2.081  0.0395
+## 
+## Confidence level used: 0.95 
+## 
+## $OR
+##  contrast       estimate       SE  df  lower.CL upper.CL t.ratio p.value
+##  4,15 - 0,15  1.40776959 1.329947 129 -1.223562 4.039101   1.059  0.2918
+##  4,28 - 0,28  0.94876786 1.318881 129 -1.660670 3.558205   0.719  0.4732
+##  0,28 - 0,15 -0.05765899 1.329947 129 -2.688991 2.573673  -0.043  0.9655
+##  4,28 - 4,15 -0.51666071 1.318881 129 -3.126098 2.092777  -0.392  0.6959
+## 
+## Confidence level used: 0.95 
+## 
+## $X1
+##  contrast     estimate        SE  df   lower.CL upper.CL t.ratio p.value
+##  4,15 - 0,15 0.6445069 0.9897446 129 -1.3137271 2.602741   0.651  0.5161
+##  4,28 - 0,28 1.1631429 0.9815094 129 -0.7787975 3.105083   1.185  0.2382
+##  0,28 - 0,15 3.9487926 0.9897446 129  1.9905586 5.907027   3.990  0.0001
+##  4,28 - 4,15 4.4674286 0.9815094 129  2.5254883 6.409369   4.552  &lt;.0001
+## 
+## Confidence level used: 0.95 
+## 
+## $X2
+##  contrast    estimate       SE  df    lower.CL upper.CL t.ratio p.value
+##  4,15 - 0,15 2.052276 1.115120 129 -0.15401653 4.258570   1.840  0.0680
+##  4,28 - 0,28 2.111911 1.105842 129 -0.07602462 4.299846   1.910  0.0584
+##  0,28 - 0,15 3.891134 1.115120 129  1.68484062 6.097427   3.489  0.0007
+##  4,28 - 4,15 3.950768 1.105842 129  1.76283252 6.138703   3.573  0.0005
+## 
+## Confidence level used: 0.95</code></pre>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(T_o\)</span></p></li>
+<li><p><span class="math inline">\(Tbr\)</span> is noisy relative to signal but the pattern is small decrease in <span class="math inline">\(Tbr\)</span> given temperature flucation but no change in mean and small increase in <span class="math inline">\(Tbr\)</span> given change in temperature regardless of fluctuation.</p></li>
+<li><p><span class="math inline">\(LTL\)</span> increases with mean temp in both constant and fluctuating T levels but simple fluctuation (with no increase in mean temperature) has effectively zero response.</p></li>
+<li><p><span class="math inline">\(UTL\)</span> increase with mean temp in fluctuation level but only small increase with mean temp in no-fluctuation level. Increase with fluctuation at both mean temperature levels.</p></li>
+<li><p><span class="math inline">\(OR\)</span></p></li>
+</ol>
+</div>
 <div id="shift-in-utl" class="section level2">
 <h2>Shift in UTL</h2>
 <blockquote>
 <p>in variable environments the upper thermal limit of performance curve shifted to the right, but flies reared in constant environments did not exhibit changes in UTL and the curve did not shift.</p>
 </blockquote>
+<p>Note that their Fig. 2 shows a clear right shift even in the non-fluctuating environment but an anomaly with the data at 40 degrees where the high temperature treatment is unusually low.</p>
 <p>They don’t really present evidence for this anywhere but a HarrellPlot does a good job. The first two contrasts are the <span class="math inline">\(Tbar\)</span> effect, which is the evidence for the shift to right in fluctuating environment vs. non fluctuating environment. The bottom two contrasts are the <span class="math inline">\(Tfluc\)</span> effect.</p>
-<pre class="r"><code>HarrellPlot(x=&quot;Tfluc&quot;, y=&quot;UTL&quot;, g=&quot;Tbar&quot;, data=dt, add_interaction=TRUE, interaction.group = TRUE, contrasts.method=&#39;revpairwise&#39;)$gg</code></pre>
-<p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<pre class="r"><code>HarrellPlot(x=&quot;Tfluc&quot;, y=&quot;UTL&quot;, g=&quot;Tbar&quot;, data=dt, add_interaction=FALSE, interaction.group = TRUE, contrasts.method=&#39;revpairwise&#39;)$gg</code></pre>
-<p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
 <p>The HarrellPlot supports the conclusion but the conclusion is unsupported by their own presentation as it implies a <span class="math inline">\(Tbar \times Tfluc\)</span> interaction (that is, the effect of <span class="math inline">\(Tbar\)</span> depends on the level of <span class="math inline">\(Tfluc\)</span>). But nowhere do they show this interaction. Their own “best model” for <span class="math inline">\(UTL\)</span> does not include the interaction but just the additve effects of <span class="math inline">\(Tbar\)</span> and <span class="math inline">\(Tfluc\)</span>.</p>
-<pre class="r"><code>  full_model &lt;- formula(paste(&quot;UTL ~ Tbar*Tfluc&quot;))
-  coefficients(summary(lm(full_model, data=dt, na.action=na.fail)))</code></pre>
-<pre><code>##                 Estimate Std. Error    t value     Pr(&gt;|t|)
-## (Intercept)   50.2451613   1.292751 38.8668455 4.417888e-73
-## Tbar28         0.7362673   1.775223  0.4147464 6.790165e-01
-## Tfluc4         3.0005530   1.775223  1.6902401 9.339711e-02
-## Tbar28:Tfluc4  2.9264559   2.500122  1.1705255 2.439474e-01</code></pre>
 </div>
 </div>
 <div id="red-flags" class="section level1">

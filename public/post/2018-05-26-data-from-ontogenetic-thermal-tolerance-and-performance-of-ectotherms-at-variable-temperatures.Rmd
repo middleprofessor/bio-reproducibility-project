@@ -14,7 +14,13 @@ output:
   blogdown::html_page:
     toc: true
 ---
-# Summary
+# Background
+
+Explored changes in thermal performance curve in response to rearing at 1 of 4 temperature classes (2 mean temperatures x 2 temperature fluctations). Compared to Huey & Kingsolver's three evolutionary responses, so considered this an ontogenetic response. The three kinds of responses are 1) right shift in upper thermal limit (UTL), 2) right shift in whole curve -- so increase in UTL but decrease in lower thermal limit (LTL) - this is a trade-off, 3) increase in both UTL and LTL, which broadens the thermal performance (Thermal breath (Tbr) and possibly Optimal Range (OR))
+
+Just looking at their Fig. 2, the response was a right shift of the whole curve. They used a model selection procedure to reduce to a minimum adequate model but this is a case where they want estimates for LTL, UTL, TB, and OR to compare to the H&K models!
+
+# Summary of reproducibility
 
 Table 1 - mostly reproducible but rounding error.
 
@@ -124,25 +130,46 @@ Is this correlated change across the trial temperatures? There is no data for th
 
 The data to re-plot Figure 2 were not made available.
 
-# Explore
+# Post-publication review
+## Use the full model to compare to Huey & Kinsolver
+
+To compare to H&K models, we need estimates for change in $LTL$, $UTL$, $Tbr$ and possibly $OR$ across treatment effects. If the interation is smallish, report the pooled effects across both levels of the other treatment. Otherwise report the simple effects (differences within each level of the other treatment).
+
+```{r fullmodels}
+ycols <- c('To', 'Vmax', 'Tbr', 'LTL', 'UTL', 'OR', 'X1', 'X2')
+full_table <- list()
+gg_list <- list()
+for(j in 1:length(ycols)){
+  
+  res <- HarrellPlot(x="Tfluc", y=ycols[j], g="Tbar", data=dt, 
+                     add_interaction=TRUE, interaction.group = TRUE, 
+                     contrasts.method='revpairwise')
+  full_table[[j]] <- res$tables$contrasts
+  gg_list[[j]] <- res$gg
+}
+names(full_table) <- ycols
+names(gg_list) <- ycols
+full_table
+```
+
+1. $T_o$
+
+2. $Tbr$ is noisy relative to signal but the pattern is small decrease in $Tbr$ given temperature flucation but no change in mean and small increase in $Tbr$ given change in temperature regardless of fluctuation.
+
+3. $LTL$ increases with mean temp in both constant and fluctuating T levels but simple fluctuation (with no increase in mean temperature) has effectively zero response.
+
+4. $UTL$ increase with mean temp in fluctuation level but only small increase with mean temp in no-fluctuation level. Increase with fluctuation at both mean temperature levels.
+
+5. $OR$
+
 ## Shift in UTL
 > in variable environments the upper thermal limit of performance curve shifted to the right, but flies reared in constant environments did not exhibit changes in UTL and the curve did not shift.
 
+Note that their Fig. 2 shows a clear right shift even in the non-fluctuating environment but an anomaly with the data at 40 degrees where the high temperature treatment is unusually low.
+
 They don't really present evidence for this anywhere but a HarrellPlot does a good job. The first two contrasts are the $Tbar$ effect, which is the evidence for the shift to right in fluctuating environment vs. non fluctuating environment. The bottom two contrasts are the $Tfluc$ effect.
 
-```{r}
-HarrellPlot(x="Tfluc", y="UTL", g="Tbar", data=dt, add_interaction=TRUE, interaction.group = TRUE, contrasts.method='revpairwise')$gg
-
-HarrellPlot(x="Tfluc", y="UTL", g="Tbar", data=dt, add_interaction=FALSE, interaction.group = TRUE, contrasts.method='revpairwise')$gg
-
-```
-
 The HarrellPlot supports the conclusion but the conclusion is unsupported by their own presentation as it implies a $Tbar \times Tfluc$ interaction (that is, the effect of $Tbar$ depends on the level of $Tfluc$). But nowhere do they show this interaction. Their own "best model" for $UTL$ does not include the interaction but just the additve effects of $Tbar$ and $Tfluc$.
-
-```{r}
-  full_model <- formula(paste("UTL ~ Tbar*Tfluc"))
-  coefficients(summary(lm(full_model, data=dt, na.action=na.fail)))
-```
 
 # Red Flags
 1. "Nevertheless, Tbr was not affected by environmental variability." P > 0.05 != "no effect"
