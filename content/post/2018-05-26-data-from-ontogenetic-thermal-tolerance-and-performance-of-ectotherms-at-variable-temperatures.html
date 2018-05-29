@@ -18,15 +18,19 @@ output:
 
 <div id="TOC">
 <ul>
+<li><a href="#sources">Sources</a></li>
 <li><a href="#background">Background</a></li>
-<li><a href="#summary-of-reproducibility">Summary of reproducibility</a></li>
-<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#summary-of-re-analysis">Summary of Re-analysis</a><ul>
+<li><a href="#reproducibility">Reproducibility</a></li>
+<li><a href="#post-publication-review">Post-publication review</a></li>
+</ul></li>
+<li><a href="#reproducibility-1">Reproducibility</a><ul>
 <li><a href="#table-1">Table 1</a></li>
 <li><a href="#table-2">Table 2</a></li>
 <li><a href="#table-3">Table 3</a></li>
 <li><a href="#figure-2">Figure 2</a></li>
 </ul></li>
-<li><a href="#post-publication-review">Post-publication review</a><ul>
+<li><a href="#post-publication-review-1">Post-publication review</a><ul>
 <li><a href="#use-the-full-model-to-compare-to-huey-kinsolver">Use the full model to compare to Huey &amp; Kinsolver</a><ul>
 <li><a href="#table-of-contrasts-needed-for-interpretation">Table of contrasts needed for interpretation</a></li>
 <li><a href="#harrell-plots-of-full-model-ignoring-sex">Harrell Plots of full model ignoring sex</a></li>
@@ -39,17 +43,29 @@ output:
 </ul>
 </div>
 
+<div id="sources" class="section level1">
+<h1>Sources</h1>
+<p>Cavieres G, Bogdanovich JM, Bozinovic F (2016) Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures. Journal of Evolutionary Biology 29(7): 1462-1468. <a href="https://doi.org/10.1111/jeb.12886" class="uri">https://doi.org/10.1111/jeb.12886</a>. <a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C20&amp;q=Ontogenetic+thermal+tolerance+and+performance+of+ectotherms+at+variable&amp;btnG=" target="_blank">Google Scholar</a></p>
+<p>Cavieres G, Bogdanovich JM, Bozinovic F (2016) Data from: Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures. Dryad Digital Repository. <a href="https://doi.org/10.5061/dryad.dm93h" class="uri" target="_blank">https://doi.org/10.5061/dryad.dm93h</a></p>
+</div>
 <div id="background" class="section level1">
 <h1>Background</h1>
 <p>Explored changes in thermal performance curve in response to rearing at 1 of 4 temperature classes (2 mean temperatures x 2 temperature fluctations). Compared to Huey &amp; Kingsolver’s three evolutionary responses, so considered this an ontogenetic response. The three kinds of responses are 1) right shift in upper thermal limit (UTL), 2) right shift in whole curve – so increase in UTL but decrease in lower thermal limit (LTL) - this is a trade-off, 3) increase in both UTL and LTL, which broadens the thermal performance (Thermal breath (Tbr) and possibly Optimal Range (OR))</p>
 <p>Just looking at their Fig. 2, the response was a right shift of the whole curve. They used a model selection procedure to reduce to a minimum adequate model but this is a case where they want estimates for LTL, UTL, TB, and OR to compare to the H&amp;K models!</p>
 </div>
-<div id="summary-of-reproducibility" class="section level1">
-<h1>Summary of reproducibility</h1>
-<p>Table 1 - mostly reproducible but rounding error.</p>
-<p>Table 2 - partly reproducible but less important for inference</p>
+<div id="summary-of-re-analysis" class="section level1">
+<h1>Summary of Re-analysis</h1>
+<div id="reproducibility" class="section level2">
+<h2>Reproducibility</h2>
+<p>Table 1 - mostly reproducible but some rounding error.</p>
+<p>Table 2 - not reproducible. The methods aren’t clear on the model to compute the marginal means and I cannot recover them.</p>
 </div>
-<div id="reproducibility" class="section level1">
+<div id="post-publication-review" class="section level2">
+<h2>Post-publication review</h2>
+<p>Their Fig. 2 is good but their Tables 1 and 2 are not the tables needed to make the claims they do. Where were the reviewers? I add this. There is one red flag based on anomalous data in Fig. 1 that suggests (contrary to authors) that there is a right shift in <span class="math inline">\(UTL\)</span> in the constant-<span class="math inline">\(T\)</span> group.</p>
+</div>
+</div>
+<div id="reproducibility-1" class="section level1">
 <h1>Reproducibility</h1>
 <pre class="r"><code>library(knitr)
 library(readxl)
@@ -78,7 +94,7 @@ dt &lt;- orderBy(~ Tbar + Tfluc, dt)</code></pre>
 <blockquote>
 <p>To test the potential effects of mean of temperature and daily fluctuation, we performed a linear model, with following variables: sex + mean of temperature * daily fluctuation. Model selection was performed using Akaike’s information criterion for finites sample (AICc); both delta AIC (Di) values, a measure of each model relative to the best model, and model weights (wi), a measure of the evidence supporting a specific model, were used for selections and model comparison. When there were multiple models with Di &lt; 2, selection was based on the difference in parameters present in each model, reduction in deviance and log-likelihood values (Burnham &amp; Anderson, 2003)</p>
 </blockquote>
-<p>“selection was based on the difference in parameters present in each model, reduction in deviance and log-likelihood” is not reproducible language.</p>
+<p>“selection was based on the difference in parameters present in each model, reduction in deviance and log-likelihood” is not reproducible language. I don’t know what this means but this is a critical part of the methods? Did the reviewers understand this or did they just give it a pass?</p>
 <div id="table-1" class="section level2">
 <h2>Table 1</h2>
 <pre class="r"><code>ycols &lt;- c(&#39;To&#39;, &#39;Vmax&#39;, &#39;Tbr&#39;, &#39;LTL&#39;, &#39;UTL&#39;, &#39;OR&#39;, &#39;X1&#39;, &#39;X2&#39;)
@@ -261,7 +277,7 @@ table2</code></pre>
 <p>The data to re-plot Figure 2 were not made available.</p>
 </div>
 </div>
-<div id="post-publication-review" class="section level1">
+<div id="post-publication-review-1" class="section level1">
 <h1>Post-publication review</h1>
 <div id="use-the-full-model-to-compare-to-huey-kinsolver" class="section level2">
 <h2>Use the full model to compare to Huey &amp; Kinsolver</h2>

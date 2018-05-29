@@ -14,17 +14,27 @@ output:
   blogdown::html_page:
     toc: true
 ---
+# Sources
+
+Cavieres G, Bogdanovich JM, Bozinovic F (2016) Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures. Journal of Evolutionary Biology 29(7): 1462-1468. https://doi.org/10.1111/jeb.12886. [Google Scholar](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C20&q=Ontogenetic+thermal+tolerance+and+performance+of+ectotherms+at+variable&btnG=){target="_blank"}
+
+Cavieres G, Bogdanovich JM, Bozinovic F (2016) Data from: Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures. Dryad Digital Repository. [https://doi.org/10.5061/dryad.dm93h]( https://doi.org/10.5061/dryad.dm93h){target="_blank"}
+
 # Background
 
 Explored changes in thermal performance curve in response to rearing at 1 of 4 temperature classes (2 mean temperatures x 2 temperature fluctations). Compared to Huey & Kingsolver's three evolutionary responses, so considered this an ontogenetic response. The three kinds of responses are 1) right shift in upper thermal limit (UTL), 2) right shift in whole curve -- so increase in UTL but decrease in lower thermal limit (LTL) - this is a trade-off, 3) increase in both UTL and LTL, which broadens the thermal performance (Thermal breath (Tbr) and possibly Optimal Range (OR))
 
 Just looking at their Fig. 2, the response was a right shift of the whole curve. They used a model selection procedure to reduce to a minimum adequate model but this is a case where they want estimates for LTL, UTL, TB, and OR to compare to the H&K models!
 
-# Summary of reproducibility
+# Summary of Re-analysis
+## Reproducibility
 
-Table 1 - mostly reproducible but rounding error.
+Table 1 - mostly reproducible but some rounding error.
 
-Table 2 - partly reproducible but less important for inference
+Table 2 - not reproducible. The methods aren't clear on the model to compute the marginal means and I cannot recover them.
+
+## Post-publication review
+Their Fig. 2 is good but their Tables 1 and 2 are not the tables needed to make the claims they do. Where were the reviewers? I add this. There is one red flag based on anomalous data in Fig. 1 that suggests (contrary to authors) that there is a right shift in $UTL$ in the constant-$T$ group.
 
 # Reproducibility
 ```{r libraries, echo=TRUE, message=FALSE}
@@ -60,7 +70,7 @@ The authors used a model selection method to get something like minimum adequate
 
 >To test the potential effects of mean of temperature and daily fluctuation, we performed a linear model, with following variables: sex + mean of temperature * daily fluctuation. Model selection was performed using Akaike’s information criterion for finites sample (AICc); both delta AIC (Di) values, a measure of each model relative to the best model, and model weights (wi), a measure of the evidence supporting a specific model, were used for selections and model comparison. When there were multiple models with Di < 2, selection was based on the difference in parameters present in each model, reduction in deviance and log-likelihood values (Burnham & Anderson, 2003)
 
-"selection was based on the difference in parameters present in each model, reduction in deviance and log-likelihood" is not reproducible language.
+"selection was based on the difference in parameters present in each model, reduction in deviance and log-likelihood" is not reproducible language. I don't know what this means but this is a critical part of the methods? Did the reviewers understand this or did they just give it a pass?
 
 ## Table 1
 
