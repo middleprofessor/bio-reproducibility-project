@@ -281,7 +281,7 @@ table2</code></pre>
 <h1>Post-publication review</h1>
 <div id="use-the-full-model-to-compare-to-huey-kinsolver" class="section level2">
 <h2>Use the full model to compare to Huey &amp; Kinsolver</h2>
-<p>To compare to H&amp;K models, we need estimates for change in <span class="math inline">\(LTL\)</span>, <span class="math inline">\(UTL\)</span>, <span class="math inline">\(Tbr\)</span> and possibly <span class="math inline">\(OR\)</span> across treatment effects. If the interaction is smallish, report the pooled effects across both levels of the other treatment. Otherwise report the simple effects (differences within each level of the other treatment).</p>
+<p>To compare to H&amp;K models, we need estimates for change in <span class="math inline">\(LTL\)</span>, <span class="math inline">\(UTL\)</span>, <span class="math inline">\(Tbr\)</span> and possibly <span class="math inline">\(OR\)</span> across treatment effects. If the interaction is very smallish, one could report the pooled effects across both levels of the other treatment. Here I report the simple effects (differences within each level of the other treatment).</p>
 <pre class="r"><code>ycols &lt;- c(&#39;To&#39;, &#39;Vmax&#39;, &#39;Tbr&#39;, &#39;LTL&#39;, &#39;UTL&#39;, &#39;OR&#39;, &#39;X1&#39;, &#39;X2&#39;)
 table_list &lt;- list()
 gg_list &lt;- list()

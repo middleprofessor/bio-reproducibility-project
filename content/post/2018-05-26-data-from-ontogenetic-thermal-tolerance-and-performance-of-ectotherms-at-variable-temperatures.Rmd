@@ -143,7 +143,7 @@ The data to re-plot Figure 2 were not made available.
 # Post-publication review
 ## Use the full model to compare to Huey & Kinsolver
 
-To compare to H&K models, we need estimates for change in $LTL$, $UTL$, $Tbr$ and possibly $OR$ across treatment effects. If the interaction is smallish, report the pooled effects across both levels of the other treatment. Otherwise report the simple effects (differences within each level of the other treatment).
+To compare to H&K models, we need estimates for change in $LTL$, $UTL$, $Tbr$ and possibly $OR$ across treatment effects. If the interaction is very smallish, one could report the pooled effects across both levels of the other treatment. Here I report the simple effects (differences within each level of the other treatment).
 
 ```{r fullmodels}
 ycols <- c('To', 'Vmax', 'Tbr', 'LTL', 'UTL', 'OR', 'X1', 'X2')
