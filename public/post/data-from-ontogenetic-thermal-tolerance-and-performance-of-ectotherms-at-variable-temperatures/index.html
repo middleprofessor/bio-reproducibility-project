@@ -6,9 +6,9 @@
   <title>Data from Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from Ontogenetic thermal tolerance and performance of ectotherms …" />
-  <meta name="description" content="Background Summary of reproducibility Reproducibility Table 1 Table 2 Table 3 Figure 2  Post-publication review Use the full model to compare to Huey &amp; Kinsolver Shift in UTL  Red Flags   Background Explored changes in thermal performance curve in response to rearing at 1 of 4 temperature classes (2 mean temperatures x 2 temperature fluctations). Compared to Huey &amp; Kingsolver’s three evolutionary responses, so considered this an ontogenetic response.">
-  <meta property="og:description" content="Background Summary of reproducibility Reproducibility Table 1 Table 2 Table 3 Figure 2  Post-publication review Use the full model to compare to Huey &amp; Kinsolver Shift in UTL  Red Flags   Background Explored changes in thermal performance curve in response to rearing at 1 of 4 temperature classes (2 mean temperatures x 2 temperature fluctations). Compared to Huey &amp; Kingsolver’s three evolutionary responses, so considered this an ontogenetic response.">
-  <meta name="twitter:description" content="Background Summary of reproducibility Reproducibility Table 1 Table 2 Table 3 Figure 2  Post-publication review Use the full model to compare to Huey &amp; Kinsolver Shift in UTL  Red Flags …">
+  <meta name="description" content="Background Summary of reproducibility Reproducibility Table 1 Table 2 Table 3 Figure 2  Post-publication review Use the full model to compare to Huey &amp; Kinsolver Table of contrasts needed for interpretation Harrell Plots of full model ignoring sex Summary of my Harrell Plots and Table of contrasts  Shift in UTL  Red Flags Statistical misconceptions   Background Explored changes in thermal performance curve in response to rearing at 1 of 4 temperature classes (2 mean temperatures x 2 temperature fluctations).">
+  <meta property="og:description" content="Background Summary of reproducibility Reproducibility Table 1 Table 2 Table 3 Figure 2  Post-publication review Use the full model to compare to Huey &amp; Kinsolver Table of contrasts needed for interpretation Harrell Plots of full model ignoring sex Summary of my Harrell Plots and Table of contrasts  Shift in UTL  Red Flags Statistical misconceptions   Background Explored changes in thermal performance curve in response to rearing at 1 of 4 temperature classes (2 mean temperatures x 2 temperature fluctations).">
+  <meta name="twitter:description" content="Background Summary of reproducibility Reproducibility Table 1 Table 2 Table 3 Figure 2  Post-publication review Use the full model to compare to Huey &amp; Kinsolver Table of contrasts needed for …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures/" />
@@ -78,10 +78,15 @@
 <li><a href="#figure-2">Figure 2</a></li>
 </ul></li>
 <li><a href="#post-publication-review">Post-publication review</a><ul>
-<li><a href="#use-the-full-model-to-compare-to-huey-kinsolver">Use the full model to compare to Huey &amp; Kinsolver</a></li>
+<li><a href="#use-the-full-model-to-compare-to-huey-kinsolver">Use the full model to compare to Huey &amp; Kinsolver</a><ul>
+<li><a href="#table-of-contrasts-needed-for-interpretation">Table of contrasts needed for interpretation</a></li>
+<li><a href="#harrell-plots-of-full-model-ignoring-sex">Harrell Plots of full model ignoring sex</a></li>
+<li><a href="#summary-of-my-harrell-plots-and-table-of-contrasts">Summary of my Harrell Plots and Table of contrasts</a></li>
+</ul></li>
 <li><a href="#shift-in-utl">Shift in UTL</a></li>
 </ul></li>
 <li><a href="#red-flags">Red Flags</a></li>
+<li><a href="#statistical-misconceptions">Statistical misconceptions</a></li>
 </ul>
 </div>
 
@@ -203,11 +208,11 @@ table1</code></pre>
 <div id="table-2" class="section level2">
 <h2>Table 2</h2>
 <p>These seem to be estimated marginal means, presumably from the models in Table 1. But this can’t be because 28C-15 != 28V-15V for <span class="math inline">\(T_o\)</span> and others. Also, <span class="math inline">\(OR\)</span> is not simply the intercept (and must have an interaction too).</p>
-<p>Tried various combinations. The closest that comes to reproducing is the full model (<span class="math inline">\(Sex + Tbar*Tfluc\)</span>).</p>
+<p>Tried various combinations of the IVs. An additive model ignoring sex is similar but again, cannot be it because there is some kind of interaction in their results, just not the modeled interaction.</p>
 <pre class="r"><code>dredge_it &lt;- FALSE
 table2 &lt;- list()
 for(j in 1:length(ycols)){
-  full_model &lt;- formula(paste(ycols[j], &quot;~ Sex + Tbar * Tfluc&quot;))
+  full_model &lt;- formula(paste(ycols[j], &quot;~ Tbar + Tfluc&quot;))
   fit &lt;- lm(full_model, data=dt, na.action=na.fail)
   if(dredge_it){
     fit.all &lt;- dredge(fit)
@@ -226,82 +231,74 @@ names(table2) &lt;- ycols
 table2</code></pre>
 <pre><code>## $To
 ##  Tbar Tfluc   emmean        SE  df lower.CL upper.CL
-##  15   0     26.51693 0.7066490 128 25.11870 27.91515
-##  28   0     30.75443 0.6630939 128 29.44238 32.06647
-##  15   4     28.46871 0.6630939 128 27.15667 29.78076
-##  28   4     33.02531 0.6937334 128 31.65264 34.39798
+##  15   0     26.38434 0.6017123 130 25.19392 27.57476
+##  28   0     30.80244 0.5779744 130 29.65899 31.94590
+##  15   4     28.51673 0.5779744 130 27.37327 29.66018
+##  28   4     32.93483 0.5956034 130 31.75650 34.11316
 ## 
-## Results are averaged over the levels of: Sex 
 ## Confidence level used: 0.95 
 ## 
 ## $Vmax
-##  Tbar Tfluc   emmean        SE  df lower.CL upper.CL
-##  15   0     2.023785 0.1082218 128 1.809650 2.237920
-##  28   0     2.272385 0.1015514 128 2.071448 2.473322
-##  15   4     2.050670 0.1015514 128 1.849734 2.251607
-##  28   4     1.869592 0.1062438 128 1.659370 2.079813
+##  Tbar Tfluc   emmean         SE  df lower.CL upper.CL
+##  15   0     2.142931 0.09327193 130 1.958404 2.327459
+##  28   0     2.173118 0.08959230 130 1.995870 2.350365
+##  15   4     1.951404 0.08959230 130 1.774156 2.128651
+##  28   4     1.981590 0.09232498 130 1.798936 2.164244
 ## 
-## Results are averaged over the levels of: Sex 
 ## Confidence level used: 0.95 
 ## 
 ## $Tbr
 ##  Tbar Tfluc   emmean        SE  df lower.CL upper.CL
-##  15   0     17.12701 0.7438499 128 15.65518 18.59885
-##  28   0     18.31439 0.6980019 128 16.93327 19.69550
-##  15   4     15.77524 0.6980019 128 14.39413 17.15636
-##  28   4     17.21397 0.7302543 128 15.76903 18.65890
+##  15   0     17.04540 0.6302073 130 15.79861 18.29218
+##  28   0     18.36551 0.6053452 130 17.16790 19.56311
+##  15   4     15.82636 0.6053452 130 14.62876 17.02397
+##  28   4     17.14648 0.6238091 130 15.91234 18.38061
 ## 
-## Results are averaged over the levels of: Sex 
 ## Confidence level used: 0.95 
 ## 
 ## $LTL
 ##  Tbar Tfluc   emmean        SE  df lower.CL  upper.CL
-##  15   0     3.509038 0.7550244 128 2.015093  5.002983
-##  28   0     9.225715 0.7084877 128 7.823851 10.627579
-##  15   4     3.174572 0.7084877 128 1.772709  4.576436
-##  28   4     9.219690 0.7412246 128 7.753050 10.686329
+##  15   0     3.486591 0.6453813 130 2.209781  4.763401
+##  28   0     9.341591 0.6199206 130 8.115152 10.568030
+##  15   4     3.290448 0.6199206 130 2.064009  4.516887
+##  28   4     9.145448 0.6388291 130 7.881601 10.409295
 ## 
-## Results are averaged over the levels of: Sex 
 ## Confidence level used: 0.95 
 ## 
 ## $UTL
 ##  Tbar Tfluc   emmean       SE  df lower.CL upper.CL
-##  15   0     50.37028 1.293989 128 47.80991 52.93066
-##  28   0     51.00359 1.214232 128 48.60103 53.40616
-##  15   4     53.26788 1.214232 128 50.86531 55.67045
-##  28   4     56.95692 1.270338 128 54.44334 59.47050
+##  15   0     49.46272 1.108091 130 47.27050 51.65495
+##  28   0     51.67444 1.064377 130 49.56870 53.78019
+##  15   4     53.93873 1.064377 130 51.83299 56.04447
+##  28   4     56.15045 1.096841 130 53.98048 58.32042
 ## 
-## Results are averaged over the levels of: Sex 
 ## Confidence level used: 0.95 
 ## 
 ## $OR
 ##  Tbar Tfluc   emmean        SE  df lower.CL upper.CL
-##  15   0     13.32877 0.9750995 128 11.39936 15.25817
-##  28   0     13.25938 0.9149982 128 11.44890 15.06986
-##  15   4     14.72481 0.9149982 128 12.91433 16.53529
-##  28   4     14.21115 0.9572774 128 12.31701 16.10528
+##  15   0     13.43724 0.8259690 130 11.80316 15.07132
+##  28   0     13.14816 0.7933840 130 11.57855 14.71778
+##  15   4     14.61359 0.7933840 130 13.04397 16.18320
+##  28   4     14.32451 0.8175833 130 12.70702 15.94200
 ## 
-## Results are averaged over the levels of: Sex 
 ## Confidence level used: 0.95 
 ## 
 ## $X1
 ##  Tbar Tfluc   emmean        SE  df lower.CL upper.CL
-##  15   0     20.44185 0.7255346 128 19.00626 21.87745
-##  28   0     24.40399 0.6808155 128 23.05688 25.75109
-##  15   4     21.09970 0.6808155 128 19.75259 22.44681
-##  28   4     25.56372 0.7122738 128 24.15436 26.97307
+##  15   0     20.31940 0.6148718 130 19.10295 21.53585
+##  28   0     24.52968 0.5906147 130 23.36122 25.69814
+##  15   4     21.22539 0.5906147 130 20.05693 22.39385
+##  28   4     25.43567 0.6086293 130 24.23157 26.63977
 ## 
-## Results are averaged over the levels of: Sex 
 ## Confidence level used: 0.95 
 ## 
 ## $X2
 ##  Tbar Tfluc   emmean        SE  df lower.CL upper.CL
-##  15   0     33.77062 0.8177011 128 32.15266 35.38858
-##  28   0     37.66337 0.7673012 128 36.14513 39.18160
-##  15   4     35.82451 0.7673012 128 34.30627 37.34275
-##  28   4     39.77486 0.8027558 128 38.18647 41.36325
+##  15   0     33.75664 0.6923930 130 32.38682 35.12645
+##  28   0     37.67784 0.6650777 130 36.36206 38.99361
+##  15   4     35.83898 0.6650777 130 34.52320 37.15476
+##  28   4     39.76018 0.6853635 130 38.40427 41.11609
 ## 
-## Results are averaged over the levels of: Sex 
 ## Confidence level used: 0.95</code></pre>
 <p>Table 2 reproducibility – partial.</p>
 <p>Regardless, this makes little difference to the inference.</p>
@@ -333,6 +330,8 @@ for(j in 1:length(ycols)){
 }
 names(table_list) &lt;- ycols
 names(gg_list) &lt;- ycols</code></pre>
+<div id="table-of-contrasts-needed-for-interpretation" class="section level3">
+<h3>Table of contrasts needed for interpretation</h3>
 <pre class="r"><code>table_list</code></pre>
 <pre><code>## $To
 ##  contrast    estimate        SE  df   lower.CL upper.CL t.ratio p.value
@@ -410,6 +409,9 @@ names(gg_list) &lt;- ycols</code></pre>
 ##  4,28 - 4,15 3.950768 1.105842 129  1.76283252 6.138703   3.573  0.0005
 ## 
 ## Confidence level used: 0.95</code></pre>
+</div>
+<div id="harrell-plots-of-full-model-ignoring-sex" class="section level3">
+<h3>Harrell Plots of full model ignoring sex</h3>
 <pre class="r"><code>gg_list</code></pre>
 <pre><code>## $To</code></pre>
 <p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/fullModelPlots-1.png" width="672" /></p>
@@ -434,6 +436,9 @@ names(gg_list) &lt;- ycols</code></pre>
 <pre><code>## 
 ## $X2</code></pre>
 <p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/fullModelPlots-8.png" width="672" /></p>
+</div>
+<div id="summary-of-my-harrell-plots-and-table-of-contrasts" class="section level3">
+<h3>Summary of my Harrell Plots and Table of contrasts</h3>
 <ol style="list-style-type: decimal">
 <li><p><span class="math inline">\(T_o\)</span></p></li>
 <li><p><span class="math inline">\(Tbr\)</span> is noisy relative to signal but the pattern is small decrease in <span class="math inline">\(Tbr\)</span> given temperature flucation but no change in mean and small increase in <span class="math inline">\(Tbr\)</span> given change in temperature regardless of fluctuation.</p></li>
@@ -442,18 +447,25 @@ names(gg_list) &lt;- ycols</code></pre>
 <li><p><span class="math inline">\(OR\)</span></p></li>
 </ol>
 </div>
+</div>
 <div id="shift-in-utl" class="section level2">
 <h2>Shift in UTL</h2>
 <blockquote>
 <p>in variable environments the upper thermal limit of performance curve shifted to the right, but flies reared in constant environments did not exhibit changes in UTL and the curve did not shift.</p>
 </blockquote>
 <p>Note that their Fig. 2 shows a clear right shift even in the non-fluctuating environment but an anomaly with the data at 40 degrees where the high temperature treatment is unusually low.</p>
-<p>They don’t really present evidence for this anywhere but a HarrellPlot does a good job. The first two contrasts are the <span class="math inline">\(Tbar\)</span> effect, which is the evidence for the shift to right in fluctuating environment vs. non fluctuating environment. The bottom two contrasts are the <span class="math inline">\(Tfluc\)</span> effect.</p>
-<p>The HarrellPlot supports the conclusion but the conclusion is unsupported by their own presentation as it implies a <span class="math inline">\(Tbar \times Tfluc\)</span> interaction (that is, the effect of <span class="math inline">\(Tbar\)</span> depends on the level of <span class="math inline">\(Tfluc\)</span>). But nowhere do they show this interaction. Their own “best model” for <span class="math inline">\(UTL\)</span> does not include the interaction but just the additve effects of <span class="math inline">\(Tbar\)</span> and <span class="math inline">\(Tfluc\)</span>.</p>
+<p>Their Table 1 doesn’t present the evidence for this – indeed their presented model does not include the interaction, which suggests a uniform “right shift” (increase in <span class="math inline">\(UTL\)</span>) independnet of level of <span class="math inline">\(Tfluc\)</span>. But the conclusion implies an interaction. Their Table 2 doesn’t present this because it doesn’t seem to include the modeled interaction even though there is some small interaction since the contrasts within each level are not equal. Also, a table of marginal means + SE does is not what we want anyway, we want a table of the contrasts (my version of table 2)</p>
+<p>The HarrellPlot of the model with interaction shows the result nices - increased <span class="math inline">\(UTL\)</span>, with increased <span class="math inline">\(Temperature\)</span>, in the fluctuating temperature group but trivially small change in the constant temperature group. The top two contrasts are the <span class="math inline">\(Tbar\)</span> effect, which is the evidence for the shift to right in fluctuating environment vs. non fluctuating environment. The bottom two contrasts are the <span class="math inline">\(Tfluc\)</span> effect. The proper table to show these results are in my version of Table 1.</p>
 </div>
 </div>
 <div id="red-flags" class="section level1">
 <h1>Red Flags</h1>
+<ol style="list-style-type: decimal">
+<li>Fig 1 shows a right shift in UTL in the constant <span class="math inline">\(T\)</span> group but the anomalously low walking speed at 40 C seems to have effected the estimate of <span class="math inline">\(UTL\)</span> (I don’t know how this was estimated from the data but the authors give a reference). The fact that this is an anomalously low speed in both groups suggest that it was a systematic error in the measurement (maybe that accidentally increased the to 44 C).</li>
+</ol>
+</div>
+<div id="statistical-misconceptions" class="section level1">
+<h1>Statistical misconceptions</h1>
 <ol style="list-style-type: decimal">
 <li>“Nevertheless, Tbr was not affected by environmental variability.” P &gt; 0.05 != “no effect”</li>
 </ol>

@@ -92,13 +92,13 @@ Table 1 reproducibility
 
 These seem to be estimated marginal means, presumably from the models in Table 1. But this can't be because 28C-15 != 28V-15V for $T_o$ and others. Also, $OR$ is not simply the intercept (and must have an interaction too).
 
-Tried various combinations. The closest that comes to reproducing is the full model ($Sex + Tbar*Tfluc$).
+Tried various combinations of the IVs. An additive model ignoring sex is similar but again, cannot be it because there is some kind of interaction in their results, just not the modeled interaction.
 
 ```{r table2}
 dredge_it <- FALSE
 table2 <- list()
 for(j in 1:length(ycols)){
-  full_model <- formula(paste(ycols[j], "~ Sex + Tbar * Tfluc"))
+  full_model <- formula(paste(ycols[j], "~ Tbar + Tfluc"))
   fit <- lm(full_model, data=dt, na.action=na.fail)
   if(dredge_it){
     fit.all <- dredge(fit)
@@ -151,14 +151,17 @@ names(table_list) <- ycols
 names(gg_list) <- ycols
 ```
 
+### Table of contrasts needed for interpretation
 ```{r fullModelTables}
 table_list
 ```
 
+### Harrell Plots of full model ignoring sex
 ```{r fullModelPlots}
 gg_list
 ```
 
+### Summary of my Harrell Plots and Table of contrasts
 1. $T_o$
 
 2. $Tbr$ is noisy relative to signal but the pattern is small decrease in $Tbr$ given temperature flucation but no change in mean and small increase in $Tbr$ given change in temperature regardless of fluctuation.
@@ -174,9 +177,12 @@ gg_list
 
 Note that their Fig. 2 shows a clear right shift even in the non-fluctuating environment but an anomaly with the data at 40 degrees where the high temperature treatment is unusually low.
 
-They don't really present evidence for this anywhere but a HarrellPlot does a good job. The first two contrasts are the $Tbar$ effect, which is the evidence for the shift to right in fluctuating environment vs. non fluctuating environment. The bottom two contrasts are the $Tfluc$ effect.
+Their Table 1 doesn't present the evidence for this -- indeed their presented model does not include the interaction, which suggests a uniform "right shift" (increase in $UTL$) independnet of level of $Tfluc$. But the conclusion implies an interaction. Their Table 2 doesn't present this because it doesn't seem to include the modeled interaction even though there is some small interaction since the contrasts within each level are not equal. Also, a table of marginal means + SE does is not what we want anyway, we want a table of the contrasts (my version of table 2)
 
-The HarrellPlot supports the conclusion but the conclusion is unsupported by their own presentation as it implies a $Tbar \times Tfluc$ interaction (that is, the effect of $Tbar$ depends on the level of $Tfluc$). But nowhere do they show this interaction. Their own "best model" for $UTL$ does not include the interaction but just the additve effects of $Tbar$ and $Tfluc$.
+The HarrellPlot of the model with interaction shows the result nices - increased $UTL$, with increased $Temperature$, in the fluctuating temperature group but trivially small change in the constant temperature group. The top two contrasts are the $Tbar$ effect, which is the evidence for the shift to right in fluctuating environment vs. non fluctuating environment. The bottom two contrasts are the $Tfluc$ effect. The proper table to show these results are in my version of Table 1.
 
 # Red Flags
+1. Fig 1 shows a right shift in UTL in the constant $T$ group but the anomalously low walking speed at 40 C seems to have effected the estimate of $UTL$ (I don't know how this was estimated from the data but the authors give a reference). The fact that this is an anomalously low speed in both groups suggest that it was a systematic error in the measurement (maybe that accidentally increased the to 44 C).
+
+# Statistical misconceptions
 1. "Nevertheless, Tbr was not affected by environmental variability." P > 0.05 != "no effect"
