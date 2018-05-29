@@ -133,23 +133,30 @@ The data to re-plot Figure 2 were not made available.
 # Post-publication review
 ## Use the full model to compare to Huey & Kinsolver
 
-To compare to H&K models, we need estimates for change in $LTL$, $UTL$, $Tbr$ and possibly $OR$ across treatment effects. If the interation is smallish, report the pooled effects across both levels of the other treatment. Otherwise report the simple effects (differences within each level of the other treatment).
+To compare to H&K models, we need estimates for change in $LTL$, $UTL$, $Tbr$ and possibly $OR$ across treatment effects. If the interaction is smallish, report the pooled effects across both levels of the other treatment. Otherwise report the simple effects (differences within each level of the other treatment).
 
 ```{r fullmodels}
 ycols <- c('To', 'Vmax', 'Tbr', 'LTL', 'UTL', 'OR', 'X1', 'X2')
-full_table <- list()
+table_list <- list()
 gg_list <- list()
 for(j in 1:length(ycols)){
   
   res <- HarrellPlot(x="Tfluc", y=ycols[j], g="Tbar", data=dt, 
                      add_interaction=TRUE, interaction.group = TRUE, 
                      contrasts.method='revpairwise')
-  full_table[[j]] <- res$tables$contrasts
+  table_list[[j]] <- res$tables$contrasts
   gg_list[[j]] <- res$gg
 }
-names(full_table) <- ycols
+names(table_list) <- ycols
 names(gg_list) <- ycols
-full_table
+```
+
+```{r fullModelTables}
+table_list
+```
+
+```{r fullModelPlots}
+gg_list
 ```
 
 1. $T_o$

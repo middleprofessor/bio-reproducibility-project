@@ -319,21 +319,21 @@ table2</code></pre>
 <h1>Post-publication review</h1>
 <div id="use-the-full-model-to-compare-to-huey-kinsolver" class="section level2">
 <h2>Use the full model to compare to Huey &amp; Kinsolver</h2>
-<p>To compare to H&amp;K models, we need estimates for change in <span class="math inline">\(LTL\)</span>, <span class="math inline">\(UTL\)</span>, <span class="math inline">\(Tbr\)</span> and possibly <span class="math inline">\(OR\)</span> across treatment effects. If the interation is smallish, report the pooled effects across both levels of the other treatment. Otherwise report the simple effects (differences within each level of the other treatment).</p>
+<p>To compare to H&amp;K models, we need estimates for change in <span class="math inline">\(LTL\)</span>, <span class="math inline">\(UTL\)</span>, <span class="math inline">\(Tbr\)</span> and possibly <span class="math inline">\(OR\)</span> across treatment effects. If the interaction is smallish, report the pooled effects across both levels of the other treatment. Otherwise report the simple effects (differences within each level of the other treatment).</p>
 <pre class="r"><code>ycols &lt;- c(&#39;To&#39;, &#39;Vmax&#39;, &#39;Tbr&#39;, &#39;LTL&#39;, &#39;UTL&#39;, &#39;OR&#39;, &#39;X1&#39;, &#39;X2&#39;)
-full_table &lt;- list()
+table_list &lt;- list()
 gg_list &lt;- list()
 for(j in 1:length(ycols)){
   
   res &lt;- HarrellPlot(x=&quot;Tfluc&quot;, y=ycols[j], g=&quot;Tbar&quot;, data=dt, 
                      add_interaction=TRUE, interaction.group = TRUE, 
                      contrasts.method=&#39;revpairwise&#39;)
-  full_table[[j]] &lt;- res$tables$contrasts
+  table_list[[j]] &lt;- res$tables$contrasts
   gg_list[[j]] &lt;- res$gg
 }
-names(full_table) &lt;- ycols
-names(gg_list) &lt;- ycols
-full_table</code></pre>
+names(table_list) &lt;- ycols
+names(gg_list) &lt;- ycols</code></pre>
+<pre class="r"><code>table_list</code></pre>
 <pre><code>## $To
 ##  contrast    estimate        SE  df   lower.CL upper.CL t.ratio p.value
 ##  4,15 - 0,15 2.005530 0.9689541 129 0.08843055 3.922629   2.070  0.0405
@@ -410,6 +410,30 @@ full_table</code></pre>
 ##  4,28 - 4,15 3.950768 1.105842 129  1.76283252 6.138703   3.573  0.0005
 ## 
 ## Confidence level used: 0.95</code></pre>
+<pre class="r"><code>gg_list</code></pre>
+<pre><code>## $To</code></pre>
+<p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/fullModelPlots-1.png" width="672" /></p>
+<pre><code>## 
+## $Vmax</code></pre>
+<p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/fullModelPlots-2.png" width="672" /></p>
+<pre><code>## 
+## $Tbr</code></pre>
+<p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/fullModelPlots-3.png" width="672" /></p>
+<pre><code>## 
+## $LTL</code></pre>
+<p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/fullModelPlots-4.png" width="672" /></p>
+<pre><code>## 
+## $UTL</code></pre>
+<p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/fullModelPlots-5.png" width="672" /></p>
+<pre><code>## 
+## $OR</code></pre>
+<p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/fullModelPlots-6.png" width="672" /></p>
+<pre><code>## 
+## $X1</code></pre>
+<p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/fullModelPlots-7.png" width="672" /></p>
+<pre><code>## 
+## $X2</code></pre>
+<p><img src="/post/2018-05-26-data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures_files/figure-html/fullModelPlots-8.png" width="672" /></p>
 <ol style="list-style-type: decimal">
 <li><p><span class="math inline">\(T_o\)</span></p></li>
 <li><p><span class="math inline">\(Tbr\)</span> is noisy relative to signal but the pattern is small decrease in <span class="math inline">\(Tbr\)</span> given temperature flucation but no change in mean and small increase in <span class="math inline">\(Tbr\)</span> given change in temperature regardless of fluctuation.</p></li>
