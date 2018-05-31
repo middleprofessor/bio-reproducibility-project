@@ -17,6 +17,8 @@ library(ggplot2)
 library(data.table)
 library(lme4)
 library(lmerTest)
+library(emmeans)
+library(doBy)
 
 base_path <- "../data" #knitr
 #base_path <- "content/data"  # console
@@ -56,29 +58,69 @@ fit <- lmer(Mass ~ Treatment*Capture_Period + (1|BandNo), data=bird)
 kable(as.data.frame(anova(fit, ddf="Kenward-Roger")), digits=3)
 ```
 
-> We found that female body mass significantly decreased between the two capture periods (F1,14.7 = 48.9, P < 0.001; Fig. 2b), but we did not detect a significant effect of either treatment (F2,23 = 1.9, P = 0.173) or a treatment x capture period interaction (F2,15 = 2 5, P = 0.118). The mean decrease in body mass between capture periods was significant for females in the control treatment [b = -0.95 (95% CI:  1.75,  0.14), t1,16 = 3.8, P = 0 017] as well as both handicapping treatments [light clipping: b = -1.07 (95% CI:  1.88,  0.26), t1,15 3 = 4.3, P = 0.007; heavy clipping: b = -2.12 (95% CI:  3.67,  0.58), t1,14 3 = 4.5, P = 0.005; Fig. 2b]. However, the magnitude of decrease in mean body mass of females in the light and heavy clipping treatments was 1.29X (95% CI: 0.6, 2.3) and 2.29X (95% CI: 1.2, 4.5) greater, respectively, that of females in the control treatment.
+> The mean decrease in body mass between capture periods was significant for females in the control treatment [b = -0.95 (95% CI:  1.75,  0.14), t1,16 = 3.8, P = 0 017] as well as both handicapping treatments [light clipping: b = -1.07 (95% CI:  1.88,  0.26), t1,15 3 = 4.3, P = 0.007; heavy clipping: b = -2.12 (95% CI:  3.67,  0.58), t1,14 3 = 4.5, P = 0.005; Fig. 2b]. 
 
-```{r fib2b_change}
-# look at coefficients of lmm in addition to the ANOVA above
-b_table <- coefficients(summary(fit))
-b <- b_table[, "Estimate"]
+```{r fib2bChange}
+# no adjustment for multiple tests
+b_table <- summary(contrast(emmeans(fit, spec=c('Treatment', 'Capture_Period')), method='revpairwise', adjust='none'), infer=c(TRUE,TRUE))
+x_rows <- c('1_control,13 - 1_control,3','2_4Fclip,13 - 2_4Fclip,3', '3_8Fclip,13 - 3_8Fclip,3')
+b_table <- b_table[which(b_table[,"contrast"]%in%x_rows),]
 kable(b_table, digits=3)
 
-# how many X greater was the reduction (this is a confusing way to report)
-b['Treatment2_4Fclip:Capture_Period13']/b['Capture_Period13']
-b['Treatment3_8Fclip:Capture_Period13']/b['Capture_Period13']
+# Tukey HSD adjustment reproduces
+b_table <- data.table(summary(contrast(emmeans(fit, spec=c('Treatment', 'Capture_Period')), method='revpairwise'), infer=c(TRUE,TRUE)))
+x_rows <- c('1_control,13 - 1_control,3','2_4Fclip,13 - 2_4Fclip,3', '3_8Fclip,13 - 3_8Fclip,3')
+b_table <- b_table[contrast%in%x_rows,]
+kable(b_table, digits=3)
 ```
+
+>However, the magnitude of decrease in mean body mass of females in the light and heavy clipping treatments was 1.29X (95% CI: 0.6, 2.3) and 2.29X (95% CI: 1.2, 4.5) greater, respectively, that of females in the control treatment.
+
+Fold changes are a type of change (or gain) score and are conditionally biased on the pre-treatment value (see below). Regardless, it's not clear to me how the CIs of the fold-changes were computed and this isn't an easy problem. I did find information [here](https://stats.stackexchange.com/questions/16349/how-to-compute-the-confidence-interval-of-the-ratio-of-two-normal-means/16354#16354). Instead, I use a bootstrap to try to reproduce.
+
+```{r fig2bFoldChange, eval=FALSE}
+# how many X greater was the reduction (this is a confusing way to report)
+niter <- 100
+x_levels <- c('Capture_PeriodMass_13', 'Treatment2_4Fclip:Capture_PeriodMass_13', 'Treatment3_8Fclip:Capture_PeriodMass_13')
+fold_table <- matrix(NA, nrow=niter, ncol=2)
+colnames(fold_table) <- c('clip4', 'clip8')
+inc <- 1:nrow(bird_wide)
+iter <- 1
+while(iter <= niter){
+  bird_samp <- na.omit(melt(bird_wide[inc,], id.vars=c('BandNo','Treatment'),
+                    measure.vars=c('Mass_3', 'Mass_13'),
+                    variable.name = 'Capture_Period',
+                    value.name='Mass'))
+  #bird_o <- na.omit(orderBy(~BandNo, bird[,.SD,.SDcols=c('Treatment','BandNo','Capture_Period','Mass')]))
+  #coefficients(summary(lmer(Mass ~ Treatment*Capture_Period + (1|BandNo), data=bird_o)))
+
+  fit <- lmer(Mass ~ Treatment*Capture_Period + (1|BandNo), data=bird_samp)
+  b <- coefficients(summary(fit))
+  if(all(x_levels %in% row.names(b))){
+    b <- b[x_levels, 'Estimate']
+    fold_table[iter,'clip4'] <- (b[1]+b[2])/b[1]
+    fold_table[iter,'clip8'] <- (b[1]+b[3])/b[1]
+    iter <- iter+1
+  }
+  
+  # resample
+  inc <- sample(1:nrow(bird_wide), replace=TRUE)
+}
+
+b_table[contrast=='2_4Fclip,13 - 2_4Fclip,3', estimate]/b_table[contrast=='1_control,13 - 1_control,3', estimate]
+b_table[contrast=='3_8Fclip,13 - 3_8Fclip,3', estimate]/b_table[contrast=='1_control,13 - 1_control,3', estimate]
+
+apply(fold_table, 2, quantile, c(0.025,0.975))
+
+```
+
 Or, 1.13X and 2.23X more reduction
 
 # Red Flags
 ## Adjustment for baseline when comparing change in mass
-Note the inconsistency between the report of 2.29X greater reduction in mass with CI that does not cover 1.0 and the ANOVA table interaction row (both are different ways of looking at the same thing). Fig 2b shows effectively zero effect of treatment for post-treatment measure. The expectation is zero if there is no effect, and the data are very consistent with this. But there is a big difference in pre-treatment mass among levels (again, the expectation is zero with randomized treatment assignment). So this might be a good example of pre-post bias in the estimates of 1.29X and 2.29X greater reduction in mass. [The expectation for these estimates is not 1.0 conditional on pre-treatment mass](https://www.middleprofessor.com/files/quasipubs/change_scores.html).
+In the linear mixed model, it is the *interaction effect* that contains the difference in mass loss among treatments (so the treatment effect of the change score). Note the inconsistency between the report of 2.29X greater reduction in mass with CI that does not cover 1.0 and the ANOVA table interaction row (both are different ways of looking at the same thing). Fig 2b shows effectively zero effect of treatment for post-treatment measure. The expectation is zero if there is no effect, and the data are very consistent with this. But there is a big difference in pre-treatment mass among levels (again, the expectation is zero with randomized treatment assignment). So this might be a good example of pre-post bias in the estimates of 1.29X and 2.29X greater reduction in mass. [The expectation for these estimates is not 1.0 conditional on pre-treatment mass](https://www.middleprofessor.com/files/quasipubs/change_scores.html). That is, the fold-change that they report is biased, conditional on the pre-treatment mass.
 
-Why might? Because the interaction effects of the LMM should adjust for baseline. This should be explored. I compare the results with an ANCOVA using baseline mass as a covariate.
-
-Why might pre-treatment control mass be unusually low or pre-treatment 8-clip mass be unusually high? This could simply be a function of when the birds were weighed, since bird mass oscillates during the day.
-
-```{r fig2bAncova, fig.cap="ANCOVA style plot. blah blah blah"}
+```{r fig2bAncova, fig.cap="ANCOVA style plot"}
 
 # change in mass
 gg <- ggplot(data=bird_wide, aes(x=day3mass, y=dMass, color=Treatment)) +
@@ -98,4 +140,4 @@ bird_wide[!is.na(dMass), .(N=.N), by=Treatment]
 
 ```
 
-Look at their fig 2b which reports sample sizes for pre and post measures. The n drops in all post measures. The ANCOVA only analyzes birds with both pre and post measures so is using less data.
+Look at their fig 2b which reports sample sizes for pre and post measures. The $n$ drops in all post measures. The ANCOVA only analyzes birds with both pre and post measures so is using less data.
