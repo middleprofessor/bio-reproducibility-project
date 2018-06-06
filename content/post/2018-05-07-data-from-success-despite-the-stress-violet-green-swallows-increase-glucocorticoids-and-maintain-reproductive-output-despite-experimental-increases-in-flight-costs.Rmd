@@ -19,6 +19,8 @@ library(lme4)
 library(lmerTest)
 library(emmeans)
 library(doBy)
+library(mvtnorm)
+library(nlme) # model 2 of Liang and Zeger 2000
 
 base_path <- "../data" #knitr
 #base_path <- "content/data"  # console
@@ -26,60 +28,172 @@ folder <- '2018-05-07-data-from-success-despite-the-stress'
 ```
 
 # Sources
-Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719 [[Google Scholar](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C20&q=%22Success+despite+the+stress%3A+violet‐green+swallows+increase+glucocorticoids+and+maintain+reproductive+output+despite+experimental+increases+in+flight+costs%22&btnG=){target="_blank"}]
+Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719 [[Google Scholar](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C20&q=%22Success+despite+the+stress%3A+violet‐green+swallows+increase+glucocorticoids+and+maintain+reproductive+output+despite+experimental+increases+in+flight+costs%22&btnG=)]c]
 
 Data source: [https://datadryad.org/resource/doi:10.5061/dryad.3bc3s](https://datadryad.org/resource/doi:10.5061/dryad.3bc3s){target="_blank"}
 
 # Background
-xxx
+
+**usage note** The authors refer to the measure of cortisol as "baseline cortisol." Sice the design here is pre-post, this could be confused with the more general and wide usage of "baseline" to mean pre-treatment measure.
 
 # Data
-```{r}
+These are the data for the major results of change in $Corb_b$ and $Mass$ in response to the treatment.
+
+```{r data}
 fn <- 'RiversetalVGSWhandicappingRawData.xls'
 file_path <- paste(base_path, folder, fn, sep='/')
 bird <- data.table(read_excel(file_path, sheet = 'Tab3 "a8"'))
 bird[, Treatment:=factor(Treatment)]
-bird[, Capture_Period:=factor(Nestling_Age)]
-bird_wide <- dcast(bird,  Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Capture_Period, value.var=c('Mass','Time'))
-bird_wide[, dMass:=Mass_13 - Mass_3]
-
+bird[, Capture_Period:=factor(Nestling_Age)] # the paper uses Capture_Period as a label
+bird[, Time:=as.integer(Capture_Period) - 1] # for the constrained LDA
 ```
 
 # Reproducibility
-## Body Mass
->We found that female body mass significantly decreased between the two capture periods (F1,14.7 = 48.9, P < 0 001; Fig. 2b), but we did not detect a significant effect of either treatment (F2,23 = 1.9, P = 0.173) or a treatment x capture period interaction (F2,15 = 2.5, P = 0.118).
+# Reproducibility key
+1. Reproducibility: 1 (fails to reproduce). Not really close
+2. Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)
+3. Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.
+4. Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.
+
+A "+" means that the precise method wasn't specified and reproducibility required exploration.
+
+## Initial measures
+
+>We detected no significant differences among females in the three treatment groups with respect to mean body mass (F2,20 = 2.83, P = 0.083), mean baseline cort (F2,14 = 1.81, P = 0.199), mean clutch size (F2,21 = 0.61, P = 0.555) or mean brood size (F2,21 = 2.54, P = 0.103) when they were measured prior to feather clipping.
+
+```{r initalMeasures}
+tab1 <- data.table(read_excel(file_path, sheet = 'Tab1 "baseline"'))
+anova(lm(Mass ~ Treatment, data=tab1)) # check
+anova(lm(CORT_B ~ Treatment, data=tab1)) #check
+anova(lm(Clutch ~ Treatment, data=tab1)) #check
+anova(lm(day3brood ~ Treatment, data=tab1)) #check
+
+#note that these data are also in "Tab3", which is kinda dangerous
+anova(lm(Mass ~ Treatment, data=bird[Nestling_Age=='3'])) # check
+anova(lm(CORT_B ~ Treatment, data=bird[Nestling_Age=='3'])) #check
+
+```
+
+Reproducibility: 3 (reproduces to decimal or random error)
+
+**Workflow flag**. The data for these statistics are in multiple tabs, which is a dangerous practice (what if a datum is corrected in one tab but not others?). Regardless, testing for treatment differences at baseline is not very useful (it doesn't protect against conditional bias on the treatment effect)
+
+## Change in Cort
+>Overall, females subjected to feather-clipping treatments were found to have increased baseline cort compared to controls after treatments were implemented (Fig. 2a). We detected a significant main effect of handicapping treatment (F2,25 = 13.3, P = 0.001), capture period (F1,25 = 129.0, P < 0.001) and a treatment x capture period interaction (F2,25 = 22.8, P < 0.001).
+
+```{r Fig2a}
+gg <- ggplot(data=bird, aes(x=Treatment, y=CORT_B, fill=Capture_Period)) +
+  geom_boxplot()
+gg
+fit2a <- lmer(CORT_B ~ Treatment*Capture_Period + DOY_Initiation + day3mass + (1|BandNo), data=bird)
+kable(as.data.frame(anova(fit2a)), digits=3)
+```
+
+Reproducibility: 3 (reproduces to decimal or random error)
+
+**Red Flag** The interaction effect is the effect of interest here. This is the effect of treatment on *the post-treatment value* of baseline cortisol. The problem is that this interaction is not conditional on pre-treatment values and so is conditionally biased (see below).
+
+>Pre-treatment mean baseline cort concentrations of control females [2.67 ng mL 1 (95% CI: 1.55, 3.80)] were not statistically different from those of females in the light clipping [2.69 ng mL (95% CI: 1.65, 3.73); t1,25 = 0.0, P = 1.000] and heavy clipping treatments [1.97 ng mL 1 (95% CI:  0.16, 4.09); t1,25 = 0.6, P = 0.990]. In contrast, post-treatment baseline cort concentrations in control females [4.65 ng mL 1 (95% CI: 3.46, 5.84)] were significantly lower than females in both the light clipped [7.4 ng mL 1 (95% CI: 6.45, 8.64); t1,25 = 3.7, P = 0.012] and heavy clipped treatments [14.07 ng mL 1 (95% CI: 12.24, 15.90); t1,25 = 8.7, P < 0.001].
+
+```{r Fig2aEMmeans}
+# kenward-rogers adjustment is default but I am specifying it regardless
+emm_options(lmer.df = "kenward-roger")
+fit2a_lsmeans <- emmeans(fit2a, spec=c('Treatment', 'Capture_Period'))
+fit2a_lsmeans
+```
+
+Reproducibility: 3 (reproduces to decimal or random error)
+**Exceptions** - 7.54 v 7.4 for 2_4Fclip/13. Given the level 3 for other estimates I suspect this is a transcription error
+
+**Code flag** - a best practice is to construct published tables using code that extracts results directly rather than manually transcribing results. This is not in a table though, so is susceptible to transcription error. 
+
+Marginal means are reported but the p-values must be from Tukey-HSD contrasts.
+
+```{r Fig2aContrasts}
+# just for fun
+x_rows <- c('Treatment2_4Fclip', 'Treatment3_8Fclip')
+kable(coefficients(summary(fit2a))[x_rows,], digits=3)
+
+# no adjustment for multiple tests -- just for fun
+fit2a_table <- summary(contrast(fit2a_lsmeans, method='revpairwise', adjust='none'), infer=c(TRUE,TRUE))
+x_rows <- c('2_4Fclip,3 - 1_control,3', '3_8Fclip,3 - 1_control,3')
+kable(fit2a_table[which(fit2a_table[,"contrast"]%in%x_rows),], digits=3)
+
+# Tukey HSD adjustment reproduces
+fit2a_table <- summary(contrast(fit2a_lsmeans, method='revpairwise'), infer=c(TRUE,TRUE))
+kable(fit2a_table[which(fit2a_table[,"contrast"]%in%x_rows),], digits=3)
+
+```
+
+Reproducibility: 3 (reproduces to decimal or random error)
+
+>Within each treatment, mean baseline cort increased from the pre-treatment capture period to the post-treatment capture period: control: b = 1.97 (95% CI: -0.44, 4.39), t1,25 = 2.5, P = 0.155; light clipping: b = 4.85 (95% CI: 2.62, 7.09), t1,25 = 6.7, P < 0.001; and heavy clipping: b = 12.10 (95% CI: 8.16, 16.05), t1,25 = 9.5, P < 0.001. Relative to females in the control group, the magnitude of increase in mean baseline cort between the two capture periods was 2.59 (95% CI: 1.1, 5.7) and 6.19 (95% CI: 2.7, 13.9) greater in females subjected to the light clipping and heavy clipping treatments, respectively (Fig. 2a)
+
+```{r Fig2aChanges}
+# Tukey HSD adjustment reproduces
+fit2a_table <- summary(contrast(fit2a_lsmeans, method='revpairwise'), infer=c(TRUE,TRUE))
+x_rows <- c('1_control,13 - 1_control,3','2_4Fclip,13 - 2_4Fclip,3', '3_8Fclip,13 - 3_8Fclip,3')
+kable(fit2a_table[which(fit2a_table[,"contrast"]%in%x_rows),], digits=3)
+
+```
+
+Reproducibility: 2 (reproduces to a similar value)
+
+Estiamtes are the same but my CIs are wider and my t-values are smaller (both reflecting bigger SE in my results). The reported df of 25 is the simple t-test df and not a kenward-rogers adjusted df.
+
+## Change in Body Mass
+>We found that female body mass significantly decreased between the two capture periods (F1,14.7 = 48.9, P < 0.001; Fig. 2b), but we did not detect a significant effect of either treatment (F2,23 = 1.9, P = 0.173) or a treatment x capture period interaction (F2,15 = 2.5, P = 0.118).
+
+The authors do not report the model.
 
 ```{r fig2b, fig.cap="Reproduced Fig. 2b"}
 # capture period == nestling_age
 gg <- ggplot(data=bird, aes(x=Treatment, y=Mass, fill=Capture_Period)) +
   geom_boxplot()
 gg
-fit <- lmer(Mass ~ Treatment*Capture_Period + (1|BandNo), data=bird)
-kable(as.data.frame(anova(fit, ddf="Kenward-Roger")), digits=3)
+# without initiation
+fit2b <- lmer(Mass ~ Treatment*Capture_Period + (1|BandNo), data=bird)
+kable(as.data.frame(anova(fit2b)), digits=3)
+# with initiation
+fit2b <- lmer(Mass ~ DOY_Initiation + Treatment*Capture_Period + (1|BandNo), data=bird)
+kable(as.data.frame(anova(fit2b, type=1)), digits=3)
+kable(as.data.frame(anova(fit2b, type=2)), digits=3)
+kable(as.data.frame(anova(fit2b, type=3)), digits=3)
 ```
 
-> The mean decrease in body mass between capture periods was significant for females in the control treatment [b = -0.95 (95% CI:  1.75,  0.14), t1,16 = 3.8, P = 0 017] as well as both handicapping treatments [light clipping: b = -1.07 (95% CI:  1.88,  0.26), t1,15 3 = 4.3, P = 0.007; heavy clipping: b = -2.12 (95% CI:  3.67,  0.58), t1,14 3 = 4.5, P = 0.005; Fig. 2b]. 
+Reproducibility: 3-+ (reproduces to decimal or random error, some exploration required)
+
+level 3 reproducibility using Type 2 SS. This is more than decimal error but it's close. I had to explore SS type.
+
+> The mean decrease in body mass between capture periods was significant for females in the control treatment [b = -0.95 (95% CI: -1.75, -0.14), t1,16 = 3.8, P = 0.017] as well as both handicapping treatments [light clipping: b = -1.07 (95% CI: -1.88,-0.26), t1,15.3 = 4.3, P = 0.007; heavy clipping: b = -2.12 (95% CI: -3.67, -0.58), t1,14.3 = 4.5, P = 0.005; Fig. 2b]. 
+
+The authors used Kenwood-Rogers approximate DF for the contrasts and Tukey-Kramer adjusted SE/p-values for all the contrasts (not just the three reported).
 
 ```{r fib2bChange}
-# no adjustment for multiple tests
-b_table <- summary(contrast(emmeans(fit, spec=c('Treatment', 'Capture_Period')), method='revpairwise', adjust='none'), infer=c(TRUE,TRUE))
+coefficients(summary(fit2b))
+
+emm_options(lmer.df = "kenward-roger")
+fit2b_lsmeans <- emmeans(fit2b, spec=c('Treatment', 'Capture_Period'))
+
+# no adjustment for multiple tests --  just for fun
+b_table <- summary(contrast(fit2b_lsmeans, method='revpairwise', adjust='none'), infer=c(TRUE,TRUE))
 x_rows <- c('1_control,13 - 1_control,3','2_4Fclip,13 - 2_4Fclip,3', '3_8Fclip,13 - 3_8Fclip,3')
-b_table <- b_table[which(b_table[,"contrast"]%in%x_rows),]
-kable(b_table, digits=3)
+kable(b_table[which(b_table[,"contrast"]%in%x_rows),], digits=3)
 
 # Tukey HSD adjustment reproduces
-b_table <- data.table(summary(contrast(emmeans(fit, spec=c('Treatment', 'Capture_Period')), method='revpairwise'), infer=c(TRUE,TRUE)))
-x_rows <- c('1_control,13 - 1_control,3','2_4Fclip,13 - 2_4Fclip,3', '3_8Fclip,13 - 3_8Fclip,3')
-b_table <- b_table[contrast%in%x_rows,]
-kable(b_table, digits=3)
+b_table <- summary(contrast(fit2b_lsmeans, method='revpairwise'), infer=c(TRUE,TRUE))
+kable(b_table[which(b_table[,"contrast"]%in%x_rows),], digits=3)
 ```
+
+Reproducibility: 3 (reproduces to decimal or random error)
 
 >However, the magnitude of decrease in mean body mass of females in the light and heavy clipping treatments was 1.29X (95% CI: 0.6, 2.3) and 2.29X (95% CI: 1.2, 4.5) greater, respectively, that of females in the control treatment.
 
-Fold changes are a type of change (or gain) score and are conditionally biased on the pre-treatment value (see below). Regardless, it's not clear to me how the CIs of the fold-changes were computed and this isn't an easy problem. I did find information [here](https://stats.stackexchange.com/questions/16349/how-to-compute-the-confidence-interval-of-the-ratio-of-two-normal-means/16354#16354). Instead, I use a bootstrap to try to reproduce.
+It's not clear to me how the CIs of the fold-changes were computed and this isn't an easy problem. I did find information [here](https://stats.stackexchange.com/questions/16349/how-to-compute-the-confidence-interval-of-the-ratio-of-two-normal-means/16354#16354). Instead, I use a bootstrap to try to reproduce.
 
 ```{r fig2bFoldChange, eval=FALSE}
 # how many X greater was the reduction (this is a confusing way to report)
+bird_wide <- dcast(bird,  Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Capture_Period, value.var=c('Mass','Time'))
 niter <- 100
 x_levels <- c('Capture_PeriodMass_13', 'Treatment2_4Fclip:Capture_PeriodMass_13', 'Treatment3_8Fclip:Capture_PeriodMass_13')
 fold_table <- matrix(NA, nrow=niter, ncol=2)
@@ -87,14 +201,14 @@ colnames(fold_table) <- c('clip4', 'clip8')
 inc <- 1:nrow(bird_wide)
 iter <- 1
 while(iter <= niter){
-  bird_samp <- na.omit(melt(bird_wide[inc,], id.vars=c('BandNo','Treatment'),
+  bird_samp <- na.omit(melt(bird_wide[inc,], id.vars=c('BandNo','Treatment','DOY_Initiation'),
                     measure.vars=c('Mass_3', 'Mass_13'),
                     variable.name = 'Capture_Period',
                     value.name='Mass'))
   #bird_o <- na.omit(orderBy(~BandNo, bird[,.SD,.SDcols=c('Treatment','BandNo','Capture_Period','Mass')]))
   #coefficients(summary(lmer(Mass ~ Treatment*Capture_Period + (1|BandNo), data=bird_o)))
 
-  fit <- lmer(Mass ~ Treatment*Capture_Period + (1|BandNo), data=bird_samp)
+  fit <- lmer(Mass ~ DOY_Initiation + Treatment*Capture_Period + (1|BandNo), data=bird_samp)
   b <- coefficients(summary(fit))
   if(all(x_levels %in% row.names(b))){
     b <- b[x_levels, 'Estimate']
@@ -110,28 +224,62 @@ while(iter <= niter){
 b_table[contrast=='2_4Fclip,13 - 2_4Fclip,3', estimate]/b_table[contrast=='1_control,13 - 1_control,3', estimate]
 b_table[contrast=='3_8Fclip,13 - 3_8Fclip,3', estimate]/b_table[contrast=='1_control,13 - 1_control,3', estimate]
 
-apply(fold_table, 2, quantile, c(0.025,0.975))
+fold_table[1, ]
+apply(fold_table, 2, quantile, c(0.025, 0.975))
 
 ```
 
-Or, 1.13X and 2.23X more reduction
+Reproducibility: 2+ (reproduces to a similar value)
 
-# Red Flags
-## Adjustment for baseline when comparing change in mass
-In the linear mixed model, it is the *interaction effect* that contains the difference in mass loss among treatments (so the treatment effect of the change score). Note the inconsistency between the report of 2.29X greater reduction in mass with CI that does not cover 1.0 and the ANOVA table interaction row (both are different ways of looking at the same thing). Fig 2b shows effectively zero effect of treatment for post-treatment measure. The expectation is zero if there is no effect, and the data are very consistent with this. But there is a big difference in pre-treatment mass among levels (again, the expectation is zero with randomized treatment assignment). So this might be a good example of pre-post bias in the estimates of 1.29X and 2.29X greater reduction in mass. [The expectation for these estimates is not 1.0 conditional on pre-treatment mass](https://www.middleprofessor.com/files/quasipubs/change_scores.html). That is, the fold-change that they report is biased, conditional on the pre-treatment mass.
+I get 13% and 123% more reduction instead of 29% and 129%. Intervals shifted. 
 
-```{r fig2bAncova, fig.cap="ANCOVA style plot"}
+** Red flag** - First, comparing fold change CIs is not the way to compare a contrast in fold-change (this is the interaction effect). More important, fold changes are a type of change (or gain) score and are conditionally biased on the pre-treatment value (see below).
+
+# Post-publication review
+## "no significant differences" among treatment groups at baseline does not protect in any way against the bias in change scores (post - pre treatment measure)
+
+>We detected no significant differences among females in the three treatment groups with respect to mean body mass (F2,20 = 2.83, P = 0.083), mean baseline cort (F2,14 = 1.81, P = 0.199), mean clutch size (F2,21 = 0.61, P = 0.555) or mean brood size (F2,21 = 2.54, P = 0.103) when they were measured prior to feather clipping.
+
+The expected change in some measure from pre to post-treatment is conditionally biased on the pre-treatment value - a hypothesis test of a nil null is not relevant to comparing change scores, at all. As I wrote [here](https://www.middleprofessor.com/files/quasipubs/change_scores.html){target="_blank"} "And, contrary to some advice and maybe to intuition, it makes no sense to use a t-test of the difference in initial measures to decide how to proceed. First, a null-hypothesis significance test cannot tell you that there is “no difference” – this is not what null-hypothesis tests do. Second, any $p$-value after the initial test isn’t strictly valid as it does not take into account this decision step. Third, it doesn’t matter; there will always be some difference in the actual means of the initial measures and, consequently, the conditional expectation of the final measures, or change in measures, or percent change will be dependent on this initial difference."
+
+## Estimates of treatment effects on Cortisol and Mass were not adjusted for baseline values
+
+Again, the expected change in some measure from pre to post-treatment is conditionally biased on the pre-treatment value. This is *regression to the mean*. Coverage (and p-values) of change scores are at nominal level *but* are correlated with the pre-treatment value. Regression to the mean will effect unadjusted change score estimates in both $Cort_b$ and $Mass$ but the Fig 2b suggests that this effect will be large for $Mass$. Specifically, Fig 2b shows effectively zero effect of treatment for post-treatment measure. The expectation is zero if there is no effect, and the data are very consistent with this. But there is a big difference in pre-treatment mass among levels (again, the expectation is zero with randomized treatment assignment). So this is a good example of pre-post bias in the estimates of 1.29X and 2.29X greater reduction in mass. [The expectation for these unadjusted estimates is not 1.0 conditional on pre-treatment mass](https://www.middleprofessor.com/files/quasipubs/change_scores.html).
+
+It is widely (but mistakenly) believed that a non-significant hypothesis test of of baseline values validates a comparison of change scores. The authors do not explicitly state this but do report these tests, which are not especially useful for anything.
+
+>We detected no significant differences among females in the three treatment groups with respect to mean body mass (F2,20 = 2.83, P = 0.083), mean baseline cort (F2,14 = 1.81, P = 0.199), mean clutch size (F2,21 = 0.61, P = 0.555) or mean brood size (F2,21 = 2.54, P = 0.103) when they were measured prior to feather clipping.
+
+The expected change in some measure from pre to post-treatment is conditionally biased on the pre-treatment value - a hypothesis test of a nil null is not relevant to comparing change scores, at all. As I wrote [here](https://www.middleprofessor.com/files/quasipubs/change_scores.html){target="_blank"} "And, contrary to some advice and maybe to intuition, it makes no sense to use a t-test of the difference in initial measures to decide how to proceed. First, a null-hypothesis significance test cannot tell you that there is “no difference” – this is not what null-hypothesis tests do. Second, any $p$-value after the initial test isn’t strictly valid as it does not take into account this decision step. Third, it doesn’t matter; there will always be some difference in the actual means of the initial measures and, consequently, the conditional expectation of the final measures, or change in measures, or percent change will be dependent on this initial difference."
+
+The standard method to estimate a treatment effect conditional on pre-treatment value is a simple (ANCOVA) linear model. The response could be the change score or the post-treatment measure. The estimated effect is the same either way (only the intercept changes). Here, I re-compute the treatment effects on $Cort_b$ and $Mass$ (starting with $Mass$) but adjust for pre-treatment ("baseline") values.
+
+```{r fig2bANCOVAlm}
+bird_wide <- dcast(bird,  Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Capture_Period, value.var=c('Mass','Time'))
+bird_wide[, dMass:=Mass_13 - Mass_3]
 
 # change in mass
-gg <- ggplot(data=bird_wide, aes(x=day3mass, y=dMass, color=Treatment)) +
-  geom_point()
-gg
-
-fit2 <- lm(dMass ~ Mass_3 + Treatment, data=bird_wide)
-coefficients(summary(fit2))
+fit2b.c <- lm(dMass ~ DOY_Initiation + Mass_3 + Treatment, data=bird_wide)
+coefs2.c <- coefficients(summary(fit2b.c))
+kable(coefs2.c, digits=3)
 ```
 
-These results are inconsistent with the LMM where the decrease in mass is actually less for the 4-clip treatment.
+And a plot of this model is here
+```{r fig2bAncovaFig, fig.cap="ANCOVA style plot"}
+# change in mass
+gg <- ggplot(data=bird_wide, aes(x=day3mass, y=dMass, color=Treatment)) +
+  geom_point() +
+  theme_minimal()
+gg
+```
+
+These results are inconsistent with the LMM
+1. The decrease in mass from day 3 to day 13 is actually less for the 4-clip treatment than for the control (lmm: b= -0.121; ANCOVA lm: b= 0.256)
+2. The decrease in mass from day 3 to day 13 is greater in the 8-clip treatment than for the control but not as big as the estimated decrease from the lmm (lmm: b= -1.18; ANCOVA lm: b= -.548). In the lmm, the uncorrected (for multiplicity) CI nearly covers zero ($p = 0.042). But in the ANCOVA lm, the SE is huge relative to the effect.
+
+Two things are going on 1) there is a big difference in sample size between the lmm and the ANCOVA lm. The reason is that the lmm uses a long-data format, so cases in which either pre or post treatment measure are missing are partly in the model (the available measure is in the model), but these cases are omitted entirely from the ANCOVA lm, which uses wide-format.
+
+Here is sample size for the ANCOVA lm
 
 ```{r fig2b_explore}
 # sample size
@@ -140,4 +288,129 @@ bird_wide[!is.na(dMass), .(N=.N), by=Treatment]
 
 ```
 
-Look at their fig 2b which reports sample sizes for pre and post measures. The $n$ drops in all post measures. The ANCOVA only analyzes birds with both pre and post measures so is using less data.
+Look at their fig 2b which reports sample sizes for pre and post measures. The $n$ drops in all post measures.
+
+2) The second thing going on of course is that the ANCOVA lm adjusts for pre-treatment $Mass$ but the lmm does not.
+
+This is interesting, as we have a trade-off here between power (the lmm uses more data) and bias (the lmm estimates are conditionally biased).
+
+A solution is a linear-mixed model that forces the intercept of both treatment levels to be the same. This is the constrained Longitudinal Data Analysis (cLDA) method of Liang and Zeger (see also Liu.). For data with no missing values, estimates from cLDA and from ANCOVA lm are equal.
+
+```{r fig2bcLDA}
+# need to make Capture_Period a numeric dummy variable to get the right interaction effect -- when coded as a factor, lme/lmer creates an interaction column for both levels of Capture_Period if Treatment is missing from the model (but in the interaction)
+bird[, Time:=as.integer(Capture_Period)-1]
+fit.mod2 <- lme(Mass ~ DOY_Initiation + Time + Time:Treatment, random = ~ Time-1|BandNo, weights = varIdent(form = ~ 1 | Time), cor=corSymm(), bird, na.action=na.omit)
+kable(coefficients(summary(fit.mod2)), digits = 3)
+```
+
+This analysis uses all of the available data (like the lmm) and adjusts for pre-treatment value (by forcing these to be the same). The results are quite similar to the ANCOVA lm results but the SEs are smaller, because of increased sample size. Again, there is a positive effect on the 4-clip treatment but a negative effect on the 8-clip treatment. The effect on the 8-clip treatment is about 1/2 the magnitude as that estimated using the lmm. This estimate is -0.52 g over the treatment period, but the SE for this estimate is too large to infer much.
+
+## Simulation to explore behavior in lmm vs. ANCOVA-lm vs. cLDA
+
+This simulation generates fake data to show how lmm but not ANCOVA-lm/cLDA has conditionally biased estimates. I model data using parameters of the actual bird data.
+
+```{r lmmfakedata}
+varcor <- VarCorr(fit2b)
+var <- as.data.frame(VarCorr(fit2b))["vcov"][,1]
+rho <- var[1]/sum(var)
+
+fit2b_table <- coefficients(summary(fit2b))
+mu1 <- fit2b_table["(Intercept)", "Estimate"]
+b <- fit2b_table["Capture_Period13", "Estimate"]
+mu <- c(mu1, mu1+b)
+sigma <- matrix(c(var[1]+var[2], var[1],var[1], var[1]+var[2]), nrow=2)
+
+inc <- c("1_control","3_8Fclip")
+N_table <- bird_wide[Treatment %in% inc, .(N=.N), by=c('Treatment')]
+
+n <- sum(N_table[, N])
+
+niter <- 10
+methods <- c('lmm', 'lm', 'cLDA', 'lm-NA', 'cLDA-NA')
+fake_labels <- c('baseline_d', methods)
+fake_b <- matrix(NA, nrow=niter, ncol=length(fake_labels))
+colnames(fake_b) <- fake_labels
+
+for(iter in 1:niter){
+  # data with no effect other than capture period.
+  Y <- rmvnorm(n, mean=mu, sigma=sigma)
+  
+  # start with n1=n2
+  dt_wide <- data.table(ID=paste("bird",1:n,sep=''),
+                        Treatment=factor(rep(c('control', 'clip'), times=c(n/2, n/2))),
+                        pre=Y[,1],
+                        post=Y[,2])
+  dt_wide[, Treatment:=factor(Treatment, c('control', 'clip'))]
+  dt_wide[, dMass:=post-pre]
+  
+  dt <- melt(dt_wide, id.vars=c('ID','Treatment'), 
+             measure.vars=c('pre', 'post'), 
+             variable.name="Capture_Period",
+             value.name = "Mass"
+  )
+  dt[, Capture_Period:=factor(Capture_Period, c('pre', 'post'))]
+  fake_b[iter, 'baseline_d'] <- mean(dt_wide[Treatment=='clip', pre], na.rm=TRUE) - 
+                mean(dt_wide[Treatment=='control', pre], na.rm=TRUE)
+  
+  fit.lmm <- lmer(Mass ~ Treatment*Capture_Period + (1|ID), dt)
+  fake_b[iter, 'lmm'] <- coefficients(summary(fit.lmm))['Treatmentclip:Capture_Periodpost', 'Estimate']
+  
+  fit.lm <- lm(dMass ~ pre + Treatment, data=dt_wide)
+  fake_b[iter, 'lm'] <- coefficients(summary(fit.lm))['Treatmentclip', 'Estimate']
+  
+  # model 2 of liang and zeger - unconstrained and constrained longitudinal data analysis
+  dt[, Time:=as.integer(Capture_Period) - 1] # Time has to be dummy coded for mod2 but not sure why
+  fit.mod2 <- lme(Mass ~ Time + Time:Treatment, random = ~ Time-1|ID,
+                  weights = varIdent(form = ~ 1 | Time), 
+                  correlation=corSymm (form = ~ 1 | ID), 
+                  data = dt)
+  fake_b[iter, 'cLDA'] <- coefficients(summary(fit.mod2))['Time:Treatmentclip', 'Value']
+
+  # model 2 using gls
+  # from https://datascienceplus.com/taking-the-baseline-measurement-into-account-constrained-lda-in-r/
+  # X <- model.matrix(~ Treatment*Capture_Period, data=dt)
+  # Xalt <- X[,c('Capture_Periodpost', "Treatmentclip:Capture_Periodpost")]
+  # clda_gls <- gls(Mass ~ Xalt, 
+  #                 weights = varIdent(form = ~ 1 | Capture_Period), 
+  #                 correlation=corSymm (form = ~ 1 | ID), 
+  #                 data = dt)
+  
+  # coefficients(summary(fit.lmm))
+  # coefficients(summary(fit.mod2))
+  # coefficients(summary(fit.lm))
+}
+fake_b <- data.table(fake_b)
+apply(fake_b, 2, quantile, c(0.025, 0.5, 0.975))
+
+fake_b_long <- melt(fake_b, id.vars = 'baseline_d', measure.vars = methods, variable.name='model', value.name='estimate')
+qplot(x=baseline_d, y=estimate, color=model, data=fake_b_long) + geom_smooth(method='lm')
+```
+
+
+
+## Adjustment for baseline comparing cort
+```{r fig2aCorrected}
+# original lmm
+coefs2a <- coefficients(summary(fit2a))
+kable(coefs2a, digits=3)
+
+fit.clda <- lme(CORT_B ~ day3mass + DOY_Initiation + Time + Time:Treatment, random = ~ Time-1|BandNo, weights = varIdent(form = ~ 1 | Time), cor=corSymm(), bird, na.action=na.omit)
+coefficients(summary(fit.clda))
+
+
+bird_wide <- dcast(bird,  Year + Treatment + BandNo ~ Capture_Period, value.var=c('CORT_B', 'Time'))
+bird_wide[, dCort:=CORT_B_13 - CORT_B_3]
+
+# change in Cort
+fit2a.c <- lm(dCort ~ CORT_B_3 + Treatment, data=bird_wide)
+coefs2a.c <- coefficients(summary(fit2a.c))
+kable(coefs2a.c, digits=3)
+
+gg <- ggplot(data=bird_wide, aes(x=CORT_B_3, y=dCort, color=Treatment)) +
+  geom_point() +
+  theme_minimal()
+gg
+
+```
+
+Again, there are only n=2 for the estimate of the clip8 treatment effect and these two happen to have had the smallest initial cortisol at baseline.
