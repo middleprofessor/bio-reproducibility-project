@@ -24,7 +24,7 @@ subtitle: ''
 </div>
 <div id="data" class="section level1">
 <h1>Data</h1>
-<p>These are the data for the major results of change in <span class="math inline">\(Corb_b\)</span> and <span class="math inline">\(Mass\)</span> in response to the treatment.</p>
+<p>These are the data for the major results of change in <span class="math inline">\(Cort_b\)</span> and <span class="math inline">\(Mass\)</span> in response to the treatment.</p>
 <pre class="r"><code>fn &lt;- &#39;RiversetalVGSWhandicappingRawData.xls&#39;
 file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
 bird &lt;- data.table(read_excel(file_path, sheet = &#39;Tab3 &quot;a8&quot;&#39;))
@@ -934,83 +934,100 @@ kable(coefficients(summary(fit.mod2)), digits = 3)</code></pre>
 <div id="simulation-to-explore-behavior-in-lmm-vs.ancova-lm-vs.clda" class="section level2">
 <h2>Simulation to explore behavior in lmm vs. ANCOVA-lm vs. cLDA</h2>
 <p>This simulation generates fake data to show how lmm but not ANCOVA-lm/cLDA has conditionally biased estimates. I model data using parameters of the actual bird data.</p>
-<pre class="r"><code>varcor &lt;- VarCorr(fit2b)
-var &lt;- as.data.frame(VarCorr(fit2b))[&quot;vcov&quot;][,1]
-rho &lt;- var[1]/sum(var)
-
-fit2b_table &lt;- coefficients(summary(fit2b))
-mu1 &lt;- fit2b_table[&quot;(Intercept)&quot;, &quot;Estimate&quot;]
-b &lt;- fit2b_table[&quot;Capture_Period13&quot;, &quot;Estimate&quot;]
-mu &lt;- c(mu1, mu1+b)
-sigma &lt;- matrix(c(var[1]+var[2], var[1],var[1], var[1]+var[2]), nrow=2)
-
-inc &lt;- c(&quot;1_control&quot;,&quot;3_8Fclip&quot;)
-N_table &lt;- bird_wide[Treatment %in% inc, .(N=.N), by=c(&#39;Treatment&#39;)]
-N_table_long &lt;- bird[Treatment %in% inc, .(N=.N), by=c(&#39;Treatment&#39;, &#39;Capture_Period&#39;)]
-
-n &lt;- sum(N_table[, N])
-
-niter &lt;- 1000
-methods &lt;- c(&#39;lmm&#39;, &#39;lm&#39;, &#39;cLDA&#39;, &#39;lm-NA&#39;, &#39;cLDA-NA&#39;)
-methods &lt;- c(&#39;lmm&#39;, &#39;lm&#39;, &#39;cLDA&#39;)
-fake_labels &lt;- c(&#39;baseline_d&#39;, methods)
-fake_b &lt;- matrix(NA, nrow=niter, ncol=length(fake_labels))
-colnames(fake_b) &lt;- fake_labels
-
-for(iter in 1:niter){
-  # data with no effect other than capture period.
-  Y &lt;- rmvnorm(n, mean=mu, sigma=sigma)
+<pre class="r"><code>re_run &lt;- TRUE
+if(re_run==TRUE){
+  set.seed(1)
+  varcor &lt;- VarCorr(fit2b)
+  var &lt;- as.data.frame(VarCorr(fit2b))[&quot;vcov&quot;][,1]
+  rho &lt;- var[1]/sum(var)
   
-  # start with n1=n2
-  dt_wide &lt;- data.table(ID=paste(&quot;bird&quot;,1:n,sep=&#39;&#39;),
-                        Treatment=factor(rep(c(&#39;control&#39;, &#39;clip&#39;), times=c(n/2, n/2))),
-                        pre=Y[,1],
-                        post=Y[,2])
-  dt_wide[, Treatment:=factor(Treatment, c(&#39;control&#39;, &#39;clip&#39;))]
-  dt_wide[, dMass:=post-pre]
+  fit2b_table &lt;- coefficients(summary(fit2b))
+  mu1 &lt;- fit2b_table[&quot;(Intercept)&quot;, &quot;Estimate&quot;]
+  b &lt;- fit2b_table[&quot;Capture_Period13&quot;, &quot;Estimate&quot;]
+  mu &lt;- c(mu1, mu1+b)
+  sigma &lt;- matrix(c(var[1]+var[2], var[1],var[1], var[1]+var[2]), nrow=2)
   
-  dt &lt;- melt(dt_wide, id.vars=c(&#39;ID&#39;,&#39;Treatment&#39;), 
-             measure.vars=c(&#39;pre&#39;, &#39;post&#39;), 
-             variable.name=&quot;Capture_Period&quot;,
-             value.name = &quot;Mass&quot;
-  )
-  dt[, Capture_Period:=factor(Capture_Period, c(&#39;pre&#39;, &#39;post&#39;))]
-  fake_b[iter, &#39;baseline_d&#39;] &lt;- mean(dt_wide[Treatment==&#39;clip&#39;, pre], na.rm=TRUE) - 
-                mean(dt_wide[Treatment==&#39;control&#39;, pre], na.rm=TRUE)
+  inc &lt;- c(&quot;1_control&quot;,&quot;3_8Fclip&quot;)
+  N_table &lt;- bird_wide[Treatment %in% inc, .(N=.N), by=c(&#39;Treatment&#39;)]
+  N_table_long &lt;- bird[Treatment %in% inc, .(N=.N), by=c(&#39;Treatment&#39;, &#39;Capture_Period&#39;)]
   
-  fit.lmm &lt;- lmer(Mass ~ Treatment*Capture_Period + (1|ID), dt)
-  fake_b[iter, &#39;lmm&#39;] &lt;- coefficients(summary(fit.lmm))[&#39;Treatmentclip:Capture_Periodpost&#39;, &#39;Estimate&#39;]
+  n &lt;- sum(N_table[, N])
   
-  fit.lm &lt;- lm(dMass ~ pre + Treatment, data=dt_wide)
-  fake_b[iter, &#39;lm&#39;] &lt;- coefficients(summary(fit.lm))[&#39;Treatmentclip&#39;, &#39;Estimate&#39;]
+  niter &lt;- 2000
+  methods &lt;- c(&#39;lmm&#39;, &#39;lm&#39;) # include &#39;cLDA&#39; to compare cLDA to lm
+  fake_labels &lt;- c(&#39;baseline_d&#39;, methods)
+  fake_b &lt;- matrix(NA, nrow=niter, ncol=length(fake_labels))
+  colnames(fake_b) &lt;- fake_labels
   
-  # model 2 of liang and zeger - unconstrained and constrained longitudinal data analysis
-  dt[, Time:=as.integer(Capture_Period) - 1] # Time has to be dummy coded for mod2 but not sure why
-  fit.mod2 &lt;- lme(Mass ~ Time + Time:Treatment, random = ~ Time-1|ID,
-                  weights = varIdent(form = ~ 1 | Time), 
-                  correlation=corSymm (form = ~ 1 | ID), 
-                  data = dt)
-  fake_b[iter, &#39;cLDA&#39;] &lt;- coefficients(summary(fit.mod2))[&#39;Time:Treatmentclip&#39;, &#39;Value&#39;]
-
-  # model 2 using gls
-  # from https://datascienceplus.com/taking-the-baseline-measurement-into-account-constrained-lda-in-r/
-  # X &lt;- model.matrix(~ Treatment*Capture_Period, data=dt)
-  # Xalt &lt;- X[,c(&#39;Capture_Periodpost&#39;, &quot;Treatmentclip:Capture_Periodpost&quot;)]
-  # clda_gls &lt;- gls(Mass ~ Xalt, 
-  #                 weights = varIdent(form = ~ 1 | Capture_Period), 
-  #                 correlation=corSymm (form = ~ 1 | ID), 
-  #                 data = dt)
-  
-  # coefficients(summary(fit.lmm))
-  # coefficients(summary(fit.mod2))
-  # coefficients(summary(fit.lm))
-}
+  for(iter in 1:niter){
+    # data with no effect other than capture period.
+    Y &lt;- rmvnorm(n, mean=mu, sigma=sigma)
+    
+    # start with n1=n2
+    dt_wide &lt;- data.table(ID=paste(&quot;bird&quot;,1:n,sep=&#39;&#39;),
+                          Treatment=factor(rep(c(&#39;control&#39;, &#39;clip&#39;), times=c(n/2, n/2))),
+                          pre=Y[,1],
+                          post=Y[,2])
+    dt_wide[, Treatment:=factor(Treatment, c(&#39;control&#39;, &#39;clip&#39;))]
+    dt_wide[, dMass:=post-pre]
+    
+    dt &lt;- melt(dt_wide, id.vars=c(&#39;ID&#39;,&#39;Treatment&#39;), 
+               measure.vars=c(&#39;pre&#39;, &#39;post&#39;), 
+               variable.name=&quot;Capture_Period&quot;,
+               value.name = &quot;Mass&quot;
+    )
+    dt[, Capture_Period:=factor(Capture_Period, c(&#39;pre&#39;, &#39;post&#39;))]
+    fake_b[iter, &#39;baseline_d&#39;] &lt;- mean(dt_wide[Treatment==&#39;clip&#39;, pre], na.rm=TRUE) - 
+      mean(dt_wide[Treatment==&#39;control&#39;, pre], na.rm=TRUE)
+    
+    fit.lmm &lt;- lmer(Mass ~ Treatment*Capture_Period + (1|ID), dt)
+    fake_b[iter, &#39;lmm&#39;] &lt;- coefficients(summary(fit.lmm))[&#39;Treatmentclip:Capture_Periodpost&#39;, &#39;Estimate&#39;]
+    
+    fit.lm &lt;- lm(dMass ~ pre + Treatment, data=dt_wide)
+    fake_b[iter, &#39;lm&#39;] &lt;- coefficients(summary(fit.lm))[&#39;Treatmentclip&#39;, &#39;Estimate&#39;]
+    
+    if(&#39;cLDA&#39; %in% methods){
+      # model 2 of liang and zeger - unconstrained and constrained longitudinal data analysis
+      # adapted from gls code below
+      dt[, Time:=as.integer(Capture_Period) - 1] # Time has to be dummy coded for mod2 but not sure why
+      fit.mod2 &lt;- lme(Mass ~ Time + Time:Treatment, random = ~ Time-1|ID,
+                      weights = varIdent(form = ~ 1 | Time), 
+                      correlation=corSymm (form = ~ 1 | ID), 
+                      data = dt)
+      fake_b[iter, &#39;cLDA&#39;] &lt;- coefficients(summary(fit.mod2))[&#39;Time:Treatmentclip&#39;, &#39;Value&#39;]
+      
+      # model 2 using gls
+      # from https://datascienceplus.com/taking-the-baseline-measurement-into-account-constrained-lda-in-r/
+      # X &lt;- model.matrix(~ Treatment*Capture_Period, data=dt)
+      # Xalt &lt;- X[,c(&#39;Capture_Periodpost&#39;, &quot;Treatmentclip:Capture_Periodpost&quot;)]
+      # clda_gls &lt;- gls(Mass ~ Xalt, 
+      #                 weights = varIdent(form = ~ 1 | Capture_Period), 
+      #                 correlation=corSymm (form = ~ 1 | ID), 
+      #                 data = dt)
+      
+      # coefficients(summary(fit.lmm))
+      # coefficients(summary(fit.mod2))
+      # coefficients(summary(fit.lm))
+      
+    }
+  }
 fake_b &lt;- data.table(fake_b)
+fn &lt;- &#39;fake_b.RData&#39;
+file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
+save(fake_b, file = file_path)
+
+}else{
+  fn &lt;- &#39;fake_b.RData&#39;
+  file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
+  load(file_path) # file name is fake_b
+  
+}
+
 apply(fake_b, 2, quantile, c(0.025, 0.5, 0.975))</code></pre>
-<pre><code>##         baseline_d          lmm          lm        cLDA
-## 2.5%  -0.845052274 -0.661568280 -0.65315261 -0.65315252
-## 50%    0.007897947 -0.003029864 -0.01917818 -0.01917819
-## 97.5%  0.723842599  0.612876012  0.61090950  0.61090947</code></pre>
+<pre><code>##          baseline_d          lmm          lm
+## 2.5%  -0.8373045367 -0.649735601 -0.64228739
+## 50%   -0.0006116204  0.009345333  0.01171883
+## 97.5%  0.7844047430  0.710732490  0.66579532</code></pre>
 <p>A plot of the estimated effect and difference in baseline (pre-treatment) <span class="math inline">\(Mass\)</span> shows that the lmm used by the authors does not correct for regression to the mean. That is, <span class="math inline">\(E[Mass | X_{treatment} - X_{control}]\)</span> is not zero but is a function of the baseline differnce <span class="math inline">\(X_{treatment} - X_{control}\)</span>.</p>
 <pre class="r"><code>fake_b_long &lt;- melt(fake_b, id.vars = &#39;baseline_d&#39;, measure.vars = methods, variable.name=&#39;model&#39;, value.name=&#39;estimate&#39;)
 qplot(x=baseline_d, y=estimate, color=model, data=fake_b_long) + geom_smooth(method=&#39;lm&#39;)</code></pre>

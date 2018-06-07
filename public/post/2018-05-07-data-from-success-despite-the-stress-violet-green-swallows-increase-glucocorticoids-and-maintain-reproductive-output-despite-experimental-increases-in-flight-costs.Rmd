@@ -37,7 +37,7 @@ Data source: [https://datadryad.org/resource/doi:10.5061/dryad.3bc3s](https://da
 **usage note** The authors refer to the measure of cortisol as "baseline cortisol." Sice the design here is pre-post, this could be confused with the more general and wide usage of "baseline" to mean pre-treatment measure.
 
 # Data
-These are the data for the major results of change in $Corb_b$ and $Mass$ in response to the treatment.
+These are the data for the major results of change in $Cort_b$ and $Mass$ in response to the treatment.
 
 ```{r data}
 fn <- 'RiversetalVGSWhandicappingRawData.xls'
@@ -315,78 +315,95 @@ This analysis uses all of the available data (like the lmm) and adjusts for pre-
 This simulation generates fake data to show how lmm but not ANCOVA-lm/cLDA has conditionally biased estimates. I model data using parameters of the actual bird data.
 
 ```{r lmmfakedata}
-varcor <- VarCorr(fit2b)
-var <- as.data.frame(VarCorr(fit2b))["vcov"][,1]
-rho <- var[1]/sum(var)
-
-fit2b_table <- coefficients(summary(fit2b))
-mu1 <- fit2b_table["(Intercept)", "Estimate"]
-b <- fit2b_table["Capture_Period13", "Estimate"]
-mu <- c(mu1, mu1+b)
-sigma <- matrix(c(var[1]+var[2], var[1],var[1], var[1]+var[2]), nrow=2)
-
-inc <- c("1_control","3_8Fclip")
-N_table <- bird_wide[Treatment %in% inc, .(N=.N), by=c('Treatment')]
-N_table_long <- bird[Treatment %in% inc, .(N=.N), by=c('Treatment', 'Capture_Period')]
-
-n <- sum(N_table[, N])
-
-niter <- 1000
-methods <- c('lmm', 'lm', 'cLDA', 'lm-NA', 'cLDA-NA')
-methods <- c('lmm', 'lm', 'cLDA')
-fake_labels <- c('baseline_d', methods)
-fake_b <- matrix(NA, nrow=niter, ncol=length(fake_labels))
-colnames(fake_b) <- fake_labels
-
-for(iter in 1:niter){
-  # data with no effect other than capture period.
-  Y <- rmvnorm(n, mean=mu, sigma=sigma)
+re_run <- TRUE
+if(re_run==TRUE){
+  set.seed(1)
+  varcor <- VarCorr(fit2b)
+  var <- as.data.frame(VarCorr(fit2b))["vcov"][,1]
+  rho <- var[1]/sum(var)
   
-  # start with n1=n2
-  dt_wide <- data.table(ID=paste("bird",1:n,sep=''),
-                        Treatment=factor(rep(c('control', 'clip'), times=c(n/2, n/2))),
-                        pre=Y[,1],
-                        post=Y[,2])
-  dt_wide[, Treatment:=factor(Treatment, c('control', 'clip'))]
-  dt_wide[, dMass:=post-pre]
+  fit2b_table <- coefficients(summary(fit2b))
+  mu1 <- fit2b_table["(Intercept)", "Estimate"]
+  b <- fit2b_table["Capture_Period13", "Estimate"]
+  mu <- c(mu1, mu1+b)
+  sigma <- matrix(c(var[1]+var[2], var[1],var[1], var[1]+var[2]), nrow=2)
   
-  dt <- melt(dt_wide, id.vars=c('ID','Treatment'), 
-             measure.vars=c('pre', 'post'), 
-             variable.name="Capture_Period",
-             value.name = "Mass"
-  )
-  dt[, Capture_Period:=factor(Capture_Period, c('pre', 'post'))]
-  fake_b[iter, 'baseline_d'] <- mean(dt_wide[Treatment=='clip', pre], na.rm=TRUE) - 
-                mean(dt_wide[Treatment=='control', pre], na.rm=TRUE)
+  inc <- c("1_control","3_8Fclip")
+  N_table <- bird_wide[Treatment %in% inc, .(N=.N), by=c('Treatment')]
+  N_table_long <- bird[Treatment %in% inc, .(N=.N), by=c('Treatment', 'Capture_Period')]
   
-  fit.lmm <- lmer(Mass ~ Treatment*Capture_Period + (1|ID), dt)
-  fake_b[iter, 'lmm'] <- coefficients(summary(fit.lmm))['Treatmentclip:Capture_Periodpost', 'Estimate']
+  n <- sum(N_table[, N])
   
-  fit.lm <- lm(dMass ~ pre + Treatment, data=dt_wide)
-  fake_b[iter, 'lm'] <- coefficients(summary(fit.lm))['Treatmentclip', 'Estimate']
+  niter <- 2000
+  methods <- c('lmm', 'lm') # include 'cLDA' to compare cLDA to lm
+  fake_labels <- c('baseline_d', methods)
+  fake_b <- matrix(NA, nrow=niter, ncol=length(fake_labels))
+  colnames(fake_b) <- fake_labels
   
-  # model 2 of liang and zeger - unconstrained and constrained longitudinal data analysis
-  dt[, Time:=as.integer(Capture_Period) - 1] # Time has to be dummy coded for mod2 but not sure why
-  fit.mod2 <- lme(Mass ~ Time + Time:Treatment, random = ~ Time-1|ID,
-                  weights = varIdent(form = ~ 1 | Time), 
-                  correlation=corSymm (form = ~ 1 | ID), 
-                  data = dt)
-  fake_b[iter, 'cLDA'] <- coefficients(summary(fit.mod2))['Time:Treatmentclip', 'Value']
-
-  # model 2 using gls
-  # from https://datascienceplus.com/taking-the-baseline-measurement-into-account-constrained-lda-in-r/
-  # X <- model.matrix(~ Treatment*Capture_Period, data=dt)
-  # Xalt <- X[,c('Capture_Periodpost', "Treatmentclip:Capture_Periodpost")]
-  # clda_gls <- gls(Mass ~ Xalt, 
-  #                 weights = varIdent(form = ~ 1 | Capture_Period), 
-  #                 correlation=corSymm (form = ~ 1 | ID), 
-  #                 data = dt)
-  
-  # coefficients(summary(fit.lmm))
-  # coefficients(summary(fit.mod2))
-  # coefficients(summary(fit.lm))
-}
+  for(iter in 1:niter){
+    # data with no effect other than capture period.
+    Y <- rmvnorm(n, mean=mu, sigma=sigma)
+    
+    # start with n1=n2
+    dt_wide <- data.table(ID=paste("bird",1:n,sep=''),
+                          Treatment=factor(rep(c('control', 'clip'), times=c(n/2, n/2))),
+                          pre=Y[,1],
+                          post=Y[,2])
+    dt_wide[, Treatment:=factor(Treatment, c('control', 'clip'))]
+    dt_wide[, dMass:=post-pre]
+    
+    dt <- melt(dt_wide, id.vars=c('ID','Treatment'), 
+               measure.vars=c('pre', 'post'), 
+               variable.name="Capture_Period",
+               value.name = "Mass"
+    )
+    dt[, Capture_Period:=factor(Capture_Period, c('pre', 'post'))]
+    fake_b[iter, 'baseline_d'] <- mean(dt_wide[Treatment=='clip', pre], na.rm=TRUE) - 
+      mean(dt_wide[Treatment=='control', pre], na.rm=TRUE)
+    
+    fit.lmm <- lmer(Mass ~ Treatment*Capture_Period + (1|ID), dt)
+    fake_b[iter, 'lmm'] <- coefficients(summary(fit.lmm))['Treatmentclip:Capture_Periodpost', 'Estimate']
+    
+    fit.lm <- lm(dMass ~ pre + Treatment, data=dt_wide)
+    fake_b[iter, 'lm'] <- coefficients(summary(fit.lm))['Treatmentclip', 'Estimate']
+    
+    if('cLDA' %in% methods){
+      # model 2 of liang and zeger - unconstrained and constrained longitudinal data analysis
+      # adapted from gls code below
+      dt[, Time:=as.integer(Capture_Period) - 1] # Time has to be dummy coded for mod2 but not sure why
+      fit.mod2 <- lme(Mass ~ Time + Time:Treatment, random = ~ Time-1|ID,
+                      weights = varIdent(form = ~ 1 | Time), 
+                      correlation=corSymm (form = ~ 1 | ID), 
+                      data = dt)
+      fake_b[iter, 'cLDA'] <- coefficients(summary(fit.mod2))['Time:Treatmentclip', 'Value']
+      
+      # model 2 using gls
+      # from https://datascienceplus.com/taking-the-baseline-measurement-into-account-constrained-lda-in-r/
+      # X <- model.matrix(~ Treatment*Capture_Period, data=dt)
+      # Xalt <- X[,c('Capture_Periodpost', "Treatmentclip:Capture_Periodpost")]
+      # clda_gls <- gls(Mass ~ Xalt, 
+      #                 weights = varIdent(form = ~ 1 | Capture_Period), 
+      #                 correlation=corSymm (form = ~ 1 | ID), 
+      #                 data = dt)
+      
+      # coefficients(summary(fit.lmm))
+      # coefficients(summary(fit.mod2))
+      # coefficients(summary(fit.lm))
+      
+    }
+  }
 fake_b <- data.table(fake_b)
+fn <- 'fake_b.RData'
+file_path <- paste(base_path, folder, fn, sep='/')
+save(fake_b, file = file_path)
+
+}else{
+  fn <- 'fake_b.RData'
+  file_path <- paste(base_path, folder, fn, sep='/')
+  load(file_path) # file name is fake_b
+  
+}
+
 apply(fake_b, 2, quantile, c(0.025, 0.5, 0.975))
 
 ```
