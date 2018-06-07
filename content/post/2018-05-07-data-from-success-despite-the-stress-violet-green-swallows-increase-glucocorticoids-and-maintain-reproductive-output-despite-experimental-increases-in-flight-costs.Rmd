@@ -9,6 +9,9 @@ tags:
   - experiment
   - physiology
 subtitle: ''
+output:
+  blogdown::html_page:
+    toc: true
 ---
 ```{r prep, echo=FALSE, message=FALSE}
 library(knitr)
