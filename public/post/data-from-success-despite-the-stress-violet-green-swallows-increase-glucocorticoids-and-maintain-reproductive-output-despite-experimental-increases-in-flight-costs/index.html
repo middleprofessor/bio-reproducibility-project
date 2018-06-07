@@ -6,14 +6,12 @@
   <title>Data from: Success despite the stress -- violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from: Success despite the stress -- violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from: Success despite the stress -- violet-green swallows …" />
-  <meta name="description" content="Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719 [Google Scholar]
+  <meta name="description" content="Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719 [Google Scholar]c]
 Data source: https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
- Background xxx
- Data fn &lt;- &#39;RiversetalVGSWhandicappingRawData.xls&#39; file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;) bird &lt;- data.table(read_excel(file_path, sheet = &#39;Tab3 &quot;a8&quot;&#39;)) bird[, Treatment:=factor(Treatment)] bird[, Capture_Period:=factor(Nestling_Age)] bird_wide &lt;- dcast(bird, Year &#43; Treatment &#43; BandNo &#43; DOY_Initiation &#43; day3mass ~ Capture_Period, value.">
-  <meta property="og:description" content="Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719 [Google Scholar]
+ Background usage note The authors refer to the measure of cortisol as “baseline cortisol.” Sice the design here is pre-post, this could be confused with the more general and wide usage of “baseline” to mean pre-treatment measure.">
+  <meta property="og:description" content="Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719 [Google Scholar]c]
 Data source: https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
- Background xxx
- Data fn &lt;- &#39;RiversetalVGSWhandicappingRawData.xls&#39; file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;) bird &lt;- data.table(read_excel(file_path, sheet = &#39;Tab3 &quot;a8&quot;&#39;)) bird[, Treatment:=factor(Treatment)] bird[, Capture_Period:=factor(Nestling_Age)] bird_wide &lt;- dcast(bird, Year &#43; Treatment &#43; BandNo &#43; DOY_Initiation &#43; day3mass ~ Capture_Period, value.">
+ Background usage note The authors refer to the measure of cortisol as “baseline cortisol.” Sice the design here is pre-post, this could be confused with the more general and wide usage of “baseline” to mean pre-treatment measure.">
   <meta name="twitter:description" content="Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
@@ -75,43 +73,103 @@ Data source: https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
 </aside>
       <div id="sources" class="section level1">
 <h1>Sources</h1>
-<p>Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. <a href="https://doi.org/10.1111/1365-2435.12719" class="uri">https://doi.org/10.1111/1365-2435.12719</a> [<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C20&amp;q=%22Success+despite+the+stress%3A+violet‐green+swallows+increase+glucocorticoids+and+maintain+reproductive+output+despite+experimental+increases+in+flight+costs%22&amp;btnG=" target="_blank">Google Scholar</a>]</p>
+<p>Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. <a href="https://doi.org/10.1111/1365-2435.12719" class="uri">https://doi.org/10.1111/1365-2435.12719</a> [<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C20&amp;q=%22Success+despite+the+stress%3A+violet‐green+swallows+increase+glucocorticoids+and+maintain+reproductive+output+despite+experimental+increases+in+flight+costs%22&amp;btnG=">Google Scholar</a>]c]</p>
 <p>Data source: <a href="https://datadryad.org/resource/doi:10.5061/dryad.3bc3s" class="uri" target="_blank">https://datadryad.org/resource/doi:10.5061/dryad.3bc3s</a></p>
 </div>
 <div id="background" class="section level1">
 <h1>Background</h1>
-<p>xxx</p>
+<p><strong>usage note</strong> The authors refer to the measure of cortisol as “baseline cortisol.” Sice the design here is pre-post, this could be confused with the more general and wide usage of “baseline” to mean pre-treatment measure.</p>
 </div>
 <div id="data" class="section level1">
 <h1>Data</h1>
+<p>These are the data for the major results of change in <span class="math inline">\(Corb_b\)</span> and <span class="math inline">\(Mass\)</span> in response to the treatment.</p>
 <pre class="r"><code>fn &lt;- &#39;RiversetalVGSWhandicappingRawData.xls&#39;
 file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
 bird &lt;- data.table(read_excel(file_path, sheet = &#39;Tab3 &quot;a8&quot;&#39;))
 bird[, Treatment:=factor(Treatment)]
-bird[, Capture_Period:=factor(Nestling_Age)]
-bird_wide &lt;- dcast(bird,  Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Capture_Period, value.var=c(&#39;Mass&#39;,&#39;Time&#39;))
-bird_wide[, dMass:=Mass_13 - Mass_3]</code></pre>
+bird[, Capture_Period:=factor(Nestling_Age)] # the paper uses Capture_Period as a label
+bird[, Time:=as.integer(Capture_Period) - 1] # for the constrained LDA</code></pre>
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
-<div id="body-mass" class="section level2">
-<h2>Body Mass</h2>
+</div>
+<div id="reproducibility-key" class="section level1">
+<h1>Reproducibility key</h1>
+<ol style="list-style-type: decimal">
+<li>Reproducibility: 1 (fails to reproduce). Not really close</li>
+<li>Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)</li>
+<li>Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.</li>
+<li>Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.</li>
+</ol>
+<p>A “+” means that the precise method wasn’t specified and reproducibility required exploration.</p>
+<div id="initial-measures" class="section level2">
+<h2>Initial measures</h2>
 <blockquote>
-<p>We found that female body mass significantly decreased between the two capture periods (F1,14.7 = 48.9, P &lt; 0 001; Fig. 2b), but we did not detect a significant effect of either treatment (F2,23 = 1.9, P = 0.173) or a treatment x capture period interaction (F2,15 = 2.5, P = 0.118).</p>
+<p>We detected no significant differences among females in the three treatment groups with respect to mean body mass (F2,20 = 2.83, P = 0.083), mean baseline cort (F2,14 = 1.81, P = 0.199), mean clutch size (F2,21 = 0.61, P = 0.555) or mean brood size (F2,21 = 2.54, P = 0.103) when they were measured prior to feather clipping.</p>
 </blockquote>
-<pre class="r"><code># capture period == nestling_age
-gg &lt;- ggplot(data=bird, aes(x=Treatment, y=Mass, fill=Capture_Period)) +
+<pre class="r"><code>tab1 &lt;- data.table(read_excel(file_path, sheet = &#39;Tab1 &quot;baseline&quot;&#39;))
+anova(lm(Mass ~ Treatment, data=tab1)) # check</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Mass
+##           Df  Sum Sq Mean Sq F value  Pr(&gt;F)  
+## Treatment  2  4.4787 2.23936  2.8298 0.08276 .
+## Residuals 20 15.8270 0.79135                  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(lm(CORT_B ~ Treatment, data=tab1)) #check</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: CORT_B
+##           Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Treatment  2 2.5371 1.26856   1.814 0.1993
+## Residuals 14 9.7905 0.69932</code></pre>
+<pre class="r"><code>anova(lm(Clutch ~ Treatment, data=tab1)) #check</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Clutch
+##           Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Treatment  2 0.4636 0.23182  0.6058 0.5549
+## Residuals 21 8.0364 0.38268</code></pre>
+<pre class="r"><code>anova(lm(day3brood ~ Treatment, data=tab1)) #check</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: day3brood
+##           Df  Sum Sq Mean Sq F value Pr(&gt;F)
+## Treatment  2  5.2462  2.6231  2.5371 0.1031
+## Residuals 21 21.7121  1.0339</code></pre>
+<pre class="r"><code>#note that these data are also in &quot;Tab3&quot;, which is kinda dangerous
+anova(lm(Mass ~ Treatment, data=bird[Nestling_Age==&#39;3&#39;])) # check</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Mass
+##           Df  Sum Sq Mean Sq F value  Pr(&gt;F)  
+## Treatment  2  4.4787 2.23936  2.8298 0.08276 .
+## Residuals 20 15.8270 0.79135                  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(lm(CORT_B ~ Treatment, data=bird[Nestling_Age==&#39;3&#39;])) #check</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: CORT_B
+##           Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Treatment  2 2.5371 1.26856   1.814 0.1993
+## Residuals 14 9.7905 0.69932</code></pre>
+<p>Reproducibility: 3 (reproduces to decimal or random error)</p>
+<p><strong>Workflow flag</strong>. The data for these statistics are in multiple tabs, which is a dangerous practice (what if a datum is corrected in one tab but not others?). Regardless, testing for treatment differences at baseline is not very useful (it doesn’t protect against conditional bias on the treatment effect)</p>
+</div>
+<div id="change-in-cort" class="section level2">
+<h2>Change in Cort</h2>
+<blockquote>
+<p>Overall, females subjected to feather-clipping treatments were found to have increased baseline cort compared to controls after treatments were implemented (Fig. 2a). We detected a significant main effect of handicapping treatment (F2,25 = 13.3, P = 0.001), capture period (F1,25 = 129.0, P &lt; 0.001) and a treatment x capture period interaction (F2,25 = 22.8, P &lt; 0.001).</p>
+</blockquote>
+<pre class="r"><code>gg &lt;- ggplot(data=bird, aes(x=Treatment, y=CORT_B, fill=Capture_Period)) +
   geom_boxplot()
 gg</code></pre>
-<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_boxplot).</code></pre>
-<div class="figure"><span id="fig:fig2b"></span>
-<img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/fig2b-1.png" alt="Reproduced Fig. 2b" width="672" />
-<p class="caption">
-Figure 1: Reproduced Fig. 2b
-</p>
-</div>
-<pre class="r"><code>fit &lt;- lmer(Mass ~ Treatment*Capture_Period + (1|BandNo), data=bird)
-kable(as.data.frame(anova(fit, ddf=&quot;Kenward-Roger&quot;)), digits=3)</code></pre>
+<pre><code>## Warning: Removed 8 rows containing non-finite values (stat_boxplot).</code></pre>
+<p><img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/Fig2a-1.png" width="672" /></p>
+<pre class="r"><code>fit2a &lt;- lmer(CORT_B ~ Treatment*Capture_Period + DOY_Initiation + day3mass + (1|BandNo), data=bird)
+kable(as.data.frame(anova(fit2a)), digits=3)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -127,40 +185,905 @@ kable(as.data.frame(anova(fit, ddf=&quot;Kenward-Roger&quot;)), digits=3)</code>
 <tbody>
 <tr class="odd">
 <td>Treatment</td>
-<td align="right">0.944</td>
-<td align="right">0.472</td>
+<td align="right">52.004</td>
+<td align="right">26.002</td>
 <td align="right">2</td>
-<td align="right">24.461</td>
-<td align="right">2.016</td>
-<td align="right">0.155</td>
+<td align="right">25</td>
+<td align="right">13.257</td>
+<td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td>Capture_Period</td>
-<td align="right">11.546</td>
-<td align="right">11.546</td>
+<td align="right">253.058</td>
+<td align="right">253.058</td>
 <td align="right">1</td>
-<td align="right">15.352</td>
-<td align="right">49.316</td>
+<td align="right">25</td>
+<td align="right">129.022</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td>DOY_Initiation</td>
+<td align="right">1.380</td>
+<td align="right">1.380</td>
+<td align="right">1</td>
+<td align="right">25</td>
+<td align="right">0.703</td>
+<td align="right">0.410</td>
+</tr>
+<tr class="even">
+<td>day3mass</td>
+<td align="right">3.118</td>
+<td align="right">3.118</td>
+<td align="right">1</td>
+<td align="right">25</td>
+<td align="right">1.590</td>
+<td align="right">0.219</td>
+</tr>
+<tr class="odd">
+<td>Treatment:Capture_Period</td>
+<td align="right">89.330</td>
+<td align="right">44.665</td>
+<td align="right">2</td>
+<td align="right">25</td>
+<td align="right">22.773</td>
+<td align="right">0.000</td>
+</tr>
+</tbody>
+</table>
+<p>Reproducibility: 3 (reproduces to decimal or random error)</p>
+<p><strong>Red Flag</strong> The interaction effect is the effect of interest here. This is the effect of treatment on <em>the post-treatment value</em> of baseline cortisol. The problem is that this interaction is not conditional on pre-treatment values and so is conditionally biased (see below).</p>
+<blockquote>
+<p>Pre-treatment mean baseline cort concentrations of control females [2.67 ng mL 1 (95% CI: 1.55, 3.80)] were not statistically different from those of females in the light clipping [2.69 ng mL (95% CI: 1.65, 3.73); t1,25 = 0.0, P = 1.000] and heavy clipping treatments [1.97 ng mL 1 (95% CI: 0.16, 4.09); t1,25 = 0.6, P = 0.990]. In contrast, post-treatment baseline cort concentrations in control females [4.65 ng mL 1 (95% CI: 3.46, 5.84)] were significantly lower than females in both the light clipped [7.4 ng mL 1 (95% CI: 6.45, 8.64); t1,25 = 3.7, P = 0.012] and heavy clipped treatments [14.07 ng mL 1 (95% CI: 12.24, 15.90); t1,25 = 8.7, P &lt; 0.001].</p>
+</blockquote>
+<pre class="r"><code># kenward-rogers adjustment is default but I am specifying it regardless
+emm_options(lmer.df = &quot;kenward-roger&quot;)
+fit2a_lsmeans &lt;- emmeans(fit2a, spec=c(&#39;Treatment&#39;, &#39;Capture_Period&#39;))</code></pre>
+<pre><code>## Loading required namespace: pbkrtest</code></pre>
+<pre class="r"><code>fit2a_lsmeans</code></pre>
+<pre><code>##  Treatment Capture_Period    emmean        SE    df   lower.CL  upper.CL
+##  1_control 3               2.676601 0.5559913 24.82  1.5310829  3.822120
+##  2_4Fclip  3               2.689967 0.5121113 24.82  1.6348629  3.745070
+##  3_8Fclip  3               1.967819 1.0679731 24.34 -0.2347274  4.170366
+##  1_control 13              4.651025 0.5925682 24.79  3.4300885  5.871962
+##  2_4Fclip  13              7.544309 0.5463091 24.87  6.4188703  8.669749
+##  3_8Fclip  13             14.071839 0.8921614 24.30 12.2316954 15.911982
+## 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95</code></pre>
+<p>Reproducibility: 3 (reproduces to decimal or random error) <strong>Exceptions</strong> - 7.54 v 7.4 for 2_4Fclip/13. Given the level 3 for other estimates I suspect this is a transcription error</p>
+<p><strong>Code flag</strong> - a best practice is to construct published tables using code that extracts results directly rather than manually transcribing results. This is not in a table though, so is susceptible to transcription error.</p>
+<p>Marginal means are reported but the p-values must be from Tukey-HSD contrasts.</p>
+<pre class="r"><code># just for fun
+x_rows &lt;- c(&#39;Treatment2_4Fclip&#39;, &#39;Treatment3_8Fclip&#39;)
+kable(coefficients(summary(fit2a))[x_rows,], digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">df</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Treatment2_4Fclip</td>
+<td align="right">0.013</td>
+<td align="right">0.749</td>
+<td align="right">25</td>
+<td align="right">0.018</td>
+<td align="right">0.986</td>
+</tr>
+<tr class="even">
+<td>Treatment3_8Fclip</td>
+<td align="right">-0.709</td>
+<td align="right">1.191</td>
+<td align="right">25</td>
+<td align="right">-0.595</td>
+<td align="right">0.557</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># no adjustment for multiple tests -- just for fun
+fit2a_table &lt;- summary(contrast(fit2a_lsmeans, method=&#39;revpairwise&#39;, adjust=&#39;none&#39;), infer=c(TRUE,TRUE))
+x_rows &lt;- c(&#39;2_4Fclip,3 - 1_control,3&#39;, &#39;3_8Fclip,3 - 1_control,3&#39;)
+kable(fit2a_table[which(fit2a_table[,&quot;contrast&quot;]%in%x_rows),], digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">contrast</th>
+<th align="right">estimate</th>
+<th align="right">SE</th>
+<th align="right">df</th>
+<th align="right">lower.CL</th>
+<th align="right">upper.CL</th>
+<th align="right">t.ratio</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2_4Fclip,3 - 1_control,3</td>
+<td align="right">0.013</td>
+<td align="right">0.762</td>
+<td align="right">24.510</td>
+<td align="right">-1.557</td>
+<td align="right">1.583</td>
+<td align="right">0.018</td>
+<td align="right">0.986</td>
+</tr>
+<tr class="even">
+<td align="left">3_8Fclip,3 - 1_control,3</td>
+<td align="right">-0.709</td>
+<td align="right">1.227</td>
+<td align="right">24.253</td>
+<td align="right">-3.240</td>
+<td align="right">1.823</td>
+<td align="right">-0.578</td>
+<td align="right">0.569</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Tukey HSD adjustment reproduces
+fit2a_table &lt;- summary(contrast(fit2a_lsmeans, method=&#39;revpairwise&#39;), infer=c(TRUE,TRUE))
+kable(fit2a_table[which(fit2a_table[,&quot;contrast&quot;]%in%x_rows),], digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">contrast</th>
+<th align="right">estimate</th>
+<th align="right">SE</th>
+<th align="right">df</th>
+<th align="right">lower.CL</th>
+<th align="right">upper.CL</th>
+<th align="right">t.ratio</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2_4Fclip,3 - 1_control,3</td>
+<td align="right">0.013</td>
+<td align="right">0.762</td>
+<td align="right">24.510</td>
+<td align="right">-2.337</td>
+<td align="right">2.364</td>
+<td align="right">0.018</td>
+<td align="right">1.000</td>
+</tr>
+<tr class="even">
+<td align="left">3_8Fclip,3 - 1_control,3</td>
+<td align="right">-0.709</td>
+<td align="right">1.227</td>
+<td align="right">24.253</td>
+<td align="right">-4.500</td>
+<td align="right">3.082</td>
+<td align="right">-0.578</td>
+<td align="right">0.992</td>
+</tr>
+</tbody>
+</table>
+<p>Reproducibility: 3 (reproduces to decimal or random error)</p>
+<blockquote>
+<p>Within each treatment, mean baseline cort increased from the pre-treatment capture period to the post-treatment capture period: control: b = 1.97 (95% CI: -0.44, 4.39), t1,25 = 2.5, P = 0.155; light clipping: b = 4.85 (95% CI: 2.62, 7.09), t1,25 = 6.7, P &lt; 0.001; and heavy clipping: b = 12.10 (95% CI: 8.16, 16.05), t1,25 = 9.5, P &lt; 0.001. Relative to females in the control group, the magnitude of increase in mean baseline cort between the two capture periods was 2.59 (95% CI: 1.1, 5.7) and 6.19 (95% CI: 2.7, 13.9) greater in females subjected to the light clipping and heavy clipping treatments, respectively (Fig. 2a)</p>
+</blockquote>
+<pre class="r"><code># Tukey HSD adjustment reproduces
+fit2a_table &lt;- summary(contrast(fit2a_lsmeans, method=&#39;revpairwise&#39;), infer=c(TRUE,TRUE))
+x_rows &lt;- c(&#39;1_control,13 - 1_control,3&#39;,&#39;2_4Fclip,13 - 2_4Fclip,3&#39;, &#39;3_8Fclip,13 - 3_8Fclip,3&#39;)
+kable(fit2a_table[which(fit2a_table[,&quot;contrast&quot;]%in%x_rows),], digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">contrast</th>
+<th align="right">estimate</th>
+<th align="right">SE</th>
+<th align="right">df</th>
+<th align="right">lower.CL</th>
+<th align="right">upper.CL</th>
+<th align="right">t.ratio</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4</td>
+<td align="left">1_control,13 - 1_control,3</td>
+<td align="right">1.974</td>
+<td align="right">0.800</td>
+<td align="right">14.133</td>
+<td align="right">-0.646</td>
+<td align="right">4.595</td>
+<td align="right">2.468</td>
+<td align="right">0.198</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td align="left">2_4Fclip,13 - 2_4Fclip,3</td>
+<td align="right">4.854</td>
+<td align="right">0.745</td>
+<td align="right">15.970</td>
+<td align="right">2.453</td>
+<td align="right">7.256</td>
+<td align="right">6.515</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td align="left">3_8Fclip,13 - 3_8Fclip,3</td>
+<td align="right">12.104</td>
+<td align="right">1.312</td>
+<td align="right">13.563</td>
+<td align="right">7.783</td>
+<td align="right">16.426</td>
+<td align="right">9.229</td>
+<td align="right">0.000</td>
+</tr>
+</tbody>
+</table>
+<p>Reproducibility: 2 (reproduces to a similar value)</p>
+<p>Estiamtes are the same but my CIs are wider and my t-values are smaller (both reflecting bigger SE in my results). The reported df of 25 is the simple t-test df and not a kenward-rogers adjusted df.</p>
+</div>
+<div id="change-in-body-mass" class="section level2">
+<h2>Change in Body Mass</h2>
+<blockquote>
+<p>We found that female body mass significantly decreased between the two capture periods (F1,14.7 = 48.9, P &lt; 0.001; Fig. 2b), but we did not detect a significant effect of either treatment (F2,23 = 1.9, P = 0.173) or a treatment x capture period interaction (F2,15 = 2.5, P = 0.118).</p>
+</blockquote>
+<p>The authors do not report the model.</p>
+<pre class="r"><code># capture period == nestling_age
+gg &lt;- ggplot(data=bird, aes(x=Treatment, y=Mass, fill=Capture_Period)) +
+  geom_boxplot()
+gg</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_boxplot).</code></pre>
+<div class="figure"><span id="fig:fig2b"></span>
+<img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/fig2b-1.png" alt="Reproduced Fig. 2b" width="672" />
+<p class="caption">
+Figure 1: Reproduced Fig. 2b
+</p>
+</div>
+<pre class="r"><code># without initiation
+fit2b &lt;- lmer(Mass ~ Treatment*Capture_Period + (1|BandNo), data=bird)
+kable(as.data.frame(anova(fit2b)), digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Sum Sq</th>
+<th align="right">Mean Sq</th>
+<th align="right">NumDF</th>
+<th align="right">DenDF</th>
+<th align="right">F.value</th>
+<th align="right">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Treatment</td>
+<td align="right">0.949</td>
+<td align="right">0.475</td>
+<td align="right">2</td>
+<td align="right">24.066</td>
+<td align="right">2.027</td>
+<td align="right">0.154</td>
+</tr>
+<tr class="even">
+<td>Capture_Period</td>
+<td align="right">11.871</td>
+<td align="right">11.871</td>
+<td align="right">1</td>
+<td align="right">14.942</td>
+<td align="right">50.704</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td>Treatment:Capture_Period</td>
-<td align="right">1.151</td>
-<td align="right">0.575</td>
+<td align="right">1.180</td>
+<td align="right">0.590</td>
 <td align="right">2</td>
-<td align="right">15.650</td>
-<td align="right">2.457</td>
-<td align="right">0.118</td>
+<td align="right">15.229</td>
+<td align="right">2.520</td>
+<td align="right">0.113</td>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code># with initiation
+fit2b &lt;- lmer(Mass ~ DOY_Initiation + Treatment*Capture_Period + (1|BandNo), data=bird)
+kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Sum Sq</th>
+<th align="right">Mean Sq</th>
+<th align="right">NumDF</th>
+<th align="right">DenDF</th>
+<th align="right">F.value</th>
+<th align="right">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>DOY_Initiation</td>
+<td align="right">0.067</td>
+<td align="right">0.067</td>
+<td align="right">1</td>
+<td align="right">22.088</td>
+<td align="right">0.283</td>
+<td align="right">0.600</td>
+</tr>
+<tr class="even">
+<td>Treatment</td>
+<td align="right">1.461</td>
+<td align="right">0.731</td>
+<td align="right">2</td>
+<td align="right">22.460</td>
+<td align="right">3.112</td>
+<td align="right">0.064</td>
+</tr>
+<tr class="odd">
+<td>Capture_Period</td>
+<td align="right">11.411</td>
+<td align="right">11.411</td>
+<td align="right">1</td>
+<td align="right">15.516</td>
+<td align="right">48.606</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>Treatment:Capture_Period</td>
+<td align="right">1.192</td>
+<td align="right">0.596</td>
+<td align="right">2</td>
+<td align="right">15.029</td>
+<td align="right">2.539</td>
+<td align="right">0.112</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>kable(as.data.frame(anova(fit2b, type=2)), digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Sum Sq</th>
+<th align="right">Mean Sq</th>
+<th align="right">NumDF</th>
+<th align="right">DenDF</th>
+<th align="right">F.value</th>
+<th align="right">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>DOY_Initiation</td>
+<td align="right">0.019</td>
+<td align="right">0.019</td>
+<td align="right">1</td>
+<td align="right">22.233</td>
+<td align="right">0.081</td>
+<td align="right">0.779</td>
+</tr>
+<tr class="even">
+<td>Treatment</td>
+<td align="right">0.922</td>
+<td align="right">0.461</td>
+<td align="right">2</td>
+<td align="right">22.626</td>
+<td align="right">1.963</td>
+<td align="right">0.164</td>
+</tr>
+<tr class="odd">
+<td>Capture_Period</td>
+<td align="right">11.411</td>
+<td align="right">11.411</td>
+<td align="right">1</td>
+<td align="right">15.516</td>
+<td align="right">48.606</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>Treatment:Capture_Period</td>
+<td align="right">1.192</td>
+<td align="right">0.596</td>
+<td align="right">2</td>
+<td align="right">15.029</td>
+<td align="right">2.539</td>
+<td align="right">0.112</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>kable(as.data.frame(anova(fit2b, type=3)), digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Sum Sq</th>
+<th align="right">Mean Sq</th>
+<th align="right">NumDF</th>
+<th align="right">DenDF</th>
+<th align="right">F.value</th>
+<th align="right">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>DOY_Initiation</td>
+<td align="right">0.019</td>
+<td align="right">0.019</td>
+<td align="right">1</td>
+<td align="right">22.231</td>
+<td align="right">0.081</td>
+<td align="right">0.779</td>
+</tr>
+<tr class="even">
+<td>Treatment</td>
+<td align="right">0.894</td>
+<td align="right">0.447</td>
+<td align="right">2</td>
+<td align="right">22.961</td>
+<td align="right">1.904</td>
+<td align="right">0.172</td>
+</tr>
+<tr class="odd">
+<td>Capture_Period</td>
+<td align="right">11.819</td>
+<td align="right">11.819</td>
+<td align="right">1</td>
+<td align="right">14.728</td>
+<td align="right">50.344</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>Treatment:Capture_Period</td>
+<td align="right">1.192</td>
+<td align="right">0.596</td>
+<td align="right">2</td>
+<td align="right">15.018</td>
+<td align="right">2.539</td>
+<td align="right">0.112</td>
+</tr>
+</tbody>
+</table>
+<p>Reproducibility: 3-+ (reproduces to decimal or random error, some exploration required)</p>
+<p>level 3 reproducibility using Type 2 SS. This is more than decimal error but it’s close. I had to explore SS type.</p>
 <blockquote>
-<p>We found that female body mass significantly decreased between the two capture periods (F1,14.7 = 48.9, P &lt; 0.001; Fig. 2b), but we did not detect a significant effect of either treatment (F2,23 = 1.9, P = 0.173) or a treatment x capture period interaction (F2,15 = 2 5, P = 0.118). The mean decrease in body mass between capture periods was significant for females in the control treatment [b = -0.95 (95% CI: 1.75, 0.14), t1,16 = 3.8, P = 0 017] as well as both handicapping treatments [light clipping: b = -1.07 (95% CI: 1.88, 0.26), t1,15 3 = 4.3, P = 0.007; heavy clipping: b = -2.12 (95% CI: 3.67, 0.58), t1,14 3 = 4.5, P = 0.005; Fig. 2b]. However, the magnitude of decrease in mean body mass of females in the light and heavy clipping treatments was 1.29X (95% CI: 0.6, 2.3) and 2.29X (95% CI: 1.2, 4.5) greater, respectively, that of females in the control treatment.</p>
+<p>The mean decrease in body mass between capture periods was significant for females in the control treatment [b = -0.95 (95% CI: -1.75, -0.14), t1,16 = 3.8, P = 0.017] as well as both handicapping treatments [light clipping: b = -1.07 (95% CI: -1.88,-0.26), t1,15.3 = 4.3, P = 0.007; heavy clipping: b = -2.12 (95% CI: -3.67, -0.58), t1,14.3 = 4.5, P = 0.005; Fig. 2b].</p>
 </blockquote>
-<pre class="r"><code># look at coefficients of lmm in addition to the ANOVA above
-b_table &lt;- coefficients(summary(fit))
-b &lt;- b_table[, &quot;Estimate&quot;]
-kable(b_table, digits=3)</code></pre>
+<p>The authors used Kenwood-Rogers approximate DF for the contrasts and Tukey-Kramer adjusted SE/p-values for all the contrasts (not just the three reported).</p>
+<pre class="r"><code>coefficients(summary(fit2b))</code></pre>
+<pre><code>##                                       Estimate Std. Error       df
+## (Intercept)                        13.09837461 6.41758669 22.35249
+## DOY_Initiation                      0.01172635 0.04119665 22.23298
+## Treatment2_4Fclip                   0.65126356 0.35803910 32.65636
+## Treatment3_8Fclip                   1.13967598 0.54885428 30.10932
+## Capture_Period13                   -0.94908601 0.24270225 16.04279
+## Treatment2_4Fclip:Capture_Period13 -0.12094911 0.34567116 15.67319
+## Treatment3_8Fclip:Capture_Period13 -1.17529737 0.52934113 14.62314
+##                                       t value    Pr(&gt;|t|)
+## (Intercept)                         2.0410125 0.053230770
+## DOY_Initiation                      0.2846433 0.778551891
+## Treatment2_4Fclip                   1.8189733 0.078096082
+## Treatment3_8Fclip                   2.0764637 0.046482967
+## Capture_Period13                   -3.9104953 0.001240312
+## Treatment2_4Fclip:Capture_Period13 -0.3498964 0.731073941
+## Treatment3_8Fclip:Capture_Period13 -2.2203024 0.042653397</code></pre>
+<pre class="r"><code>emm_options(lmer.df = &quot;kenward-roger&quot;)
+fit2b_lsmeans &lt;- emmeans(fit2b, spec=c(&#39;Treatment&#39;, &#39;Capture_Period&#39;))
+
+# no adjustment for multiple tests --  just for fun
+b_table &lt;- summary(contrast(fit2b_lsmeans, method=&#39;revpairwise&#39;, adjust=&#39;none&#39;), infer=c(TRUE,TRUE))
+x_rows &lt;- c(&#39;1_control,13 - 1_control,3&#39;,&#39;2_4Fclip,13 - 2_4Fclip,3&#39;, &#39;3_8Fclip,13 - 3_8Fclip,3&#39;)
+kable(b_table[which(b_table[,&quot;contrast&quot;]%in%x_rows),], digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">contrast</th>
+<th align="right">estimate</th>
+<th align="right">SE</th>
+<th align="right">df</th>
+<th align="right">lower.CL</th>
+<th align="right">upper.CL</th>
+<th align="right">t.ratio</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4</td>
+<td align="left">1_control,13 - 1_control,3</td>
+<td align="right">-0.949</td>
+<td align="right">0.248</td>
+<td align="right">16.570</td>
+<td align="right">-1.473</td>
+<td align="right">-0.426</td>
+<td align="right">-3.833</td>
+<td align="right">0.001</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td align="left">2_4Fclip,13 - 2_4Fclip,3</td>
+<td align="right">-1.070</td>
+<td align="right">0.250</td>
+<td align="right">15.821</td>
+<td align="right">-1.601</td>
+<td align="right">-0.539</td>
+<td align="right">-4.272</td>
+<td align="right">0.001</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td align="left">3_8Fclip,13 - 3_8Fclip,3</td>
+<td align="right">-2.124</td>
+<td align="right">0.476</td>
+<td align="right">14.776</td>
+<td align="right">-3.140</td>
+<td align="right">-1.109</td>
+<td align="right">-4.465</td>
+<td align="right">0.000</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Tukey HSD adjustment reproduces
+b_table &lt;- summary(contrast(fit2b_lsmeans, method=&#39;revpairwise&#39;), infer=c(TRUE,TRUE))
+kable(b_table[which(b_table[,&quot;contrast&quot;]%in%x_rows),], digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">contrast</th>
+<th align="right">estimate</th>
+<th align="right">SE</th>
+<th align="right">df</th>
+<th align="right">lower.CL</th>
+<th align="right">upper.CL</th>
+<th align="right">t.ratio</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4</td>
+<td align="left">1_control,13 - 1_control,3</td>
+<td align="right">-0.949</td>
+<td align="right">0.248</td>
+<td align="right">16.570</td>
+<td align="right">-1.744</td>
+<td align="right">-0.155</td>
+<td align="right">-3.833</td>
+<td align="right">0.015</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td align="left">2_4Fclip,13 - 2_4Fclip,3</td>
+<td align="right">-1.070</td>
+<td align="right">0.250</td>
+<td align="right">15.821</td>
+<td align="right">-1.878</td>
+<td align="right">-0.262</td>
+<td align="right">-4.272</td>
+<td align="right">0.007</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td align="left">3_8Fclip,13 - 3_8Fclip,3</td>
+<td align="right">-2.124</td>
+<td align="right">0.476</td>
+<td align="right">14.776</td>
+<td align="right">-3.673</td>
+<td align="right">-0.575</td>
+<td align="right">-4.465</td>
+<td align="right">0.005</td>
+</tr>
+</tbody>
+</table>
+<p>Reproducibility: 3 (reproduces to decimal or random error)</p>
+<blockquote>
+<p>However, the magnitude of decrease in mean body mass of females in the light and heavy clipping treatments was 1.29X (95% CI: 0.6, 2.3) and 2.29X (95% CI: 1.2, 4.5) greater, respectively, that of females in the control treatment.</p>
+</blockquote>
+<p>It’s not clear to me how the CIs of the fold-changes were computed and this isn’t an easy problem. I did find information <a href="https://stats.stackexchange.com/questions/16349/how-to-compute-the-confidence-interval-of-the-ratio-of-two-normal-means/16354#16354">here</a>. Instead, I use a bootstrap to try to reproduce.</p>
+<pre class="r"><code># how many X greater was the reduction (this is a confusing way to report)
+bird_wide &lt;- dcast(bird,  Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Capture_Period, value.var=c(&#39;Mass&#39;,&#39;Time&#39;))
+niter &lt;- 100
+x_levels &lt;- c(&#39;Capture_PeriodMass_13&#39;, &#39;Treatment2_4Fclip:Capture_PeriodMass_13&#39;, &#39;Treatment3_8Fclip:Capture_PeriodMass_13&#39;)
+fold_table &lt;- matrix(NA, nrow=niter, ncol=2)
+colnames(fold_table) &lt;- c(&#39;clip4&#39;, &#39;clip8&#39;)
+inc &lt;- 1:nrow(bird_wide)
+iter &lt;- 1
+while(iter &lt;= niter){
+  bird_samp &lt;- na.omit(melt(bird_wide[inc,], id.vars=c(&#39;BandNo&#39;,&#39;Treatment&#39;,&#39;DOY_Initiation&#39;),
+                    measure.vars=c(&#39;Mass_3&#39;, &#39;Mass_13&#39;),
+                    variable.name = &#39;Capture_Period&#39;,
+                    value.name=&#39;Mass&#39;))
+  #bird_o &lt;- na.omit(orderBy(~BandNo, bird[,.SD,.SDcols=c(&#39;Treatment&#39;,&#39;BandNo&#39;,&#39;Capture_Period&#39;,&#39;Mass&#39;)]))
+  #coefficients(summary(lmer(Mass ~ Treatment*Capture_Period + (1|BandNo), data=bird_o)))
+
+  fit &lt;- lmer(Mass ~ DOY_Initiation + Treatment*Capture_Period + (1|BandNo), data=bird_samp)
+  b &lt;- coefficients(summary(fit))
+  if(all(x_levels %in% row.names(b))){
+    b &lt;- b[x_levels, &#39;Estimate&#39;]
+    fold_table[iter,&#39;clip4&#39;] &lt;- (b[1]+b[2])/b[1]
+    fold_table[iter,&#39;clip8&#39;] &lt;- (b[1]+b[3])/b[1]
+    iter &lt;- iter+1
+  }
+  
+  # resample
+  inc &lt;- sample(1:nrow(bird_wide), replace=TRUE)
+}
+
+b_table[contrast==&#39;2_4Fclip,13 - 2_4Fclip,3&#39;, estimate]/b_table[contrast==&#39;1_control,13 - 1_control,3&#39;, estimate]
+b_table[contrast==&#39;3_8Fclip,13 - 3_8Fclip,3&#39;, estimate]/b_table[contrast==&#39;1_control,13 - 1_control,3&#39;, estimate]
+
+fold_table[1, ]
+apply(fold_table, 2, quantile, c(0.025, 0.975))</code></pre>
+<p>Reproducibility: 2+ (reproduces to a similar value)</p>
+<p>I get 13% and 123% more reduction instead of 29% and 129%. Intervals shifted.</p>
+<p>** Red flag** - First, comparing fold change CIs is not the way to compare a contrast in fold-change (this is the interaction effect). More important, fold changes are a type of change (or gain) score and are conditionally biased on the pre-treatment value (see below).</p>
+</div>
+</div>
+<div id="post-publication-review" class="section level1">
+<h1>Post-publication review</h1>
+<div id="no-significant-differences-among-treatment-groups-at-baseline-does-not-protect-in-any-way-against-the-bias-in-change-scores-post---pre-treatment-measure" class="section level2">
+<h2>“no significant differences” among treatment groups at baseline does not protect in any way against the bias in change scores (post - pre treatment measure)</h2>
+<blockquote>
+<p>We detected no significant differences among females in the three treatment groups with respect to mean body mass (F2,20 = 2.83, P = 0.083), mean baseline cort (F2,14 = 1.81, P = 0.199), mean clutch size (F2,21 = 0.61, P = 0.555) or mean brood size (F2,21 = 2.54, P = 0.103) when they were measured prior to feather clipping.</p>
+</blockquote>
+<p>The expected change in some measure from pre to post-treatment is conditionally biased on the pre-treatment value - a hypothesis test of a nil null is not relevant to comparing change scores, at all. As I wrote <a href="https://www.middleprofessor.com/files/quasipubs/change_scores.html" target="_blank">here</a> “And, contrary to some advice and maybe to intuition, it makes no sense to use a t-test of the difference in initial measures to decide how to proceed. First, a null-hypothesis significance test cannot tell you that there is “no difference” – this is not what null-hypothesis tests do. Second, any <span class="math inline">\(p\)</span>-value after the initial test isn’t strictly valid as it does not take into account this decision step. Third, it doesn’t matter; there will always be some difference in the actual means of the initial measures and, consequently, the conditional expectation of the final measures, or change in measures, or percent change will be dependent on this initial difference.”</p>
+</div>
+<div id="estimates-of-treatment-effects-on-cortisol-and-mass-were-not-adjusted-for-baseline-values" class="section level2">
+<h2>Estimates of treatment effects on Cortisol and Mass were not adjusted for baseline values</h2>
+<p>Again, the expected change in some measure from pre to post-treatment is conditionally biased on the pre-treatment value. This is <em>regression to the mean</em>. Coverage (and p-values) of change scores are at nominal level <em>but</em> are correlated with the pre-treatment value. Regression to the mean will effect unadjusted change score estimates in both <span class="math inline">\(Cort_b\)</span> and <span class="math inline">\(Mass\)</span> but the Fig 2b suggests that this effect will be large for <span class="math inline">\(Mass\)</span>. Specifically, Fig 2b shows effectively zero effect of treatment for post-treatment measure. The expectation is zero if there is no effect, and the data are very consistent with this. But there is a big difference in pre-treatment mass among levels (again, the expectation is zero with randomized treatment assignment). So this is a good example of pre-post bias in the estimates of 1.29X and 2.29X greater reduction in mass. <a href="https://www.middleprofessor.com/files/quasipubs/change_scores.html">The expectation for these unadjusted estimates is not 1.0 conditional on pre-treatment mass</a>.</p>
+<p>It is widely (but mistakenly) believed that a non-significant hypothesis test of of baseline values validates a comparison of change scores. The authors do not explicitly state this but do report these tests, which are not especially useful for anything.</p>
+<blockquote>
+<p>We detected no significant differences among females in the three treatment groups with respect to mean body mass (F2,20 = 2.83, P = 0.083), mean baseline cort (F2,14 = 1.81, P = 0.199), mean clutch size (F2,21 = 0.61, P = 0.555) or mean brood size (F2,21 = 2.54, P = 0.103) when they were measured prior to feather clipping.</p>
+</blockquote>
+<p>The expected change in some measure from pre to post-treatment is conditionally biased on the pre-treatment value - a hypothesis test of a nil null is not relevant to comparing change scores, at all. As I wrote <a href="https://www.middleprofessor.com/files/quasipubs/change_scores.html" target="_blank">here</a> “And, contrary to some advice and maybe to intuition, it makes no sense to use a t-test of the difference in initial measures to decide how to proceed. First, a null-hypothesis significance test cannot tell you that there is “no difference” – this is not what null-hypothesis tests do. Second, any <span class="math inline">\(p\)</span>-value after the initial test isn’t strictly valid as it does not take into account this decision step. Third, it doesn’t matter; there will always be some difference in the actual means of the initial measures and, consequently, the conditional expectation of the final measures, or change in measures, or percent change will be dependent on this initial difference.”</p>
+<p>The standard method to estimate a treatment effect conditional on pre-treatment value is a simple (ANCOVA) linear model. The response could be the change score or the post-treatment measure. The estimated effect is the same either way (only the intercept changes). Here, I re-compute the treatment effects on <span class="math inline">\(Cort_b\)</span> and <span class="math inline">\(Mass\)</span> (starting with <span class="math inline">\(Mass\)</span>) but adjust for pre-treatment (“baseline”) values.</p>
+<pre class="r"><code>bird_wide &lt;- dcast(bird,  Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Capture_Period, value.var=c(&#39;Mass&#39;,&#39;Time&#39;))
+bird_wide[, dMass:=Mass_13 - Mass_3]
+
+# change in mass
+fit2b.c &lt;- lm(dMass ~ DOY_Initiation + Mass_3 + Treatment, data=bird_wide)
+coefs2.c &lt;- coefficients(summary(fit2b.c))
+kable(coefs2.c, digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td align="right">2.382</td>
+<td align="right">6.732</td>
+<td align="right">0.354</td>
+<td align="right">0.730</td>
+</tr>
+<tr class="even">
+<td>DOY_Initiation</td>
+<td align="right">0.018</td>
+<td align="right">0.044</td>
+<td align="right">0.405</td>
+<td align="right">0.693</td>
+</tr>
+<tr class="odd">
+<td>Mass_3</td>
+<td align="right">-0.416</td>
+<td align="right">0.214</td>
+<td align="right">-1.949</td>
+<td align="right">0.077</td>
+</tr>
+<tr class="even">
+<td>Treatment2_4Fclip</td>
+<td align="right">0.256</td>
+<td align="right">0.346</td>
+<td align="right">0.740</td>
+<td align="right">0.475</td>
+</tr>
+<tr class="odd">
+<td>Treatment3_8Fclip</td>
+<td align="right">-0.548</td>
+<td align="right">0.650</td>
+<td align="right">-0.844</td>
+<td align="right">0.417</td>
+</tr>
+</tbody>
+</table>
+<p>And a plot of this model is here</p>
+<pre class="r"><code># change in mass
+gg &lt;- ggplot(data=bird_wide, aes(x=day3mass, y=dMass, color=Treatment)) +
+  geom_point() +
+  theme_minimal()
+gg</code></pre>
+<pre><code>## Warning: Removed 12 rows containing missing values (geom_point).</code></pre>
+<div class="figure"><span id="fig:fig2bAncovaFig"></span>
+<img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/fig2bAncovaFig-1.png" alt="ANCOVA style plot" width="672" />
+<p class="caption">
+Figure 2: ANCOVA style plot
+</p>
+</div>
+<p>These results are inconsistent with the LMM 1. The decrease in mass from day 3 to day 13 is actually less for the 4-clip treatment than for the control (lmm: b= -0.121; ANCOVA lm: b= 0.256) 2. The decrease in mass from day 3 to day 13 is greater in the 8-clip treatment than for the control but not as big as the estimated decrease from the lmm (lmm: b= -1.18; ANCOVA lm: b= -.548). In the lmm, the uncorrected (for multiplicity) CI nearly covers zero ($p = 0.042). But in the ANCOVA lm, the SE is huge relative to the effect.</p>
+<p>Two things are going on 1) there is a big difference in sample size between the lmm and the ANCOVA lm. The reason is that the lmm uses a long-data format, so cases in which either pre or post treatment measure are missing are partly in the model (the available measure is in the model), but these cases are omitted entirely from the ANCOVA lm, which uses wide-format.</p>
+<p>Here is sample size for the ANCOVA lm</p>
+<pre class="r"><code># sample size
+ycols &lt;- c(&#39;Treatment&#39;, &#39;day3mass&#39;, &#39;dMass&#39;)
+bird_wide[!is.na(dMass), .(N=.N), by=Treatment]</code></pre>
+<pre><code>##    Treatment N
+## 1:  2_4Fclip 7
+## 2:  3_8Fclip 2
+## 3: 1_control 7</code></pre>
+<p>Look at their fig 2b which reports sample sizes for pre and post measures. The <span class="math inline">\(n\)</span> drops in all post measures.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>The second thing going on of course is that the ANCOVA lm adjusts for pre-treatment <span class="math inline">\(Mass\)</span> but the lmm does not.</li>
+</ol>
+<p>This is interesting, as we have a trade-off here between power (the lmm uses more data) and bias (the lmm estimates are conditionally biased).</p>
+<p>A solution is a linear-mixed model that adjusts for pre-treatment values by forcing the intercept of both treatment levels (the pre-treatment value) to be the same. This is the constrained Longitudinal Data Analysis (cLDA) method of Liang and Zeger (see also Liu.). For data with no missing values, estimates from cLDA and from ANCOVA lm are equal.</p>
+<pre class="r"><code># need to make Capture_Period a numeric dummy variable to get the right interaction effect -- when coded as a factor, lme/lmer creates an interaction column for both levels of Capture_Period if Treatment is missing from the model (but in the interaction)
+bird[, Time:=as.integer(Capture_Period)-1]
+fit.mod2 &lt;- lme(Mass ~ DOY_Initiation + Time + Time:Treatment, random = ~ Time-1|BandNo,
+                weights = varIdent(form = ~ 1 | Time), 
+                correlation=corSymm (form = ~ 1 | BandNo), 
+                data = bird,
+                na.action=na.omit)
+kable(coefficients(summary(fit.mod2)), digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Value</th>
+<th align="right">Std.Error</th>
+<th align="right">DF</th>
+<th align="right">t-value</th>
+<th align="right">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td align="right">13.159</td>
+<td align="right">6.387</td>
+<td align="right">26</td>
+<td align="right">2.060</td>
+<td align="right">0.050</td>
+</tr>
+<tr class="even">
+<td>DOY_Initiation</td>
+<td align="right">0.014</td>
+<td align="right">0.041</td>
+<td align="right">26</td>
+<td align="right">0.346</td>
+<td align="right">0.732</td>
+</tr>
+<tr class="odd">
+<td>Time</td>
+<td align="right">-1.216</td>
+<td align="right">0.216</td>
+<td align="right">13</td>
+<td align="right">-5.635</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>Time:Treatment2_4Fclip</td>
+<td align="right">0.210</td>
+<td align="right">0.275</td>
+<td align="right">13</td>
+<td align="right">0.764</td>
+<td align="right">0.458</td>
+</tr>
+<tr class="odd">
+<td>Time:Treatment3_8Fclip</td>
+<td align="right">-0.518</td>
+<td align="right">0.436</td>
+<td align="right">13</td>
+<td align="right">-1.188</td>
+<td align="right">0.256</td>
+</tr>
+</tbody>
+</table>
+<p>This analysis uses all of the available data (like the lmm) and adjusts for pre-treatment value (by forcing these to be the same). The results are quite similar to the ANCOVA lm results but the SEs are smaller, because of increased sample size. Again, there is a positive effect on the 4-clip treatment but a negative effect on the 8-clip treatment. The effect on the 8-clip treatment is about 1/2 the magnitude as that estimated using the lmm. This estimate is -0.52 g over the treatment period, but the SE for this estimate is too large to infer much.</p>
+</div>
+<div id="simulation-to-explore-behavior-in-lmm-vs.ancova-lm-vs.clda" class="section level2">
+<h2>Simulation to explore behavior in lmm vs. ANCOVA-lm vs. cLDA</h2>
+<p>This simulation generates fake data to show how lmm but not ANCOVA-lm/cLDA has conditionally biased estimates. I model data using parameters of the actual bird data.</p>
+<pre class="r"><code>varcor &lt;- VarCorr(fit2b)
+var &lt;- as.data.frame(VarCorr(fit2b))[&quot;vcov&quot;][,1]
+rho &lt;- var[1]/sum(var)
+
+fit2b_table &lt;- coefficients(summary(fit2b))
+mu1 &lt;- fit2b_table[&quot;(Intercept)&quot;, &quot;Estimate&quot;]
+b &lt;- fit2b_table[&quot;Capture_Period13&quot;, &quot;Estimate&quot;]
+mu &lt;- c(mu1, mu1+b)
+sigma &lt;- matrix(c(var[1]+var[2], var[1],var[1], var[1]+var[2]), nrow=2)
+
+inc &lt;- c(&quot;1_control&quot;,&quot;3_8Fclip&quot;)
+N_table &lt;- bird_wide[Treatment %in% inc, .(N=.N), by=c(&#39;Treatment&#39;)]
+N_table_long &lt;- bird[Treatment %in% inc, .(N=.N), by=c(&#39;Treatment&#39;, &#39;Capture_Period&#39;)]
+
+n &lt;- sum(N_table[, N])
+
+niter &lt;- 1000
+methods &lt;- c(&#39;lmm&#39;, &#39;lm&#39;, &#39;cLDA&#39;, &#39;lm-NA&#39;, &#39;cLDA-NA&#39;)
+methods &lt;- c(&#39;lmm&#39;, &#39;lm&#39;, &#39;cLDA&#39;)
+fake_labels &lt;- c(&#39;baseline_d&#39;, methods)
+fake_b &lt;- matrix(NA, nrow=niter, ncol=length(fake_labels))
+colnames(fake_b) &lt;- fake_labels
+
+for(iter in 1:niter){
+  # data with no effect other than capture period.
+  Y &lt;- rmvnorm(n, mean=mu, sigma=sigma)
+  
+  # start with n1=n2
+  dt_wide &lt;- data.table(ID=paste(&quot;bird&quot;,1:n,sep=&#39;&#39;),
+                        Treatment=factor(rep(c(&#39;control&#39;, &#39;clip&#39;), times=c(n/2, n/2))),
+                        pre=Y[,1],
+                        post=Y[,2])
+  dt_wide[, Treatment:=factor(Treatment, c(&#39;control&#39;, &#39;clip&#39;))]
+  dt_wide[, dMass:=post-pre]
+  
+  dt &lt;- melt(dt_wide, id.vars=c(&#39;ID&#39;,&#39;Treatment&#39;), 
+             measure.vars=c(&#39;pre&#39;, &#39;post&#39;), 
+             variable.name=&quot;Capture_Period&quot;,
+             value.name = &quot;Mass&quot;
+  )
+  dt[, Capture_Period:=factor(Capture_Period, c(&#39;pre&#39;, &#39;post&#39;))]
+  fake_b[iter, &#39;baseline_d&#39;] &lt;- mean(dt_wide[Treatment==&#39;clip&#39;, pre], na.rm=TRUE) - 
+                mean(dt_wide[Treatment==&#39;control&#39;, pre], na.rm=TRUE)
+  
+  fit.lmm &lt;- lmer(Mass ~ Treatment*Capture_Period + (1|ID), dt)
+  fake_b[iter, &#39;lmm&#39;] &lt;- coefficients(summary(fit.lmm))[&#39;Treatmentclip:Capture_Periodpost&#39;, &#39;Estimate&#39;]
+  
+  fit.lm &lt;- lm(dMass ~ pre + Treatment, data=dt_wide)
+  fake_b[iter, &#39;lm&#39;] &lt;- coefficients(summary(fit.lm))[&#39;Treatmentclip&#39;, &#39;Estimate&#39;]
+  
+  # model 2 of liang and zeger - unconstrained and constrained longitudinal data analysis
+  dt[, Time:=as.integer(Capture_Period) - 1] # Time has to be dummy coded for mod2 but not sure why
+  fit.mod2 &lt;- lme(Mass ~ Time + Time:Treatment, random = ~ Time-1|ID,
+                  weights = varIdent(form = ~ 1 | Time), 
+                  correlation=corSymm (form = ~ 1 | ID), 
+                  data = dt)
+  fake_b[iter, &#39;cLDA&#39;] &lt;- coefficients(summary(fit.mod2))[&#39;Time:Treatmentclip&#39;, &#39;Value&#39;]
+
+  # model 2 using gls
+  # from https://datascienceplus.com/taking-the-baseline-measurement-into-account-constrained-lda-in-r/
+  # X &lt;- model.matrix(~ Treatment*Capture_Period, data=dt)
+  # Xalt &lt;- X[,c(&#39;Capture_Periodpost&#39;, &quot;Treatmentclip:Capture_Periodpost&quot;)]
+  # clda_gls &lt;- gls(Mass ~ Xalt, 
+  #                 weights = varIdent(form = ~ 1 | Capture_Period), 
+  #                 correlation=corSymm (form = ~ 1 | ID), 
+  #                 data = dt)
+  
+  # coefficients(summary(fit.lmm))
+  # coefficients(summary(fit.mod2))
+  # coefficients(summary(fit.lm))
+}
+fake_b &lt;- data.table(fake_b)
+apply(fake_b, 2, quantile, c(0.025, 0.5, 0.975))</code></pre>
+<pre><code>##         baseline_d          lmm          lm        cLDA
+## 2.5%  -0.845052274 -0.661568280 -0.65315261 -0.65315252
+## 50%    0.007897947 -0.003029864 -0.01917818 -0.01917819
+## 97.5%  0.723842599  0.612876012  0.61090950  0.61090947</code></pre>
+<p>A plot of the estimated effect and difference in baseline (pre-treatment) <span class="math inline">\(Mass\)</span> shows that the lmm used by the authors does not correct for regression to the mean. That is, <span class="math inline">\(E[Mass | X_{treatment} - X_{control}]\)</span> is not zero but is a function of the baseline differnce <span class="math inline">\(X_{treatment} - X_{control}\)</span>.</p>
+<pre class="r"><code>fake_b_long &lt;- melt(fake_b, id.vars = &#39;baseline_d&#39;, measure.vars = methods, variable.name=&#39;model&#39;, value.name=&#39;estimate&#39;)
+qplot(x=baseline_d, y=estimate, color=model, data=fake_b_long) + geom_smooth(method=&#39;lm&#39;)</code></pre>
+<div class="figure"><span id="fig:fakedataplot"></span>
+<img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/fakedataplot-1.png" alt="Estimated treatment effect as a function of the difference in treatment at baseline (between pre-treatment measures of mass). Simulated data using parameters from the bird data." width="672" />
+<p class="caption">
+Figure 3: Estimated treatment effect as a function of the difference in treatment at baseline (between pre-treatment measures of mass). Simulated data using parameters from the bird data.
+</p>
+</div>
+</div>
+<div id="adjustment-for-baseline-comparing-cort_b" class="section level2">
+<h2>Adjustment for baseline comparing <span class="math inline">\(Cort_b\)</span></h2>
+<pre class="r"><code># original lmm
+coefs2a &lt;- coefficients(summary(fit2a))
+kable(coefs2a, digits=3)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -175,98 +1098,198 @@ kable(b_table, digits=3)</code></pre>
 <tbody>
 <tr class="odd">
 <td>(Intercept)</td>
-<td align="right">14.922</td>
-<td align="right">0.254</td>
-<td align="right">36.319</td>
-<td align="right">58.718</td>
-<td align="right">0.000</td>
+<td align="right">0.324</td>
+<td align="right">10.090</td>
+<td align="right">25</td>
+<td align="right">0.032</td>
+<td align="right">0.975</td>
 </tr>
 <tr class="even">
 <td>Treatment2_4Fclip</td>
-<td align="right">0.665</td>
-<td align="right">0.350</td>
-<td align="right">34.416</td>
-<td align="right">1.899</td>
-<td align="right">0.066</td>
+<td align="right">0.013</td>
+<td align="right">0.749</td>
+<td align="right">25</td>
+<td align="right">0.018</td>
+<td align="right">0.986</td>
 </tr>
 <tr class="odd">
 <td>Treatment3_8Fclip</td>
-<td align="right">1.118</td>
-<td align="right">0.534</td>
-<td align="right">31.632</td>
-<td align="right">2.092</td>
-<td align="right">0.045</td>
+<td align="right">-0.709</td>
+<td align="right">1.191</td>
+<td align="right">25</td>
+<td align="right">-0.595</td>
+<td align="right">0.557</td>
 </tr>
 <tr class="even">
 <td>Capture_Period13</td>
-<td align="right">-0.950</td>
-<td align="right">0.242</td>
-<td align="right">16.311</td>
-<td align="right">-3.930</td>
-<td align="right">0.001</td>
+<td align="right">1.974</td>
+<td align="right">0.782</td>
+<td align="right">25</td>
+<td align="right">2.524</td>
+<td align="right">0.018</td>
+</tr>
+<tr class="odd">
+<td>DOY_Initiation</td>
+<td align="right">0.057</td>
+<td align="right">0.068</td>
+<td align="right">25</td>
+<td align="right">0.839</td>
+<td align="right">0.410</td>
+</tr>
+<tr class="even">
+<td>day3mass</td>
+<td align="right">-0.427</td>
+<td align="right">0.339</td>
+<td align="right">25</td>
+<td align="right">-1.261</td>
+<td align="right">0.219</td>
 </tr>
 <tr class="odd">
 <td>Treatment2_4Fclip:Capture_Period13</td>
-<td align="right">-0.127</td>
-<td align="right">0.345</td>
-<td align="right">15.903</td>
-<td align="right">-0.367</td>
-<td align="right">0.718</td>
+<td align="right">2.880</td>
+<td align="right">1.069</td>
+<td align="right">25</td>
+<td align="right">2.694</td>
+<td align="right">0.012</td>
 </tr>
 <tr class="even">
 <td>Treatment3_8Fclip:Capture_Period13</td>
-<td align="right">-1.170</td>
-<td align="right">0.528</td>
-<td align="right">14.821</td>
-<td align="right">-2.215</td>
-<td align="right">0.043</td>
+<td align="right">10.130</td>
+<td align="right">1.501</td>
+<td align="right">25</td>
+<td align="right">6.748</td>
+<td align="right">0.000</td>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code># how many X greater was the reduction (this is a confusing way to report)
-b[&#39;Treatment2_4Fclip:Capture_Period13&#39;]/b[&#39;Capture_Period13&#39;]</code></pre>
-<pre><code>## Treatment2_4Fclip:Capture_Period13 
-##                           0.133301</code></pre>
-<pre class="r"><code>b[&#39;Treatment3_8Fclip:Capture_Period13&#39;]/b[&#39;Capture_Period13&#39;]</code></pre>
-<pre><code>## Treatment3_8Fclip:Capture_Period13 
-##                           1.231322</code></pre>
-<p>Or, 1.13X and 2.23X more reduction</p>
-</div>
-</div>
-<div id="red-flags" class="section level1">
-<h1>Red Flags</h1>
-<div id="adjustment-for-baseline-when-comparing-change-in-mass" class="section level2">
-<h2>Adjustment for baseline when comparing change in mass</h2>
-<p>Note the inconsistency between the report of 2.29X greater reduction in mass with CI that does not cover 1.0 and the ANOVA table interaction row (both are different ways of looking at the same thing). Fig 2b shows effectively zero effect of treatment for post-treatment measure. The expectation is zero if there is no effect, and the data are very consistent with this. But there is a big difference in pre-treatment mass among levels (again, the expectation is zero with randomized treatment assignment). So this might be a good example of pre-post bias in the estimates of 1.29X and 2.29X greater reduction in mass. <a href="https://www.middleprofessor.com/files/quasipubs/change_scores.html">The expectation for these estimates is not 1.0 conditional on pre-treatment mass</a>.</p>
-<p>Why might? Because the interaction effects of the LMM should adjust for baseline. This should be explored. I compare the results with an ANCOVA using baseline mass as a covariate.</p>
-<p>Why might pre-treatment control mass be unusually low or pre-treatment 8-clip mass be unusually high? This could simply be a function of when the birds were weighed, since bird mass oscillates during the day.</p>
-<pre class="r"><code># change in mass
-gg &lt;- ggplot(data=bird_wide, aes(x=day3mass, y=dMass, color=Treatment)) +
-  geom_point()
+<pre class="r"><code># cLDA
+fit.mod2 &lt;- lme(CORT_B ~ day3mass + DOY_Initiation + Time + Time:Treatment,
+                random = ~ Time-1|BandNo,
+                weights = varIdent(form = ~ 1 | Time), 
+                correlation=corSymm (form = ~ 1 | BandNo), 
+                data = bird,
+                na.action=na.omit)
+coefs2a.cLDA &lt;- coefficients(summary(fit.mod2))
+kable(coefs2a.cLDA, digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Value</th>
+<th align="right">Std.Error</th>
+<th align="right">DF</th>
+<th align="right">t-value</th>
+<th align="right">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td align="right">-11.157</td>
+<td align="right">3.762</td>
+<td align="right">18</td>
+<td align="right">-2.966</td>
+<td align="right">0.008</td>
+</tr>
+<tr class="even">
+<td>day3mass</td>
+<td align="right">-0.205</td>
+<td align="right">0.160</td>
+<td align="right">18</td>
+<td align="right">-1.278</td>
+<td align="right">0.218</td>
+</tr>
+<tr class="odd">
+<td>DOY_Initiation</td>
+<td align="right">0.108</td>
+<td align="right">0.027</td>
+<td align="right">18</td>
+<td align="right">3.991</td>
+<td align="right">0.001</td>
+</tr>
+<tr class="even">
+<td>Time</td>
+<td align="right">2.294</td>
+<td align="right">0.857</td>
+<td align="right">9</td>
+<td align="right">2.677</td>
+<td align="right">0.025</td>
+</tr>
+<tr class="odd">
+<td>Time:Treatment2_4Fclip</td>
+<td align="right">2.870</td>
+<td align="right">0.768</td>
+<td align="right">9</td>
+<td align="right">3.736</td>
+<td align="right">0.005</td>
+</tr>
+<tr class="even">
+<td>Time:Treatment3_8Fclip</td>
+<td align="right">6.713</td>
+<td align="right">1.125</td>
+<td align="right">9</td>
+<td align="right">5.965</td>
+<td align="right">0.000</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># ANCOVA lm
+bird_wide &lt;- dcast(bird,  Year + Treatment + BandNo ~ Capture_Period, value.var=c(&#39;CORT_B&#39;, &#39;Time&#39;))
+bird_wide[, dCort:=CORT_B_13 - CORT_B_3]
+
+# change in Cort
+fit2a.lm &lt;- lm(dCort ~ CORT_B_3 + Treatment, data=bird_wide)
+coefs2a.lm &lt;- coefficients(summary(fit2a.lm))
+kable(coefs2a.lm, digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td align="right">6.809</td>
+<td align="right">2.165</td>
+<td align="right">3.145</td>
+<td align="right">0.014</td>
+</tr>
+<tr class="even">
+<td>CORT_B_3</td>
+<td align="right">-1.690</td>
+<td align="right">0.809</td>
+<td align="right">-2.089</td>
+<td align="right">0.070</td>
+</tr>
+<tr class="odd">
+<td>Treatment2_4Fclip</td>
+<td align="right">3.172</td>
+<td align="right">1.032</td>
+<td align="right">3.073</td>
+<td align="right">0.015</td>
+</tr>
+<tr class="even">
+<td>Treatment3_8Fclip</td>
+<td align="right">6.545</td>
+<td align="right">1.542</td>
+<td align="right">4.246</td>
+<td align="right">0.003</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>gg &lt;- ggplot(data=bird_wide, aes(x=CORT_B_3, y=dCort, color=Treatment)) +
+  geom_point() +
+  theme_minimal()
 gg</code></pre>
-<pre><code>## Warning: Removed 12 rows containing missing values (geom_point).</code></pre>
-<div class="figure"><span id="fig:fig2bAncova"></span>
-<img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/fig2bAncova-1.png" alt="ANCOVA style plot. blah blah blah" width="672" />
-<p class="caption">
-Figure 2: ANCOVA style plot. blah blah blah
-</p>
-</div>
-<pre class="r"><code>fit2 &lt;- lm(dMass ~ Mass_3 + Treatment, data=bird_wide)
-coefficients(summary(fit2))</code></pre>
-<pre><code>##                     Estimate Std. Error    t value   Pr(&gt;|t|)
-## (Intercept)        4.8126755  2.9454578  1.6339312 0.12821673
-## Mass_3            -0.3912755  0.1972236 -1.9839176 0.07061761
-## Treatment2_4Fclip  0.2631583  0.3330682  0.7901034 0.44480076
-## Treatment3_8Fclip -0.6370666  0.5896500 -1.0804148 0.30119354</code></pre>
-<p>These results are inconsistent with the LMM where the decrease in mass is actually less for the 4-clip treatment.</p>
-<pre class="r"><code># sample size
-ycols &lt;- c(&#39;Treatment&#39;, &#39;day3mass&#39;, &#39;dMass&#39;)
-bird_wide[!is.na(dMass), .(N=.N), by=Treatment]</code></pre>
-<pre><code>##    Treatment N
-## 1:  2_4Fclip 7
-## 2:  3_8Fclip 2
-## 3: 1_control 7</code></pre>
-<p>Look at their fig 2b which reports sample sizes for pre and post measures. The n drops in all post measures. The ANCOVA only analyzes birds with both pre and post measures so is using less data.</p>
+<pre><code>## Warning: Removed 16 rows containing missing values (geom_point).</code></pre>
+<p><img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/fig2aCorrected-1.png" width="672" /></p>
+<p>Comparison of estimates 1. for 4-clip treatment lmm: b=2.88, ANCOVA: b=3.172, cLDA: b=2.87 2. for 8-clip treatment lmm: 10.13, ANCOVA:6.55, cLDA: b=6.713</p>
+<p>Again, the ANCOVA lm and cLDA estimates differ because the cLDA is using more of the data. For the ANCOVA, there are only n=2 birds with both pre- and posttreatment measures of <span class="math inline">\(Cort_b\)</span> in the clip8 treatment effect and these two happen to have had the smallest initial cortisol at baseline, which is not comforting for having confidence in the results.</p>
 </div>
 </div>
 

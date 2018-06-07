@@ -294,13 +294,18 @@ Look at their fig 2b which reports sample sizes for pre and post measures. The $
 
 This is interesting, as we have a trade-off here between power (the lmm uses more data) and bias (the lmm estimates are conditionally biased).
 
-A solution is a linear-mixed model that forces the intercept of both treatment levels to be the same. This is the constrained Longitudinal Data Analysis (cLDA) method of Liang and Zeger (see also Liu.). For data with no missing values, estimates from cLDA and from ANCOVA lm are equal.
+A solution is a linear-mixed model that adjusts for pre-treatment values by forcing the intercept of both treatment levels (the pre-treatment value) to be the same. This is the constrained Longitudinal Data Analysis (cLDA) method of Liang and Zeger (see also Liu.). For data with no missing values, estimates from cLDA and from ANCOVA lm are equal.
 
 ```{r fig2bcLDA}
 # need to make Capture_Period a numeric dummy variable to get the right interaction effect -- when coded as a factor, lme/lmer creates an interaction column for both levels of Capture_Period if Treatment is missing from the model (but in the interaction)
 bird[, Time:=as.integer(Capture_Period)-1]
-fit.mod2 <- lme(Mass ~ DOY_Initiation + Time + Time:Treatment, random = ~ Time-1|BandNo, weights = varIdent(form = ~ 1 | Time), cor=corSymm(), bird, na.action=na.omit)
+fit.mod2 <- lme(Mass ~ DOY_Initiation + Time + Time:Treatment, random = ~ Time-1|BandNo,
+                weights = varIdent(form = ~ 1 | Time), 
+                correlation=corSymm (form = ~ 1 | BandNo), 
+                data = bird,
+                na.action=na.omit)
 kable(coefficients(summary(fit.mod2)), digits = 3)
+
 ```
 
 This analysis uses all of the available data (like the lmm) and adjusts for pre-treatment value (by forcing these to be the same). The results are quite similar to the ANCOVA lm results but the SEs are smaller, because of increased sample size. Again, there is a positive effect on the 4-clip treatment but a negative effect on the 8-clip treatment. The effect on the 8-clip treatment is about 1/2 the magnitude as that estimated using the lmm. This estimate is -0.52 g over the treatment period, but the SE for this estimate is too large to infer much.
@@ -322,11 +327,13 @@ sigma <- matrix(c(var[1]+var[2], var[1],var[1], var[1]+var[2]), nrow=2)
 
 inc <- c("1_control","3_8Fclip")
 N_table <- bird_wide[Treatment %in% inc, .(N=.N), by=c('Treatment')]
+N_table_long <- bird[Treatment %in% inc, .(N=.N), by=c('Treatment', 'Capture_Period')]
 
 n <- sum(N_table[, N])
 
-niter <- 10
+niter <- 1000
 methods <- c('lmm', 'lm', 'cLDA', 'lm-NA', 'cLDA-NA')
+methods <- c('lmm', 'lm', 'cLDA')
 fake_labels <- c('baseline_d', methods)
 fake_b <- matrix(NA, nrow=niter, ncol=length(fake_labels))
 colnames(fake_b) <- fake_labels
@@ -382,29 +389,40 @@ for(iter in 1:niter){
 fake_b <- data.table(fake_b)
 apply(fake_b, 2, quantile, c(0.025, 0.5, 0.975))
 
-fake_b_long <- melt(fake_b, id.vars = 'baseline_d', measure.vars = methods, variable.name='model', value.name='estimate')
-qplot(x=baseline_d, y=estimate, color=model, data=fake_b_long) + geom_smooth(method='lm')
 ```
 
+A plot of the estimated effect and difference in baseline (pre-treatment) $Mass$ shows that the lmm used by the authors does not correct for regression to the mean. That is, $E[Mass | X_{treatment} - X_{control}]$ is not zero but is a function of the baseline differnce $X_{treatment} - X_{control}$.
 
+```{r fakedataplot, fig.cap="Estimated treatment effect as a function of the difference in treatment at baseline (between pre-treatment measures of mass). Simulated data using parameters from the bird data."}
+fake_b_long <- melt(fake_b, id.vars = 'baseline_d', measure.vars = methods, variable.name='model', value.name='estimate')
+qplot(x=baseline_d, y=estimate, color=model, data=fake_b_long) + geom_smooth(method='lm')
 
-## Adjustment for baseline comparing cort
+```
+
+## Adjustment for baseline comparing $Cort_b$
 ```{r fig2aCorrected}
 # original lmm
 coefs2a <- coefficients(summary(fit2a))
 kable(coefs2a, digits=3)
 
-fit.clda <- lme(CORT_B ~ day3mass + DOY_Initiation + Time + Time:Treatment, random = ~ Time-1|BandNo, weights = varIdent(form = ~ 1 | Time), cor=corSymm(), bird, na.action=na.omit)
-coefficients(summary(fit.clda))
+# cLDA
+fit.mod2 <- lme(CORT_B ~ day3mass + DOY_Initiation + Time + Time:Treatment,
+                random = ~ Time-1|BandNo,
+                weights = varIdent(form = ~ 1 | Time), 
+                correlation=corSymm (form = ~ 1 | BandNo), 
+                data = bird,
+                na.action=na.omit)
+coefs2a.cLDA <- coefficients(summary(fit.mod2))
+kable(coefs2a.cLDA, digits=3)
 
-
+# ANCOVA lm
 bird_wide <- dcast(bird,  Year + Treatment + BandNo ~ Capture_Period, value.var=c('CORT_B', 'Time'))
 bird_wide[, dCort:=CORT_B_13 - CORT_B_3]
 
 # change in Cort
-fit2a.c <- lm(dCort ~ CORT_B_3 + Treatment, data=bird_wide)
-coefs2a.c <- coefficients(summary(fit2a.c))
-kable(coefs2a.c, digits=3)
+fit2a.lm <- lm(dCort ~ CORT_B_3 + Treatment, data=bird_wide)
+coefs2a.lm <- coefficients(summary(fit2a.lm))
+kable(coefs2a.lm, digits=3)
 
 gg <- ggplot(data=bird_wide, aes(x=CORT_B_3, y=dCort, color=Treatment)) +
   geom_point() +
@@ -413,4 +431,8 @@ gg
 
 ```
 
-Again, there are only n=2 for the estimate of the clip8 treatment effect and these two happen to have had the smallest initial cortisol at baseline.
+Comparison of estimates
+1. for 4-clip treatment lmm: b=2.88, ANCOVA: b=3.172, cLDA: b=2.87
+2. for 8-clip treatment lmm: 10.13, ANCOVA:6.55, cLDA: b=6.713
+
+Again, the ANCOVA lm and cLDA estimates differ because the cLDA is using more of the data. For the ANCOVA, there are only n=2 birds with both pre- and posttreatment measures of $Cort_b$ in the clip8 treatment effect and these two happen to have had the smallest initial cortisol at baseline, which is not comforting for having confidence in the results.

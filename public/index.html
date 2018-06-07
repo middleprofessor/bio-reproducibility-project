@@ -95,10 +95,9 @@
           </li>
         </ul>
         <div class="article-content">
-          Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719 [Google Scholar]
+          Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs. Functional Ecology 31(1): 235-244. https://doi.org/10.1111/1365-2435.12719 [Google Scholar]c]
 Data source: https://datadryad.org/resource/doi:10.5061/dryad.3bc3s
- Background xxx
- Data fn &lt;- &#39;RiversetalVGSWhandicappingRawData.xls&#39; file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;) bird &lt;- data.table(read_excel(file_path, sheet = &#39;Tab3 &quot;a8&quot;&#39;)) bird[, Treatment:=factor(Treatment)] bird[, Capture_Period:=factor(Nestling_Age)] bird_wide &lt;- dcast(bird, Year + Treatment + BandNo + DOY_Initiation + day3mass ~ Capture_Period, value.
+ Background usage note The authors refer to the measure of cortisol as “baseline cortisol.” Sice the design here is pre-post, this could be confused with the more general and wide usage of “baseline” to mean pre-treatment measure.
         </div>
         <div class="article-readmore"><a href="/post/data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs/">Read more...</a></div>
         <div class="article-floatclear"></div>
