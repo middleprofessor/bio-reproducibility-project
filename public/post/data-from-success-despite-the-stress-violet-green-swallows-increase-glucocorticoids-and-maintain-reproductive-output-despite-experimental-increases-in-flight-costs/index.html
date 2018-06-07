@@ -992,7 +992,8 @@ kable(coefficients(summary(fit.mod2)), digits = 3)</code></pre>
 <div id="simulation-to-explore-behavior-in-lmm-vs.ancova-lm-vs.clda" class="section level2">
 <h2>Simulation to explore behavior in lmm vs. ANCOVA-lm vs. cLDA</h2>
 <p>This simulation generates fake data to show how lmm but not ANCOVA-lm/cLDA has conditionally biased estimates. I model data using parameters of the actual bird data.</p>
-<pre class="r"><code>re_run &lt;- TRUE
+<pre class="r"><code>re_run &lt;- FALSE
+models &lt;- c(&#39;lmm&#39;, &#39;lm&#39;, &#39;cLDA&#39;) # include &#39;cLDA&#39; to compare cLDA to lm
 if(re_run==TRUE){
   set.seed(1)
   varcor &lt;- VarCorr(fit2b)
@@ -1012,10 +1013,11 @@ if(re_run==TRUE){
   n &lt;- sum(N_table[, N])
   
   niter &lt;- 2000
-  methods &lt;- c(&#39;lmm&#39;, &#39;lm&#39;) # include &#39;cLDA&#39; to compare cLDA to lm
-  fake_labels &lt;- c(&#39;baseline_d&#39;, methods)
+  fake_labels &lt;- c(&#39;baseline_d&#39;, models)
   fake_b &lt;- matrix(NA, nrow=niter, ncol=length(fake_labels))
+  fake_se &lt;- matrix(NA, nrow=niter, ncol=length(fake_labels))
   colnames(fake_b) &lt;- fake_labels
+  colnames(fake_se) &lt;- fake_labels
   
   for(iter in 1:niter){
     # data with no effect other than capture period.
@@ -1037,14 +1039,18 @@ if(re_run==TRUE){
     dt[, Capture_Period:=factor(Capture_Period, c(&#39;pre&#39;, &#39;post&#39;))]
     fake_b[iter, &#39;baseline_d&#39;] &lt;- mean(dt_wide[Treatment==&#39;clip&#39;, pre], na.rm=TRUE) - 
       mean(dt_wide[Treatment==&#39;control&#39;, pre], na.rm=TRUE)
+    fake_se[iter, &#39;baseline_d&#39;] &lt;- mean(dt_wide[Treatment==&#39;clip&#39;, pre], na.rm=TRUE) - 
+      mean(dt_wide[Treatment==&#39;control&#39;, pre], na.rm=TRUE)
     
     fit.lmm &lt;- lmer(Mass ~ Treatment*Capture_Period + (1|ID), dt)
     fake_b[iter, &#39;lmm&#39;] &lt;- coefficients(summary(fit.lmm))[&#39;Treatmentclip:Capture_Periodpost&#39;, &#39;Estimate&#39;]
+    fake_se[iter, &#39;lmm&#39;] &lt;- coefficients(summary(fit.lmm))[&#39;Treatmentclip:Capture_Periodpost&#39;, &#39;Std. Error&#39;]
     
     fit.lm &lt;- lm(dMass ~ pre + Treatment, data=dt_wide)
     fake_b[iter, &#39;lm&#39;] &lt;- coefficients(summary(fit.lm))[&#39;Treatmentclip&#39;, &#39;Estimate&#39;]
+    fake_se[iter, &#39;lm&#39;] &lt;- coefficients(summary(fit.lm))[&#39;Treatmentclip&#39;, &#39;Std. Error&#39;]
     
-    if(&#39;cLDA&#39; %in% methods){
+    if(&#39;cLDA&#39; %in% models){
       # model 2 of liang and zeger - unconstrained and constrained longitudinal data analysis
       # adapted from gls code below
       dt[, Time:=as.integer(Capture_Period) - 1] # Time has to be dummy coded for mod2 but not sure why
@@ -1053,6 +1059,7 @@ if(re_run==TRUE){
                       correlation=corSymm (form = ~ 1 | ID), 
                       data = dt)
       fake_b[iter, &#39;cLDA&#39;] &lt;- coefficients(summary(fit.mod2))[&#39;Time:Treatmentclip&#39;, &#39;Value&#39;]
+      fake_se[iter, &#39;cLDA&#39;] &lt;- coefficients(summary(fit.mod2))[&#39;Time:Treatmentclip&#39;, &#39;Std.Error&#39;]
       
       # model 2 using gls
       # from https://datascienceplus.com/taking-the-baseline-measurement-into-account-constrained-lda-in-r/
@@ -1069,30 +1076,125 @@ if(re_run==TRUE){
       
     }
   }
-fake_b &lt;- data.table(fake_b)
 fn &lt;- &#39;fake_b.RData&#39;
 file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
 save(fake_b, file = file_path)
+
+fn &lt;- &#39;fake_se.RData&#39;
+file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
+save(fake_se, file = file_path)
 
 }else{
   fn &lt;- &#39;fake_b.RData&#39;
   file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
   load(file_path) # file name is fake_b
+  fn &lt;- &#39;fake_se.RData&#39;
+  file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
+  load(file_path) # file name is fake_b
   
 }
 
-apply(fake_b, 2, quantile, c(0.025, 0.5, 0.975))</code></pre>
-<pre><code>##          baseline_d          lmm          lm
-## 2.5%  -0.8373045367 -0.649735601 -0.64228739
-## 50%   -0.0006116204  0.009345333  0.01171883
-## 97.5%  0.7844047430  0.710732490  0.66579532</code></pre>
-<p>A plot of the estimated effect and difference in baseline (pre-treatment) <span class="math inline">\(Mass\)</span> shows that the lmm used by the authors does not correct for regression to the mean. That is, <span class="math inline">\(E[Mass | X_{treatment} - X_{control}]\)</span> is not zero but is a function of the baseline differnce <span class="math inline">\(X_{treatment} - X_{control}\)</span>.</p>
-<pre class="r"><code>fake_b_long &lt;- melt(fake_b, id.vars = &#39;baseline_d&#39;, measure.vars = methods, variable.name=&#39;model&#39;, value.name=&#39;estimate&#39;)
-qplot(x=baseline_d, y=estimate, color=model, data=fake_b_long) + geom_smooth(method=&#39;lm&#39;)</code></pre>
+fake_b &lt;- data.table(fake_b)
+fake_se &lt;- data.table(fake_se)
+
+kable(apply(fake_b, 2, quantile, c(0.025, 0.5, 0.975)), caption=&quot;Distribution of estimates for lmm, ANCOVA lm, and cLDA models. Also given is the distribution of the difference at baseline.&quot;)</code></pre>
+<table>
+<caption><span id="tab:lmmfakedata">Table 1: </span>Distribution of estimates for lmm, ANCOVA lm, and cLDA models. Also given is the distribution of the difference at baseline.</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">baseline_d</th>
+<th align="right">lmm</th>
+<th align="right">lm</th>
+<th align="right">cLDA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2.5%</td>
+<td align="right">-0.8373045</td>
+<td align="right">-0.6497356</td>
+<td align="right">-0.6422874</td>
+<td align="right">-0.6422874</td>
+</tr>
+<tr class="even">
+<td>50%</td>
+<td align="right">-0.0006116</td>
+<td align="right">0.0093453</td>
+<td align="right">0.0117188</td>
+<td align="right">0.0117188</td>
+</tr>
+<tr class="odd">
+<td>97.5%</td>
+<td align="right">0.7844047</td>
+<td align="right">0.7107325</td>
+<td align="right">0.6657953</td>
+<td align="right">0.6657954</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>kable(apply(fake_se, 2, quantile, c(0.025, 0.5, 0.975)), caption=&quot;Distribution of the standard error of the estimate for lmm, ANCOVA lm, and cLDA models. Also given is the distribution of the difference at baseline.&quot;)</code></pre>
+<table>
+<caption><span id="tab:lmmfakedata">Table 1: </span>Distribution of the standard error of the estimate for lmm, ANCOVA lm, and cLDA models. Also given is the distribution of the difference at baseline.</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">baseline_d</th>
+<th align="right">lmm</th>
+<th align="right">lm</th>
+<th align="right">cLDA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2.5%</td>
+<td align="right">-0.8373045</td>
+<td align="right">0.2220451</td>
+<td align="right">0.1967922</td>
+<td align="right">0.1872311</td>
+</tr>
+<tr class="even">
+<td>50%</td>
+<td align="right">-0.0006116</td>
+<td align="right">0.3355896</td>
+<td align="right">0.3166069</td>
+<td align="right">0.2944304</td>
+</tr>
+<tr class="odd">
+<td>97.5%</td>
+<td align="right">0.7844047</td>
+<td align="right">0.4646727</td>
+<td align="right">0.4452824</td>
+<td align="right">0.4081951</td>
+</tr>
+</tbody>
+</table>
+<p>A plot of the estimated effect (where the true effect is zero) and difference in baseline (pre-treatment) <span class="math inline">\(Mass\)</span> shows that the lmm used by the authors does not correct for regression to the mean. That is, <span class="math inline">\(E[Mass | X_{treatment} - X_{control}]\)</span> is not zero but is a function of the baseline difference <span class="math inline">\(X_{treatment} - X_{control}\)</span>. A plot of the standard error of the estimate shows that the cLDA model has the most power, even for data with no missing values (assuming coverage is approximately correct).</p>
+<pre class="r"><code>fake_b_long &lt;- melt(fake_b, id.vars = &#39;baseline_d&#39;, measure.vars = models, variable.name=&#39;model&#39;, value.name=&#39;estimate&#39;)
+gg &lt;- ggplot(data=fake_b_long, aes(x=baseline_d, y=estimate, color=model)) +
+  geom_point() +
+  geom_smooth(method=&#39;lm&#39;) +
+  xlab(&quot;Difference at pre-treatment&quot;) +
+  ylab(&quot;Estimate&quot;) +
+  theme_minimal()
+gg</code></pre>
 <div class="figure"><span id="fig:fakedataplot"></span>
 <img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/fakedataplot-1.png" alt="Estimated treatment effect as a function of the difference in treatment at baseline (between pre-treatment measures of mass). Simulated data using parameters from the bird data." width="672" />
 <p class="caption">
 Figure 3: Estimated treatment effect as a function of the difference in treatment at baseline (between pre-treatment measures of mass). Simulated data using parameters from the bird data.
+</p>
+</div>
+<pre class="r"><code>fake_se_long &lt;- melt(fake_se, id.vars = &#39;baseline_d&#39;, measure.vars = models, variable.name=&#39;model&#39;, value.name=&#39;SE&#39;)
+gg &lt;- ggplot(data=fake_se_long, aes(x=baseline_d, y=SE, color=model)) +
+  geom_point() +
+  geom_smooth(method=&#39;lm&#39;) +
+  xlab(&quot;Difference at pre-treatment&quot;) +
+  theme_minimal()
+gg</code></pre>
+<div class="figure"><span id="fig:fakedataSE"></span>
+<img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/fakedataSE-1.png" alt="SE as a function of difference in treatment at baseline." width="672" />
+<p class="caption">
+Figure 4: SE as a function of difference in treatment at baseline.
 </p>
 </div>
 </div>
@@ -1305,7 +1407,7 @@ kable(coefs2a.lm, digits=3)</code></pre>
 gg</code></pre>
 <pre><code>## Warning: Removed 16 rows containing missing values (geom_point).</code></pre>
 <p><img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/fig2aCorrected-1.png" width="672" /></p>
-<p>Comparison of estimates 1. for 4-clip treatment lmm: b=2.88, ANCOVA: b=3.172, cLDA: b=2.87 2. for 8-clip treatment lmm: 10.13, ANCOVA:6.55, cLDA: b=6.713</p>
+<p>Comparison of estimates 1. for 4-clip treatment lmm: b=2.88, ANCOVA: b=3.172, cLDA: b=2.87 2. for 8-clip treatment lmm: 10.13, ANCOVA:6.55, cLDA: b=6.55</p>
 <p>Again, the ANCOVA lm and cLDA estimates differ because the cLDA is using more of the data. For the ANCOVA, there are only n=2 birds with both pre- and posttreatment measures of <span class="math inline">\(Cort_b\)</span> in the clip8 treatment effect and these two happen to have had the smallest initial cortisol at baseline, which is not comforting for having confidence in the results.</p>
 </div>
 </div>
