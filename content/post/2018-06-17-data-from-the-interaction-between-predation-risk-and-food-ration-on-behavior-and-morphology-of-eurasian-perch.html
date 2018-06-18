@@ -1,0 +1,190 @@
+---
+title: Data from The interaction between predation risk and food ration on behavior
+  and morphology of Eurasian perch
+author: Jeff Walker
+date: '2018-06-17'
+slug: data-from-the-interaction-between-predation-risk-and-food-ration-on-behavior-and-morphology-of-eurasian-perch
+categories: []
+tags:
+  - anova
+  - ecology
+  - experiment
+  - factorial
+  - nested
+subtitle: ''
+output:
+  blogdown::html_page:
+    toc: true
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#sources">Sources</a></li>
+<li><a href="#background">Background</a></li>
+<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#reproducibility-key">Reproducibility key</a></li>
+<li><a href="#figure-1table-1-condition-and-length">Figure 1/Table 1 (Condition and Length)</a><ul>
+<li><a href="#condition-index">Condition index</a></li>
+<li><a href="#table-1">Table 1</a></li>
+<li><a href="#tukey-contrasts">Tukey Contrasts</a></li>
+</ul></li>
+<li><a href="#figure-2table-2-behavior">Figure 2/Table 2 (Behavior)</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="sources" class="section level1">
+<h1>Sources</h1>
+<p>Svanbäck R, Zha Y, Brönmark C, Johansson F (2017) The interaction between predation risk and food ration on behavior and morphology of Eurasian perch. Ecology and Evolution 7(20): 8567-8577. <a href="https://doi.org/10.1002/ece3.3330" class="uri">https://doi.org/10.1002/ece3.3330</a></p>
+<p>Svanback R, Zha Y, Brönmark C, Johansson F (2017) Data from: The interaction between predation risk and food ration on behavior and morphology of Eurasian perch. Dryad Digital Repository. <a href="https://doi.org/10.5061/dryad.975m1" class="uri">https://doi.org/10.5061/dryad.975m1</a></p>
+</div>
+<div id="background" class="section level1">
+<h1>Background</h1>
+</div>
+<div id="reproducibility" class="section level1">
+<h1>Reproducibility</h1>
+<div id="reproducibility-key" class="section level2">
+<h2>Reproducibility key</h2>
+<ol style="list-style-type: decimal">
+<li>Reproducibility: 1 (fails to reproduce). Not really close</li>
+<li>Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)</li>
+<li>Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.</li>
+<li>Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.</li>
+</ol>
+<p>A “+” means that the precise method wasn’t specified and reproducibility required exploration.</p>
+</div>
+<div id="figure-1table-1-condition-and-length" class="section level2">
+<h2>Figure 1/Table 1 (Condition and Length)</h2>
+<pre class="r"><code>fn &lt;- &#39;individual data.csv&#39;
+file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
+dt.fig1 &lt;- fread(file_path)</code></pre>
+<div id="condition-index" class="section level3">
+<h3>Condition index</h3>
+<blockquote>
+<p>We estimated condition of each individual by first performing a regression on all log-transformed lengths and weights and saving the residuals. From this regression, we calculated the weight for an average individual of 90 mm (the average length at the end of the experiment was 90.6 mm). Condition for each fish was then estimated as the calculated average weight plus the residual. The condition index was then used as a measure of condition in all analyses.</p>
+</blockquote>
+<p>I assume that “performing a regression on all log-transformed lengths and weights and saving the residuals” means to regress weight on length.</p>
+<pre class="r"><code>dt.fig1[, ln_weight:=log(Weight)]
+dt.fig1[, ln_length:=log(Length)]
+fit &lt;- lm(ln_weight ~ ln_length, na.action=&quot;na.exclude&quot;, data=dt.fig1)
+yhat &lt;- predict(fit, newdata = data.frame(ln_length=log(90)))
+dt.fig1[, condition:=yhat + residuals(fit)]
+dt.fig1[, condition2:=exp(yhat + residuals(fit))]
+dt.fig1[, condition3:=exp(yhat) + exp(residuals(fit)) - 1] # sub exp(0)=1
+
+dt.fig1[, .(mean=exp(mean(condition)), # marginal mean then backtransform
+            SE=exp(sd(condition)/sqrt(.N)),
+            mean2=mean(condition2), # backtransform then mean
+            SE2=sd(condition2/sqrt(.N)),
+            mean3=mean(condition3), # backtransform yhat and residuals then mean
+            SE3=sd(condition3/sqrt(.N)) 
+            ), by=c(&#39;Pike_presence&#39;, &#39;Food_Ratio&#39;)]</code></pre>
+<pre><code>##    Pike_presence Food_Ratio     mean       SE    mean2        SE2    mean3
+## 1:             y     05_low 5.052031 1.027348 5.071878 0.13277327 5.640308
+## 2:             y  10_medium 5.630975 1.014212 5.637722 0.07986898 5.738549
+## 3:             n  10_medium 6.304749 1.035395 6.367111 0.25064352 5.865185
+## 4:             y    15_high 6.126227 1.019035 6.140303 0.11459835 5.825807
+## 5:             n     05_low 4.827397 1.021083 4.838904 0.10021281 5.599859
+## 6:             n    15_high 6.440573 1.014135 6.449491 0.09098461 5.879488
+##           SE3
+## 1: 0.02305198
+## 2: 0.01386679
+## 3: 0.04351652
+## 4: 0.01989647
+## 5: 0.01739886
+## 6: 0.01579667</code></pre>
+<p>mean computes the statistics in the transformed space and then backtransforms, which makes a little more sense. condition3/mean3 is the closest to the values suggest by Figure 1 but the range of my means is slightly larger.</p>
+<p>Reproducibility: 2+ (reproduces to a similar value).</p>
+</div>
+<div id="table-1" class="section level3">
+<h3>Table 1</h3>
+<pre class="r"><code>model &lt;- formula(condition3 ~ Pike_presence*Food_Ratio)
+fit.condition &lt;- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig1)
+anova(fit.condition, type=&#39;sequential&#39;) # Type I</code></pre>
+<pre><code>##                          numDF denDF   F-value p-value
+## (Intercept)                  1    46 142271.14  &lt;.0001
+## Pike_presence                1    30      3.66  0.0654
+## Food_Ratio                   2    30     21.42  &lt;.0001
+## Pike_presence:Food_Ratio     2    30      3.15  0.0573</code></pre>
+<pre class="r"><code>anova(fit.condition, type=&#39;marginal&#39;) # Type III</code></pre>
+<pre><code>##                          numDF denDF   F-value p-value
+## (Intercept)                  1    46 21408.452  &lt;.0001
+## Pike_presence                1    30     0.485  0.4913
+## Food_Ratio                   2    30    18.221  &lt;.0001
+## Pike_presence:Food_Ratio     2    30     3.150  0.0573</code></pre>
+<pre class="r"><code># type II for Food_Ratio
+model &lt;- formula(condition3 ~ Pike_presence + Food_Ratio)
+anova(lme(model, random = ~ 1|Aquarium_ID, data=dt.fig1), type=&#39;sequential&#39;)</code></pre>
+<pre><code>##               numDF denDF   F-value p-value
+## (Intercept)       1    46 126477.26  &lt;.0001
+## Pike_presence     1    32      3.26  0.0805
+## Food_Ratio        2    32     19.07  &lt;.0001</code></pre>
+<pre class="r"><code># type II for Pike_presence
+model &lt;- formula(condition3 ~ Food_Ratio + Pike_presence)
+anova(lme(model, random = ~ 1|Aquarium_ID, data=dt.fig1), type=&#39;sequential&#39;)</code></pre>
+<pre><code>##               numDF denDF   F-value p-value
+## (Intercept)       1    46 126477.26  &lt;.0001
+## Food_Ratio        2    32     19.13  &lt;.0001
+## Pike_presence     1    32      3.13  0.0864</code></pre>
+<pre class="r"><code>model &lt;- formula(Length ~ Pike_presence*Food_Ratio)
+fit.length &lt;- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig1)
+anova(fit.length, type=&#39;sequential&#39;) # Type I</code></pre>
+<pre><code>##                          numDF denDF   F-value p-value
+## (Intercept)                  1    46 11803.212  &lt;.0001
+## Pike_presence                1    30     0.724  0.4017
+## Food_Ratio                   2    30     5.211  0.0114
+## Pike_presence:Food_Ratio     2    30     0.486  0.6197</code></pre>
+<pre class="r"><code>anova(fit.length, type=&#39;marginal&#39;) # Type III</code></pre>
+<pre><code>##                          numDF denDF   F-value p-value
+## (Intercept)                  1    46 1656.0538  &lt;.0001
+## Pike_presence                1    30    0.0049  0.9445
+## Food_Ratio                   2    30    3.1855  0.0557
+## Pike_presence:Food_Ratio     2    30    0.4863  0.6197</code></pre>
+<pre class="r"><code># type II for Food_Ratio
+model &lt;- formula(Length ~ Pike_presence + Food_Ratio)
+anova(lme(model, random = ~ 1|Aquarium_ID, data=dt.fig1), type=&#39;sequential&#39;)</code></pre>
+<pre><code>##               numDF denDF   F-value p-value
+## (Intercept)       1    46 12516.147  &lt;.0001
+## Pike_presence     1    32     0.778  0.3844
+## Food_Ratio        2    32     5.488  0.0089</code></pre>
+<pre class="r"><code># type II for Pike_presence
+model &lt;- formula(Length ~ Food_Ratio + Pike_presence)
+anova(lme(model, random = ~ 1|Aquarium_ID, data=dt.fig1), type=&#39;sequential&#39;)</code></pre>
+<pre><code>##               numDF denDF   F-value p-value
+## (Intercept)       1    46 12516.147  &lt;.0001
+## Food_Ratio        2    32     5.496  0.0089
+## Pike_presence     1    32     0.761  0.3894</code></pre>
+<p>Condition: Reproducibility: 2+ (reproduces to a similar value). Probably a difference in computation of Condition index. Reproduces uses sequential (default) but not marginal SS.</p>
+<p>Length: Reproducibility: 3+ (reproduces to decimal or random error). Reproduces uses sequential (default) but not marginal SS.</p>
+<p><strong>Red Flag</strong>. Table 1 reports Type 1 (sequential) sums of squares and almost certainly the authors want Type III SS given the interaction effect in the model. Notice this makes a key difference here if inference is based on alpha.</p>
+</div>
+<div id="tukey-contrasts" class="section level3">
+<h3>Tukey Contrasts</h3>
+<pre class="r"><code>inc_rows &lt;- c(&#39;y,05_low - n,05_low&#39;, &#39;y,10_medium - n,10_medium&#39;, &#39;y,15_high - n,15_high&#39;)
+condition.emm &lt;- emmeans(fit.condition, specs=c(&#39;Pike_presence&#39;, &#39;Food_Ratio&#39;))
+condition.contrasts &lt;- data.table(summary(contrast(condition.emm, method=&#39;revpairwise&#39;)))
+condition.contrasts[contrast %in% inc_rows,]</code></pre>
+<pre><code>##                     contrast    estimate         SE df    t.ratio
+## 1:       y,05_low - n,05_low  0.03774033 0.05416473 30  0.6967694
+## 2: y,10_medium - n,10_medium -0.15142115 0.05252112 30 -2.8830525
+## 3:     y,15_high - n,15_high -0.05228491 0.05227553 30 -1.0001795
+##       p.value
+## 1: 0.98090332
+## 2: 0.07114079
+## 3: 0.91423070</code></pre>
+<pre class="r"><code>length.emm &lt;- emmeans(fit.length, specs=c(&#39;Pike_presence&#39;, &#39;Food_Ratio&#39;))
+length.contrasts &lt;- data.table(summary(contrast(length.emm, method=&#39;revpairwise&#39;)))
+length.contrasts[contrast %in% inc_rows,]</code></pre>
+<pre><code>##                     contrast   estimate       SE df     t.ratio   p.value
+## 1:       y,05_low - n,05_low -0.2148140 3.057885 30 -0.07024919 0.9999997
+## 2: y,10_medium - n,10_medium  3.6073001 2.824343 30  1.27721761 0.7947445
+## 3:     y,15_high - n,15_high  0.5916154 2.807236 30  0.21074654 0.9999362</code></pre>
+<p>Condition post-hoc: Reproducibility: 1+ (fails to reproduce). Compounded difference due to difference in Condition index mean and standard error. My pattern of mean and SE are similar and close in values but do not replicated at level 3.</p>
+<p>Length post-hoc: Reproducibility: NA. Qualitatively it reproduces but numbers aren’t given in text.</p>
+</div>
+</div>
+<div id="figure-2table-2-behavior" class="section level2">
+<h2>Figure 2/Table 2 (Behavior)</h2>
+</div>
+</div>

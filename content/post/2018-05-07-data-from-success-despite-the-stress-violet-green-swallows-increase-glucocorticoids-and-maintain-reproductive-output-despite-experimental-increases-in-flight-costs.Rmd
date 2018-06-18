@@ -52,7 +52,7 @@ bird[, Time:=as.integer(Capture_Period) - 1] # for the constrained LDA
 ```
 
 # Reproducibility
-# Reproducibility key
+## Reproducibility key
 1. Reproducibility: 1 (fails to reproduce). Not really close
 2. Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)
 3. Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.

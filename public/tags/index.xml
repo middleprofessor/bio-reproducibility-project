@@ -22,9 +22,18 @@
     </item>
     
     <item>
+      <title>Anova</title>
+      <link>/tags/anova/</link>
+      <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/anova/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Ecology</title>
       <link>/tags/ecology/</link>
-      <pubDate>Mon, 07 May 2018 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/ecology/</guid>
       <description></description>
@@ -33,9 +42,18 @@
     <item>
       <title>Experiment</title>
       <link>/tags/experiment/</link>
-      <pubDate>Sat, 26 May 2018 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/experiment/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Factorial</title>
+      <link>/tags/factorial/</link>
+      <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/factorial/</guid>
       <description></description>
     </item>
     
@@ -45,6 +63,15 @@
       <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/linear-mixed-model/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Nested</title>
+      <link>/tags/nested/</link>
+      <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/nested/</guid>
       <description></description>
     </item>
     

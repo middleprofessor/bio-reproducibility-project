@@ -20,8 +20,8 @@ output:
 <li><a href="#sources">Sources</a></li>
 <li><a href="#background">Background</a></li>
 <li><a href="#data">Data</a></li>
-<li><a href="#reproducibility">Reproducibility</a></li>
-<li><a href="#reproducibility-key">Reproducibility key</a><ul>
+<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#reproducibility-key">Reproducibility key</a></li>
 <li><a href="#initial-measures">Initial measures</a></li>
 <li><a href="#change-in-cort">Change in Cort</a></li>
 <li><a href="#change-in-body-mass">Change in Body Mass</a></li>
@@ -56,9 +56,8 @@ bird[, Time:=as.integer(Capture_Period) - 1] # for the constrained LDA</code></p
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
-</div>
-<div id="reproducibility-key" class="section level1">
-<h1>Reproducibility key</h1>
+<div id="reproducibility-key" class="section level2">
+<h2>Reproducibility key</h2>
 <ol style="list-style-type: decimal">
 <li>Reproducibility: 1 (fails to reproduce). Not really close</li>
 <li>Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)</li>
@@ -66,6 +65,7 @@ bird[, Time:=as.integer(Capture_Period) - 1] # for the constrained LDA</code></p
 <li>Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.</li>
 </ol>
 <p>A “+” means that the precise method wasn’t specified and reproducibility required exploration.</p>
+</div>
 <div id="initial-measures" class="section level2">
 <h2>Initial measures</h2>
 <blockquote>

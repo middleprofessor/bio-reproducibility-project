@@ -1,0 +1,334 @@
+rm(list=ls()) # clears workspace#
+####################################################################################
+#
+#### Required libraries#
+require(geomorph)#
+library(shapes)#
+library(svd)#
+library(scatterplot3d)#
+library(rgl)#
+library(MASS)#
+library(ape)#
+library(vegan)#
+library(psych)#
+library(gplots)#
+library(nlme)#
+library(ggplot2)#
+library(grid)#
+library(gridExtra)#
+require(scales)#
+#
+####################################################################################
+###   function needed for summary statistics and making plots in ggplot2#
+####################################################################################
+#
+##### First run these lines to attach the function "summarySE"#
+#
+## Summarizes data.#
+## Gives count, mean, standard deviation, standard error of the mean, and confidence interval (default 95%).#
+##   data: a data frame.#
+##   measurevar: the name of a column that contains the variable to be summariezed#
+##   groupvars: a vector containing names of columns that contain grouping variables#
+##   na.rm: a boolean that indicates whether to ignore NA's#
+##   conf.interval: the percent range of the confidence interval (default is 95%)#
+summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=FALSE,#
+                      conf.interval=.95, .drop=TRUE) {#
+    require(plyr)#
+#
+    # New version of length which can handle NA's: if na.rm==T, don't count them#
+    length2 <- function (x, na.rm=FALSE) {#
+        if (na.rm) sum(!is.na(x))#
+        else       length(x)#
+    }#
+#
+    # This does the summary. For each group's data frame, return a vector with#
+    # N, mean, and sd#
+    datac <- ddply(data, groupvars, .drop=.drop,#
+      .fun = function(xx, col) {#
+        c(N    = length2(xx[[col]], na.rm=na.rm),#
+          mean = mean   (xx[[col]], na.rm=na.rm),#
+          sd   = sd     (xx[[col]], na.rm=na.rm)#
+        )#
+      },#
+      measurevar#
+    )#
+#
+    # Rename the "mean" column    #
+    datac <- rename(datac, c("mean" = measurevar))#
+#
+    datac$se <- datac$sd / sqrt(datac$N)  # Calculate standard error of the mean#
+#
+    # Confidence interval multiplier for standard error#
+    # Calculate t-statistic for confidence interval: #
+    # e.g., if conf.interval is .95, use .975 (above/below), and use df=N-1#
+    ciMult <- qt(conf.interval/2 + .5, datac$N-1)#
+    datac$ci <- datac$se * ciMult#
+#
+    return(datac)#
+}#
+### Load metadata#
+meta <- read.csv("/Users/lirichard/My documents/3. My Projects/1. Pågående Projekt/43. Yinghua/1. Predation-food ration morphology/manuscript/metadata.csv")#
+attach(meta)#
+names(meta)#
+#
+##### NEED TO GET DATA FOR 2 INDS WHER THERE ARE NOW NAs, INDS #47 & #48#
+model <- lm(log(Intestine) ~ log(Length))#
+summary(model)#
+intestine_resids <- resid(model)#
+meta <- cbind(meta, intestine_resids)#
+model <- lm(log10(Weight) ~ log10(Length))#
+summary(model)#
+weight_resids <- resid(model)#
+estimated_weight <- weight_resids + 10^(2.9693 * log10(90) -5.0424) # estimated weight of an averag individual. mean length at the end = 90.59 mm#
+meta <- cbind(meta, estimated_weight)#
+#
+### Load behavioral data#
+behavior <-  read.csv("/Users/lirichard/My documents/3. My Projects/1. Pågående Projekt/43. Yinghua/1. Predation-food ration morphology/manuscript/behavioral data.csv")#
+attach(behavior)#
+names(behavior)#
+z <- prcomp( ~ x_position + y_position + tot_dist_swimming, data = behavior, scale=TRUE) # formula method#
+summary(z)  #
+PCBehav <- predict(z)#
+behavior <- cbind(behavior, PCBehav)#
+#
+behavior.initial <- subset(behavior, time=="start")#
+behavior.end <- subset(behavior, time=="end")#
+#### Load landmark data - OBS, DETTA KRÅNGLAR#
+#setwd("/Users/lirichard/My documents/3. My Projects/1. Pågående Projekt/43. Yinghua/1. Predation-food ration morphology/1. Morphology/1. NTS photo order")#
+#myFiles <- dir(pattern="[nN][tT][sS]")#
+#mylands <- readmulti.nts(myFiles)#
+## This is needed to convert the landmark file into another set of landmark file that could be used for later analyzes etc.#
+#new <- two.d.array(mylands) #not sure why, but had to convert the landmarks into a 2-D array#
+#lands <- arrayspecs(new, 16, 2, byLand=FALSE) # and then back into another type of landmark file#
+##### OM "Load landmark data" KRÅNGLAR - PRÖVA DETTA#
+setwd("/Users/lirichard/My documents/3. My Projects/1. Pågående Projekt/43. Yinghua/1. Predation-food ration morphology/1. Morphology/1. NTS photo order")#
+myFiles <- dir(pattern="[nN][tT][sS]")#
+land.data <- readland.nts(myFiles[1])#
+landmark.data <- two.d.array(land.data)#
+for(i in 2:82){#
+	land.data <- readland.nts(myFiles[i])#
+	new <- two.d.array(land.data)#
+	landmark.data <- rbind(landmark.data, new)#
+}#
+lands <- arrayspecs(landmark.data, 16, 2) # and then back into another type of landmark file#
+# This is for superimposition of all the specimens#
+plotAllSpecimens(lands) # This plots the raw landmarks, without superimposition#
+proc <- gpagen(lands, Proj=TRUE)#
+proc$coords # Procrustes coordinates after superimposition#
+proc_Csize <- proc$Csize # the Centroid size of the specimens#
+proc$coords[,2,] <- -1*proc$coords[,2,]
+pca.lands <- plotTangentSpace(proc$coords, label=TRUE)#, verbose=T) # This creates a plot of the specimens in PC-space and 2 TPS grids showing the shape associated with the first axis#
+pca.lands$pc.summary # summary of variances associated with each PC axis#
+pca.lands$pc.scores # Shape variables as principal component scores#
+### PCA to get eigenvalues#
+proc.coords.landmarks <- two.d.array(proc$coords)#
+z <- prcomp(proc.coords.landmarks)  #
+summary(z)                 # square root of eigenvalues, variance proportions#
+print(z)                   # square root of eigenvalues; eigenvectors too#
+plot(z,type="lines")       # "scree" plot of eigenvalues#
+screeplot(z, type="lines") # same#
+z$rotation                 # eigenvectors (with trait loadings)#
+z$sdev^2                   # eigenvalues (variances)#
+procD.lm(two.d.array(proc$coords) ~ proc$Csize, iter=999) # This tests if there is an Allometry in shape with size (Centroid size)#
+plotAllometry(proc$coords, proc$Csize, method=c("CAC")) # This plots the relationship between Csize and shape as well as gridplots#
+test <- procD.allometry(proc$coords ~ proc$Csize, iter = 999, alpha = 0.05)#
+plot(test, method = "RegScore")#
+test$A#
+#
+proc <- gpagen(lands, Proj=TRUE)
+aquaria_1 <- mshape(arrayspecs(landmark.data[1:3,], 16, 2))#
+aquaria_2 <- mshape(arrayspecs(landmark.data[4:5,], 16, 2))#
+aquaria_3 <- mshape(arrayspecs(landmark.data[6:8,], 16, 2))#
+aquaria_4 <- mshape(arrayspecs(landmark.data[9:10,], 16, 2))#
+aquaria_5 <- mshape(arrayspecs(landmark.data[11:13,], 16, 2))#
+aquaria_6 <- mshape(arrayspecs(landmark.data[14:15,], 16, 2))#
+aquaria_7 <- mshape(arrayspecs(landmark.data[16:18,], 16, 2))#
+aquaria_8 <- mshape(arrayspecs(landmark.data[19:20,], 16, 2))#
+aquaria_9 <- mshape(arrayspecs(landmark.data[21,], 16, 2))#
+aquaria_10 <- mshape(arrayspecs(landmark.data[22:24,], 16, 2))#
+aquaria_11 <- mshape(arrayspecs(landmark.data[25:27,], 16, 2))#
+aquaria_12 <- mshape(arrayspecs(landmark.data[28:29,], 16, 2))#
+aquaria_13 <- mshape(arrayspecs(landmark.data[30:31,], 16, 2))#
+aquaria_14 <- mshape(arrayspecs(landmark.data[32:33,], 16, 2))#
+aquaria_15 <- mshape(arrayspecs(landmark.data[34:35,], 16, 2))#
+aquaria_16 <- mshape(arrayspecs(landmark.data[36,], 16, 2))#
+aquaria_17 <- mshape(arrayspecs(landmark.data[37,], 16, 2))#
+aquaria_18 <- mshape(arrayspecs(landmark.data[38:39,], 16, 2))#
+aquaria_19 <- mshape(arrayspecs(landmark.data[40:41,], 16, 2))#
+aquaria_20 <- mshape(arrayspecs(landmark.data[42:43,], 16, 2))#
+aquaria_21 <- mshape(arrayspecs(landmark.data[44:45,], 16, 2))#
+aquaria_22 <- mshape(arrayspecs(landmark.data[46:8,], 16, 2))#
+aquaria_23 <- mshape(arrayspecs(landmark.data[49:51,], 16, 2))#
+aquaria_24 <- mshape(arrayspecs(landmark.data[52,], 16, 2))#
+aquaria_25 <- mshape(arrayspecs(landmark.data[53:54,], 16, 2))#
+aquaria_26 <- mshape(arrayspecs(landmark.data[55:57,], 16, 2))#
+aquaria_27 <- mshape(arrayspecs(landmark.data[58:59,], 16, 2))#
+aquaria_28 <- mshape(arrayspecs(landmark.data[60:62,], 16, 2))#
+aquaria_29 <- mshape(arrayspecs(landmark.data[63,], 16, 2))#
+aquaria_30 <- mshape(arrayspecs(landmark.data[64:66,], 16, 2))#
+aquaria_31 <- mshape(arrayspecs(landmark.data[67:69,], 16, 2))#
+aquaria_32 <- mshape(arrayspecs(landmark.data[70:72,], 16, 2))#
+aquaria_33 <- mshape(arrayspecs(landmark.data[73:74,], 16, 2))#
+aquaria_34 <- mshape(arrayspecs(landmark.data[75:77,], 16, 2))#
+aquaria_35 <- mshape(arrayspecs(landmark.data[78:79,], 16, 2))#
+aquaria_36 <- mshape(arrayspecs(landmark.data[80:82,], 16, 2))#
+#
+aquaria.lands <- arrayspecs(rbind(aquaria_1, aquaria_2, aquaria_3, aquaria_4, aquaria_5, aquaria_6, aquaria_7, aquaria_8, aquaria_9, aquaria_10, aquaria_11, aquaria_12, aquaria_13, aquaria_14, aquaria_15, aquaria_16, aquaria_17, aquaria_18, aquaria_19, aquaria_20, aquaria_21, aquaria_22, aquaria_23, aquaria_24, aquaria_25, aquaria_26, aquaria_27, aquaria_28, aquaria_29, aquaria_30, aquaria_31, aquaria_32, aquaria_33, aquaria_34, aquaria_35, aquaria_36), 16, 2)
+alldata <- cbind(meta, proc_Csize, pca.lands$pc.scores)#
+attach(alldata)#
+names(alldata)#
+#write.table(alldata,"/Users/lirichard/Desktop/Digitize/Photos/alldata.txt")#
+#
+analyze.record <- matrix(NA,nrow = 36, ncol = 61)#
+colnames(analyze.record) <- c("photo_id", "sort_ID", "Aquarium_ID", "Diet", "Ratio", "Pike", "treatment_nr", "number", "Perch_ID", "Weight", "Length", "Intestine", "Sex", "intestine_residual", "estimated_weight", "proc_Csize", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", "PC8", "PC9", "PC10", "PC11", "PC12", "PC13", "PC14", "PC15", "PC16", "PC17", "PC18", "PC19", "PC20", "PC21", "PC22", "PC23", "PC24", "PC25", "PC26", "PC27", "PC28", "PC29", "PC30", "PC31", "PC32", "x_position_initial", "y_position_initial", "tot_dist_swimming_initial", "PC1_initial_behav", "PC2_initial_behav", "PC3_initial_behav", "x_position_final", "y_position_final", "tot_dist_swimming_final", "PC1_final_behav", "PC2_final_behav", "PC3_final_behav","surv")#
+for(i in 1:36){#
+	data <- subset(alldata, sort_ID==i)#
+	behav.init <- subset(behavior.initial, sort_ID==i)#
+	behav.end <- subset(behavior.end, sort_ID==i)#
+	photo_id <- as.character(data$photo_id[1])#
+	analyze.record[i,1] <- as.character(data$photo_id[1])#
+	analyze.record[i,2] <- as.character(data$sort_ID[1])#
+	analyze.record[i,3] <-as.character(data$Aquarium_ID[1])#
+	analyze.record[i,4] <- as.character(data$Diet[1])#
+	analyze.record[i,5] <- as.character(data$Ratio[1])#
+	analyze.record[i,6] <- as.character(data$Pike[1])#
+	analyze.record[i,7] <- as.character(data$treatment_nr[1])#
+	analyze.record[i,8] <-as.character(data$number[1])#
+	analyze.record[i,9] <-as.character(data$Perch_ID[1])#
+	for(j in 10:48){#
+			analyze.record[i,j] <-mean(data[,j])#
+		}#
+	for(j in 49:51){#
+			k <- j-43#
+			analyze.record[i,j] <-mean(behav.init[,k])#
+		}#
+	for(j in 52:54){#
+			k <- j-42#
+			analyze.record[i,j] <-mean(behav.init[,k])#
+		}#
+	for(j in 55:57){#
+		k <- j-49#
+			analyze.record[i,j] <-mean(behav.end[,k])#
+		}#
+	for(j in 58:60){#
+		k <- j-48#
+			analyze.record[i,j] <-mean(behav.end[,k])#
+		}#
+		analyze.record[i,61] <-dim(data)[1]		#
+	}#
+analyze.record <- data.frame(analyze.record)#
+#
+analyze.record$PC1 <- as.numeric(as.vector(analyze.record$PC1))#
+analyze.record$PC2 <- as.numeric(as.vector(analyze.record$PC2))#
+analyze.record$PC3 <- as.numeric(as.vector(analyze.record$PC3))#
+analyze.record$PC4 <- as.numeric(as.vector(analyze.record$PC4))#
+analyze.record$PC5 <- as.numeric(as.vector(analyze.record$PC5))#
+analyze.record$PC6 <- as.numeric(as.vector(analyze.record$PC6))#
+analyze.record$PC7 <- as.numeric(as.vector(analyze.record$PC7))#
+analyze.record$PC8 <- as.numeric(as.vector(analyze.record$PC8))#
+analyze.record$PC9 <- as.numeric(as.vector(analyze.record$PC9))#
+analyze.record$PC10 <- as.numeric(as.vector(analyze.record$PC10))#
+analyze.record$PC11 <- as.numeric(as.vector(analyze.record$PC11))#
+analyze.record$PC12 <- as.numeric(as.vector(analyze.record$PC12))#
+analyze.record$PC13 <- as.numeric(as.vector(analyze.record$PC13))#
+analyze.record$PC14 <- as.numeric(as.vector(analyze.record$PC14))#
+analyze.record$PC15 <- as.numeric(as.vector(analyze.record$PC15))#
+analyze.record$PC16 <- as.numeric(as.vector(analyze.record$PC16))#
+analyze.record$PC17 <- as.numeric(as.vector(analyze.record$PC17))#
+analyze.record$PC18 <- as.numeric(as.vector(analyze.record$PC18))#
+analyze.record$PC19 <- as.numeric(as.vector(analyze.record$PC19))#
+analyze.record$PC20 <- as.numeric(as.vector(analyze.record$PC20))#
+analyze.record$PC21 <- as.numeric(as.vector(analyze.record$PC21))#
+analyze.record$PC22 <- as.numeric(as.vector(analyze.record$PC22))#
+analyze.record$PC23 <- as.numeric(as.vector(analyze.record$PC23))#
+analyze.record$PC24 <- as.numeric(as.vector(analyze.record$PC24))#
+analyze.record$PC25 <- as.numeric(as.vector(analyze.record$PC25))#
+analyze.record$PC26 <- as.numeric(as.vector(analyze.record$PC26))#
+analyze.record$PC27 <- as.numeric(as.vector(analyze.record$PC27))#
+analyze.record$PC28 <- as.numeric(as.vector(analyze.record$PC28))#
+analyze.record$PC29 <- as.numeric(as.vector(analyze.record$PC29))#
+analyze.record$PC30 <- as.numeric(as.vector(analyze.record$PC30))#
+analyze.record$PC31 <- as.numeric(as.vector(analyze.record$PC31))#
+analyze.record$PC32 <- as.numeric(as.vector(analyze.record$PC32))#
+analyze.record$proc_Csize <- as.numeric(as.vector(analyze.record$proc_Csize))#
+analyze.record$x_position_initial <- as.numeric(as.vector(analyze.record$x_position_initial))#
+analyze.record$y_position_initial <- as.numeric(as.vector(analyze.record$y_position_initial))#
+analyze.record$y_position_initial <- 20 - analyze.record$y_position_initial#
+analyze.record$tot_dist_swimming_initial <- as.numeric(as.vector(analyze.record$tot_dist_swimming_initial))#
+analyze.record$x_position_final <- as.numeric(as.vector(analyze.record$x_position_final))#
+analyze.record$y_position_final <- as.numeric(as.vector(analyze.record$y_position_final))#
+analyze.record$y_position_final <- 20 - analyze.record$y_position_final#
+analyze.record$PC1_initial_behav <- as.numeric(as.vector(analyze.record$PC1_initial_behav))#
+analyze.record$PC2_initial_behav <- as.numeric(as.vector(analyze.record$PC2_initial_behav))#
+analyze.record$PC3_initial_behav <- as.numeric(as.vector(analyze.record$PC3_initial_behav))#
+analyze.record$PC1_final_behav <- as.numeric(as.vector(analyze.record$PC1_final_behav))#
+analyze.record$PC2_final_behav <- as.numeric(as.vector(analyze.record$PC2_final_behav))#
+analyze.record$PC3_final_behav <- as.numeric(as.vector(analyze.record$PC3_final_behav))#
+analyze.record$tot_dist_swimming_final <- as.numeric(as.vector(analyze.record$tot_dist_swimming_final))#
+analyze.record$Length <- as.numeric(as.vector(analyze.record$Length))#
+analyze.record$Weight <- as.numeric(as.vector(analyze.record$Weight))#
+analyze.record$Intestine <- as.numeric(as.vector(analyze.record$Intestine))#
+analyze.record$Pike <- as.factor(analyze.record$Pike)#
+analyze.record$Ratio <- as.factor(analyze.record$Ratio)#
+analyze.record$intestine_residual <- as.numeric(as.vector(analyze.record$intestine_residual))#
+analyze.record$estimated_weight <- as.numeric(as.vector(analyze.record$estimated_weight))#
+analyze.record$surv <- as.numeric(as.vector(analyze.record$surv))
+y <- cbind(analyze.record$PC1, analyze.record$PC2, analyze.record$PC3, analyze.record$PC4)#,  analyze.record$PC5)
+fit <- manova(y ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + analyze.record$Pike * analyze.record$Ratio)
+summary(fit, test="Wilks")
+vif(fit)
+library(MASS)
+vif(fit)
+library(car)
+vif(fit)
+mshapiro.test(fit)
+library(VIF)
+vif.sel <- vif(y, fit, trace = FALSE)
+x <- cbind(analyze.record$tot_dist_swimming_initial, analyze.record$tot_dist_swimming_final, analyze.record$proc_Csize, analyze.record$estimated_weight, analyze.record$Pike, analyze.record$Ratio)
+vif.sel <- vif(y, x, trace = FALSE)
+library(car)
+vif(manova(y ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + analyze.record$Pike * analyze.record$Ratio))
+vif(manova(y ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight))
+model <- lm(analyze.record$PC1 ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight)
+vif(lm(analyze.record$PC1 ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight))
+model <- lm(analyze.record$PC1 ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + analyze.record$Pike * analyze.record$Ratio)
+summary(model)
+str(analyze.record)
+model <- lm(analyze.record$PC1 ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + as.numeric(analyze.record$Pike) * as.numeric(analyze.record$Ratio))
+vif(model)
+model <- lm(analyze.record$PC1 ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + as.numeric(analyze.record$Pike) + as.numeric(analyze.record$Ratio))
+vif(model)
+model <- lm( ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + as.numeric(analyze.record$Pike) + as.numeric(analyze.record$Ratio))
+vif(model)
+model <- lm(y ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + as.numeric(analyze.record$Pike) + as.numeric(analyze.record$Ratio))
+vif(model)
+model <- lm(analyze.record$PC1 ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + as.numeric(analyze.record$Pike) + as.numeric(analyze.record$Ratio))
+vif(model)
+analyze.record$PC1
+fit <- manova(y ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + analyze.record$Pike * analyze.record$Ratio)
+library(car)
+vif(fit)
+fit
+plot(fit)
+fit <- aov(analyze.record$PC1 ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + as.numeric(analyze.record$Pike) + as.numeric(analyze.record$Ratio))
+summary(fit)
+vif(fit)
+fit <- lm(analyze.record$PC1 ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + as.numeric(analyze.record$Pike) + as.numeric(analyze.record$Ratio))
+VIF(fit)
+library(fmsb)
+VIF(fit)
+fit <- lm(analyze.record$PC2 ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + as.numeric(analyze.record$Pike) + as.numeric(analyze.record$Ratio))
+VIF(fit)
+fit <- lm(analyze.record$PC3 ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + as.numeric(analyze.record$Pike) + as.numeric(analyze.record$Ratio))
+VIF(fit)
+fit <- lm(analyze.record$PC4 ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + as.numeric(analyze.record$Pike) + as.numeric(analyze.record$Ratio))
+VIF(fit)
+fit <- manova(y ~ analyze.record$tot_dist_swimming_initial + analyze.record$tot_dist_swimming_final + analyze.record$proc_Csize + analyze.record$estimated_weight + analyze.record$Pike * analyze.record$Ratio)
+VIF(fit)
+corr(analyze.record$tot_dist_swimming_initial, analyze.record$tot_dist_swimming_final )
+cor(analyze.record$tot_dist_swimming_initial, analyze.record$tot_dist_swimming_final )
+plot(analyze.record$tot_dist_swimming_initial, analyze.record$tot_dist_swimming_final )
+str(analyze.record)
+cor(analyze.record$tot_dist_swimming_initial, analyze.record$tot_dist_swimming_final,analyze.record$proc_Csize, analyze.record$estimated_weight )
+mult.cor(analyze.record$tot_dist_swimming_initial, analyze.record$tot_dist_swimming_final,analyze.record$proc_Csize, analyze.record$estimated_weight )
+cor(data.frame(analyze.record$tot_dist_swimming_initial, analyze.record$tot_dist_swimming_final,analyze.record$proc_Csize, analyze.record$estimated_weight ))

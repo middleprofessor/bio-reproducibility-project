@@ -7,18 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
-    <lastBuildDate>Mon, 30 Apr 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 17 Jun 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/anova/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Data from: Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal</title>
-      <link>/post/data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/</link>
-      <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
+      <title>Data from The interaction between predation risk and food ration on behavior and morphology of Eurasian perch</title>
+      <link>/post/data-from-the-interaction-between-predation-risk-and-food-ration-on-behavior-and-morphology-of-eurasian-perch/</link>
+      <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/</guid>
-      <description>Sources Background Effect of spruce cone availability on local density (Fig. 1B) reproducibility  Effect of Density on growth rate (Fig. 2/Table S2) reproducibility Red flags - Figure 2 doesn’t make sense  Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4) reproducibility Red flags one-tailed tests Forking paths Confounding Density and Treatment in Fig 3A,B/Table S4 What is effect of ignoring Chickadee manipulation in Fig 3C/Table S4 Justification for using chickadee playback as “Control” Summary of Red Flags for Figure 3/Table S4   Effect of FCM on offspring growth rate (Table S5) reproducibility    Sources Dantzer, B.</description>
+      <guid>/post/data-from-the-interaction-between-predation-risk-and-food-ration-on-behavior-and-morphology-of-eurasian-perch/</guid>
+      <description>Sources Background Reproducibility Reproducibility key Figure 1/Table 1 (Condition and Length) Condition index Table 1 Tukey Contrasts  Figure 2/Table 2 (Behavior)    Sources Svanbäck R, Zha Y, Brönmark C, Johansson F (2017) The interaction between predation risk and food ration on behavior and morphology of Eurasian perch. Ecology and Evolution 7(20): 8567-8577. https://doi.org/10.1002/ece3.3330
+Svanback R, Zha Y, Brönmark C, Johansson F (2017) Data from: The interaction between predation risk and food ration on behavior and morphology of Eurasian perch.</description>
     </item>
     
   </channel>
