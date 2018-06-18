@@ -29,8 +29,12 @@ output:
 <li><a href="#table-1">Table 1</a></li>
 <li><a href="#tukey-contrasts">Tukey Contrasts</a></li>
 </ul></li>
-<li><a href="#figure-2table-2-behavior">Figure 2/Table 2 (Behavior)</a></li>
+<li><a href="#figure-2table-2-behavior">Figure 2/Table 2 (Behavior)</a><ul>
+<li><a href="#table-2">Table 2</a></li>
 </ul></li>
+<li><a href="#morphometrics">Morphometrics</a></li>
+</ul></li>
+<li><a href="#post-publication-review">Post-publication review</a></li>
 </ul>
 </div>
 
@@ -41,6 +45,7 @@ output:
 </div>
 <div id="background" class="section level1">
 <h1>Background</h1>
+<p>test</p>
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
@@ -99,7 +104,9 @@ dt.fig1[, .(mean=exp(mean(condition)), # marginal mean then backtransform
 </div>
 <div id="table-1" class="section level3">
 <h3>Table 1</h3>
-<pre class="r"><code>model &lt;- formula(condition3 ~ Pike_presence*Food_Ratio)
+<p>it’s much simpler for me to think of this as factorial design with a random (aquarium) or clustered component than to think of the tanks as being nested within Pike_presence*Food_Ratio. Tank is the cluster unit.</p>
+<pre class="r"><code># condition
+model &lt;- formula(condition3 ~ Pike_presence*Food_Ratio)
 fit.condition &lt;- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig1)
 anova(fit.condition, type=&#39;sequential&#39;) # Type I</code></pre>
 <pre><code>##                          numDF denDF   F-value p-value
@@ -127,7 +134,8 @@ anova(lme(model, random = ~ 1|Aquarium_ID, data=dt.fig1), type=&#39;sequential&#
 ## (Intercept)       1    46 126477.26  &lt;.0001
 ## Food_Ratio        2    32     19.13  &lt;.0001
 ## Pike_presence     1    32      3.13  0.0864</code></pre>
-<pre class="r"><code>model &lt;- formula(Length ~ Pike_presence*Food_Ratio)
+<pre class="r"><code># length
+model &lt;- formula(Length ~ Pike_presence*Food_Ratio)
 fit.length &lt;- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig1)
 anova(fit.length, type=&#39;sequential&#39;) # Type I</code></pre>
 <pre><code>##                          numDF denDF   F-value p-value
@@ -180,11 +188,123 @@ length.contrasts[contrast %in% inc_rows,]</code></pre>
 ## 1:       y,05_low - n,05_low -0.2148140 3.057885 30 -0.07024919 0.9999997
 ## 2: y,10_medium - n,10_medium  3.6073001 2.824343 30  1.27721761 0.7947445
 ## 3:     y,15_high - n,15_high  0.5916154 2.807236 30  0.21074654 0.9999362</code></pre>
-<p>Condition post-hoc: Reproducibility: 1+ (fails to reproduce). Compounded difference due to difference in Condition index mean and standard error. My pattern of mean and SE are similar and close in values but do not replicated at level 3.</p>
+<p>Condition post-hoc: Reproducibility: 1+ (fails to reproduce). Compounded difference due to difference in Condition index mean and standard error. My pattern of mean and SE are similar and close in values but do not replicate at level 3.</p>
 <p>Length post-hoc: Reproducibility: NA. Qualitatively it reproduces but numbers aren’t given in text.</p>
 </div>
 </div>
 <div id="figure-2table-2-behavior" class="section level2">
 <h2>Figure 2/Table 2 (Behavior)</h2>
+<pre class="r"><code>fn &lt;- &#39;behavioral data.csv&#39;
+file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
+dt.fig2 &lt;- fread(file_path)</code></pre>
+<div id="table-2" class="section level3">
+<h3>Table 2</h3>
+<p>I assume “distance from the partitioning” is the distance_from_predator in the table.</p>
+<pre class="r"><code># rename columns to remove spaces
+setnames(dt.fig2, old=c(&#39;distance from the partitioning&#39;, &#39;distance from the bottom&#39;, &#39;time_measured(start or end of experiment)&#39;),
+         new=c(&#39;distance_from_predator&#39;, &#39;distance_from_bottom&#39;, &#39;time&#39;))
+
+# start of experiment
+# distance from predator
+model &lt;- formula(distance_from_predator ~ Pike_presence*Food_Ratio)
+fit.condition &lt;- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2[time==&#39;start&#39;])
+anova(fit.condition, type=&#39;sequential&#39;) # Type I</code></pre>
+<pre><code>##                          numDF denDF  F-value p-value
+## (Intercept)                  1    63 930.5413  &lt;.0001
+## Pike_presence                1    30  40.0064  &lt;.0001
+## Food_Ratio                   2    30   2.4014  0.1078
+## Pike_presence:Food_Ratio     2    30   5.3623  0.0102</code></pre>
+<pre class="r"><code>anova(fit.condition, type=&#39;marginal&#39;) # Type III</code></pre>
+<pre><code>##                          numDF denDF   F-value p-value
+## (Intercept)                  1    63 128.68705  &lt;.0001
+## Pike_presence                1    30   4.80555  0.0363
+## Food_Ratio                   2    30   7.23652  0.0027
+## Pike_presence:Food_Ratio     2    30   5.36228  0.0102</code></pre>
+<pre class="r"><code># distance from bottom
+model &lt;- formula(distance_from_bottom ~ Pike_presence*Food_Ratio)
+fit.condition &lt;- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2[time==&#39;start&#39;])
+anova(fit.condition, type=&#39;sequential&#39;) # Type I</code></pre>
+<pre><code>##                          numDF denDF   F-value p-value
+## (Intercept)                  1    63 1737.8836  &lt;.0001
+## Pike_presence                1    30   16.8330  0.0003
+## Food_Ratio                   2    30    4.5008  0.0195
+## Pike_presence:Food_Ratio     2    30    5.1535  0.0119</code></pre>
+<pre class="r"><code>anova(fit.condition, type=&#39;marginal&#39;) # Type III</code></pre>
+<pre><code>##                          numDF denDF   F-value p-value
+## (Intercept)                  1    63 295.99270  &lt;.0001
+## Pike_presence                1    30   0.00035  0.9852
+## Food_Ratio                   2    30   6.93613  0.0033
+## Pike_presence:Food_Ratio     2    30   5.15349  0.0119</code></pre>
+<pre class="r"><code># swimming distance
+model &lt;- formula(tot_dist_swimming ~ Pike_presence*Food_Ratio)
+fit.condition &lt;- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2[time==&#39;start&#39;])
+anova(fit.condition, type=&#39;sequential&#39;) # Type I</code></pre>
+<pre><code>##                          numDF denDF   F-value p-value
+## (Intercept)                  1    63 169.06454  &lt;.0001
+## Pike_presence                1    30  23.57728  &lt;.0001
+## Food_Ratio                   2    30   0.53516  0.5911
+## Pike_presence:Food_Ratio     2    30   1.25262  0.3003</code></pre>
+<pre class="r"><code>anova(fit.condition, type=&#39;marginal&#39;) # Type III</code></pre>
+<pre><code>##                          numDF denDF  F-value p-value
+## (Intercept)                  1    63 46.39753  &lt;.0001
+## Pike_presence                1    30  3.65862  0.0654
+## Food_Ratio                   2    30  1.43545  0.2539
+## Pike_presence:Food_Ratio     2    30  1.25262  0.3003</code></pre>
+<pre class="r"><code># end of experiment
+# distance from predator
+model &lt;- formula(distance_from_predator ~ Pike_presence*Food_Ratio)
+fit.condition &lt;- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2[time==&#39;end&#39;])
+anova(fit.condition, type=&#39;sequential&#39;) # Type I</code></pre>
+<pre><code>##                          numDF denDF  F-value p-value
+## (Intercept)                  1    42 682.8711  &lt;.0001
+## Pike_presence                1    30   5.0650  0.0319
+## Food_Ratio                   2    30   1.3879  0.2652
+## Pike_presence:Food_Ratio     2    30   0.6498  0.5294</code></pre>
+<pre class="r"><code>anova(fit.condition, type=&#39;marginal&#39;) # Type III</code></pre>
+<pre><code>##                          numDF denDF  F-value p-value
+## (Intercept)                  1    42 72.20010  &lt;.0001
+## Pike_presence                1    30  3.01693  0.0927
+## Food_Ratio                   2    30  1.82411  0.1788
+## Pike_presence:Food_Ratio     2    30  0.64976  0.5294</code></pre>
+<pre class="r"><code># distance from bottom
+model &lt;- formula(distance_from_bottom ~ Pike_presence*Food_Ratio)
+fit.condition &lt;- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2[time==&#39;end&#39;])
+anova(fit.condition, type=&#39;sequential&#39;) # Type I</code></pre>
+<pre><code>##                          numDF denDF  F-value p-value
+## (Intercept)                  1    42 775.4438  &lt;.0001
+## Pike_presence                1    30   2.9583  0.0957
+## Food_Ratio                   2    30   4.8096  0.0154
+## Pike_presence:Food_Ratio     2    30   0.4117  0.6662</code></pre>
+<pre class="r"><code>anova(fit.condition, type=&#39;marginal&#39;) # Type III</code></pre>
+<pre><code>##                          numDF denDF  F-value p-value
+## (Intercept)                  1    42 74.35658  &lt;.0001
+## Pike_presence                1    30  2.00641  0.1669
+## Food_Ratio                   2    30  3.79771  0.0339
+## Pike_presence:Food_Ratio     2    30  0.41174  0.6662</code></pre>
+<pre class="r"><code># swimming distance
+model &lt;- formula(tot_dist_swimming ~ Pike_presence*Food_Ratio)
+fit.condition &lt;- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2[time==&#39;end&#39;])
+anova(fit.condition, type=&#39;sequential&#39;) # Type I</code></pre>
+<pre><code>##                          numDF denDF  F-value p-value
+## (Intercept)                  1    42 338.7991  &lt;.0001
+## Pike_presence                1    30   5.1067  0.0313
+## Food_Ratio                   2    30   4.1053  0.0265
+## Pike_presence:Food_Ratio     2    30   1.6320  0.2124</code></pre>
+<pre class="r"><code>anova(fit.condition, type=&#39;marginal&#39;) # Type III</code></pre>
+<pre><code>##                          numDF denDF   F-value p-value
+## (Intercept)                  1    42 118.24997  &lt;.0001
+## Pike_presence                1    30   7.40418  0.0107
+## Food_Ratio                   2    30   5.40359  0.0099
+## Pike_presence:Food_Ratio     2    30   1.63205  0.2124</code></pre>
+<p>Reproducibility: 3+ (reproduces to decimal or random error). Reproduces uses sequential (default) but not marginal SS.</p>
+<p><strong>Red Flag</strong>. Table 2 reports Type 1 (sequential) sums of squares and almost certainly the authors want Type III SS (or Type II) given the interaction effect in the model. Notice this makes a key difference here if inference is based on alpha.</p>
 </div>
+</div>
+<div id="morphometrics" class="section level2">
+<h2>Morphometrics</h2>
+</div>
+</div>
+<div id="post-publication-review" class="section level1">
+<h1>Post-publication review</h1>
+<p>As noted above, the ANOVA tables reported present Type I (sequential) SS which are almost certainly not what the authors intended as the p-values of the first factor will not be conditional on the second factor (nor the interaction). This had consequences on the inference from the ANOVA tables, which raises the question of the role of “storytelling” to “explain” whatever results occur. Would the revised tables generate the same “explanatory” story? It’s one reason why I just don’t find ANOVA tables worthwhile (at all). I’d much rather use sets of contrasts to understand what is going on and at least these also give me effect sizes.</p>
 </div>
