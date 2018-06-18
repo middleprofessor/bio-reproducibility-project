@@ -85,7 +85,8 @@ Reproducibility: 2+ (reproduces to a similar value).
 
 ### Table 1
 
-Note - this is not a nested design. It's a factorial design with a random (aquarium) component.
+it's much simpler for me to think of this as factorial design with a random (aquarium) or clustered component than to think of the tanks as being nested within Pike_presence*Food_Ratio. Tank is the cluster unit.
+
 ```{r table1}
 # condition
 model <- formula(condition3 ~ Pike_presence*Food_Ratio)
@@ -133,7 +134,7 @@ length.contrasts[contrast %in% inc_rows,]
 
 ```
 
-Condition post-hoc: Reproducibility: 1+ (fails to reproduce). Compounded difference due to difference in Condition index mean and standard error. My pattern of mean and SE are similar and close in values but do not replicated at level 3. 
+Condition post-hoc: Reproducibility: 1+ (fails to reproduce). Compounded difference due to difference in Condition index mean and standard error. My pattern of mean and SE are similar and close in values but do not replicate at level 3. 
 
 Length post-hoc: Reproducibility: NA. Qualitatively it reproduces but numbers aren't given in text.
 
@@ -147,28 +148,58 @@ dt.fig2 <- fread(file_path)
 
 ### Table 2
 
+I assume "distance from the partitioning" is the distance_from_predator in the table.
 ```{r}
 # rename columns to remove spaces
-setnames(dt.fig2, old=c('distance from the partitioning', 'distance from the bottom'),
-         new=c('distance_from_predator', 'distance_from_bottom'))
+setnames(dt.fig2, old=c('distance from the partitioning', 'distance from the bottom', 'time_measured(start or end of experiment)'),
+         new=c('distance_from_predator', 'distance_from_bottom', 'time'))
 
+# start of experiment
 # distance from predator
 model <- formula(distance_from_predator ~ Pike_presence*Food_Ratio)
-fit.condition <- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2)
+fit.condition <- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2[time=='start'])
 anova(fit.condition, type='sequential') # Type I
 anova(fit.condition, type='marginal') # Type III
 
 # distance from bottom
 model <- formula(distance_from_bottom ~ Pike_presence*Food_Ratio)
-fit.condition <- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2)
+fit.condition <- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2[time=='start'])
 anova(fit.condition, type='sequential') # Type I
 anova(fit.condition, type='marginal') # Type III
 
 # swimming distance
 model <- formula(tot_dist_swimming ~ Pike_presence*Food_Ratio)
-fit.condition <- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2)
+fit.condition <- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2[time=='start'])
+anova(fit.condition, type='sequential') # Type I
+anova(fit.condition, type='marginal') # Type III
+
+# end of experiment
+# distance from predator
+model <- formula(distance_from_predator ~ Pike_presence*Food_Ratio)
+fit.condition <- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2[time=='end'])
+anova(fit.condition, type='sequential') # Type I
+anova(fit.condition, type='marginal') # Type III
+
+# distance from bottom
+model <- formula(distance_from_bottom ~ Pike_presence*Food_Ratio)
+fit.condition <- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2[time=='end'])
+anova(fit.condition, type='sequential') # Type I
+anova(fit.condition, type='marginal') # Type III
+
+# swimming distance
+model <- formula(tot_dist_swimming ~ Pike_presence*Food_Ratio)
+fit.condition <- lme(model, random = ~ 1|Aquarium_ID, data=dt.fig2[time=='end'])
 anova(fit.condition, type='sequential') # Type I
 anova(fit.condition, type='marginal') # Type III
 
 ```
 
+Reproducibility: 3+ (reproduces to decimal or random error). Reproduces uses sequential (default) but not marginal SS.
+
+**Red Flag**. Table 2 reports Type 1 (sequential) sums of squares and almost certainly the authors want Type III SS (or Type II) given the interaction effect in the model. Notice this makes a key difference here if inference is based on alpha.
+
+## Morphometrics
+
+# Post-publication review
+
+As noted above, the ANOVA tables reported present Type I (sequential) SS which are almost certainly not what the authors intended as the p-values of the first factor will not be conditional on the second factor (nor the interaction). This had consequences on the inference from the ANOVA tables, which raises the question of the role of "storytelling" to "explain" whatever results occur. Would the revised tables generate the same "explanatory" story? It's one reason why I just don't find ANOVA tables worthwhile (at all). I'd much rather use sets of contrasts to understand what is going on and at least these also give me effect sizes.
