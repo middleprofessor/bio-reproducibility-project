@@ -1,0 +1,295 @@
+---
+title: Data from Critical thermal limits affected differently by developmental and
+  adult thermal fluctuations
+author: Jeff Walker
+date: '2018-06-19'
+slug: data-from-critical-thermal-limits-affected-differently-by-developmental-and-adult-thermal-fluctuations
+categories: []
+tags:
+  - physiology
+  - 2x2
+  - experiment
+  - factorial
+output:
+  blogdown::html_page:
+    toc: true
+---
+# Sources
+
+Salachan PV, Sørensen JG (2017) Critical thermal limits affected differently by developmental and adult thermal fluctuations. Journal of Experimental Biology 220(23): 4471-4478. https://doi.org/10.1242/jeb.165308
+
+Salachan PV, Sørensen JG (2017) Data from: Critical thermal limits affected differently by developmental and adult thermal fluctuations. Dryad Digital Repository. https://doi.org/10.5061/dryad.25b8f
+
+# Background
+
+# Reproducibility
+```{r prep, message=FALSE}
+library(knitr)
+library(ggplot2)
+library(data.table)
+library(emmeans)
+library(car)
+library(lme4)
+library(lmerTest)
+
+base_path <- "../data" #knitr
+folder <- '2018-06-19-data-from-critical-thermal-limits-affected-differently-by-developmental-and-adult-thermal-fluctuations'
+
+# Occasional outliers exceeding 2.2 times the interquartile range were removed
+outlier.removal <- function(x){
+  q1 <- quantile(x, .25, na.rm=TRUE) # quartile 1
+  q3 <- quantile(x, .75, na.rm=TRUE) # quartile 3
+  iqr <- q3 - q1 # interquartile range
+  min <- q1 - (iqr*2.2) # remove any observation less than this
+  max <- q3 + (iqr*2.2) # remove any observation greater than this
+  x.out <- ifelse(x < min | x > max, NA, x)
+  return(x.out)
+}
+
+```
+
+## Reproducibility key
+1. Reproducibility: 1 (fails to reproduce). Not really close
+2. Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)
+3. Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.
+4. Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.
+
+A "+" means that the precise method wasn't specified and reproducibility required exploration.
+
+## Table 1 (Results of ANOVA for effects on CTmin and CTmax of ±4 and ±8°C amplitude fluctuation after developmental acclimation (Fig. 2A))
+
+```{r table1}
+file_list <- c(
+           'CTmin_2d_4_19,23.csv',
+           'CTmin_2d_8_19,23.csv',
+           'CTmax_2d_4_19,23.csv',
+           'CTmax_2d_8_19,23.csv'
+           )
+
+table1_labels <- paste(substr(file_list,1,5), substr(file_list,10,10), sep='±')
+table1.typeI <- data.frame(matrix(NA,nrow=3, ncol=length(file_list)))
+colnames(table1.typeI) <- table1_labels
+row.names(table1.typeI) <- c('Treat', 'Temp', 'Treat:Temp')
+table1.typeIII <- copy(table1.typeI)
+for(fn in file_list){
+  file_path <- paste(base_path, folder, fn, sep='/')
+  fly <- fread(file_path)
+  fly[, dev.temp:=factor(dev.temp)]
+  if(substr(fn,1,5)=='CTmin'){ # rename the response column and remove outliers
+    fly[, CT:=outlier.removal(ctmin), by=.(dev.treat, dev.temp)]
+  }else{
+    fly[, CT:=outlier.removal(ctmax), by=.(dev.treat, dev.temp)]
+  }
+    
+  form <- formula('CT ~ dev.treat*dev.temp')
+  fit <- anova(lm(form, data=fly))
+  F_value <- round(fit[1:3,'F value'], 1)
+  p_value <- round(fit[1:3,'Pr(>F)'], 3)
+  df_value <- rep(fit['Residuals', 'Df'], 3)
+  p_value[p_value==0] <- "<0.001"
+  res <- paste(F_value, " (p=", p_value, ", ddf=", df_value, ")", sep='')
+  j <- which(fn==file_list)
+  table1.typeI[, j] <- res
+  
+  options(contrasts=c(unordered="contr.sum", ordered="contr.poly"))
+  fit3 <- Anova(lm(form, data=fly), type='III')
+  options(contrasts=c(unordered="contr.treatment", ordered="contr.poly"))
+  F_value <- round(fit3[2:4,'F value'], 1)
+  p_value <- round(fit3[2:4,'Pr(>F)'], 3)
+  df_value <- rep(fit3['Residuals', 'Df'], 3)
+  p_value[p_value==0] <- "<0.001"
+  res <- paste(F_value, " (p=", p_value, ", ddf=", df_value, ")", sep='')
+  table1.typeIII[, j] <- res
+}
+```
+
+Type I results
+
+Reproducibility: 2 (reproduces to a similar value) to 3 (reproduces to decimal or random error). Most values reproduce to 3. Some differences are due to different ddf, which suggests the algorithm for outlier detection differs. Results with reproducible ddf but different F-value may be due to different cases that are identified as outlier (but equal number of outlier cases in total).
+
+** Red Flag **
+
+The reported ANOVA table is Type I SS and almost certainly the author want Type III (or Type II) SS (depending on how they want to treat the interaction). There are some differences that will impact inference. Also, since there is no random effect, lm should be used instead of lmer (at least I couldn't get lmer to fit without a random effect specified).
+
+```{r table1_typeI}
+  kable(table1.typeI)
+
+```
+
+Type III results
+```{r table1_typeIII}
+  kable(table1.typeIII)
+```
+
+## Table 2 results
+
+```{r table2}
+# two files have dev.temp=19 and dev.temp=23 combined. Separate these into separate files. Could make this a loop but not having loop may be more readable
+fn <- 'CTmin_5d_4_19,23.csv' # split this file
+file_path <- paste(base_path, folder, fn, sep='/')
+fly <- fread(file_path)
+out_fn <- 'CTmin_5d_4_19.csv'
+file_path <- paste(base_path, folder, out_fn, sep='/')
+write.table(fly[dev.temp==19, ], file_path, row.names = FALSE, quote=FALSE, sep=',')
+out_fn <- 'CTmin_5d_4_23.csv'
+file_path <- paste(base_path, folder, out_fn, sep='/')
+write.table(fly[dev.temp==23, ], file_path, row.names = FALSE, quote=FALSE, sep=',')
+
+fn <- 'CTmax_5d_4_19,23.csv' # split this file
+file_path <- paste(base_path, folder, fn, sep='/')
+fly <- fread(file_path)
+out_fn <- 'CTmax_5d_4_19.csv'
+file_path <- paste(base_path, folder, out_fn, sep='/')
+write.table(fly[dev.temp==19, ], file_path, row.names = FALSE, quote=FALSE, sep=',')
+out_fn <- 'CTmax_5d_4_23.csv'
+file_path <- paste(base_path, folder, out_fn, sep='/')
+write.table(fly[dev.temp==23, ], file_path, row.names = FALSE, quote=FALSE, sep=',')
+
+file_list <- c(
+           'CTmin_5d_4_19.csv',
+           'CTmin_5d_4_23.csv',
+           'CTmin_5d_8_19.csv',
+           'CTmin_5d_8_23.csv',
+           'CTmax_5d_4_19.csv',
+           'CTmax_5d_4_23.csv',
+           'CTmax_5d_8_19.csv',
+           'CTmax_5d_8_23.csv'
+           )
+
+table2_labels <- paste(substr(file_list,1,5), substr(file_list,10,10), sep='±')
+table2_labels <- paste(table2_labels, substr(file_list,12,13), sep=', D')
+
+table2.typeI <- data.frame(matrix(NA,nrow=3, ncol=length(file_list)))
+colnames(table2.typeI) <- table2_labels
+row.names(table2.typeI) <- c('Treat_dev', 'Treat_ad', 'Treat_dev:Treat_ad')
+table2.typeIII <- copy(table2.typeI)
+for(fn in file_list){
+  file_path <- paste(base_path, folder, fn, sep='/')
+  fly <- fread(file_path)
+  if(substr(fn,1,5)=='CTmin'){ # rename the response column and remove outliers
+    fly[, CT:=outlier.removal(ctmin), by=.(dev.treat, ad.treat)]
+  }else{
+    fly[, CT:=outlier.removal(ctmax), by=.(dev.treat, ad.treat)]
+  }
+    
+  form <- formula('CT ~ dev.treat*ad.treat')
+  fit <- anova(lm(form, data=fly))
+  F_value <- round(fit[1:3,'F value'], 1)
+  p_value <- round(fit[1:3,'Pr(>F)'], 3)
+  df_value <- rep(fit['Residuals', 'Df'], 3)
+  p_value[p_value==0] <- "<0.001"
+  res <- paste(F_value, " (p=", p_value, ", ddf=", df_value, ")", sep='')
+  j <- which(fn==file_list)
+  table2.typeI[, j] <- res
+  
+
+  options(contrasts=c(unordered="contr.sum", ordered="contr.poly"))
+  fit3 <- Anova(lm(form, data=fly), type='III')
+  options(contrasts=c(unordered="contr.treatment", ordered="contr.poly"))
+  F_value <- round(fit3[2:4,'F value'], 1)
+  p_value <- round(fit3[2:4,'Pr(>F)'], 3)
+  df_value <- rep(fit3['Residuals', 'Df'], 3)
+  p_value[p_value==0] <- "<0.001"
+  res <- paste(F_value, " (p=", p_value, ", ddf=", df_value, ")", sep='')
+  table2.typeIII[, j] <- res
+  
+}
+
+```
+
+Type I results
+
+Reproducibility: 3 (reproduces to decimal or random error).
+
+** Red Flag **
+
+The reported ANOVA table is Type I SS and almost certainly the author want Type III (or Type II) SS (depending on how they want to treat the interaction). There are some differences that will impact inference. Also, since there is no random effect, lm should be used instead of lmer (at least I couldn't get lmer to fit without a random effect specified).
+```{r table2_typeI}
+  kable(table2.typeI)
+
+```
+
+Type III results
+```{r table2_typeIII}
+  kable(table2.typeIII)
+```
+
+
+## Table 3 results
+
+```{r table3}
+file_list <- c(
+           'CTmin_9d_4_19.csv',
+           'CTmin_9d_4_23.csv',
+           'CTmin_9d_8_19.csv',
+           'CTmin_9d_8_23.csv',
+           'CTmax_9d_4_19.csv',
+           'CTmax_9d_4_23.csv',
+           'CTmax_9d_8_19.csv',
+           'CTmax_9d_8_23.csv'
+)
+
+table3_labels <- paste(substr(file_list,1,5), substr(file_list,10,10), sep='±')
+table3_labels <- paste(table3_labels, substr(file_list,12,13), sep=', D')
+
+table3.typeI <- data.frame(matrix(NA,nrow=3, ncol=length(file_list)))
+colnames(table3.typeI) <- table3_labels
+row.names(table3.typeI) <- c('Treat_dev', 'Temp_ad', 'Treat_dev:Temp_ad')
+table3.typeIII <- copy(table3.typeI)
+for(fn in file_list){
+  file_path <- paste(base_path, folder, fn, sep='/')
+  fly <- fread(file_path)
+  fly[, dev.treat:=factor(dev.treat)]
+  fly[, ad.temp:=factor(ad.temp)]
+  if(substr(fn,1,5)=='CTmin'){ # rename the response column and remove outliers
+    fly[, CT:=outlier.removal(ctmin), by=.(dev.treat, ad.temp)]
+  }else{
+    fly[, CT:=outlier.removal(ctmax), by=.(dev.treat, ad.temp)]
+  }
+    
+  form <- formula('CT ~ dev.treat*ad.temp')
+  fit <- anova(lm(form, data=fly))
+  F_value <- round(fit[1:3,'F value'], 1)
+  p_value <- round(fit[1:3,'Pr(>F)'], 3)
+  df_value <- rep(fit['Residuals', 'Df'], 3)
+  p_value[p_value==0] <- "<0.001"
+  res <- paste(F_value, " (p=", p_value, ", ddf=", df_value, ")", sep='')
+  j <- which(fn==file_list)
+  table3.typeI[, j] <- res
+  
+
+  options(contrasts=c(unordered="contr.sum", ordered="contr.poly"))
+  fit3 <- Anova(lm(form, data=fly), type='III')
+  options(contrasts=c(unordered="contr.treatment", ordered="contr.poly"))
+  F_value <- round(fit3[2:4,'F value'], 1)
+  p_value <- round(fit3[2:4,'Pr(>F)'], 3)
+  df_value <- rep(fit3['Residuals', 'Df'], 3)
+  p_value[p_value==0] <- "<0.001"
+  res <- paste(F_value, " (p=", p_value, ", ddf=", df_value, ")", sep='')
+  table3.typeIII[, j] <- res
+  
+}
+
+```
+
+Type I results
+
+Reproducibility: Reproducibility: 1 (fails to reproduce), 2 (reproduces to a similar value), and 3 (reproduces to decimal or random error). The columns with ±8 are using very different -- mine have much large samples and DF. The massive difference in ddf does not suggest something as simple as outlier detection difference. As above, for the level 2 differences, these are due to different ddf, which suggests the algorithm for outlier detection differs. Results with reproducible ddf but different F-value may be due to different cases that are identified as outlier (but equal number of outlier cases in total).
+
+** Red Flag **
+
+The reported ANOVA table is Type I SS and almost certainly the author want Type III (or Type II) SS (depending on how they want to treat the interaction). There are some differences that will impact inference. Also, since there is no random effect, lm should be used instead of lmer (at least I couldn't get lmer to fit without a random effect specified).
+
+```{r table3_typeI}
+  kable(table3.typeI)
+
+```
+
+Type III results
+```{r table3_typeIII}
+  kable(table3.typeIII)
+```
+
+# Post-publication review
+
+As noted above, the ANOVA tables reported present Type I (sequential) SS which are almost certainly not what the authors intended as the p-values of the first factor will not be conditional on the second factor (nor the interaction). This has consequences on the inference from the ANOVA tables.

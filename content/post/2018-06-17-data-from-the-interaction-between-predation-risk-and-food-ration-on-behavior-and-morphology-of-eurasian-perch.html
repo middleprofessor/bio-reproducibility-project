@@ -11,6 +11,7 @@ tags:
   - experiment
   - factorial
   - nested
+  - linear mixed model
 subtitle: ''
 output:
   blogdown::html_page:
@@ -306,5 +307,5 @@ anova(fit.condition, type=&#39;sequential&#39;) # Type I</code></pre>
 </div>
 <div id="post-publication-review" class="section level1">
 <h1>Post-publication review</h1>
-<p>As noted above, the ANOVA tables reported present Type I (sequential) SS which are almost certainly not what the authors intended as the p-values of the first factor will not be conditional on the second factor (nor the interaction). This had consequences on the inference from the ANOVA tables, which raises the question of the role of “storytelling” to “explain” whatever results occur. Would the revised tables generate the same “explanatory” story? It’s one reason why I just don’t find ANOVA tables worthwhile (at all). I’d much rather use sets of contrasts to understand what is going on and at least these also give me effect sizes.</p>
+<p>As noted above, the ANOVA tables reported present Type I (sequential) SS which are almost certainly not what the authors intended as the p-values of the first factor will not be conditional on the second factor (nor the interaction). This has consequences on the inference from the ANOVA tables, which raises the question of the role of “storytelling” to “explain” whatever results occur. Would the revised tables generate the same “explanatory” story? It’s one reason why I just don’t find ANOVA tables worthwhile (at all). I’d much rather use sets of contrasts to understand what is going on and at least these also give me effect sizes.</p>
 </div>

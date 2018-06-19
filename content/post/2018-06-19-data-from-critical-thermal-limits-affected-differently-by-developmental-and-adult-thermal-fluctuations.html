@@ -1,0 +1,539 @@
+---
+title: Data from Critical thermal limits affected differently by developmental and
+  adult thermal fluctuations
+author: Jeff Walker
+date: '2018-06-19'
+slug: data-from-critical-thermal-limits-affected-differently-by-developmental-and-adult-thermal-fluctuations
+categories: []
+tags:
+  - physiology
+  - 2x2
+  - experiment
+  - factorial
+output:
+  blogdown::html_page:
+    toc: true
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#sources">Sources</a></li>
+<li><a href="#background">Background</a></li>
+<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#reproducibility-key">Reproducibility key</a></li>
+<li><a href="#table-1-results-of-anova-for-effects-on-ctmin-and-ctmax-of-4-and-8c-amplitude-fluctuation-after-developmental-acclimation-fig.-2a">Table 1 (Results of ANOVA for effects on CTmin and CTmax of ±4 and ±8°C amplitude fluctuation after developmental acclimation (Fig. 2A))</a></li>
+<li><a href="#table-2-results">Table 2 results</a></li>
+<li><a href="#table-3-results">Table 3 results</a></li>
+</ul></li>
+<li><a href="#post-publication-review">Post-publication review</a></li>
+</ul>
+</div>
+
+<div id="sources" class="section level1">
+<h1>Sources</h1>
+<p>Salachan PV, Sørensen JG (2017) Critical thermal limits affected differently by developmental and adult thermal fluctuations. Journal of Experimental Biology 220(23): 4471-4478. <a href="https://doi.org/10.1242/jeb.165308" class="uri">https://doi.org/10.1242/jeb.165308</a></p>
+<p>Salachan PV, Sørensen JG (2017) Data from: Critical thermal limits affected differently by developmental and adult thermal fluctuations. Dryad Digital Repository. <a href="https://doi.org/10.5061/dryad.25b8f" class="uri">https://doi.org/10.5061/dryad.25b8f</a></p>
+</div>
+<div id="background" class="section level1">
+<h1>Background</h1>
+</div>
+<div id="reproducibility" class="section level1">
+<h1>Reproducibility</h1>
+<pre class="r"><code>library(knitr)
+library(ggplot2)
+library(data.table)
+library(emmeans)
+library(car)
+library(lme4)
+library(lmerTest)
+
+base_path &lt;- &quot;../data&quot; #knitr
+folder &lt;- &#39;2018-06-19-data-from-critical-thermal-limits-affected-differently-by-developmental-and-adult-thermal-fluctuations&#39;
+
+# Occasional outliers exceeding 2.2 times the interquartile range were removed
+outlier.removal &lt;- function(x){
+  q1 &lt;- quantile(x, .25, na.rm=TRUE) # quartile 1
+  q3 &lt;- quantile(x, .75, na.rm=TRUE) # quartile 3
+  iqr &lt;- q3 - q1 # interquartile range
+  min &lt;- q1 - (iqr*2.2) # remove any observation less than this
+  max &lt;- q3 + (iqr*2.2) # remove any observation greater than this
+  x.out &lt;- ifelse(x &lt; min | x &gt; max, NA, x)
+  return(x.out)
+}</code></pre>
+<div id="reproducibility-key" class="section level2">
+<h2>Reproducibility key</h2>
+<ol style="list-style-type: decimal">
+<li>Reproducibility: 1 (fails to reproduce). Not really close</li>
+<li>Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)</li>
+<li>Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.</li>
+<li>Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.</li>
+</ol>
+<p>A “+” means that the precise method wasn’t specified and reproducibility required exploration.</p>
+</div>
+<div id="table-1-results-of-anova-for-effects-on-ctmin-and-ctmax-of-4-and-8c-amplitude-fluctuation-after-developmental-acclimation-fig.-2a" class="section level2">
+<h2>Table 1 (Results of ANOVA for effects on CTmin and CTmax of ±4 and ±8°C amplitude fluctuation after developmental acclimation (Fig. 2A))</h2>
+<pre class="r"><code>file_list &lt;- c(
+           &#39;CTmin_2d_4_19,23.csv&#39;,
+           &#39;CTmin_2d_8_19,23.csv&#39;,
+           &#39;CTmax_2d_4_19,23.csv&#39;,
+           &#39;CTmax_2d_8_19,23.csv&#39;
+           )
+
+table1_labels &lt;- paste(substr(file_list,1,5), substr(file_list,10,10), sep=&#39;±&#39;)
+table1.typeI &lt;- data.frame(matrix(NA,nrow=3, ncol=length(file_list)))
+colnames(table1.typeI) &lt;- table1_labels
+row.names(table1.typeI) &lt;- c(&#39;Treat&#39;, &#39;Temp&#39;, &#39;Treat:Temp&#39;)
+table1.typeIII &lt;- copy(table1.typeI)
+for(fn in file_list){
+  file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
+  fly &lt;- fread(file_path)
+  fly[, dev.temp:=factor(dev.temp)]
+  if(substr(fn,1,5)==&#39;CTmin&#39;){ # rename the response column and remove outliers
+    fly[, CT:=outlier.removal(ctmin), by=.(dev.treat, dev.temp)]
+  }else{
+    fly[, CT:=outlier.removal(ctmax), by=.(dev.treat, dev.temp)]
+  }
+    
+  form &lt;- formula(&#39;CT ~ dev.treat*dev.temp&#39;)
+  fit &lt;- anova(lm(form, data=fly))
+  F_value &lt;- round(fit[1:3,&#39;F value&#39;], 1)
+  p_value &lt;- round(fit[1:3,&#39;Pr(&gt;F)&#39;], 3)
+  df_value &lt;- rep(fit[&#39;Residuals&#39;, &#39;Df&#39;], 3)
+  p_value[p_value==0] &lt;- &quot;&lt;0.001&quot;
+  res &lt;- paste(F_value, &quot; (p=&quot;, p_value, &quot;, ddf=&quot;, df_value, &quot;)&quot;, sep=&#39;&#39;)
+  j &lt;- which(fn==file_list)
+  table1.typeI[, j] &lt;- res
+  
+  options(contrasts=c(unordered=&quot;contr.sum&quot;, ordered=&quot;contr.poly&quot;))
+  fit3 &lt;- Anova(lm(form, data=fly), type=&#39;III&#39;)
+  options(contrasts=c(unordered=&quot;contr.treatment&quot;, ordered=&quot;contr.poly&quot;))
+  F_value &lt;- round(fit3[2:4,&#39;F value&#39;], 1)
+  p_value &lt;- round(fit3[2:4,&#39;Pr(&gt;F)&#39;], 3)
+  df_value &lt;- rep(fit3[&#39;Residuals&#39;, &#39;Df&#39;], 3)
+  p_value[p_value==0] &lt;- &quot;&lt;0.001&quot;
+  res &lt;- paste(F_value, &quot; (p=&quot;, p_value, &quot;, ddf=&quot;, df_value, &quot;)&quot;, sep=&#39;&#39;)
+  table1.typeIII[, j] &lt;- res
+}</code></pre>
+<p>Type I results</p>
+<p>Reproducibility: 2 (reproduces to a similar value) to 3 (reproduces to decimal or random error). Most values reproduce to 3. Some differences are due to different ddf, which suggests the algorithm for outlier detection differs. Results with reproducible ddf but different F-value may be due to different cases that are identified as outlier (but equal number of outlier cases in total).</p>
+<p>** Red Flag **</p>
+<p>The reported ANOVA table is Type I SS and almost certainly the author want Type III (or Type II) SS (depending on how they want to treat the interaction). There are some differences that will impact inference. Also, since there is no random effect, lm should be used instead of lmer (at least I couldn’t get lmer to fit without a random effect specified).</p>
+<pre class="r"><code>  kable(table1.typeI)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">CTmin±4</th>
+<th align="left">CTmin±8</th>
+<th align="left">CTmax±4</th>
+<th align="left">CTmax±8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Treat</td>
+<td align="left">0.1 (p=0.705, ddf=61)</td>
+<td align="left">28.1 (p=&lt;0.001, ddf=73)</td>
+<td align="left">0.2 (p=0.647, ddf=62)</td>
+<td align="left">58.2 (p=&lt;0.001, ddf=73)</td>
+</tr>
+<tr class="even">
+<td>Temp</td>
+<td align="left">660.3 (p=&lt;0.001, ddf=61)</td>
+<td align="left">263.4 (p=&lt;0.001, ddf=73)</td>
+<td align="left">16.2 (p=&lt;0.001, ddf=62)</td>
+<td align="left">31.4 (p=&lt;0.001, ddf=73)</td>
+</tr>
+<tr class="odd">
+<td>Treat:Temp</td>
+<td align="left">0.4 (p=0.512, ddf=61)</td>
+<td align="left">1.1 (p=0.304, ddf=73)</td>
+<td align="left">0.2 (p=0.669, ddf=62)</td>
+<td align="left">1.1 (p=0.295, ddf=73)</td>
+</tr>
+</tbody>
+</table>
+<p>Type III results</p>
+<pre class="r"><code>  kable(table1.typeIII)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">CTmin±4</th>
+<th align="left">CTmin±8</th>
+<th align="left">CTmax±4</th>
+<th align="left">CTmax±8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Treat</td>
+<td align="left">1 (p=0.317, ddf=61)</td>
+<td align="left">21.9 (p=&lt;0.001, ddf=73)</td>
+<td align="left">0.3 (p=0.605, ddf=62)</td>
+<td align="left">56.3 (p=&lt;0.001, ddf=73)</td>
+</tr>
+<tr class="even">
+<td>Temp</td>
+<td align="left">660.7 (p=&lt;0.001, ddf=61)</td>
+<td align="left">261.5 (p=&lt;0.001, ddf=73)</td>
+<td align="left">16.2 (p=&lt;0.001, ddf=62)</td>
+<td align="left">31.6 (p=&lt;0.001, ddf=73)</td>
+</tr>
+<tr class="odd">
+<td>Treat:Temp</td>
+<td align="left">0.4 (p=0.512, ddf=61)</td>
+<td align="left">1.1 (p=0.304, ddf=73)</td>
+<td align="left">0.2 (p=0.669, ddf=62)</td>
+<td align="left">1.1 (p=0.295, ddf=73)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="table-2-results" class="section level2">
+<h2>Table 2 results</h2>
+<pre class="r"><code># two files have dev.temp=19 and dev.temp=23 combined. Separate these into separate files. Could make this a loop but not having loop may be more readable
+fn &lt;- &#39;CTmin_5d_4_19,23.csv&#39; # split this file
+file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
+fly &lt;- fread(file_path)
+out_fn &lt;- &#39;CTmin_5d_4_19.csv&#39;
+file_path &lt;- paste(base_path, folder, out_fn, sep=&#39;/&#39;)
+write.table(fly[dev.temp==19, ], file_path, row.names = FALSE, quote=FALSE, sep=&#39;,&#39;)
+out_fn &lt;- &#39;CTmin_5d_4_23.csv&#39;
+file_path &lt;- paste(base_path, folder, out_fn, sep=&#39;/&#39;)
+write.table(fly[dev.temp==23, ], file_path, row.names = FALSE, quote=FALSE, sep=&#39;,&#39;)
+
+fn &lt;- &#39;CTmax_5d_4_19,23.csv&#39; # split this file
+file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
+fly &lt;- fread(file_path)
+out_fn &lt;- &#39;CTmax_5d_4_19.csv&#39;
+file_path &lt;- paste(base_path, folder, out_fn, sep=&#39;/&#39;)
+write.table(fly[dev.temp==19, ], file_path, row.names = FALSE, quote=FALSE, sep=&#39;,&#39;)
+out_fn &lt;- &#39;CTmax_5d_4_23.csv&#39;
+file_path &lt;- paste(base_path, folder, out_fn, sep=&#39;/&#39;)
+write.table(fly[dev.temp==23, ], file_path, row.names = FALSE, quote=FALSE, sep=&#39;,&#39;)
+
+file_list &lt;- c(
+           &#39;CTmin_5d_4_19.csv&#39;,
+           &#39;CTmin_5d_4_23.csv&#39;,
+           &#39;CTmin_5d_8_19.csv&#39;,
+           &#39;CTmin_5d_8_23.csv&#39;,
+           &#39;CTmax_5d_4_19.csv&#39;,
+           &#39;CTmax_5d_4_23.csv&#39;,
+           &#39;CTmax_5d_8_19.csv&#39;,
+           &#39;CTmax_5d_8_23.csv&#39;
+           )
+
+table2_labels &lt;- paste(substr(file_list,1,5), substr(file_list,10,10), sep=&#39;±&#39;)
+table2_labels &lt;- paste(table2_labels, substr(file_list,12,13), sep=&#39;, D&#39;)
+
+table2.typeI &lt;- data.frame(matrix(NA,nrow=3, ncol=length(file_list)))
+colnames(table2.typeI) &lt;- table2_labels
+row.names(table2.typeI) &lt;- c(&#39;Treat_dev&#39;, &#39;Treat_ad&#39;, &#39;Treat_dev:Treat_ad&#39;)
+table2.typeIII &lt;- copy(table2.typeI)
+for(fn in file_list){
+  file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
+  fly &lt;- fread(file_path)
+  if(substr(fn,1,5)==&#39;CTmin&#39;){ # rename the response column and remove outliers
+    fly[, CT:=outlier.removal(ctmin), by=.(dev.treat, ad.treat)]
+  }else{
+    fly[, CT:=outlier.removal(ctmax), by=.(dev.treat, ad.treat)]
+  }
+    
+  form &lt;- formula(&#39;CT ~ dev.treat*ad.treat&#39;)
+  fit &lt;- anova(lm(form, data=fly))
+  F_value &lt;- round(fit[1:3,&#39;F value&#39;], 1)
+  p_value &lt;- round(fit[1:3,&#39;Pr(&gt;F)&#39;], 3)
+  df_value &lt;- rep(fit[&#39;Residuals&#39;, &#39;Df&#39;], 3)
+  p_value[p_value==0] &lt;- &quot;&lt;0.001&quot;
+  res &lt;- paste(F_value, &quot; (p=&quot;, p_value, &quot;, ddf=&quot;, df_value, &quot;)&quot;, sep=&#39;&#39;)
+  j &lt;- which(fn==file_list)
+  table2.typeI[, j] &lt;- res
+  
+
+  options(contrasts=c(unordered=&quot;contr.sum&quot;, ordered=&quot;contr.poly&quot;))
+  fit3 &lt;- Anova(lm(form, data=fly), type=&#39;III&#39;)
+  options(contrasts=c(unordered=&quot;contr.treatment&quot;, ordered=&quot;contr.poly&quot;))
+  F_value &lt;- round(fit3[2:4,&#39;F value&#39;], 1)
+  p_value &lt;- round(fit3[2:4,&#39;Pr(&gt;F)&#39;], 3)
+  df_value &lt;- rep(fit3[&#39;Residuals&#39;, &#39;Df&#39;], 3)
+  p_value[p_value==0] &lt;- &quot;&lt;0.001&quot;
+  res &lt;- paste(F_value, &quot; (p=&quot;, p_value, &quot;, ddf=&quot;, df_value, &quot;)&quot;, sep=&#39;&#39;)
+  table2.typeIII[, j] &lt;- res
+  
+}</code></pre>
+<p>Type I results</p>
+<p>Reproducibility: 3 (reproduces to decimal or random error).</p>
+<p>** Red Flag **</p>
+<p>The reported ANOVA table is Type I SS and almost certainly the author want Type III (or Type II) SS (depending on how they want to treat the interaction). There are some differences that will impact inference. Also, since there is no random effect, lm should be used instead of lmer (at least I couldn’t get lmer to fit without a random effect specified).</p>
+<pre class="r"><code>  kable(table2.typeI)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">CTmin±4, D19</th>
+<th align="left">CTmin±4, D23</th>
+<th align="left">CTmin±8, D19</th>
+<th align="left">CTmin±8, D23</th>
+<th align="left">CTmax±4, D19</th>
+<th align="left">CTmax±4, D23</th>
+<th align="left">CTmax±8, D19</th>
+<th align="left">CTmax±8, D23</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Treat_dev</td>
+<td align="left">1.9 (p=0.18, ddf=33)</td>
+<td align="left">0.5 (p=0.48, ddf=33)</td>
+<td align="left">11.8 (p=0.001, ddf=70)</td>
+<td align="left">34.5 (p=&lt;0.001, ddf=34)</td>
+<td align="left">0.2 (p=0.699, ddf=34)</td>
+<td align="left">2.8 (p=0.104, ddf=35)</td>
+<td align="left">1.7 (p=0.192, ddf=73)</td>
+<td align="left">0.1 (p=0.756, ddf=33)</td>
+</tr>
+<tr class="even">
+<td>Treat_ad</td>
+<td align="left">0 (p=0.971, ddf=33)</td>
+<td align="left">0.6 (p=0.435, ddf=33)</td>
+<td align="left">4.1 (p=0.047, ddf=70)</td>
+<td align="left">0.5 (p=0.47, ddf=34)</td>
+<td align="left">0.1 (p=0.726, ddf=34)</td>
+<td align="left">1.6 (p=0.213, ddf=35)</td>
+<td align="left">2.3 (p=0.134, ddf=73)</td>
+<td align="left">7.2 (p=0.011, ddf=33)</td>
+</tr>
+<tr class="odd">
+<td>Treat_dev:Treat_ad</td>
+<td align="left">6.3 (p=0.018, ddf=33)</td>
+<td align="left">0 (p=0.83, ddf=33)</td>
+<td align="left">1.3 (p=0.259, ddf=70)</td>
+<td align="left">1.4 (p=0.239, ddf=34)</td>
+<td align="left">0 (p=0.854, ddf=34)</td>
+<td align="left">8.2 (p=0.007, ddf=35)</td>
+<td align="left">0.5 (p=0.502, ddf=73)</td>
+<td align="left">1.9 (p=0.182, ddf=33)</td>
+</tr>
+</tbody>
+</table>
+<p>Type III results</p>
+<pre class="r"><code>  kable(table2.typeIII)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">CTmin±4, D19</th>
+<th align="left">CTmin±4, D23</th>
+<th align="left">CTmin±8, D19</th>
+<th align="left">CTmin±8, D23</th>
+<th align="left">CTmax±4, D19</th>
+<th align="left">CTmax±4, D23</th>
+<th align="left">CTmax±8, D19</th>
+<th align="left">CTmax±8, D23</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Treat_dev</td>
+<td align="left">2.1 (p=0.161, ddf=33)</td>
+<td align="left">0.5 (p=0.471, ddf=33)</td>
+<td align="left">11.5 (p=0.001, ddf=70)</td>
+<td align="left">32.9 (p=&lt;0.001, ddf=34)</td>
+<td align="left">0.1 (p=0.706, ddf=34)</td>
+<td align="left">3.2 (p=0.084, ddf=35)</td>
+<td align="left">1.8 (p=0.182, ddf=73)</td>
+<td align="left">0 (p=0.85, ddf=33)</td>
+</tr>
+<tr class="even">
+<td>Treat_ad</td>
+<td align="left">0 (p=0.978, ddf=33)</td>
+<td align="left">0.6 (p=0.432, ddf=33)</td>
+<td align="left">3.8 (p=0.056, ddf=70)</td>
+<td align="left">0.6 (p=0.429, ddf=34)</td>
+<td align="left">0.1 (p=0.734, ddf=34)</td>
+<td align="left">1.8 (p=0.188, ddf=35)</td>
+<td align="left">2.4 (p=0.128, ddf=73)</td>
+<td align="left">7.7 (p=0.009, ddf=33)</td>
+</tr>
+<tr class="odd">
+<td>Treat_dev:Treat_ad</td>
+<td align="left">6.3 (p=0.018, ddf=33)</td>
+<td align="left">0 (p=0.83, ddf=33)</td>
+<td align="left">1.3 (p=0.259, ddf=70)</td>
+<td align="left">1.4 (p=0.239, ddf=34)</td>
+<td align="left">0 (p=0.854, ddf=34)</td>
+<td align="left">8.2 (p=0.007, ddf=35)</td>
+<td align="left">0.5 (p=0.502, ddf=73)</td>
+<td align="left">1.9 (p=0.182, ddf=33)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="table-3-results" class="section level2">
+<h2>Table 3 results</h2>
+<pre class="r"><code>file_list &lt;- c(
+           &#39;CTmin_9d_4_19.csv&#39;,
+           &#39;CTmin_9d_4_23.csv&#39;,
+           &#39;CTmin_9d_8_19.csv&#39;,
+           &#39;CTmin_9d_8_23.csv&#39;,
+           &#39;CTmax_9d_4_19.csv&#39;,
+           &#39;CTmax_9d_4_23.csv&#39;,
+           &#39;CTmax_9d_8_19.csv&#39;,
+           &#39;CTmax_9d_8_23.csv&#39;
+)
+
+table3_labels &lt;- paste(substr(file_list,1,5), substr(file_list,10,10), sep=&#39;±&#39;)
+table3_labels &lt;- paste(table3_labels, substr(file_list,12,13), sep=&#39;, D&#39;)
+
+table3.typeI &lt;- data.frame(matrix(NA,nrow=3, ncol=length(file_list)))
+colnames(table3.typeI) &lt;- table3_labels
+row.names(table3.typeI) &lt;- c(&#39;Treat_dev&#39;, &#39;Temp_ad&#39;, &#39;Treat_dev:Temp_ad&#39;)
+table3.typeIII &lt;- copy(table3.typeI)
+for(fn in file_list){
+  file_path &lt;- paste(base_path, folder, fn, sep=&#39;/&#39;)
+  fly &lt;- fread(file_path)
+  fly[, dev.treat:=factor(dev.treat)]
+  fly[, ad.temp:=factor(ad.temp)]
+  if(substr(fn,1,5)==&#39;CTmin&#39;){ # rename the response column and remove outliers
+    fly[, CT:=outlier.removal(ctmin), by=.(dev.treat, ad.temp)]
+  }else{
+    fly[, CT:=outlier.removal(ctmax), by=.(dev.treat, ad.temp)]
+  }
+    
+  form &lt;- formula(&#39;CT ~ dev.treat*ad.temp&#39;)
+  fit &lt;- anova(lm(form, data=fly))
+  F_value &lt;- round(fit[1:3,&#39;F value&#39;], 1)
+  p_value &lt;- round(fit[1:3,&#39;Pr(&gt;F)&#39;], 3)
+  df_value &lt;- rep(fit[&#39;Residuals&#39;, &#39;Df&#39;], 3)
+  p_value[p_value==0] &lt;- &quot;&lt;0.001&quot;
+  res &lt;- paste(F_value, &quot; (p=&quot;, p_value, &quot;, ddf=&quot;, df_value, &quot;)&quot;, sep=&#39;&#39;)
+  j &lt;- which(fn==file_list)
+  table3.typeI[, j] &lt;- res
+  
+
+  options(contrasts=c(unordered=&quot;contr.sum&quot;, ordered=&quot;contr.poly&quot;))
+  fit3 &lt;- Anova(lm(form, data=fly), type=&#39;III&#39;)
+  options(contrasts=c(unordered=&quot;contr.treatment&quot;, ordered=&quot;contr.poly&quot;))
+  F_value &lt;- round(fit3[2:4,&#39;F value&#39;], 1)
+  p_value &lt;- round(fit3[2:4,&#39;Pr(&gt;F)&#39;], 3)
+  df_value &lt;- rep(fit3[&#39;Residuals&#39;, &#39;Df&#39;], 3)
+  p_value[p_value==0] &lt;- &quot;&lt;0.001&quot;
+  res &lt;- paste(F_value, &quot; (p=&quot;, p_value, &quot;, ddf=&quot;, df_value, &quot;)&quot;, sep=&#39;&#39;)
+  table3.typeIII[, j] &lt;- res
+  
+}</code></pre>
+<p>Type I results</p>
+<p>Reproducibility: Reproducibility: 1 (fails to reproduce), 2 (reproduces to a similar value), and 3 (reproduces to decimal or random error). The columns with ±8 are using very different – mine have much large samples and DF. The massive difference in ddf does not suggest something as simple as outlier detection difference. As above, for the level 2 differences, these are due to different ddf, which suggests the algorithm for outlier detection differs. Results with reproducible ddf but different F-value may be due to different cases that are identified as outlier (but equal number of outlier cases in total).</p>
+<p>** Red Flag **</p>
+<p>The reported ANOVA table is Type I SS and almost certainly the author want Type III (or Type II) SS (depending on how they want to treat the interaction). There are some differences that will impact inference. Also, since there is no random effect, lm should be used instead of lmer (at least I couldn’t get lmer to fit without a random effect specified).</p>
+<pre class="r"><code>  kable(table3.typeI)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">CTmin±4, D19</th>
+<th align="left">CTmin±4, D23</th>
+<th align="left">CTmin±8, D19</th>
+<th align="left">CTmin±8, D23</th>
+<th align="left">CTmax±4, D19</th>
+<th align="left">CTmax±4, D23</th>
+<th align="left">CTmax±8, D19</th>
+<th align="left">CTmax±8, D23</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Treat_dev</td>
+<td align="left">2.8 (p=0.102, ddf=35)</td>
+<td align="left">5.3 (p=0.024, ddf=73)</td>
+<td align="left">19.4 (p=&lt;0.001, ddf=84)</td>
+<td align="left">5.2 (p=0.027, ddf=56)</td>
+<td align="left">0 (p=0.97, ddf=33)</td>
+<td align="left">2.1 (p=0.159, ddf=34)</td>
+<td align="left">0.2 (p=0.696, ddf=76)</td>
+<td align="left">2.9 (p=0.093, ddf=54)</td>
+</tr>
+<tr class="even">
+<td>Temp_ad</td>
+<td align="left">171 (p=&lt;0.001, ddf=35)</td>
+<td align="left">155.1 (p=&lt;0.001, ddf=73)</td>
+<td align="left">150 (p=&lt;0.001, ddf=84)</td>
+<td align="left">64.6 (p=&lt;0.001, ddf=56)</td>
+<td align="left">1.6 (p=0.217, ddf=33)</td>
+<td align="left">12.7 (p=0.001, ddf=34)</td>
+<td align="left">0 (p=0.956, ddf=76)</td>
+<td align="left">0.3 (p=0.594, ddf=54)</td>
+</tr>
+<tr class="odd">
+<td>Treat_dev:Temp_ad</td>
+<td align="left">3.7 (p=0.063, ddf=35)</td>
+<td align="left">0 (p=0.888, ddf=73)</td>
+<td align="left">27 (p=&lt;0.001, ddf=84)</td>
+<td align="left">0.5 (p=0.493, ddf=56)</td>
+<td align="left">5.6 (p=0.024, ddf=33)</td>
+<td align="left">1.6 (p=0.22, ddf=34)</td>
+<td align="left">0 (p=0.925, ddf=76)</td>
+<td align="left">0.6 (p=0.443, ddf=54)</td>
+</tr>
+</tbody>
+</table>
+<p>Type III results</p>
+<pre class="r"><code>  kable(table3.typeIII)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">CTmin±4, D19</th>
+<th align="left">CTmin±4, D23</th>
+<th align="left">CTmin±8, D19</th>
+<th align="left">CTmin±8, D23</th>
+<th align="left">CTmax±4, D19</th>
+<th align="left">CTmax±4, D23</th>
+<th align="left">CTmax±8, D19</th>
+<th align="left">CTmax±8, D23</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Treat_dev</td>
+<td align="left">3.9 (p=0.057, ddf=35)</td>
+<td align="left">6.1 (p=0.016, ddf=73)</td>
+<td align="left">34 (p=&lt;0.001, ddf=84)</td>
+<td align="left">3.7 (p=0.06, ddf=56)</td>
+<td align="left">0 (p=0.992, ddf=33)</td>
+<td align="left">2.4 (p=0.128, ddf=34)</td>
+<td align="left">0.1 (p=0.717, ddf=76)</td>
+<td align="left">3.4 (p=0.07, ddf=54)</td>
+</tr>
+<tr class="even">
+<td>Temp_ad</td>
+<td align="left">169.5 (p=&lt;0.001, ddf=35)</td>
+<td align="left">155 (p=&lt;0.001, ddf=73)</td>
+<td align="left">150 (p=&lt;0.001, ddf=84)</td>
+<td align="left">64.6 (p=&lt;0.001, ddf=56)</td>
+<td align="left">1.7 (p=0.196, ddf=33)</td>
+<td align="left">12.1 (p=0.001, ddf=34)</td>
+<td align="left">0 (p=0.95, ddf=76)</td>
+<td align="left">0.2 (p=0.637, ddf=54)</td>
+</tr>
+<tr class="odd">
+<td>Treat_dev:Temp_ad</td>
+<td align="left">3.7 (p=0.063, ddf=35)</td>
+<td align="left">0 (p=0.888, ddf=73)</td>
+<td align="left">27 (p=&lt;0.001, ddf=84)</td>
+<td align="left">0.5 (p=0.493, ddf=56)</td>
+<td align="left">5.6 (p=0.024, ddf=33)</td>
+<td align="left">1.6 (p=0.22, ddf=34)</td>
+<td align="left">0 (p=0.925, ddf=76)</td>
+<td align="left">0.6 (p=0.443, ddf=54)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="post-publication-review" class="section level1">
+<h1>Post-publication review</h1>
+<p>As noted above, the ANOVA tables reported present Type I (sequential) SS which are almost certainly not what the authors intended as the p-values of the first factor will not be conditional on the second factor (nor the interaction). This has consequences on the inference from the ANOVA tables.</p>
+</div>
