@@ -6,9 +6,9 @@
   <title>Data from: Success despite the stress -- violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from: Success despite the stress -- violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from: Success despite the stress -- violet-green swallows …" />
-  <meta name="description" content="Sources Background Data Reproducibility Reproducibility key Initial measures Change in Cort Change in Body Mass  Post-publication review “no significant differences” among treatment groups at baseline does not protect in any way against the bias in change scores (post - pre treatment measure) Estimates of treatment effects on Cortisol and Mass were not adjusted for baseline values Simulation to explore behavior in lmm vs. ANCOVA-lm vs. cLDA Adjustment for baseline comparing \(Cort_b\)    Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs.">
-  <meta property="og:description" content="Sources Background Data Reproducibility Reproducibility key Initial measures Change in Cort Change in Body Mass  Post-publication review “no significant differences” among treatment groups at baseline does not protect in any way against the bias in change scores (post - pre treatment measure) Estimates of treatment effects on Cortisol and Mass were not adjusted for baseline values Simulation to explore behavior in lmm vs. ANCOVA-lm vs. cLDA Adjustment for baseline comparing \(Cort_b\)    Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs.">
-  <meta name="twitter:description" content="Sources Background Data Reproducibility Reproducibility key Initial measures Change in Cort Change in Body Mass  Post-publication review “no significant differences” among treatment groups at baseline …">
+  <meta name="description" content="Sources Background Reproducibility key Caveats  Data Reproducibility Initial measures Change in Cort Change in Body Mass  Post-publication review “no significant differences” among treatment groups at baseline does not protect in any way against the bias in change scores (post - pre treatment measure) Estimates of treatment effects on Cortisol and Mass were not adjusted for baseline values Simulation to explore behavior in lmm vs. ANCOVA-lm vs. cLDA Adjustment for baseline comparing \(Cort_b\)    Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs.">
+  <meta property="og:description" content="Sources Background Reproducibility key Caveats  Data Reproducibility Initial measures Change in Cort Change in Body Mass  Post-publication review “no significant differences” among treatment groups at baseline does not protect in any way against the bias in change scores (post - pre treatment measure) Estimates of treatment effects on Cortisol and Mass were not adjusted for baseline values Simulation to explore behavior in lmm vs. ANCOVA-lm vs. cLDA Adjustment for baseline comparing \(Cort_b\)    Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs.">
+  <meta name="twitter:description" content="Sources Background Reproducibility key Caveats  Data Reproducibility Initial measures Change in Cort Change in Body Mass  Post-publication review “no significant differences” among treatment groups at …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs/" />
@@ -70,10 +70,12 @@
       <div id="TOC">
 <ul>
 <li><a href="#sources">Sources</a></li>
-<li><a href="#background">Background</a></li>
+<li><a href="#background">Background</a><ul>
+<li><a href="#reproducibility-key">Reproducibility key</a></li>
+<li><a href="#caveats">Caveats</a></li>
+</ul></li>
 <li><a href="#data">Data</a></li>
 <li><a href="#reproducibility">Reproducibility</a><ul>
-<li><a href="#reproducibility-key">Reproducibility key</a></li>
 <li><a href="#initial-measures">Initial measures</a></li>
 <li><a href="#change-in-cort">Change in Cort</a></li>
 <li><a href="#change-in-body-mass">Change in Body Mass</a></li>
@@ -95,6 +97,20 @@
 <div id="background" class="section level1">
 <h1>Background</h1>
 <p><strong>usage note</strong> The authors refer to the measure of cortisol as “baseline cortisol.” Sice the design here is pre-post, this could be confused with the more general and wide usage of “baseline” to mean pre-treatment measure.</p>
+<div id="reproducibility-key" class="section level2">
+<h2>Reproducibility key</h2>
+<ol style="list-style-type: decimal">
+<li>Reproducibility: 1 (fails to reproduce). Not really close</li>
+<li>Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)</li>
+<li>Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.</li>
+<li>Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.</li>
+</ol>
+<p>A “+” means that the precise method wasn’t specified and reproducibility required exploration.</p>
+</div>
+<div id="caveats" class="section level2">
+<h2>Caveats</h2>
+<p>Failure to reproduce (level 1) or partial reproducibility (level 2 or 3-) very well might be an error in my coding, or my misunderstanding of the author’s methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically. Similarly, my <strong>Red Flags</strong> may also represent my own lack of knowledge or best practices in statistics.</p>
+</div>
 </div>
 <div id="data" class="section level1">
 <h1>Data</h1>
@@ -108,16 +124,6 @@ bird[, Time:=as.integer(Capture_Period) - 1] # for the constrained LDA</code></p
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
-<div id="reproducibility-key" class="section level2">
-<h2>Reproducibility key</h2>
-<ol style="list-style-type: decimal">
-<li>Reproducibility: 1 (fails to reproduce). Not really close</li>
-<li>Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)</li>
-<li>Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.</li>
-<li>Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.</li>
-</ol>
-<p>A “+” means that the precise method wasn’t specified and reproducibility required exploration.</p>
-</div>
 <div id="initial-measures" class="section level2">
 <h2>Initial measures</h2>
 <blockquote>

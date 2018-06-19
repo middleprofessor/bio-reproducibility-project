@@ -26,6 +26,18 @@ Explored changes in thermal performance curve in response to rearing at 1 of 4 t
 
 Just looking at their Fig. 2, the response was a right shift of the whole curve. They used a model selection procedure to reduce to a minimum adequate model but this is a case where they want estimates for LTL, UTL, TB, and OR to compare to the H&K models!
 
+
+## Reproducibility key
+1. Reproducibility: 1 (fails to reproduce). Not really close
+2. Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)
+3. Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.
+4. Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.
+
+A "+" means that the precise method wasn't specified and reproducibility required exploration.
+
+## Caveats
+Failure to reproduce (level 1) or partial reproducibility (level 2 or 3-) very well might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically. Similarly, my **Red Flags** may also represent my own lack of knowledge or best practices in statistics.
+
 # Summary of Re-analysis
 ## Reproducibility
 

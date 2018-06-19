@@ -6,11 +6,11 @@
   <title>Data from Critical thermal limits affected differently by developmental and adult thermal fluctuations - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from Critical thermal limits affected differently by developmental and adult thermal fluctuations - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from Critical thermal limits affected differently by …" />
-  <meta name="description" content="Sources Background Reproducibility Reproducibility key Table 1 (Results of ANOVA for effects on CTmin and CTmax of ±4 and ±8°C amplitude fluctuation after developmental acclimation (Fig. 2A)) Table 2 results Table 3 results  Post-publication review   Sources Salachan PV, Sørensen JG (2017) Critical thermal limits affected differently by developmental and adult thermal fluctuations. Journal of Experimental Biology 220(23): 4471-4478. https://doi.org/10.1242/jeb.165308
+  <meta name="description" content="Sources Background Reproducibility key Caveats  Reproducibility Table 1 (Results of ANOVA for effects on CTmin and CTmax of ±4 and ±8°C amplitude fluctuation after developmental acclimation (Fig. 2A)) Table 2 results Table 3 results  Post-publication review   Sources Salachan PV, Sørensen JG (2017) Critical thermal limits affected differently by developmental and adult thermal fluctuations. Journal of Experimental Biology 220(23): 4471-4478. https://doi.org/10.1242/jeb.165308
 Salachan PV, Sørensen JG (2017) Data from: Critical thermal limits affected differently by developmental and adult thermal fluctuations.">
-  <meta property="og:description" content="Sources Background Reproducibility Reproducibility key Table 1 (Results of ANOVA for effects on CTmin and CTmax of ±4 and ±8°C amplitude fluctuation after developmental acclimation (Fig. 2A)) Table 2 results Table 3 results  Post-publication review   Sources Salachan PV, Sørensen JG (2017) Critical thermal limits affected differently by developmental and adult thermal fluctuations. Journal of Experimental Biology 220(23): 4471-4478. https://doi.org/10.1242/jeb.165308
+  <meta property="og:description" content="Sources Background Reproducibility key Caveats  Reproducibility Table 1 (Results of ANOVA for effects on CTmin and CTmax of ±4 and ±8°C amplitude fluctuation after developmental acclimation (Fig. 2A)) Table 2 results Table 3 results  Post-publication review   Sources Salachan PV, Sørensen JG (2017) Critical thermal limits affected differently by developmental and adult thermal fluctuations. Journal of Experimental Biology 220(23): 4471-4478. https://doi.org/10.1242/jeb.165308
 Salachan PV, Sørensen JG (2017) Data from: Critical thermal limits affected differently by developmental and adult thermal fluctuations.">
-  <meta name="twitter:description" content="Sources Background Reproducibility Reproducibility key Table 1 (Results of ANOVA for effects on CTmin and CTmax of ±4 and ±8°C amplitude fluctuation after developmental acclimation (Fig. 2A)) Table 2 …">
+  <meta name="twitter:description" content="Sources Background Reproducibility key Caveats  Reproducibility Table 1 (Results of ANOVA for effects on CTmin and CTmax of ±4 and ±8°C amplitude fluctuation after developmental acclimation (Fig. 2A)) …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-critical-thermal-limits-affected-differently-by-developmental-and-adult-thermal-fluctuations/" />
@@ -65,6 +65,12 @@ Salachan PV, Sørensen JG (2017) Data from: Critical thermal limits affected dif
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
+          <a href="/tags/anova/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            anova
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
           <a href="/tags/factorial/">
             <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
             factorial
@@ -78,9 +84,11 @@ Salachan PV, Sørensen JG (2017) Data from: Critical thermal limits affected dif
       <div id="TOC">
 <ul>
 <li><a href="#sources">Sources</a></li>
-<li><a href="#background">Background</a></li>
-<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#background">Background</a><ul>
 <li><a href="#reproducibility-key">Reproducibility key</a></li>
+<li><a href="#caveats">Caveats</a></li>
+</ul></li>
+<li><a href="#reproducibility">Reproducibility</a><ul>
 <li><a href="#table-1-results-of-anova-for-effects-on-ctmin-and-ctmax-of-4-and-8c-amplitude-fluctuation-after-developmental-acclimation-fig.-2a">Table 1 (Results of ANOVA for effects on CTmin and CTmax of ±4 and ±8°C amplitude fluctuation after developmental acclimation (Fig. 2A))</a></li>
 <li><a href="#table-2-results">Table 2 results</a></li>
 <li><a href="#table-3-results">Table 3 results</a></li>
@@ -96,6 +104,20 @@ Salachan PV, Sørensen JG (2017) Data from: Critical thermal limits affected dif
 </div>
 <div id="background" class="section level1">
 <h1>Background</h1>
+<div id="reproducibility-key" class="section level2">
+<h2>Reproducibility key</h2>
+<ol style="list-style-type: decimal">
+<li>Reproducibility: 1 (fails to reproduce). Not really close</li>
+<li>Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)</li>
+<li>Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.</li>
+<li>Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.</li>
+</ol>
+<p>A “+” means that the precise method wasn’t specified and reproducibility required exploration.</p>
+</div>
+<div id="caveats" class="section level2">
+<h2>Caveats</h2>
+<p>Failure to reproduce (level 1) or partial reproducibility (level 2 or 3-) very well might be an error in my coding, or my misunderstanding of the author’s methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically. Similarly, my <strong>Red Flags</strong> may also represent my own lack of knowledge or best practices in statistics.</p>
+</div>
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
@@ -120,16 +142,6 @@ outlier.removal &lt;- function(x){
   x.out &lt;- ifelse(x &lt; min | x &gt; max, NA, x)
   return(x.out)
 }</code></pre>
-<div id="reproducibility-key" class="section level2">
-<h2>Reproducibility key</h2>
-<ol style="list-style-type: decimal">
-<li>Reproducibility: 1 (fails to reproduce). Not really close</li>
-<li>Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)</li>
-<li>Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.</li>
-<li>Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.</li>
-</ol>
-<p>A “+” means that the precise method wasn’t specified and reproducibility required exploration.</p>
-</div>
 <div id="table-1-results-of-anova-for-effects-on-ctmin-and-ctmax-of-4-and-8c-amplitude-fluctuation-after-developmental-acclimation-fig.-2a" class="section level2">
 <h2>Table 1 (Results of ANOVA for effects on CTmin and CTmax of ±4 and ±8°C amplitude fluctuation after developmental acclimation (Fig. 2A))</h2>
 <pre class="r"><code>file_list &lt;- c(

@@ -10,5 +10,8 @@ The Biology Reproducibility Project is an archive of R scripts re-analysing publ
 [Reproducible Research in Computational Science](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C20&q=Reproducible+Research+in+Computational+Science&btnG=)
 
 
+Caveat that I include on each post: Failure to reproduce (level 1) or partial reproducibility (level 2 or 3-) very well might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically. Similarly, my **Red Flags** may also represent my own lack of knowledge or best practices in statistics.
+
+
 All scripts are written by [Jeffrey A. Walker](https://www.middleprofessor.com)
 

@@ -39,6 +39,18 @@ Data source: [https://datadryad.org/resource/doi:10.5061/dryad.3bc3s](https://da
 
 **usage note** The authors refer to the measure of cortisol as "baseline cortisol." Sice the design here is pre-post, this could be confused with the more general and wide usage of "baseline" to mean pre-treatment measure.
 
+
+## Reproducibility key
+1. Reproducibility: 1 (fails to reproduce). Not really close
+2. Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)
+3. Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.
+4. Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.
+
+A "+" means that the precise method wasn't specified and reproducibility required exploration.
+
+## Caveats
+Failure to reproduce (level 1) or partial reproducibility (level 2 or 3-) very well might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically. Similarly, my **Red Flags** may also represent my own lack of knowledge or best practices in statistics.
+
 # Data
 These are the data for the major results of change in $Cort_b$ and $Mass$ in response to the treatment.
 
@@ -52,14 +64,6 @@ bird[, Time:=as.integer(Capture_Period) - 1] # for the constrained LDA
 ```
 
 # Reproducibility
-## Reproducibility key
-1. Reproducibility: 1 (fails to reproduce). Not really close
-2. Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)
-3. Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.
-4. Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.
-
-A "+" means that the precise method wasn't specified and reproducibility required exploration.
-
 ## Initial measures
 
 >We detected no significant differences among females in the three treatment groups with respect to mean body mass (F2,20 = 2.83, P = 0.083), mean baseline cort (F2,14 = 1.81, P = 0.199), mean clutch size (F2,21 = 0.61, P = 0.555) or mean brood size (F2,21 = 2.54, P = 0.103) when they were measured prior to feather clipping.
