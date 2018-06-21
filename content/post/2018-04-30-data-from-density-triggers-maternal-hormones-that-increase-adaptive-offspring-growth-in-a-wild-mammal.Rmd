@@ -8,9 +8,9 @@ tags:
   - ecology
   - physiology
   - reproducible
-  - red flag
   - linear mixed model
   - experiment
+  - regression to the mean
 output:
   blogdown::html_page:
     toc: true
@@ -155,7 +155,7 @@ qplot(x=Treatment, y=log(FCM), data=fcmC_pre) + geom_boxplot() + geom_point()
 
 **Replicated results**
 
-The effects, SE, and t replicate but the my $p$-values are twice those of the authors, who must be reporting 1-tailed (directional) tests. I don't see that they have reported that they are using 1-tailed tests. My opinion is that one-tail tests are p-hacking.
+The effects, SE, and t replicate but the my $p$-values are twice those of the authors, who must be reporting 1-tailed (directional) tests (I think). I don't see that they have reported that they are using 1-tailed tests. My opinion is that one-tail tests are p-hacking.
 
 ```{r TableS4rep}
 table_part1
@@ -208,7 +208,7 @@ coefficients(summary(fit)) # what is "corrected about FCM?"
 
 # Red flags
 ## Effect of Density on growth rate (Fig. 2/Table S2)
-### Growth rate is a change score and is confounding by the basline
+### Growth rate is a change score and is confounded by the basline
 The confounding makes no difference for these data.
 
 ```{r tableS2_baseline}
@@ -260,7 +260,7 @@ modeled_GR # compare to plot
 
 ## Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)
 ### one-tailed tests
-The authors reported p-values from one-tailed tests, apparently without reporting that these are one-tailed tests (at least I cannot find this with a search). As stated above, I think one-tailed tests are p-hacking -- Conclusions or a decision to publish a paper in *Science* shouldn't rest on a p-value of 0.03 or 0.06. It also assumes that effects in the opposite direction cannot exist. If one has prior information on the direction of an effect then use this in a Bayesian model.
+The authors seem to be reporting p-values from one-tailed tests, but I cannot cofirm this because some of the p-values are < 1/2 two-tailed p. As stated above, I think one-tailed tests are p-hacking. Regardless, conclusions or a decision to publish a paper in *Science* shouldn't rest on a p-value of 0.03 or 0.06. It also assumes that effects in the opposite direction cannot exist. If one has prior information on the direction of an effect then use this in a Bayesian model.
 
 ### Forking paths
 There is variation among the analyses. Sometimes $Days_{pc}$ includes a quadratic component sometimes not. Some analysis are factorial $Treatment \times Days_{pc}$ while others are additive. The analysis below shows no real consequences of obvious forking paths.
@@ -447,9 +447,9 @@ coefficients(summary(lmer(Offspring.Growth.Rate ~ Previous.Year.Cones + Current.
 A p-value for an observational design with multiple, somewhat arbitrary covariates, that is near 0.05 just isn't very strong evidence of anything causal. The Estimate is strongly dependent on which other covariates are in the model. Certainly there are missing confounders. See Walker 2014.
 
 #### Table S5 CIs
-1. The published CIs of $Currrent_cones$, $Parturtion_date$, $Litter_size$ do not even cover the estimate. How could no-one see this?
+1. The published CIs of *Currrent_cones*, *Parturtion_date*, *Litter_size* do not even cover the estimate. This is a good example of how easy it is to get large errors through review - either because reviewers are overwhelmed or don't pay enough attention to tables or enough attention to supplements.
 2. The published CIs are not at all consistent with the p-value (e.g. compare for FCM)
-3. I would tend to have more confidence in bootstrap CI more than p-value but then my bootstrap p-values are much more consistent with p-value. Given #1 and #2, something must be wrong with published CI.
+3. Were I to simply look at the table, I would tend to have more confidence in bootstrap CI than the p-value but then my bootstrap CIs are much more consistent with the p-values. Given #1 and #2, something must be wrong with published CI.
 4. From the lme4 documentation: "the new version of lme4 does not provide an mcmcsamp (post-hoc MCMC sampling) method, because this was deemed to be unreliable"
 5. conclusion - this doesn't effect the paper but ... I am shocked, shocked, that the reviewers didn't catch the very glaring differences in inference between the CIs and p-values.
 

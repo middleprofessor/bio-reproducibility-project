@@ -178,7 +178,7 @@ dt &lt;- frb[depth==5]
 # model select
 form &lt;- select_model(y, x, r, dt, reml=FALSE)
 # anova
-anova(lmer(form, data=dt, REML=FALSE), type=3) # replicates</code></pre>
+anova(lmer(form, data=dt, REML=FALSE), type=3)</code></pre>
 <pre><code>## Analysis of Variance Table of type III  with  Satterthwaite 
 ## approximation for degrees of freedom
 ##           Sum Sq Mean Sq NumDF  DenDF F.value  Pr(&gt;F)   
@@ -187,8 +187,20 @@ anova(lmer(form, data=dt, REML=FALSE), type=3) # replicates</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code># anova(lmer(form, data=dt, REML=TRUE), type=3)
-
-# manual F
+anova(lmer(form, data=dt, REML=FALSE), type=3, ddf=&quot;Kenward-Roger&quot;)</code></pre>
+<pre><code>## Analysis of Variance Table of type III  with  Kenward-Roger 
+## approximation for degrees of freedom
+##           Sum Sq Mean Sq NumDF DenDF F.value  Pr(&gt;F)  
+## treatment  15830    7915     2    12  3.6324 0.05841 .
+## season     19092   19092     1    10  8.7619 0.01429 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(lmer(form, data=dt, REML=FALSE), type=3, ddf=&quot;lme4&quot;)</code></pre>
+<pre><code>## Analysis of Variance Table
+##           Df Sum Sq Mean Sq F value
+## treatment  2  19206  9603.1  4.4071
+## season     1  22126 22125.5 10.1538</code></pre>
+<pre class="r"><code># manual F
 1-pf(10.1538, 1, 11.823)</code></pre>
 <pre><code>## [1] 0.007960845</code></pre>
 <pre class="r"><code># published numbes
@@ -199,9 +211,8 @@ anova(lmer(form, data=dt, REML=FALSE), type=3) # replicates</code></pre>
 <p>Fine root mass was lower in litter removal soils at 0-5 cm (significant, Fig. 1)… Litter addition did not significantly lower fine root mass in either 0-5 cm or 0-10 cm soils (Fig. 1 and Appendix S1: Fig. S1).</p>
 </blockquote>
 <pre class="r"><code>fit &lt;- lmer(form, data=dt, REML=FALSE)
-b_table &lt;- emmeans(fit, pairwise ~ treatment | season)[[2]]</code></pre>
-<pre><code>## Loading required namespace: pbkrtest</code></pre>
-<pre class="r"><code>kable(b_table, digits=3, caption=&#39;Tukey&#39;)</code></pre>
+b_table &lt;- emmeans(fit, pairwise ~ treatment | season)[[2]]
+kable(b_table, digits=3, caption=&#39;Tukey&#39;)</code></pre>
 <table>
 <caption><span id="tab:FRB5cmContrasts">Table 1: </span>Tukey</caption>
 <thead>
@@ -286,14 +297,13 @@ dt &lt;- frb[depth==10]
 # model select
 form &lt;- select_model(y, x, r, dt, reml=FALSE)
 # anova
-anova(lmer(form, data=dt, REML=FALSE), type=3) # replicates</code></pre>
+anova(lmer(form, data=dt, REML=FALSE), type=3)</code></pre>
 <pre><code>## Analysis of Variance Table of type III  with  Satterthwaite 
 ## approximation for degrees of freedom
 ##        Sum Sq Mean Sq NumDF  DenDF F.value  Pr(&gt;F)  
 ## season  10096   10096     1 9.5667  3.3346 0.09915 .
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre class="r"><code># anova(lmer(form, data=dt, REML=TRUE), type=3)</code></pre>
 <p>This isn’t close. Explore</p>
 <pre class="r"><code>form &lt;- formula(FRB ~ season*treatment + (1|plot) + (1|month))
 anova(lmer(form, data=dt, REML=FALSE))</code></pre>
@@ -382,8 +392,61 @@ anova(lm(form, data=dt))</code></pre>
 ## Residuals 146 643855    4410                   
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>Reproducibility: 1 (fails to reproduce).</p>
-<p>None of these result in F with anything near 14.9</p>
+<p>Reproducibility: 1 (fails to reproduce). None of these result in F with anything near 14.9</p>
+</div>
+<div id="frl-exploration" class="section level3">
+<h3>FRL exploration</h3>
+<pre class="r"><code>form &lt;- formula(FRB ~ season*treatment + (1|plot) + (1|month))
+fit &lt;- lmer(form, data=dt, REML=FALSE)
+emmeans(fit, pairwise ~ treatment | season)# [[2]]</code></pre>
+<pre><code>## $emmeans
+## season = dry:
+##  treatment  emmean       SE    df lower.CL upper.CL
+##  CT        283.400 27.41336 46.34 228.2307 338.5693
+##  LA        248.600 27.41336 46.34 193.4307 303.7693
+##  LR        245.400 27.41336 46.34 190.2307 300.5693
+## 
+## season = wet:
+##  treatment  emmean       SE    df lower.CL upper.CL
+##  CT        316.550 19.62232 24.40 276.0864 357.0136
+##  LA        266.875 19.62232 24.40 226.4114 307.3386
+##  LR        289.675 19.62232 24.40 249.2114 330.1386
+## 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95 
+## 
+## $contrasts
+## season = dry:
+##  contrast estimate       SE    df t.ratio p.value
+##  CT - LA    34.800 33.70450 59.37   1.033  0.5595
+##  CT - LR    38.000 33.70450 59.37   1.127  0.5012
+##  LA - LR     3.200 33.70450 59.37   0.095  0.9950
+## 
+## season = wet:
+##  contrast estimate       SE    df t.ratio p.value
+##  CT - LA    49.675 26.04464 20.26   1.907  0.1622
+##  CT - LR    26.875 26.04464 20.26   1.032  0.5659
+##  LA - LR   -22.800 26.04464 20.26  -0.875  0.6615
+## 
+## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<pre class="r"><code>emmeans(fit, pairwise ~ treatment)[[2]]</code></pre>
+<pre><code>## NOTE: Results may be misleading due to involvement in interactions</code></pre>
+<pre><code>##  contrast estimate       SE    df t.ratio p.value
+##  CT - LA   42.2375 26.76682 23.05   1.578  0.2750
+##  CT - LR   32.4375 26.76682 23.05   1.212  0.4583
+##  LA - LR   -9.8000 26.76682 23.05  -0.366  0.9290
+## 
+## Results are averaged over the levels of: season 
+## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<pre class="r"><code>form &lt;- formula(FRB ~ treatment + (1|plot) + (1|month))
+fit &lt;- lmer(form, data=dt, REML=FALSE)
+emmeans(fit, pairwise ~ treatment)[[2]]</code></pre>
+<pre><code>##  contrast estimate       SE    df t.ratio p.value
+##  CT - LA      46.7 25.45215 17.92   1.835  0.1869
+##  CT - LR      29.1 25.45215 17.92   1.143  0.5009
+##  LA - LR     -17.6 25.45215 17.92  -0.691  0.7714
+## 
+## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
 </div>
 </div>
 <div id="fine-root-length" class="section level2">
@@ -671,8 +734,8 @@ gg &lt;- ggplot(data=rlp_sum, aes(x=season, y=Prod, fill=treatment)) +
 gg</code></pre>
 <p><img src="/post/2018-06-20-data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects_files/figure-html/fig3c-1.png" width="672" /></p>
 </div>
-<div id="anova" class="section level3">
-<h3>anova</h3>
+<div id="table-1c-anova" class="section level3">
+<h3>Table 1C (anova)</h3>
 <pre class="r"><code>y &lt;- &#39;Prod&#39;
 x &lt;- c(&#39;treatment&#39;, &#39;season&#39;)
 r &lt;- c(&#39;plot&#39;, &#39;month&#39;)
@@ -691,6 +754,58 @@ anova(lmer(form, data=dt, REML=FALSE), type=3)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>Reproducibility: 1 (fails to reproduce) to 2 (reproduces to a similar value). My F-value for the interaction is massive relative to the reported value. The three values have an underlying similar pattern but the numbers aren’t really close.</p>
+</div>
+</div>
+<div id="root-length-survivorship" class="section level2">
+<h2>Root length survivorship</h2>
+<pre class="r"><code>rls_cols &lt;- c(&quot;SurJul13&quot;, &quot;SurAug13&quot;, &quot;SurSep13&quot;, &quot;SurOct13&quot;, &quot;SurNov13&quot;, &quot;SurDec13&quot;, &quot;SurJan14&quot;, &quot;SurFeb14&quot;, &quot;SurMar14&quot;, &quot;SurApr14&quot;, &quot;SurMay14&quot; )
+
+rls &lt;- melt(root, id.vars=c(&#39;treatment&#39;, &#39;plot&#39;), measure.vars &lt;- rls_cols, variable.name=&#39;label&#39;, value.name=&#39;Surv&#39;)
+rls[, treatment:=factor(treatment)]
+rls[, label:=as.character(label)]
+rls[, depth:=factor(ifelse(substr(label, 4, 4)==&#39;5&#39;, 5, 10))]
+rls[, month:=substr(label, nchar(label)-4, nchar(label)-2)]
+dry &lt;- c(&#39;Jan&#39;, &#39;Feb&#39;, &#39;Mar&#39;, &#39;Apr&#39;)
+rls[, season:=factor(ifelse(month %in% dry, &#39;dry&#39;, &#39;wet&#39;))]</code></pre>
+<div id="figure-3d" class="section level3">
+<h3>Figure 3D</h3>
+<pre class="r"><code>rls_sum &lt;- rls[,.(N=.N,
+              Surv=mean(Surv),
+              SE=sd(Surv)/sqrt(.N)),
+              by=.(treatment, season)]
+rls_sum[, Lower:=Surv-SE]
+rls_sum[, Upper:=Surv+SE]
+rls_sum[, season:=factor(season, c(&#39;wet&#39;, &#39;dry&#39;))]
+rls_sum[, treatment:=factor(treatment, c(&#39;LR&#39;, &#39;CT&#39;, &#39;LA&#39;))]
+pd &lt;- position_dodge(.6)
+gg &lt;- ggplot(data=rls_sum, aes(x=season, y=Surv, fill=treatment)) +
+  geom_col(position=pd, width=0.6, color=&#39;black&#39;) +
+  geom_errorbar(aes(ymin=Lower, ymax=Upper), width=.2, position=pd) +
+  scale_fill_manual(values=c(&quot;white&quot;, &quot;gray&quot;, &quot;black&quot;)) +
+  theme_minimal(base_size=14)
+gg</code></pre>
+<p><img src="/post/2018-06-20-data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects_files/figure-html/fig3d-1.png" width="672" /></p>
+</div>
+<div id="table-1d-anova" class="section level3">
+<h3>Table 1D (anova)</h3>
+<pre class="r"><code>y &lt;- &#39;Surv&#39;
+x &lt;- c(&#39;treatment&#39;, &#39;season&#39;)
+r &lt;- c(&#39;plot&#39;, &#39;month&#39;)
+dt &lt;- rls # there is no measure at 5 cm
+
+# model select
+form &lt;- select_model(y, x, r, dt, reml=FALSE)
+# anova
+anova(lmer(form, data=dt, REML=FALSE), type=3)</code></pre>
+<pre><code>## Analysis of Variance Table of type III  with  Satterthwaite 
+## approximation for degrees of freedom
+##                  Sum Sq Mean Sq NumDF   DenDF F.value    Pr(&gt;F)    
+## treatment        2375.4  1187.7     2  15.082  4.5891   0.02775 *  
+## season           1193.6  1193.6     1  10.701  4.6119   0.05556 .  
+## treatment:season 7044.8  3522.4     2 139.872 13.6098 3.975e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing).</p>
 </div>
 </div>
 </div>

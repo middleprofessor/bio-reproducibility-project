@@ -6,8 +6,8 @@
   <title>Data from: Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from: Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from: Density triggers maternal hormones that increase adaptive …" />
-  <meta name="description" content="Sources Background Reproducibility key Caveats  Reproducibility Effect of spruce cone availability on local density (Fig. 1B) Effect of Density on growth rate (Fig. 2/Table S2) Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4) Effect of FCM on offspring growth rate (Table S5) Effect of experiment Cortisol on growth rate (Table S6)  Red flags Effect of Density on growth rate (Fig. 2/Table S2) Growth rate is a change score and is confounding by the basline Figure 2 doesn’t make sense  Effect of Density on fecal cortisol metabolites (Fig.">
-  <meta property="og:description" content="Sources Background Reproducibility key Caveats  Reproducibility Effect of spruce cone availability on local density (Fig. 1B) Effect of Density on growth rate (Fig. 2/Table S2) Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4) Effect of FCM on offspring growth rate (Table S5) Effect of experiment Cortisol on growth rate (Table S6)  Red flags Effect of Density on growth rate (Fig. 2/Table S2) Growth rate is a change score and is confounding by the basline Figure 2 doesn’t make sense  Effect of Density on fecal cortisol metabolites (Fig.">
+  <meta name="description" content="Sources Background Reproducibility key Caveats  Reproducibility Effect of spruce cone availability on local density (Fig. 1B) Effect of Density on growth rate (Fig. 2/Table S2) Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4) Effect of FCM on offspring growth rate (Table S5) Effect of experiment Cortisol on growth rate (Table S6)  Red flags Effect of Density on growth rate (Fig. 2/Table S2) Growth rate is a change score and is confounded by the basline Figure 2 doesn’t make sense  Effect of Density on fecal cortisol metabolites (Fig.">
+  <meta property="og:description" content="Sources Background Reproducibility key Caveats  Reproducibility Effect of spruce cone availability on local density (Fig. 1B) Effect of Density on growth rate (Fig. 2/Table S2) Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4) Effect of FCM on offspring growth rate (Table S5) Effect of experiment Cortisol on growth rate (Table S6)  Red flags Effect of Density on growth rate (Fig. 2/Table S2) Growth rate is a change score and is confounded by the basline Figure 2 doesn’t make sense  Effect of Density on fecal cortisol metabolites (Fig.">
   <meta name="twitter:description" content="Sources Background Reproducibility key Caveats  Reproducibility Effect of spruce cone availability on local density (Fig. 1B) Effect of Density on growth rate (Fig. 2/Table S2) Effect of Density on …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
@@ -63,12 +63,6 @@
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
-          <a href="/tags/red-flag/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
-            red flag
-          </a>&nbsp;
-        </li>
-        <li class="article-meta-tags">
           <a href="/tags/linear-mixed-model/">
             <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
             linear mixed model
@@ -78,6 +72,12 @@
           <a href="/tags/experiment/">
             <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
             experiment
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/regression-to-the-mean/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            regression to the mean
           </a>&nbsp;
         </li>
       </ul>
@@ -101,7 +101,7 @@
 </ul></li>
 <li><a href="#red-flags">Red flags</a><ul>
 <li><a href="#effect-of-density-on-growth-rate-fig.-2table-s2-1">Effect of Density on growth rate (Fig. 2/Table S2)</a><ul>
-<li><a href="#growth-rate-is-a-change-score-and-is-confounding-by-the-basline">Growth rate is a change score and is confounding by the basline</a></li>
+<li><a href="#growth-rate-is-a-change-score-and-is-confounded-by-the-basline">Growth rate is a change score and is confounded by the basline</a></li>
 <li><a href="#figure-2-doesnt-make-sense">Figure 2 doesn’t make sense</a></li>
 </ul></li>
 <li><a href="#effect-of-density-on-fecal-cortisol-metabolites-fig.-3table-s4-1">Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)</a><ul>
@@ -261,7 +261,7 @@ tableS3_rep &lt;- coefficients(summary(fit3))
 qplot(x=Treatment, y=log(FCM), data=fcmC_pre) + geom_boxplot() + geom_point()</code></pre>
 <p><img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/repS3-1.png" width="672" /></p>
 <p><strong>Replicated results</strong></p>
-<p>The effects, SE, and t replicate but the my <span class="math inline">\(p\)</span>-values are twice those of the authors, who must be reporting 1-tailed (directional) tests. I don’t see that they have reported that they are using 1-tailed tests. My opinion is that one-tail tests are p-hacking.</p>
+<p>The effects, SE, and t replicate but the my <span class="math inline">\(p\)</span>-values are twice those of the authors, who must be reporting 1-tailed (directional) tests (I think). I don’t see that they have reported that they are using 1-tailed tests. My opinion is that one-tail tests are p-hacking.</p>
 <pre class="r"><code>table_part1</code></pre>
 <pre><code>##               Estimate Std. Error         df   t value     Pr(&gt;|t|)
 ## (Intercept)  6.4524936 0.28003048   7.541837 23.042112 2.891608e-08
@@ -325,8 +325,8 @@ coefficients(summary(fit)) # what is &quot;corrected about FCM?&quot;</code></pr
 <h1>Red flags</h1>
 <div id="effect-of-density-on-growth-rate-fig.-2table-s2-1" class="section level2">
 <h2>Effect of Density on growth rate (Fig. 2/Table S2)</h2>
-<div id="growth-rate-is-a-change-score-and-is-confounding-by-the-basline" class="section level3">
-<h3>Growth rate is a change score and is confounding by the basline</h3>
+<div id="growth-rate-is-a-change-score-and-is-confounded-by-the-basline" class="section level3">
+<h3>Growth rate is a change score and is confounded by the basline</h3>
 <p>The confounding makes no difference for these data.</p>
 <pre class="r"><code>refit &lt;- lmer(Offspring.Growth.Rate ~ Offspring.Weight.1 + Scaled.Litter.Size*Treatment + (1|Mom.Squirrel.ID), data=dt.table_S2, na.action=&quot;na.exclude&quot;)
 coefficients(summary(refit))</code></pre>
@@ -396,7 +396,7 @@ modeled_GR # compare to plot</code></pre>
 <h2>Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4)</h2>
 <div id="one-tailed-tests" class="section level3">
 <h3>one-tailed tests</h3>
-<p>The authors reported p-values from one-tailed tests, apparently without reporting that these are one-tailed tests (at least I cannot find this with a search). As stated above, I think one-tailed tests are p-hacking – Conclusions or a decision to publish a paper in <em>Science</em> shouldn’t rest on a p-value of 0.03 or 0.06. It also assumes that effects in the opposite direction cannot exist. If one has prior information on the direction of an effect then use this in a Bayesian model.</p>
+<p>The authors seem to be reporting p-values from one-tailed tests, but I cannot cofirm this because some of the p-values are &lt; 1/2 two-tailed p. As stated above, I think one-tailed tests are p-hacking. Regardless, conclusions or a decision to publish a paper in <em>Science</em> shouldn’t rest on a p-value of 0.03 or 0.06. It also assumes that effects in the opposite direction cannot exist. If one has prior information on the direction of an effect then use this in a Bayesian model.</p>
 </div>
 <div id="forking-paths" class="section level3">
 <h3>Forking paths</h3>
@@ -635,9 +635,9 @@ final_weight[, percent_augmented:=added_Growth/weight*100]</code></pre>
 <div id="table-s5-cis" class="section level4">
 <h4>Table S5 CIs</h4>
 <ol style="list-style-type: decimal">
-<li>The published CIs of <span class="math inline">\(Currrent_cones\)</span>, <span class="math inline">\(Parturtion_date\)</span>, <span class="math inline">\(Litter_size\)</span> do not even cover the estimate. How could no-one see this?</li>
+<li>The published CIs of <em>Currrent_cones</em>, <em>Parturtion_date</em>, <em>Litter_size</em> do not even cover the estimate. This is a good example of how easy it is to get large errors through review - either because reviewers are overwhelmed or don’t pay enough attention to tables or enough attention to supplements.</li>
 <li>The published CIs are not at all consistent with the p-value (e.g. compare for FCM)</li>
-<li>I would tend to have more confidence in bootstrap CI more than p-value but then my bootstrap p-values are much more consistent with p-value. Given #1 and #2, something must be wrong with published CI.</li>
+<li>Were I to simply look at the table, I would tend to have more confidence in bootstrap CI than the p-value but then my bootstrap CIs are much more consistent with the p-values. Given #1 and #2, something must be wrong with published CI.</li>
 <li>From the lme4 documentation: “the new version of lme4 does not provide an mcmcsamp (post-hoc MCMC sampling) method, because this was deemed to be unreliable”</li>
 <li>conclusion - this doesn’t effect the paper but … I am shocked, shocked, that the reviewers didn’t catch the very glaring differences in inference between the CIs and p-values.</li>
 </ol>

@@ -21,5 +21,14 @@
       <description>Sources Background Reproducibility key Caveats  Data Reproducibility Initial measures Change in Cort Change in Body Mass  Post-publication review “no significant differences” among treatment groups at baseline does not protect in any way against the bias in change scores (post - pre treatment measure) Estimates of treatment effects on Cortisol and Mass were not adjusted for baseline values Simulation to explore behavior in lmm vs. ANCOVA-lm vs. cLDA Adjustment for baseline comparing \(Cort_b\)    Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs.</description>
     </item>
     
+    <item>
+      <title>Data from: Density triggers maternal hormones that increase adaptive offspring growth in a wild mammal</title>
+      <link>/post/data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/</link>
+      <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/</guid>
+      <description>Sources Background Reproducibility key Caveats  Reproducibility Effect of spruce cone availability on local density (Fig. 1B) Effect of Density on growth rate (Fig. 2/Table S2) Effect of Density on fecal cortisol metabolites (Fig. 3/Table S4) Effect of FCM on offspring growth rate (Table S5) Effect of experiment Cortisol on growth rate (Table S6)  Red flags Effect of Density on growth rate (Fig. 2/Table S2) Growth rate is a change score and is confounded by the basline Figure 2 doesn’t make sense  Effect of Density on fecal cortisol metabolites (Fig.</description>
+    </item>
+    
   </channel>
 </rss>

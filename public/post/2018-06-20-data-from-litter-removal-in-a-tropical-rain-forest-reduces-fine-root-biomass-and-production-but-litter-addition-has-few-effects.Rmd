@@ -184,8 +184,10 @@ dt <- frb[depth==5]
 # model select
 form <- select_model(y, x, r, dt, reml=FALSE)
 # anova
-anova(lmer(form, data=dt, REML=FALSE), type=3) # replicates
+anova(lmer(form, data=dt, REML=FALSE), type=3)
 # anova(lmer(form, data=dt, REML=TRUE), type=3)
+anova(lmer(form, data=dt, REML=FALSE), type=3, ddf="Kenward-Roger")
+anova(lmer(form, data=dt, REML=FALSE), type=3, ddf="lme4")
 
 # manual F
 1-pf(10.1538, 1, 11.823)
@@ -219,8 +221,7 @@ dt <- frb[depth==10]
 # model select
 form <- select_model(y, x, r, dt, reml=FALSE)
 # anova
-anova(lmer(form, data=dt, REML=FALSE), type=3) # replicates
-# anova(lmer(form, data=dt, REML=TRUE), type=3)
+anova(lmer(form, data=dt, REML=FALSE), type=3)
 
 ```
 
@@ -255,9 +256,21 @@ anova(lm(form, data=dt))
 
 ```
 
-Reproducibility: 1 (fails to reproduce).
+Reproducibility: 1 (fails to reproduce). None of these result in F with anything near 14.9
 
-None of these result in F with anything near 14.9
+### FRL exploration
+```{r FRC_10_explore_more}
+form <- formula(FRB ~ season*treatment + (1|plot) + (1|month))
+fit <- lmer(form, data=dt, REML=FALSE)
+emmeans(fit, pairwise ~ treatment | season)# [[2]]
+emmeans(fit, pairwise ~ treatment)[[2]]
+form <- formula(FRB ~ treatment + (1|plot) + (1|month))
+fit <- lmer(form, data=dt, REML=FALSE)
+emmeans(fit, pairwise ~ treatment)[[2]]
+
+
+```
+
 
 ## Fine Root Length
 ```{r FRL}
@@ -408,7 +421,7 @@ gg
 
 ```
 
-### anova
+### Table 1C (anova)
 ```{r rlpANOVA}
 y <- 'Prod'
 x <- c('treatment', 'season')
@@ -423,3 +436,56 @@ anova(lmer(form, data=dt, REML=FALSE), type=3)
 ```
 
 Reproducibility: 1 (fails to reproduce) to 2 (reproduces to a similar value). My F-value for the interaction is massive relative to the reported value. The three values have an underlying similar pattern but the numbers aren't really close.
+
+## Root length survivorship
+
+```{r RLS}
+rls_cols <- c("SurJul13", "SurAug13", "SurSep13", "SurOct13", "SurNov13", "SurDec13", "SurJan14", "SurFeb14", "SurMar14", "SurApr14", "SurMay14" )
+
+rls <- melt(root, id.vars=c('treatment', 'plot'), measure.vars <- rls_cols, variable.name='label', value.name='Surv')
+rls[, treatment:=factor(treatment)]
+rls[, label:=as.character(label)]
+rls[, depth:=factor(ifelse(substr(label, 4, 4)=='5', 5, 10))]
+rls[, month:=substr(label, nchar(label)-4, nchar(label)-2)]
+dry <- c('Jan', 'Feb', 'Mar', 'Apr')
+rls[, season:=factor(ifelse(month %in% dry, 'dry', 'wet'))]
+
+```
+
+### Figure 3D
+
+```{r fig3d}
+rls_sum <- rls[,.(N=.N,
+              Surv=mean(Surv),
+              SE=sd(Surv)/sqrt(.N)),
+              by=.(treatment, season)]
+rls_sum[, Lower:=Surv-SE]
+rls_sum[, Upper:=Surv+SE]
+rls_sum[, season:=factor(season, c('wet', 'dry'))]
+rls_sum[, treatment:=factor(treatment, c('LR', 'CT', 'LA'))]
+pd <- position_dodge(.6)
+gg <- ggplot(data=rls_sum, aes(x=season, y=Surv, fill=treatment)) +
+  geom_col(position=pd, width=0.6, color='black') +
+  geom_errorbar(aes(ymin=Lower, ymax=Upper), width=.2, position=pd) +
+  scale_fill_manual(values=c("white", "gray", "black")) +
+  theme_minimal(base_size=14)
+gg
+
+```
+
+### Table 1D (anova)
+
+```{r}
+y <- 'Surv'
+x <- c('treatment', 'season')
+r <- c('plot', 'month')
+dt <- rls # there is no measure at 5 cm
+
+# model select
+form <- select_model(y, x, r, dt, reml=FALSE)
+# anova
+anova(lmer(form, data=dt, REML=FALSE), type=3)
+```
+
+Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing).
+
