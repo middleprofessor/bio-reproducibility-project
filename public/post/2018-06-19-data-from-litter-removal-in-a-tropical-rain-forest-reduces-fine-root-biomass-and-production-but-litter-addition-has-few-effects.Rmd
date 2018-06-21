@@ -1,0 +1,334 @@
+---
+title: Data from Litter removal in a tropical rain forest reduces fine root biomass
+  and production but litter addition has few effects
+author: Jeff Walker
+date: '2018-06-20'
+slug: data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects
+categories: []
+tags:
+  - linear mixed model
+  - ecology
+  - experiment
+subtitle: ''
+---
+# Sources
+
+Rodtassana C, Tanner EVJ (2018) Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects. Ecology 99(3): 735-742. https://doi.org/10.1002/ecy.2143
+
+Rodtassana C, Tanner EVJ (2018) Data from: Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects. Dryad Digital Repository. https://doi.org/10.5061/dryad.f1948
+
+# Background
+
+## Reproducibility key
+1. Reproducibility: 1 (fails to reproduce). Not really close
+2. Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)
+3. Reproducibility: 3 (reproduces to decimal or random error). Differences due to rounding or stochastic part of estimation.
+4. Reproducibility: 3- (reproduces to something close to random error). Differences very small and due to either different specification or stochastic or maybe algorithmic differences between packages.
+
+A "+" means that the precise method wasn't specified and reproducibility required exploration.
+
+## flags
+
+1. red flag: a method that I think is inferior is problematic or is simply wrong, or an interpretation that is wrong, or similar issues with the analysis.
+2. code flag: a note on a "best practice" or at least better practice alternative to increase reproducibility related to the code.
+3. work flow flag: a note on a "best practice" or at least better practice alternative to increase reproducibility related to the organization of the data and analysis.
+4. communication flag: a note on a "best practice" or at least better practice alternative to improve communication of results.
+
+## Caveats
+Failure to reproduce (level 1) or partial reproducibility (level 2 or 3-) very well might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically. Similarly, my **Red Flags** may also represent my own lack of knowledge or best practices in statistics.
+
+# Reproducibility
+
+```{r prep, message=FALSE}
+library(knitr)
+library(ggplot2)
+library(readxl)
+library(data.table)
+library(emmeans)
+library(nlme)
+library(lme4)
+library(lmerTest)
+
+base_path <- "../data" #knitr
+folder <- '2018-06-20-data-from-litter-removal-in-a-tropical-rain-forest'
+fn <- 'Root_Ecology_supplementary_materials.xlsx'
+file_path <- paste(base_path, folder, fn, sep='/')
+root <- data.table(read_excel(file_path, range = cell_rows(1:16)))
+```
+
+Some code used for model selection with a mixed model following Chapter 5.7 of Zuur for model selection of mixed effect models.
+
+```{r modelSelection}
+select_model <- function(y, x, r, dt, reml=FALSE){
+  # the data are in dt
+  # y is the response column name
+  # x is the list of fixed effect column names
+  # r is the list of random effect column names
+  # it would seem wierd to have both month and plot in model
+  # see 5.7 of Zuur for model selection of mixed effect models
+  fixed <- paste(y,"~", paste(x, collapse='*'))
+  random <- list()
+  random[[1]] <- paste(paste("(1|", r, ")", sep=""), collapse=" + ")
+  min_aic <- 1
+  
+  # fit random part first, if there are > 1 random variables
+  if(length(r) > 1){
+    aic <- numeric(3)
+    form <- formula(paste(fixed, random[[1]], sep=' + '))
+    fit1 <- lmer(form, data=dt, REML=TRUE)
+    aic[1] <- AIC(fit1)
+    r1 <- r[1] # just the first random element
+    random[[2]] <- paste(paste("(1|", r1, ")", sep=""), collapse=" + ")
+    form <- formula(paste(fixed, random[[2]], sep=' + '))
+    fit2 <- lmer(form, data=dt, REML=TRUE)
+    aic[2] <- AIC(fit2)
+    r2 <- r[2] # just the second random element
+    random[[3]] <- paste(paste("(1|", r2, ")", sep=""), collapse=" + ")
+    form <- formula(paste(fixed, random[[3]], sep=' + '))
+    fit3 <- lmer(form, data=dt, REML=TRUE)
+    aic[3] <- AIC(fit3)
+    min_aic <- which(aic == min(aic))
+  }
+  random <- random[[min_aic]]
+
+  # fit fixed part
+  form <- list()
+  # fit with ML, choose model, then refit with REML
+  aic <- numeric(4)
+  form[[1]] <- formula(paste(fixed, random, sep=' + '))
+  # default is REML
+  fit1 <- lmer(form[[1]], data=dt, REML=reml)
+  aic[1] <- AIC(fit1)
+  
+  fixed <- paste(y,"~", paste(x, collapse=' + '))
+  form[[2]] <- formula(paste(fixed, random, sep=' + '))
+  fit2 <- lmer(form[[2]], data=dt, REML=reml)
+  aic[2] <- AIC(fit2)
+
+  fixed <- paste(y,"~", x[1])
+  form[[3]] <- formula(paste(fixed, random, sep=' + '))
+  fit3 <- lmer(form[[3]], data=dt, REML=reml)
+  aic[3] <- AIC(fit3)
+
+  fixed <- paste(y,"~", x[2])
+  form[[4]] <- formula(paste(fixed, random, sep=' + '))
+  fit4 <- lmer(form[[4]], data=dt, REML=reml)
+  aic[4] <- AIC(fit4)
+
+  min_aic <- which(aic == min(aic))
+  return(form[[min_aic]])
+}
+
+```
+
+Note in Excel data sheet
+> FRB = Fine root biomass (g/m2) at 0-5 cm and 0-10 cm
+FRL = Fine root length (m/m2 of root window) at 0-5 cm and 0-10 cm
+Sur = Fine root length survivorship (m/m2 of root window) at 0-10 cm
+Pro =Fine root length production (m/m2 of root window) at 0-10 cm
+IC = Fine root production from ingrowth cores (g/m2/3-months)
+
+## Fine Root Biomass
+
+```{r FRB}
+# root is in wide format - reshape to long
+FRB_cols <- c("FRB5cmMar13", "FRB5cmApr13", "FRB5cmMay13", "FRB5cmJun13", "FRB5cmJul13", "FRB5cmAug13", "FRB5cmSep13", "FRB5cmOct13", "FRB5cmNov13", "FRB5cmDec13", "FRB5cmJan14", "FRB5cmFeb14", "FRB10cmMar13", "FRB10cmApr13", "FRB10cmMay13", "FRB10cmJun13", "FRB10cmJul13", "FRB10cmAug13", "FRB10cmSep13", "FRB10cmOct13", "FRB10cmNov13", "FRB10cmDec13")
+# what are these "FRB5cmJul13__1", "FRB10cmJul13__1" they have values more like FRL than FRB
+frb <- melt(root, id.vars=c('treatment', 'plot'), measure.vars <- FRB_cols, variable.name='label', value.name='FRB')
+frb[, treatment:=factor(treatment)]
+frb[, label:=as.character(label)]
+frb[, depth:=factor(ifelse(substr(label, 4, 4)=='5', 5, 10))]
+frb[, month:=substr(label, nchar(label)-4, nchar(label)-2)]
+dry <- c('Jan', 'Feb', 'Mar', 'Apr')
+frb[, season:=factor(ifelse(month %in% dry, 'dry', 'wet'))]
+
+```
+
+### Figure 1
+```{r FRBplot, fig.cap="Reproducing Figure 1"}
+frb5 <- frb[depth==5, .(N=.N,
+              FRB=mean(FRB),
+              SE=sd(FRB)/sqrt(.N)),
+              by=.(treatment, season)]
+frb10 <- frb[depth==10, .(N=.N,
+              FRB=mean(FRB),
+              SE=sd(FRB)/sqrt(.N)),
+              by=.(treatment, season)]
+frb_sum <- rbind(data.table(depth=5, frb5), data.table(depth=10, frb10))
+frb_sum[, Lower:=FRB-SE]
+frb_sum[, Upper:=FRB+SE]
+frb_sum[, season:=factor(season, c('dry', 'wet'))]
+frb_sum[, treatment:=factor(treatment, c('LR', 'CT', 'LA'))]
+pd <- position_dodge(.6)
+gg <- ggplot(data=frb_sum, aes(x=season, y=FRB, fill=treatment)) +
+  geom_col(position=pd, width=0.6, color='black') +
+  geom_errorbar(aes(ymin=Lower, ymax=Upper), width=.2, position=pd) +
+  scale_fill_manual(values=c("white", "gray", "black")) +
+  facet_grid(.~depth, labeller = label_both) +
+  theme_minimal(base_size=14)
+gg
+
+```
+
+### 5 cm depth
+
+> Fine root mass in the soil was higher in the wet season than in the dry season, both at 0-5 cm soil depth (F1, 178 = 10.2, P<0.01, Fig. 1)
+
+```{r FRB_5cm}
+y <- 'FRB'
+x <- c('treatment', 'season')
+r <- c('plot', 'month') # should this include "month"?
+dt <- frb[depth==5]
+# model select
+form <- select_model(y, x, r, dt, reml=FALSE)
+# anova
+anova(lmer(form, data=dt, REML=FALSE), type=3) # replicates
+# anova(lmer(form, data=dt, REML=TRUE), type=3)
+
+# manual F
+1-pf(10.1538, 1, 11.823)
+# published numbes
+1-pf(10.1538, 1, 178) # hmm. okay so not < 0.001
+
+```
+
+Reproducibility: 2+ (reproduces to a similar value). The F reproduces at least to rounding error only if the final model is fit with REML=FALSE. But the df are very different and they don't give an exact p-value. The authors do not report the structure of the final model, which makes it hard to check.
+
+> Fine root mass was lower in litter removal soils at 0-5 cm (significant, Fig. 1)... Litter addition did not significantly lower fine root mass in either 0-5 cm or 0-10 cm soils (Fig. 1 and Appendix S1: Fig. S1).
+
+```{r FRB5cmContrasts}
+
+fit <- lmer(form, data=dt, REML=FALSE)
+b_table <- emmeans(fit, pairwise ~ treatment | season)[[2]]
+kable(b_table, digits=3, caption='Tukey')
+```
+
+Reproducibility: 3 (reproduces to decimal or random error). The pattern is the same but the authors only report letters indicating significance clusters.
+
+### 10 cm depth
+
+> and at 0-10 cm soil depth (F1, 178 = 14.9, P<0.001, Fig. 1)
+
+```{r FRB_10cm}
+y <- 'FRB'
+x <- c('treatment', 'season')
+r <- c('plot', 'month') # should this include "month"?
+dt <- frb[depth==10]
+# model select
+form <- select_model(y, x, r, dt, reml=FALSE)
+# anova
+anova(lmer(form, data=dt, REML=FALSE), type=3) # replicates
+# anova(lmer(form, data=dt, REML=TRUE), type=3)
+
+```
+
+This isn't close. Explore
+```{r FRB_10cm_explore}
+form <- formula(FRB ~ season*treatment + (1|plot) + (1|month))
+anova(lmer(form, data=dt, REML=FALSE))
+
+form <- formula(FRB ~ season+treatment + (1|plot) + (1|month))
+anova(lmer(form, data=dt, REML=FALSE))
+
+form <- formula(FRB ~ season + (1|plot) + (1|month))
+anova(lmer(form, data=dt, REML=FALSE))
+
+form <- formula(FRB ~ season*treatment + (1|plot))
+anova(lmer(form, data=dt, REML=FALSE))
+
+form <- formula(FRB ~ season+treatment + (1|plot))
+anova(lmer(form, data=dt, REML=FALSE))
+
+form <- formula(FRB ~ season + (1|plot))
+anova(lmer(form, data=dt, REML=FALSE))
+
+form <- formula(FRB ~ season*treatment + (1|month))
+anova(lmer(form, data=dt, REML=FALSE))
+
+form <- formula(FRB ~ season*treatment)
+anova(lm(form, data=dt))
+
+form <- formula(FRB ~ season + treatment)
+anova(lm(form, data=dt))
+
+```
+
+Reproducibility: 1 (fails to reproduce).
+
+None of these result in F with anything near 14.9
+
+## Fine Root Length
+```{r FRL}
+FRL_cols <- c("FRL5cmJun13", "FRL5cmAug13", "FRL5cmSep13", "FRL5cmOct13", "FRL5cmNov13", "FRL5cmDec13", "FRL5cmJan14", "FRL5cmFeb14", "FRL5cmMar14", "FRL5cmApr14", "FRL5cmMay14", "FRL10cmJun13", "FRL10cmAug13", "FRL10cmSep13",  "FRL10cmOct13", "FRL10cmNov13", "FRL10cmDec13", "FRL10cmJan14", "FRL10cmFeb14", "FRL10cmMar14", "FRL10cmApr14", "FRL10cmMay14")
+# what are these "FRB5cmJul13__1", "FRB10cmJul13__1" they have values more like FRL than FRB
+frl <- melt(root, id.vars=c('treatment', 'plot'), measure.vars <- FRL_cols, variable.name='label', value.name='FRL')
+frl[, treatment:=factor(treatment)]
+frl[, label:=as.character(label)]
+frl[, depth:=factor(ifelse(substr(label, 4, 4)=='5', 5, 10))]
+frl[, month:=substr(label, nchar(label)-4, nchar(label)-2)]
+dry <- c('Jan', 'Feb', 'Mar', 'Apr')
+frl[, season:=factor(ifelse(month %in% dry, 'dry', 'wet'))]
+
+```
+
+### Figure 3
+
+```{r FRLplot, fig.cap="Reproducing Figure 3"}
+frl5 <- frl[depth==5, .(N=.N,
+              FRL=mean(FRL),
+              SE=sd(FRL)/sqrt(.N)),
+              by=.(treatment, season)]
+frl10 <- frl[depth==10, .(N=.N,
+              FRL=mean(FRL),
+              SE=sd(FRL)/sqrt(.N)),
+              by=.(treatment, season)]
+frl_sum <- rbind(data.table(depth=5, frl5), data.table(depth=10, frl10))
+frl_sum[, Lower:=FRL-SE]
+frl_sum[, Upper:=FRL+SE]
+frl_sum[, season:=factor(season, c('dry', 'wet'))]
+frl_sum[, treatment:=factor(treatment, c('LR', 'CT', 'LA'))]
+pd <- position_dodge(.6)
+gg <- ggplot(data=frl_sum, aes(x=season, y=FRL, fill=treatment)) +
+  geom_col(position=pd, width=0.6, color='black') +
+  geom_errorbar(aes(ymin=Lower, ymax=Upper), width=.2, position=pd) +
+  scale_fill_manual(values=c("white", "gray", "black")) +
+  facet_grid(.~depth, labeller = label_both) +
+  theme_minimal(base_size=14)
+gg
+
+```
+
+### 5 cm
+
+```{r FRL_5cm}
+y <- 'FRL'
+x <- c('treatment', 'season')
+r <- c('plot', 'month')
+dt <- frl[depth==5]
+
+# model select
+form <- select_model(y, x, r, dt, reml=FALSE)
+# anova
+anova(lmer(form, data=dt, REML=FALSE), type=3)
+```
+
+Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)
+
+
+```{r FRL_10cm}
+y <- 'FRL'
+x <- c('treatment', 'season')
+r <- c('plot', 'month')
+dt <- frl[depth==10]
+
+# model select
+form <- select_model(y, x, r, dt, reml=FALSE)
+# anova
+anova(lmer(form, data=dt, REML=FALSE), type=3)
+```
+
+Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing)
+
+**communication flag** the authors should report the exact p-value instead of "n.s." as (1) n.s. is not reproducible and (2) readers may have different interpretations of p (not NHST).
+
+
