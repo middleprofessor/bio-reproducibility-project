@@ -7,8 +7,9 @@ slug: data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-v
 categories: []
 tags:
   - experiment
-  - 2x2
   - physiology
+  - factorial
+  - harrell plot
 subtitle: ''
 output:
   blogdown::html_page:

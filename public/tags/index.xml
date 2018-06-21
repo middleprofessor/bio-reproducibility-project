@@ -13,15 +13,6 @@
     
     
     <item>
-      <title>2x2</title>
-      <link>/tags/2x2/</link>
-      <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/2x2/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Anova</title>
       <link>/tags/anova/</link>
       <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
@@ -51,9 +42,18 @@
     <item>
       <title>Factorial</title>
       <link>/tags/factorial/</link>
-      <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/factorial/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Harrell Plot</title>
+      <link>/tags/harrell-plot/</link>
+      <pubDate>Sat, 26 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/harrell-plot/</guid>
       <description></description>
     </item>
     
@@ -63,6 +63,24 @@
       <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/linear-mixed-model/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Linear Model</title>
+      <link>/tags/linear-model/</link>
+      <pubDate>Mon, 07 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/linear-model/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Model Selection</title>
+      <link>/tags/model-selection/</link>
+      <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/model-selection/</guid>
       <description></description>
     </item>
     
@@ -94,11 +112,29 @@
     </item>
     
     <item>
+      <title>Regression to the Mean</title>
+      <link>/tags/regression-to-the-mean/</link>
+      <pubDate>Mon, 07 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/regression-to-the-mean/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Reproducible</title>
       <link>/tags/reproducible/</link>
       <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/reproducible/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sequential vs. Marginal Ss</title>
+      <link>/tags/sequential-vs.-marginal-ss/</link>
+      <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/sequential-vs.-marginal-ss/</guid>
       <description></description>
     </item>
     

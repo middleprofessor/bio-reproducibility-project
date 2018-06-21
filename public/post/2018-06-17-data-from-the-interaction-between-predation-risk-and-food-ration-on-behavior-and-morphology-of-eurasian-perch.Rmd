@@ -12,6 +12,7 @@ tags:
   - factorial
   - nested
   - linear mixed model
+  - sequential vs. marginal ss
 subtitle: ''
 output:
   blogdown::html_page:

@@ -9,6 +9,8 @@ tags:
   - linear mixed model
   - ecology
   - experiment
+  - factorial
+  - model selection
 subtitle: ''
 ---
 # Sources
@@ -420,4 +422,4 @@ anova(lmer(form, data=dt, REML=FALSE), type=3)
 
 ```
 
-Reproducibility: 1 (fails to reproduce) to 2 (reproduces to a similar value). My F for the interaction is massive relative to the reported value. The three values have an underlying similar pattern but the numbers aren't really close.
+Reproducibility: 1 (fails to reproduce) to 2 (reproduces to a similar value). My F-value for the interaction is massive relative to the reported value. The three values have an underlying similar pattern but the numbers aren't really close.

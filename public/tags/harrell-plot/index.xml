@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Harrell Plot on The Biology Reproducibility Project</title>
+    <link>/tags/harrell-plot/</link>
+    <description>Recent content in Harrell Plot on The Biology Reproducibility Project</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
+    <lastBuildDate>Sat, 26 May 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/harrell-plot/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Data from Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures</title>
+      <link>/post/data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures/</link>
+      <pubDate>Sat, 26 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures/</guid>
+      <description>Sources Background Reproducibility key Caveats  Summary of Re-analysis Reproducibility Post-publication review  Reproducibility Table 1 Table 2 Table 3 Figure 2  Post-publication review Use the full model to compare to Huey &amp;amp; Kinsolver Table of contrasts needed for interpretation Harrell Plots of full model ignoring sex Summary of my Harrell Plots and Table of contrasts  Shift in UTL  Red Flags Statistical misconceptions   Sources Cavieres G, Bogdanovich JM, Bozinovic F (2016) Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures.</description>
+    </item>
+    
+  </channel>
+</rss>

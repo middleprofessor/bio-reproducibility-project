@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
-    <lastBuildDate>Tue, 19 Jun 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 20 Jun 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/factorial/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Data from Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects</title>
+      <link>/post/data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects/</link>
+      <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects/</guid>
+      <description>Sources Rodtassana C, Tanner EVJ (2018) Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects. Ecology 99(3): 735-742. https://doi.org/10.1002/ecy.2143
+Rodtassana C, Tanner EVJ (2018) Data from: Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects. Dryad Digital Repository. https://doi.org/10.5061/dryad.f1948
+ Background Reproducibility key Reproducibility: 1 (fails to reproduce). Not really close Reproducibility: 2 (reproduces to a similar value).</description>
+    </item>
     
     <item>
       <title>Data from Critical thermal limits affected differently by developmental and adult thermal fluctuations</title>
@@ -30,6 +41,15 @@ Salachan PV, Sørensen JG (2017) Data from: Critical thermal limits affected dif
       <guid>/post/data-from-the-interaction-between-predation-risk-and-food-ration-on-behavior-and-morphology-of-eurasian-perch/</guid>
       <description>Sources Background Reproducibility key Caveats  Reproducibility Figure 1/Table 1 (Condition and Length) Condition index Table 1 Tukey Contrasts  Figure 2/Table 2 (Behavior) Table 2  Morphometrics  Post-publication review   Sources Svanbäck R, Zha Y, Brönmark C, Johansson F (2017) The interaction between predation risk and food ration on behavior and morphology of Eurasian perch. Ecology and Evolution 7(20): 8567-8577. https://doi.org/10.1002/ece3.3330
 Svanback R, Zha Y, Brönmark C, Johansson F (2017) Data from: The interaction between predation risk and food ration on behavior and morphology of Eurasian perch.</description>
+    </item>
+    
+    <item>
+      <title>Data from Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures</title>
+      <link>/post/data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures/</link>
+      <pubDate>Sat, 26 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-ontogenetic-thermal-tolerance-and-performance-of-ectotherms-at-variable-temperatures/</guid>
+      <description>Sources Background Reproducibility key Caveats  Summary of Re-analysis Reproducibility Post-publication review  Reproducibility Table 1 Table 2 Table 3 Figure 2  Post-publication review Use the full model to compare to Huey &amp;amp; Kinsolver Table of contrasts needed for interpretation Harrell Plots of full model ignoring sex Summary of my Harrell Plots and Table of contrasts  Shift in UTL  Red Flags Statistical misconceptions   Sources Cavieres G, Bogdanovich JM, Bozinovic F (2016) Ontogenetic thermal tolerance and performance of ectotherms at variable temperatures.</description>
     </item>
     
   </channel>

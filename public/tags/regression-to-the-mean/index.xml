@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Regression to the Mean on The Biology Reproducibility Project</title>
+    <link>/tags/regression-to-the-mean/</link>
+    <description>Recent content in Regression to the Mean on The Biology Reproducibility Project</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
+    <lastBuildDate>Mon, 07 May 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/regression-to-the-mean/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Data from: Success despite the stress -- violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs</title>
+      <link>/post/data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs/</link>
+      <pubDate>Mon, 07 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs/</guid>
+      <description>Sources Background Reproducibility key Caveats  Data Reproducibility Initial measures Change in Cort Change in Body Mass  Post-publication review “no significant differences” among treatment groups at baseline does not protect in any way against the bias in change scores (post - pre treatment measure) Estimates of treatment effects on Cortisol and Mass were not adjusted for baseline values Simulation to explore behavior in lmm vs. ANCOVA-lm vs. cLDA Adjustment for baseline comparing \(Cort_b\)    Sources Rivers JW, Newberry GN, Schwarz CJ, Ardia DR (2017) Success despite the stress: violet-green swallows increase glucocorticoids and maintain reproductive output despite experimental increases in flight costs.</description>
+    </item>
+    
+  </channel>
+</rss>
