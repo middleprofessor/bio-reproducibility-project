@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>Data from: Frequency of virus-resistant hosts determines experimental community dynamics - The Biology Reproducibility Project</title>
+  <meta property="og:title" content="Data from: Frequency of virus-resistant hosts determines experimental community dynamics - The Biology Reproducibility Project" />
+  <meta name="twitter:title" content="Data from: Frequency of virus-resistant hosts determines experimental …" />
+  <meta name="description" content="Set up Reproducibility Table 1 Table 2 Figure 2  statistical presentation   Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resistant hosts determines experimental community dynamics. Ecology 100(1): e02554. https://doi.org/10.1002/ecy.2554
+Data source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Data from: Frequency of virus-resistant hosts determines experimental community dynamics. Dryad Digital Repository. https://doi.org/10.5061/dryad.6r2p226
+Set up library(readxl) library(ggplot2) library(data.table) library(emmeans) library(lmerTest) library(ggpubr) data_folder &lt;- &quot;.">
+  <meta property="og:description" content="Set up Reproducibility Table 1 Table 2 Figure 2  statistical presentation   Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resistant hosts determines experimental community dynamics. Ecology 100(1): e02554. https://doi.org/10.1002/ecy.2554
+Data source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Data from: Frequency of virus-resistant hosts determines experimental community dynamics. Dryad Digital Repository. https://doi.org/10.5061/dryad.6r2p226
+Set up library(readxl) library(ggplot2) library(data.table) library(emmeans) library(lmerTest) library(ggpubr) data_folder &lt;- &quot;.">
+  <meta name="twitter:description" content="Set up Reproducibility Table 1 Table 2 Figure 2  statistical presentation   Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resistant hosts determines experimental …">
+  <meta name="author" content=""/>
+  <meta property="og:site_name" content="The Biology Reproducibility Project" />
+  <meta property="og:url" content="/post/data-from-frequency-of-virus-resistant-hosts-determines-experimental-community-dynamics/" />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    <h1 class="site-title"><a href="/">The Biology Reproducibility Project</a></h1>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-categories"><a href="/categories/" title="Categories">Categories</a></li>
+      <li class="site-navi-item-tags"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-archives"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+  </nav>
+</header>
+<hr class="site-header-bottom">
+
+  <div class="main" role="main">
+    <article class="article">
+      
+      
+      <h1 class="article-title">Data from: Frequency of virus-resistant hosts determines experimental community dynamics</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>January 11, 2019</time></li>
+      </ul>
+      
+<aside class="toc">
+  
+</aside>
+      <div id="TOC">
+<ul>
+<li><a href="#set-up">Set up</a></li>
+<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#table-1">Table 1</a></li>
+<li><a href="#table-2">Table 2</a></li>
+<li><a href="#figure-2">Figure 2</a></li>
+</ul></li>
+<li><a href="#statistical-presentation">statistical presentation</a></li>
+</ul>
+</div>
+
+<p>Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resistant hosts determines experimental community dynamics. Ecology 100(1): e02554. <a href="https://doi.org/10.1002/ecy.2554" class="uri">https://doi.org/10.1002/ecy.2554</a></p>
+<p>Data source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Data from: Frequency of virus-resistant hosts determines experimental community dynamics. Dryad Digital Repository. <a href="https://doi.org/10.5061/dryad.6r2p226" class="uri">https://doi.org/10.5061/dryad.6r2p226</a></p>
+<div id="set-up" class="section level1">
+<h1>Set up</h1>
+<pre class="r"><code>library(readxl)
+library(ggplot2)
+library(data.table)
+library(emmeans)
+library(lmerTest)
+library(ggpubr)
+
+data_folder &lt;- &quot;../data&quot;
+folder &lt;- &quot;Data from Frequency of virus-resistant hosts determines experimental community dynamics&quot;
+fn &lt;- &quot;Coloma DATA.xlsx&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+
+# for working use =TRUE, for final html use =FALSE
+knitr_path &lt;- FALSE</code></pre>
+<p>There is no guidance to the structure of the excel sheets and this structure is not obvious. There are 4 sheets: Nodularia, Phage, Rotifers, Chlorella. The last 3 sheets have the same structure and this seems to be</p>
+<ol style="list-style-type: decimal">
+<li>column A: percent native Nodularia (not phage resistant). Note the text states 3 levels (100%, 95%, and 50%), but the column has a 4th level – 99.5%</li>
+<li>column B - must be the different cultures with treatment combination ID as letters. The two factors are percent native Nodularia (3 levels), which is in column 1, and N addition (2 levels) which is not identified. There are 3 x 2 = 6 treatment combinations each replicated four times. Not the additional rows with the 99.5% Native Nodularia. I am going to start by coding the first set of four within a level of native percent as “N_lim” and the second set of four as “N_rich”. Based on the F-ratios, I’m right!</li>
+<li>Remaining columns must be weeks. The first row are the week levels and the second row are the week dates.</li>
+</ol>
+<p>The first sheet (Nodularia) has no columns labeling the treatment level for any factor. And there are clearly three sets of data that are stacked but the bottom two contain only 8 instead of 24 (or 30 with the 99.5% level) rows. I assume that the order of treatment levels is the same for this sheet as for the phage, chlorella, and rotifers sheet.</p>
+<p>Create a function to process all the sheets the same.</p>
+<pre class="r"><code>pre_process_data &lt;- function(dt_in){
+# takes the raw imported sheet and process it for analysis
+# output is long format
+  
+  dt &lt;- copy(dt_in)
+  # set column names
+  col_labels &lt;- c(&quot;native&quot;, &quot;id&quot;, &quot;0&quot;, &quot;0.5&quot;, as.character(1:20))
+  setnames(dt, old=colnames(dt), new=col_labels)
+  
+  # add Nitrogen column by guessing
+  dt[, N:=rep(rep(c(&quot;N_lim&quot;, &quot;N_rich&quot;), each=4), 2)]
+  
+  # cull 99.5% rows
+  dt &lt;- dt[native!=99.5]
+  
+  # make column of 1 - native for frequency of phage-resistant Nodularia
+  dt[, resistant:=100-native]
+  
+  # make resistant and Nitrogen factors
+  dt[, resistant:=factor(resistant)]
+  dt[, N:=factor(N)]
+  
+  # limit to weeks 0, 2,4 6, 8, 12, 20, need week zero for plots
+  ycols &lt;- as.character(c(0, 2, 4, 6, 8, 12, 20))
+  dt_long &lt;- melt(dt, 
+                  id.vars=c(&quot;resistant&quot;, &quot;id&quot;, &quot;N&quot;), 
+                  measure.vars=ycols,
+                  variable.name=&quot;week&quot;,
+                  value.name=&quot;count&quot;)
+  return(dt_long)
+}</code></pre>
+<p>Note that all replicates of G and H (resistant frequency = 50%) for week 4 are missing</p>
+<pre class="r"><code># phage
+sheet_i &lt;- &quot;Phage&quot;
+range_i &lt;- &quot;A3:X34&quot; # ignores labels as the first two columns have none
+phage &lt;- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))
+phage_long &lt;- pre_process_data(phage)</code></pre>
+<pre class="r"><code>sheet_i &lt;- &quot;Rotifers&quot;
+range_i &lt;- &quot;A5:X36&quot; # skip double header and read only to week 20
+rotifers &lt;- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))
+rotifers_long &lt;- pre_process_data(rotifers)</code></pre>
+<pre class="r"><code>sheet_i &lt;- &quot;Chlorella&quot;
+range_i &lt;- &quot;A4:X35&quot; # skip double header and read only to week 20
+# add first two columns as in other three
+chlorella &lt;- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))
+chlorella_long &lt;- pre_process_data(chlorella)</code></pre>
+<p>Limiting to first set of data and assume that row order is the same as in other sheets</p>
+<pre class="r"><code>sheet_i &lt;- &quot;Nodularia&quot;
+range_i &lt;- &quot;A5:V36&quot; # skip double header and read only to week 20
+nodularia_part &lt;- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))
+# change colnames so not duplicate
+colnames(nodularia_part) &lt;- paste(&quot;X&quot;,1:22,sep=&quot;&quot;)
+nodularia &lt;- cbind(phage[, 1:2], nodularia_part)
+nodularia_long &lt;- pre_process_data(nodularia)</code></pre>
+</div>
+<div id="reproducibility" class="section level1">
+<h1>Reproducibility</h1>
+<div id="table-1" class="section level2">
+<h2>Table 1</h2>
+<pre class="r"><code>show_full_table &lt;- FALSE
+if(show_full_table==TRUE){
+  summary(aov(count ~ N + Error(id), nodularia_long[week!=0]))$&quot;Error: id&quot;
+  summary(aov(count ~ N + Error(id), phage_long[week!=0]))$&quot;Error: id&quot;
+  summary(aov(count ~ N + Error(id), chlorella_long[week!=0]))$&quot;Error: id&quot;
+  summary(aov(count ~ N + Error(id), rotifers_long[week!=0]))$&quot;Error: id&quot;
+}
+
+stats &lt;- c(&quot;Df2&quot;, &quot;F value1&quot;, &quot;Pr(&gt;F)1&quot;)
+aov1 &lt;- unlist(summary(aov(count ~ N + Error(id), nodularia_long[week!=0]))$&quot;Error: id&quot;)[stats]
+aov2 &lt;- unlist(summary(aov(count ~ N + Error(id), phage_long[week!=0]))$&quot;Error: id&quot;)[stats]
+aov3 &lt;- unlist(summary(aov(count ~ N + Error(id), chlorella_long[week!=0]))$&quot;Error: id&quot;)[stats]
+aov4 &lt;- unlist(summary(aov(count ~ N + Error(id), rotifers_long[week!=0]))$&quot;Error: id&quot;)[stats]
+table_1 &lt;- data.table(component=c(&quot;Nodularia&quot;, &quot;Phage&quot;, &quot;Chlorella&quot;, &quot;Rotifer&quot;),
+                      rbind(aov1, aov2, aov3, aov4))
+setnames(table_1, old=colnames(table_1), new=c(&quot;component&quot;, &quot;DDF&quot;, &quot;F&quot;, &quot;p&quot;))
+knitr::kable(table_1, digits=c(NA, 0, 3, 3))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">component</th>
+<th align="right">DDF</th>
+<th align="right">F</th>
+<th align="right">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Nodularia</td>
+<td align="right">21</td>
+<td align="right">0.038</td>
+<td align="right">0.846</td>
+</tr>
+<tr class="even">
+<td align="left">Phage</td>
+<td align="right">21</td>
+<td align="right">0.602</td>
+<td align="right">0.446</td>
+</tr>
+<tr class="odd">
+<td align="left">Chlorella</td>
+<td align="right">22</td>
+<td align="right">1.559</td>
+<td align="right">0.225</td>
+</tr>
+<tr class="even">
+<td align="left">Rotifer</td>
+<td align="right">22</td>
+<td align="right">14.590</td>
+<td align="right">0.001</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/images/Data%20from%20Frequency%20of%20virus-resistant%20hosts%20determines%20experimental%20community%20dynamics/table1.png" /><!-- --></p>
+</div>
+<div id="table-2" class="section level2">
+<h2>Table 2</h2>
+<pre class="r"><code>show_full_table &lt;- FALSE
+if(show_full_table==TRUE){
+  summary(aov(count ~ resistant + Error(id), nodularia_long[N==&quot;N_lim&quot; &amp; week!=0]))$&quot;Error: id&quot;
+  summary(aov(count ~ resistant + Error(id), nodularia_long[N==&quot;N_rich&quot; &amp; week!=0]))$&quot;Error: id&quot;
+  summary(aov(count ~ resistant + Error(id), phage_long[N==&quot;N_lim&quot; &amp; week!=0]))$&quot;Error: id&quot;
+  summary(aov(count ~ resistant + Error(id), phage_long[N==&quot;N_rich&quot; &amp; week!=0]))$&quot;Error: id&quot;
+  summary(aov(count ~ resistant + Error(id), chlorella_long[N==&quot;N_lim&quot; &amp; week!=0]))$&quot;Error: id&quot;
+  summary(aov(count ~ resistant + Error(id), chlorella_long[N==&quot;N_rich&quot; &amp; week!=0]))$&quot;Error: id&quot;
+  summary(aov(count ~ resistant + Error(id), rotifers_long[N==&quot;N_lim&quot; &amp; week!=0]))$&quot;Error: id&quot;
+  summary(aov(count ~ resistant + Error(id), rotifers_long[N==&quot;N_rich&quot; &amp; week!=0]))$&quot;Error: id&quot;
+}
+
+stats &lt;- c(&quot;Df2&quot;, &quot;F value1&quot;, &quot;Pr(&gt;F)1&quot;)
+aov1a &lt;- unlist(summary(aov(count ~ resistant + Error(id), nodularia_long[N==&quot;N_lim&quot; &amp; week!=0]))$&quot;Error: id&quot;)[stats]
+aov2a &lt;- unlist(summary(aov(count ~ resistant + Error(id), phage_long[N==&quot;N_lim&quot; &amp; week!=0]))$&quot;Error: id&quot;)[stats]
+aov3a &lt;- unlist(summary(aov(count ~ resistant + Error(id), chlorella_long[N==&quot;N_lim&quot; &amp; week!=0]))$&quot;Error: id&quot;)[stats]
+aov4a &lt;- unlist(summary(aov(count ~ resistant + Error(id), rotifers_long[N==&quot;N_lim&quot; &amp; week!=0]))$&quot;Error: id&quot;)[stats]
+aov1b &lt;- unlist(summary(aov(count ~ resistant + Error(id), nodularia_long[N==&quot;N_rich&quot; &amp; week!=0]))$&quot;Error: id&quot;)[stats]
+aov2b &lt;- unlist(summary(aov(count ~ resistant + Error(id), phage_long[N==&quot;N_rich&quot; &amp; week!=0]))$&quot;Error: id&quot;)[stats]
+aov3b &lt;- unlist(summary(aov(count ~ resistant + Error(id), chlorella_long[N==&quot;N_rich&quot; &amp; week!=0]))$&quot;Error: id&quot;)[stats]
+aov4b &lt;- unlist(summary(aov(count ~ resistant + Error(id), rotifers_long[N==&quot;N_rich&quot; &amp; week!=0]))$&quot;Error: id&quot;)[stats]
+table_2 &lt;- data.table(component=rep(c(&quot;Nodularia&quot;, &quot;Phage&quot;, &quot;Chlorella&quot;, &quot;Rotifer&quot;), each=2),
+                      treatment=rep(c(&quot;N_lim&quot;, &quot;N_rich&quot;), 2),
+                      rbind(aov1a, aov1b, aov2a, aov2b, aov3a, aov3b, aov4a, aov4b))
+setnames(table_2, old=colnames(table_2), new=c(&quot;component&quot;, &quot;treatment&quot;, &quot;DDF&quot;, &quot;F&quot;, &quot;p&quot;))
+knitr::kable(table_2, digits=c(NA, NA, 0, 2, 5))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">component</th>
+<th align="left">treatment</th>
+<th align="right">DDF</th>
+<th align="right">F</th>
+<th align="right">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Nodularia</td>
+<td align="left">N_lim</td>
+<td align="right">8</td>
+<td align="right">405.62</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">Nodularia</td>
+<td align="left">N_rich</td>
+<td align="right">9</td>
+<td align="right">69.51</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">Phage</td>
+<td align="left">N_lim</td>
+<td align="right">8</td>
+<td align="right">56.22</td>
+<td align="right">0.00002</td>
+</tr>
+<tr class="even">
+<td align="left">Phage</td>
+<td align="left">N_rich</td>
+<td align="right">9</td>
+<td align="right">79.56</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">Chlorella</td>
+<td align="left">N_lim</td>
+<td align="right">9</td>
+<td align="right">41.70</td>
+<td align="right">0.00003</td>
+</tr>
+<tr class="even">
+<td align="left">Chlorella</td>
+<td align="left">N_rich</td>
+<td align="right">9</td>
+<td align="right">169.62</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">Rotifer</td>
+<td align="left">N_lim</td>
+<td align="right">9</td>
+<td align="right">2.48</td>
+<td align="right">0.13898</td>
+</tr>
+<tr class="even">
+<td align="left">Rotifer</td>
+<td align="left">N_rich</td>
+<td align="right">9</td>
+<td align="right">317.96</td>
+<td align="right">0.00000</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/images/Data%20from%20Frequency%20of%20virus-resistant%20hosts%20determines%20experimental%20community%20dynamics/table2.png" /><!-- --></p>
+</div>
+<div id="figure-2" class="section level2">
+<h2>Figure 2</h2>
+<p>Using the raw (not modeled) means</p>
+<pre class="r"><code>dt &lt;- rbind(data.table(component=&quot;Nodularia&quot;, nodularia_long),
+            data.table(component=&quot;Phage&quot;, phage_long),
+            data.table(component=&quot;Chlorella&quot;, chlorella_long),
+            data.table(component=&quot;Rotifers&quot;, rotifers_long))
+dt[, week:=as.integer(as.character(week))]
+dt[, component:=factor(component, c(&quot;Nodularia&quot;, &quot;Phage&quot;, &quot;Chlorella&quot;, &quot;Rotifers&quot;))]
+# raw means
+raw_means &lt;- na.omit(dt[, .(count=mean(count, na.rm=TRUE)), by=.(component, resistant, N, week)])
+
+gg &lt;- ggplot(data=raw_means, aes(x=week, y=count, group=resistant, color=resistant)) +
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(trans=&#39;log10&#39;) + 
+  scale_color_manual(values=c(&quot;black&quot;, &quot;green&quot;, &quot;red&quot;)) +
+  facet_grid(component~N, scales=&quot;free&quot;) +
+  NULL
+gg</code></pre>
+<pre><code>## Warning: Transformation introduced infinite values in continuous y-axis
+
+## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
+<p><img src="/post/2019-01-11-data-from-frequency-of-virus-resistant-hosts-determines-experimental-community-dynamics_files/figure-html/Figure%202%20repro-1.png" width="672" /></p>
+<p><img src="/images/Data%20from%20Frequency%20of%20virus-resistant%20hosts%20determines%20experimental%20community%20dynamics/fig2.png" /><!-- --></p>
+</div>
+</div>
+<div id="statistical-presentation" class="section level1">
+<h1>statistical presentation</h1>
+<p>“The statistical analysis showed a lack of significant difference between N-lim and N-rich medium conditions for Nodularia, phage 2AV2 and Chlorella densities (F1,21 = 0.1, P &gt; 0.05, F1,21 = 0.7, P &gt; 0.05, and F1,21 = 1.8, P &gt; 0.05, respectively; Table 1)”</p>
+<p>“In contrast, rotifer densities differed significantly between N-lim and N-rich medium conditions (F1,21 = 13.1, P &lt; 0.05)”</p>
+</div>
+
+    </article>
+
+    
+<ul class="article-share">
+  <li>
+    <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </li>
+  <li>
+    <div class="fb-share-button" data-href="/post/data-from-frequency-of-virus-resistant-hosts-determines-experimental-community-dynamics/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.10";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+  </li>
+  <li>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <g:plus action="share"></g:plus>
+  </li>
+  <li>
+    <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label-counter" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  </li>
+  <li>
+    <a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en"></a>
+    <script>!function(d,i){if(!d.getElementById(i)){var j=d.createElement("script");j.id=i;j.src="https://widgets.getpocket.com/v1/j/btn.js?v=1";var w=d.getElementById(i);d.body.appendChild(j);}}(document,"pocket-btn-js");</script>
+  </li>
+</ul>
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects/" data-toggle="tooltip" data-placement="top" title="Data from Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">&copy; Copyright 2018 Jeffrey A. Walker</div>
+  <ul class="site-footer-items">
+    <li class="site-footer-item-about"><a href="/about/" title="About">About</a></li>
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/">Hugo</a>
+  </div>
+</div>
+    <script src="//yihui.name/js/math-code.js"></script>
+<script async
+src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+  <script src="/js/collapse.js"></script>
+  <script src="/js/dropdown.js"></script>
+  <script src="/js/transition.js"></script>
+
+
+</body>
+</html>

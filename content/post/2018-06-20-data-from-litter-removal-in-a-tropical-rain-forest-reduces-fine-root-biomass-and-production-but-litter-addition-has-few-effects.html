@@ -809,3 +809,25 @@ anova(lmer(form, data=dt, REML=FALSE), type=3)</code></pre>
 </div>
 </div>
 </div>
+<div id="alternative-analysis" class="section level1">
+<h1>Alternative analysis</h1>
+<div id="harrell-plot" class="section level2">
+<h2>Harrell plot</h2>
+<p>The strategy is the same as the authors but plotting the contrasts very much helps with the interpretation and communication of results</p>
+<pre class="r"><code>library(cowplot)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;cowplot&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     ggsave</code></pre>
+<pre class="r"><code>library(HarrellPlot)
+  res &lt;- HarrellPlot(x=&quot;season&quot;, y=&#39;FRB&#39;, g=&quot;treatment&quot;, data=frb, 
+                     add_interaction=TRUE, interaction.group = TRUE, 
+                     contrasts.method=&#39;revpairwise&#39;, rel_height=2/3)
+  res$gg</code></pre>
+<p><img src="/post/2018-06-20-data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects_files/figure-html/HarrelPlot-1.png" width="672" /></p>
+</div>
+<div id="gams" class="section level2">
+<h2>GAMs</h2>
+</div>
+</div>

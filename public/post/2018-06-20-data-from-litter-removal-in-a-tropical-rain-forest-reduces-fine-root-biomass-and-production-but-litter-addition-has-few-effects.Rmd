@@ -489,3 +489,25 @@ anova(lmer(form, data=dt, REML=FALSE), type=3)
 
 Reproducibility: 2 (reproduces to a similar value). Differences may be due to slightly different specification of model or to slight differences in data (case may be excluded or missing).
 
+# Alternative analysis
+
+## Harrell plot
+
+The strategy is the same as the authors but plotting the contrasts very much helps with the interpretation and communication of results
+
+```{r HarrelPlot}
+library(cowplot)
+library(HarrellPlot)
+  res <- HarrellPlot(x="season", y='FRB', g="treatment", data=frb, 
+                     add_interaction=TRUE, interaction.group = TRUE, 
+                     contrasts.method='revpairwise', rel_height=2/3)
+  res$gg
+```
+
+
+## GAMs
+
+```{r}
+
+```
+

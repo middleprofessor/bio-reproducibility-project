@@ -1,0 +1,231 @@
+---
+title: 'Data from: Frequency of virus-resistant hosts determines experimental community
+  dynamics'
+author: Jeff Walker
+date: '2019-01-11'
+slug: data-from-frequency-of-virus-resistant-hosts-determines-experimental-community-dynamics
+categories: []
+tags: []
+subtitle: ''
+output:
+  blogdown::html_page:
+    toc: true
+---
+Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resistant hosts determines experimental community dynamics. Ecology 100(1): e02554. https://doi.org/10.1002/ecy.2554
+
+Data source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Data from: Frequency of virus-resistant hosts determines experimental community dynamics. Dryad Digital Repository. https://doi.org/10.5061/dryad.6r2p226
+
+# Set up
+
+```{r setup, message=FALSE, warning=FALSE}
+library(readxl)
+library(ggplot2)
+library(data.table)
+library(emmeans)
+library(lmerTest)
+library(ggpubr)
+
+data_folder <- "../data"
+folder <- "Data from Frequency of virus-resistant hosts determines experimental community dynamics"
+fn <- "Coloma DATA.xlsx"
+file_path <- paste(data_folder, folder, fn, sep="/")
+
+# for working use =TRUE, for final html use =FALSE
+knitr_path <- FALSE
+```
+
+There is no guidance to the structure of the excel sheets and this structure is not obvious. There are 4 sheets: Nodularia, Phage, Rotifers, Chlorella. The last 3 sheets have the same structure and this seems to be
+
+1. column A: percent native Nodularia (not phage resistant). Note the text states 3 levels (100%, 95%, and 50%), but the column has a 4th level -- 99.5%
+2. column B - must be the different cultures with treatment combination ID as letters. The two factors are percent native Nodularia (3 levels), which is in column 1, and N addition (2 levels) which is not identified. There are 3 x 2 = 6 treatment combinations each replicated four times. Not the additional rows with the 99.5% Native Nodularia. I am going to start by coding the first set of four within a level of native percent as "N_lim" and the second set of four as "N_rich". Based on the F-ratios, I'm right!
+3. Remaining columns must be weeks. The first row are the week levels and the second row are the week dates.
+
+The first sheet (Nodularia) has no columns labeling the treatment level for any factor. And there are clearly three sets of data that are stacked but the bottom two contain only 8 instead of 24 (or 30 with the 99.5% level) rows. I assume that the order of treatment levels is the same for this sheet as for the phage, chlorella, and rotifers sheet.
+
+Create a function to process all the sheets the same.
+
+```{r functions}
+pre_process_data <- function(dt_in){
+# takes the raw imported sheet and process it for analysis
+# output is long format
+  
+  dt <- copy(dt_in)
+  # set column names
+  col_labels <- c("native", "id", "0", "0.5", as.character(1:20))
+  setnames(dt, old=colnames(dt), new=col_labels)
+  
+  # add Nitrogen column by guessing
+  dt[, N:=rep(rep(c("N_lim", "N_rich"), each=4), 2)]
+  
+  # cull 99.5% rows
+  dt <- dt[native!=99.5]
+  
+  # make column of 1 - native for frequency of phage-resistant Nodularia
+  dt[, resistant:=100-native]
+  
+  # make resistant and Nitrogen factors
+  dt[, resistant:=factor(resistant)]
+  dt[, N:=factor(N)]
+  
+  # limit to weeks 0, 2,4 6, 8, 12, 20, need week zero for plots
+  ycols <- as.character(c(0, 2, 4, 6, 8, 12, 20))
+  dt_long <- melt(dt, 
+                  id.vars=c("resistant", "id", "N"), 
+                  measure.vars=ycols,
+                  variable.name="week",
+                  value.name="count")
+  return(dt_long)
+}
+
+```
+
+Note that all replicates of G and H (resistant frequency = 50%) for week 4 are missing
+```{r phage import}
+# phage
+sheet_i <- "Phage"
+range_i <- "A3:X34" # ignores labels as the first two columns have none
+phage <- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))
+phage_long <- pre_process_data(phage)
+```
+
+```{r rotifers import}
+sheet_i <- "Rotifers"
+range_i <- "A5:X36" # skip double header and read only to week 20
+rotifers <- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))
+rotifers_long <- pre_process_data(rotifers)
+```
+
+```{r Chlorella import}
+sheet_i <- "Chlorella"
+range_i <- "A4:X35" # skip double header and read only to week 20
+# add first two columns as in other three
+chlorella <- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))
+chlorella_long <- pre_process_data(chlorella)
+```
+
+Limiting to first set of data and assume that row order is the same as in other sheets
+```{r Nodularia import}
+sheet_i <- "Nodularia"
+range_i <- "A5:V36" # skip double header and read only to week 20
+nodularia_part <- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))
+# change colnames so not duplicate
+colnames(nodularia_part) <- paste("X",1:22,sep="")
+nodularia <- cbind(phage[, 1:2], nodularia_part)
+nodularia_long <- pre_process_data(nodularia)
+```
+
+# Reproducibility
+## Table 1
+
+
+```{r table 1 repro}
+
+show_full_table <- FALSE
+if(show_full_table==TRUE){
+  summary(aov(count ~ N + Error(id), nodularia_long[week!=0]))$"Error: id"
+  summary(aov(count ~ N + Error(id), phage_long[week!=0]))$"Error: id"
+  summary(aov(count ~ N + Error(id), chlorella_long[week!=0]))$"Error: id"
+  summary(aov(count ~ N + Error(id), rotifers_long[week!=0]))$"Error: id"
+}
+
+stats <- c("Df2", "F value1", "Pr(>F)1")
+aov1 <- unlist(summary(aov(count ~ N + Error(id), nodularia_long[week!=0]))$"Error: id")[stats]
+aov2 <- unlist(summary(aov(count ~ N + Error(id), phage_long[week!=0]))$"Error: id")[stats]
+aov3 <- unlist(summary(aov(count ~ N + Error(id), chlorella_long[week!=0]))$"Error: id")[stats]
+aov4 <- unlist(summary(aov(count ~ N + Error(id), rotifers_long[week!=0]))$"Error: id")[stats]
+table_1 <- data.table(component=c("Nodularia", "Phage", "Chlorella", "Rotifer"),
+                      rbind(aov1, aov2, aov3, aov4))
+setnames(table_1, old=colnames(table_1), new=c("component", "DDF", "F", "p"))
+knitr::kable(table_1, digits=c(NA, 0, 3, 3))
+
+```
+
+```{r table_1, echo=FALSE}
+if(knitr_path==TRUE){
+  image_path <- "../images/Data from Frequency of virus-resistant hosts determines experimental community dynamics/table1.png"
+}else{
+  image_path <- "/images/Data from Frequency of virus-resistant hosts determines experimental community dynamics/table1.png"
+}
+  knitr::include_graphics(image_path)
+```
+
+## Table 2
+
+```{r table 2 repro}
+show_full_table <- FALSE
+if(show_full_table==TRUE){
+  summary(aov(count ~ resistant + Error(id), nodularia_long[N=="N_lim" & week!=0]))$"Error: id"
+  summary(aov(count ~ resistant + Error(id), nodularia_long[N=="N_rich" & week!=0]))$"Error: id"
+  summary(aov(count ~ resistant + Error(id), phage_long[N=="N_lim" & week!=0]))$"Error: id"
+  summary(aov(count ~ resistant + Error(id), phage_long[N=="N_rich" & week!=0]))$"Error: id"
+  summary(aov(count ~ resistant + Error(id), chlorella_long[N=="N_lim" & week!=0]))$"Error: id"
+  summary(aov(count ~ resistant + Error(id), chlorella_long[N=="N_rich" & week!=0]))$"Error: id"
+  summary(aov(count ~ resistant + Error(id), rotifers_long[N=="N_lim" & week!=0]))$"Error: id"
+  summary(aov(count ~ resistant + Error(id), rotifers_long[N=="N_rich" & week!=0]))$"Error: id"
+}
+
+stats <- c("Df2", "F value1", "Pr(>F)1")
+aov1a <- unlist(summary(aov(count ~ resistant + Error(id), nodularia_long[N=="N_lim" & week!=0]))$"Error: id")[stats]
+aov2a <- unlist(summary(aov(count ~ resistant + Error(id), phage_long[N=="N_lim" & week!=0]))$"Error: id")[stats]
+aov3a <- unlist(summary(aov(count ~ resistant + Error(id), chlorella_long[N=="N_lim" & week!=0]))$"Error: id")[stats]
+aov4a <- unlist(summary(aov(count ~ resistant + Error(id), rotifers_long[N=="N_lim" & week!=0]))$"Error: id")[stats]
+aov1b <- unlist(summary(aov(count ~ resistant + Error(id), nodularia_long[N=="N_rich" & week!=0]))$"Error: id")[stats]
+aov2b <- unlist(summary(aov(count ~ resistant + Error(id), phage_long[N=="N_rich" & week!=0]))$"Error: id")[stats]
+aov3b <- unlist(summary(aov(count ~ resistant + Error(id), chlorella_long[N=="N_rich" & week!=0]))$"Error: id")[stats]
+aov4b <- unlist(summary(aov(count ~ resistant + Error(id), rotifers_long[N=="N_rich" & week!=0]))$"Error: id")[stats]
+table_2 <- data.table(component=rep(c("Nodularia", "Phage", "Chlorella", "Rotifer"), each=2),
+                      treatment=rep(c("N_lim", "N_rich"), 2),
+                      rbind(aov1a, aov1b, aov2a, aov2b, aov3a, aov3b, aov4a, aov4b))
+setnames(table_2, old=colnames(table_2), new=c("component", "treatment", "DDF", "F", "p"))
+knitr::kable(table_2, digits=c(NA, NA, 0, 2, 5))
+
+```
+
+```{r table 2, echo=FALSE}
+if(knitr_path==TRUE){
+  image_path <- "../images/Data from Frequency of virus-resistant hosts determines experimental community dynamics/table2.png"
+}else{
+  image_path <- "/images/Data from Frequency of virus-resistant hosts determines experimental community dynamics/table2.png"
+}
+  knitr::include_graphics(image_path)
+```
+
+## Figure 2
+
+Using the raw (not modeled) means
+```{r Figure 2 repro}
+dt <- rbind(data.table(component="Nodularia", nodularia_long),
+            data.table(component="Phage", phage_long),
+            data.table(component="Chlorella", chlorella_long),
+            data.table(component="Rotifers", rotifers_long))
+dt[, week:=as.integer(as.character(week))]
+dt[, component:=factor(component, c("Nodularia", "Phage", "Chlorella", "Rotifers"))]
+# raw means
+raw_means <- na.omit(dt[, .(count=mean(count, na.rm=TRUE)), by=.(component, resistant, N, week)])
+
+gg <- ggplot(data=raw_means, aes(x=week, y=count, group=resistant, color=resistant)) +
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(trans='log10') + 
+  scale_color_manual(values=c("black", "green", "red")) +
+  facet_grid(component~N, scales="free") +
+  NULL
+gg
+```
+
+```{r Figure 2, echo=FALSE}
+if(knitr_path==TRUE){
+  image_path <- "../images/Data from Frequency of virus-resistant hosts determines experimental community dynamics/fig2.png"
+}else{
+  image_path <- "/images/Data from Frequency of virus-resistant hosts determines experimental community dynamics/fig2.png"
+}
+  knitr::include_graphics(image_path)
+```
+
+# statistical presentation
+
+"The statistical analysis showed a lack of significant difference between N-lim and N-rich medium conditions for Nodularia, phage 2AV2 and Chlorella densities (F1,21 = 0.1, P > 0.05, F1,21 = 0.7, P > 0.05, and F1,21 = 1.8, P > 0.05, respectively; Table 1)"
+
+"In contrast, rotifer densities differed significantly between N-lim and N-rich medium conditions (F1,21 = 13.1, P < 0.05)"
+
+
