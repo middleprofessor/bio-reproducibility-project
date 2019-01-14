@@ -19,9 +19,11 @@ Data source: Bosc C, Roets F, Hui C, Pauw A (2018) Data from: Interactions among
 
 # Summary
 
-1. Very clean data files and readme files.
-2. Only analyzed the experiment results and not the PCA results
-3. Estimated marginal means and SEs do NOT reproduce for two reasons, 1) the methods state that *Slope* is in the model but the reported results are from a model not including *Slope*, and 2) the standard errors of the mean for the non-reference levels (Open and Shade) are the standard errors of the difference of these levels from the reference level (Cage) and not the standard errors of the means.
+1. Very clean data files, readme files, and R script.
+2. My script is independent and was written prior to opening the author's script (they are in fact quite different, which is typical of R scripts)
+3. Only analyzed the experiment results and not the PCA results
+4. Estimated marginal means and SEs do NOT reproduce for two reasons, 1) the methods state that *Slope* is in the model but the reported results are from a model not including *Slope*, and 2) the standard errors of the mean for the non-reference levels (Open and Shade) are the standard errors of the difference of these levels from the reference level (Cage) and not the standard errors of the means.
+5. Model checking suggests the data should be analyzed by generalized LMM *if* the goal is parameter estimation.
 
 # Set up
 ```{r setup, warning=FALSE, message=FALSE}

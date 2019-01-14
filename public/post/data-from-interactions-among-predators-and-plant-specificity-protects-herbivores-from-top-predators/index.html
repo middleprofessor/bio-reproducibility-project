@@ -78,9 +78,11 @@
 <div id="summary" class="section level1">
 <h1>Summary</h1>
 <ol style="list-style-type: decimal">
-<li>Very clean data files and readme files.</li>
+<li>Very clean data files, readme files, and R script.</li>
+<li>My script is independent and was written prior to opening the author’s script (they are in fact quite different, which is typical of R scripts)</li>
 <li>Only analyzed the experiment results and not the PCA results</li>
 <li>Estimated marginal means and SEs do NOT reproduce for two reasons, 1) the methods state that <em>Slope</em> is in the model but the reported results are from a model not including <em>Slope</em>, and 2) the standard errors of the mean for the non-reference levels (Open and Shade) are the standard errors of the difference of these levels from the reference level (Cage) and not the standard errors of the means.</li>
+<li>Model checking suggests the data should be analyzed by generalized LMM <em>if</em> the goal is parameter estimation.</li>
 </ol>
 </div>
 <div id="set-up" class="section level1">
