@@ -1,0 +1,312 @@
+---
+title: 'Data from: Interactions among predators and plant specificity protects herbivores
+  from top predators'
+author: Jeff Walker
+date: '2019-01-13'
+slug: data-from-interactions-among-predators-and-plant-specificity-protects-herbivores-from-top-predators
+categories: []
+tags: []
+subtitle: ''
+output:
+  blogdown::html_page:
+    toc: true
+---
+
+Source: Bosc C, Roets F, Hui C, Pauw A (2018) Interactions among predators and plant specificity protect herbivores from top predators. Ecology 99(7): 1602-1609. https://doi.org/10.1002/ecy.2377
+Additionally, please cite the Dryad data package:
+
+Data source: Bosc C, Roets F, Hui C, Pauw A (2018) Data from: Interactions among predators and plant specificity protects herbivores from top predators. Dryad Digital Repository. https://doi.org/10.5061/dryad.6k939m4
+
+# Summary
+
+1. Very clean data files and readme files.
+2. Only analyzed the experiment results and not the PCA results
+3. Estimated marginal means and SEs do NOT reproduce for two reasons, 1) the methods state that *Slope* is in the model but the reported results are from a model not including *Slope*, and 2) the standard errors of the mean for the non-reference levels (Open and Shade) are the standard errors of the difference of these levels from the reference level (Cage) and not the standard errors of the means.
+
+# Set up
+```{r setup}
+library(stringr)
+library(ggplot2)
+library(ggpubr)
+library(lmerTest)
+library(emmeans)
+library(data.table)
+
+data_folder <- "../data"
+folder <- "Data from Interactions among predators and plant specificity protects herbivores from top predators"
+
+# images need to be moved to /static/images/data from.../image.png
+knitr_path <- FALSE
+```
+
+# Import
+
+Note, the unit identifier is not the same string but has the form "6-C-7TR" in `exp_1` and "X6.C.7TR" in `abundance`
+
+```{r import}
+# design
+fn <- "ExpeDesign_BirdExpe_Dec2014.csv"
+file_path <- paste(data_folder, folder, fn, sep="/")
+exp_1 <- fread(file_path, header=TRUE)
+setnames(exp_1, old="V1", new="id")
+
+# arthropod abundance
+fn <- "ArthropodAbundances_BirdExpe_Dec2014.csv"
+file_path <- paste(data_folder, folder, fn, sep="/")
+abundance <- fread(file_path, header=TRUE)
+
+#create id column of row id with same format as that in exp_1
+abundance[, id:=V1]
+abundance[, id:=str_replace(V1,"X","")]
+abundance[, id:=gsub('.', '-', id, fixed=TRUE)]
+# abundance$id
+
+# file for trophic identification for each arthropod
+fn <- "ArthropodTrophicGroup_BirdExpe_Dec2014.csv"
+file_path <- paste(data_folder, folder, fn, sep="/")
+trophic <- fread(file_path, header=TRUE)
+setnames(trophic, old="V1", new="taxon")
+
+# file for taxonomic identification for each arthropod
+fn <- "ArthropodTaxonomy_BirdExpe_Dec2014.csv"
+file_path <- paste(data_folder, folder, fn, sep="/")
+taxonomic <- fread(file_path, header=TRUE)
+setnames(taxonomic, old="V1", new="taxon")
+
+```
+
+Need to compute abundances within trophic levels and taxonomic levels and then merge with the treatment levels in `exp_1`. 
+
+```{r merge counts into exp_1}
+taxa <- setdiff(colnames(abundance), c("V1", "id"))
+# sum rows (count arthropods in each site)
+abundance[, total_n:=apply(abundance[, .SD, .SDcols=taxa], 1, sum)]
+
+predator_cols <- trophic[TrophicGrp=="Pred", taxon]
+abundance[, pred_n:=apply(abundance[, .SD, .SDcols=predator_cols], 1, sum)]
+
+herb_cols <- trophic[TrophicGrp=="Herb", taxon]
+abundance[, herb_n:=apply(abundance[, .SD, .SDcols=herb_cols], 1, sum)]
+
+# merge abundance into exp_1
+y_cols <- c("id", "total_n", "pred_n", "herb_n")
+exp_1 <- merge(exp_1, abundance[, .SD, .SDcols=y_cols], by="id")
+
+# save this for adding columns and debugging
+working_exp_1 <- copy(exp_1)
+```
+
+# Reproducibility
+
+## Effect on total predators
+
+```{r total-predator}
+# "Significance of the fixed factors were determined with REML t-tests and Satterthwaite's approximation on the intercept in each model (package lmerTest in R software)"
+
+fit.pred <- lmer(pred_n ~ Slope + Treatment + (1|Site), data=exp_1)
+(pred.emm <- emmeans(fit.pred, specs="Treatment", lmer.df = "satterthwaite"))
+pred.anova <- anova(fit.pred) #check Table S1 Appendix S3
+
+my.anova.table <- data.table(response="total predator", pred.anova["Treatment",])
+```
+
+The authors report "intermediate predators were significantly more abundant in the exclosure treatments (estimated mean number of individuals ± SE: 27.9 ± 5.2) compared to both open (14.2 ± 2.6) and shade (16.4 ± 3.2)"
+
+The means are the same but the reported standard errors differ. The reported SEs come from the table of coefficients of the model fit *without* slope (contra methods). 
+
+```{r total-predator-coefficients}
+# using coefficients
+coef(summary(lmer(pred_n ~ Treatment + (1|Site), data=exp_1)))
+```
+
+The reported standard errors of the mean for "open" and "shade" are the the SE of the *differences between means* of each from the exclosure (these are standard errors of differences).
+
+Checking the authors supplied code, they did fit the model without Slope as a fixed effect so I've refit here with the correct standard errors of the means for "Open" and "Shade".
+
+```{r total-predator-emm-corrected}
+fit.pred <- lmer(pred_n ~ Treatment + (1|Site), data=exp_1)
+(pred.emm <- emmeans(fit.pred, specs="Treatment", lmer.df = "satterthwaite"))
+```
+
+and the table of contrasts is, which contrasts are used to generate the asterisks for Fig 1.
+
+```{r total-predator-contrasts}
+(pred.contr <- contrast(pred.emm, method="revpairwise"))
+```
+
+## Effect on total herbaceous
+```{r total-herbaceous}
+fit <- lmer(herb_n ~ Slope + Treatment + (1|Site), data=exp_1)
+(herb.emm <- emmeans(fit, specs="Treatment", lmer.df = "satterthwaite"))
+herb.anova <- anova(fit) #check Table S1 Appendix S3
+
+my.anova.table <- rbind(my.anova.table,
+                        data.table(response="total herbaceous", herb.anova["Treatment",]))
+
+```
+
+The authors report: "exclosure: 89 ± 19.1, open: 84.9 ± 13.1, shade: 85.6 ± 16"
+
+Again, the means are the same but the reported standard errors differ. The differences are due to the same two errors in the authors analysis: 1) Slope not included in model per methods and 2) SEDs used instead of SEMs. Compare:
+
+```{r}
+coef(summary(lmer(herb_n ~ Treatment + (1|Site), data=exp_1)))
+```
+
+
+Here is the table of corrected standard error of means for the model fit without Slope.
+
+```{r}
+fit <- lmer(herb_n ~ Treatment + (1|Site), data=exp_1)
+(herb.emm <- emmeans(fit, specs="Treatment", lmer.df = "satterthwaite"))
+```
+
+And the table of contrasts, which is used to get the asterisks for Figure 1
+
+```{r}
+(herb.contr <- contrast(herb.emm, method="revpairwise"))
+```
+
+## ANOVA table in Appendix 3, Table S1
+
+```{r}
+knitr::kable(my.anova.table, digits=c(NA, 3, 3, 0, 4, 3, 3))
+```
+
+
+```{r tableS1, echo=FALSE}
+fn <- "tableS1.png"
+if(knitr_path==TRUE){
+  image_path <- paste("../images", folder, fn, sep="/")
+}else{
+  image_path <- paste("/images", folder, fn, sep="/")
+}
+knitr::include_graphics(image_path)
+
+```
+
+## Fig 1
+
+
+```{r fig1, echo=FALSE}
+fn <- "fig1.png"
+if(knitr_path==TRUE){
+  image_path <- paste("../images", folder, fn, sep="/")
+}else{
+  image_path <- paste("/images", folder, fn, sep="/")
+}
+knitr::include_graphics(image_path)
+
+```
+
+## Subsetting the response
+
+Will assume going forward that Slope is *not* in the model. Compare the means and SEs to the plots in Appendix 4, Fig. S6
+```{r subsets}
+exp_1 <- copy(working_exp_1)
+spider_cols <- taxonomic[Order=="Araneae", taxon]
+pred_spider_cols <- intersect(predator_cols, spider_cols)
+abundance[, spider_n:=apply(abundance[, .SD, .SDcols=pred_spider_cols], 1, sum)]
+
+insect_cols <- taxonomic[Class=="Insecta", taxon]
+pred_insect_cols <- intersect(predator_cols, insect_cols)
+abundance[, pred_insect_n:=apply(abundance[, .SD, .SDcols=pred_insect_cols], 1, sum)]
+
+Hemiptera_cols <- intersect(herb_cols, taxonomic[Order=="Hemiptera", taxon])
+abundance[, hemiptera_n:=apply(abundance[, .SD, .SDcols=Hemiptera_cols], 1, sum)]
+
+Coleoptera_cols <- intersect(herb_cols, taxonomic[Order=="Coleoptera", taxon])
+abundance[, coleoptera_n:=apply(abundance[, .SD, .SDcols=Coleoptera_cols], 1, sum)]
+
+Lepidoptera_cols <- intersect(herb_cols, taxonomic[Order=="Lepidoptera", taxon])
+abundance[, lepidoptera_n:=apply(abundance[, .SD, .SDcols=Lepidoptera_cols], 1, sum)]
+
+Orthoptera_cols <- intersect(herb_cols, taxonomic[Order=="Orthoptera", taxon])
+abundance[, orthoptera_n:=apply(abundance[, .SD, .SDcols=Orthoptera_cols], 1, sum)]
+
+
+# merge abundance into exp_1
+y_cols <- c("id", "spider_n", "pred_insect_n", "hemiptera_n", "coleoptera_n", "lepidoptera_n", "orthoptera_n")
+exp_1 <- merge(exp_1, abundance[, .SD, .SDcols=y_cols], by="id")
+
+```
+
+### spiders
+```{r spiders}
+fit <- lmer(spider_n ~ Treatment + (1|Site), data=exp_1)
+emmeans(fit, specs="Treatment")
+# compare SEMs from coef table
+coef(summary(fit))
+```
+
+### predatory insects
+```{r predatory insects}
+fit <- lmer(pred_insect_n ~ Treatment + (1|Site), data=exp_1)
+emmeans(fit, specs="Treatment")
+# compare SEMs from coef table
+coef(summary(fit))
+```
+
+### Hemiptera
+```{r hemiptera}
+fit <- lmer(hemiptera_n ~ Treatment + (1|Site), data=exp_1)
+emmeans(fit, specs="Treatment")
+# compare SEMs from coef table
+coef(summary(fit))
+```
+
+### Coleoptera
+```{r coleoptera}
+fit <- lmer(coleoptera_n ~ Treatment + (1|Site), data=exp_1)
+emmeans(fit, specs="Treatment")
+# compare SEMs from coef table
+coef(summary(fit))
+```
+
+### Lepidoptera
+```{r lepidoptera}
+fit <- lmer(lepidoptera_n ~ Treatment + (1|Site), data=exp_1)
+emmeans(fit, specs="Treatment")
+# compare SEMs from coef table
+coef(summary(fit))
+```
+
+### Orthoptera
+
+```{r orthoptera}
+fit <- lmer(orthoptera_n ~ Treatment + (1|Site), data=exp_1)
+emmeans(fit, specs="Treatment")
+# compare SEMs from coef table
+coef(summary(fit))
+
+```
+
+## Fig S6
+```{r figS6}
+fn <- "figS6.png"
+if(knitr_path==TRUE){
+  image_path <- paste("../images", folder, fn, sep="/")
+}else{
+  image_path <- paste("/images", folder, fn, sep="/")
+}
+knitr::include_graphics(image_path)
+
+```
+
+# Statistical red-flags
+
+A quick model check of the residuals shows classic count response
+
+1. The normal Q-Q shows 1) smaller than expected quantiles at low end (piled up closer to mean) and 2) way too big quantiles at the big end (right skewed)
+2. The sqrt(residuals) vs. fitted plot shows a strong positive increase indicating strong heteroskedasticity (increase in variance with increased conditional mean)
+
+This suggests that if estimates are the goal then the data should be fit with a generalized LMM. But if hypothesis testing is the goal then the normal assumption in the LMM is probably okay.
+
+```{r model check}
+pred.residuals <- residuals(fit.pred)
+exp_1[, pred.residuals := residuals(fit.pred)]
+exp_1[, pred.fitted := fitted(fit.pred)]
+ggqqplot(data=exp_1, x = "pred.residuals", title="Normal Q-Q")
+qplot(x=pred.fitted, y=sqrt(abs(pred.residuals)), data=exp_1) + geom_smooth(method="lm")
+```
+

@@ -42,7 +42,9 @@ fn &lt;- &quot;Coloma DATA.xlsx&quot;
 file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
 
 # for working use =TRUE, for final html use =FALSE
-knitr_path &lt;- FALSE</code></pre>
+# images need to be moved to /static/images/data from.../image.png
+knitr_path &lt;- FALSE
+images_folder &lt;- &quot;../../images&quot; # for working and not final html</code></pre>
 <p>There is no guidance to the structure of the excel sheets and this structure is not obvious. There are 4 sheets: Nodularia, Phage, Rotifers, Chlorella. The last 3 sheets have the same structure and this seems to be</p>
 <ol style="list-style-type: decimal">
 <li>column A: percent native Nodularia (not phage resistant). Note the text states 3 levels (100%, 95%, and 50%), but the column has a 4th level – 99.5%</li>

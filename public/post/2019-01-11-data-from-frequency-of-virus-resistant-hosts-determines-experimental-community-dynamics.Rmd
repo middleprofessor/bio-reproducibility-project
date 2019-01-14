@@ -31,7 +31,10 @@ fn <- "Coloma DATA.xlsx"
 file_path <- paste(data_folder, folder, fn, sep="/")
 
 # for working use =TRUE, for final html use =FALSE
+# images need to be moved to /static/images/data from.../image.png
 knitr_path <- FALSE
+images_folder <- "../../images" # for working and not final html
+
 ```
 
 There is no guidance to the structure of the excel sheets and this structure is not obvious. There are 4 sheets: Nodularia, Phage, Rotifers, Chlorella. The last 3 sheets have the same structure and this seems to be

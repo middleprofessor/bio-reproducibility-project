@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>Data from: Interactions among predators and plant specificity protects herbivores from top predators - The Biology Reproducibility Project</title>
+  <meta property="og:title" content="Data from: Interactions among predators and plant specificity protects herbivores from top predators - The Biology Reproducibility Project" />
+  <meta name="twitter:title" content="Data from: Interactions among predators and plant specificity protects …" />
+  <meta name="description" content="Summary Set up Import Reproducibility Effect on total predators Effect on total herbaceous ANOVA table in Appendix 3, Table S1 Fig 1 Subsetting the response spiders predatory insects Hemiptera Coleoptera Lepidoptera Orthoptera  Fig S6  Statistical red-flags   Source: Bosc C, Roets F, Hui C, Pauw A (2018) Interactions among predators and plant specificity protect herbivores from top predators. Ecology 99(7): 1602-1609. https://doi.org/10.1002/ecy.2377 Additionally, please cite the Dryad data package:">
+  <meta property="og:description" content="Summary Set up Import Reproducibility Effect on total predators Effect on total herbaceous ANOVA table in Appendix 3, Table S1 Fig 1 Subsetting the response spiders predatory insects Hemiptera Coleoptera Lepidoptera Orthoptera  Fig S6  Statistical red-flags   Source: Bosc C, Roets F, Hui C, Pauw A (2018) Interactions among predators and plant specificity protect herbivores from top predators. Ecology 99(7): 1602-1609. https://doi.org/10.1002/ecy.2377 Additionally, please cite the Dryad data package:">
+  <meta name="twitter:description" content="Summary Set up Import Reproducibility Effect on total predators Effect on total herbaceous ANOVA table in Appendix 3, Table S1 Fig 1 Subsetting the response spiders predatory insects Hemiptera …">
+  <meta name="author" content=""/>
+  <meta property="og:site_name" content="The Biology Reproducibility Project" />
+  <meta property="og:url" content="/post/data-from-interactions-among-predators-and-plant-specificity-protects-herbivores-from-top-predators/" />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    <h1 class="site-title"><a href="/">The Biology Reproducibility Project</a></h1>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-categories"><a href="/categories/" title="Categories">Categories</a></li>
+      <li class="site-navi-item-tags"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-archives"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+  </nav>
+</header>
+<hr class="site-header-bottom">
+
+  <div class="main" role="main">
+    <article class="article">
+      
+      
+      <h1 class="article-title">Data from: Interactions among predators and plant specificity protects herbivores from top predators</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>January 13, 2019</time></li>
+      </ul>
+      
+<aside class="toc">
+  
+</aside>
+      <div id="TOC">
+<ul>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#set-up">Set up</a></li>
+<li><a href="#import">Import</a></li>
+<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#effect-on-total-predators">Effect on total predators</a></li>
+<li><a href="#effect-on-total-herbaceous">Effect on total herbaceous</a></li>
+<li><a href="#anova-table-in-appendix-3-table-s1">ANOVA table in Appendix 3, Table S1</a></li>
+<li><a href="#fig-1">Fig 1</a></li>
+<li><a href="#subsetting-the-response">Subsetting the response</a><ul>
+<li><a href="#spiders">spiders</a></li>
+<li><a href="#predatory-insects">predatory insects</a></li>
+<li><a href="#hemiptera">Hemiptera</a></li>
+<li><a href="#coleoptera">Coleoptera</a></li>
+<li><a href="#lepidoptera">Lepidoptera</a></li>
+<li><a href="#orthoptera">Orthoptera</a></li>
+</ul></li>
+<li><a href="#fig-s6">Fig S6</a></li>
+</ul></li>
+<li><a href="#statistical-red-flags">Statistical red-flags</a></li>
+</ul>
+</div>
+
+<p>Source: Bosc C, Roets F, Hui C, Pauw A (2018) Interactions among predators and plant specificity protect herbivores from top predators. Ecology 99(7): 1602-1609. <a href="https://doi.org/10.1002/ecy.2377" class="uri">https://doi.org/10.1002/ecy.2377</a> Additionally, please cite the Dryad data package:</p>
+<p>Data source: Bosc C, Roets F, Hui C, Pauw A (2018) Data from: Interactions among predators and plant specificity protects herbivores from top predators. Dryad Digital Repository. <a href="https://doi.org/10.5061/dryad.6k939m4" class="uri">https://doi.org/10.5061/dryad.6k939m4</a></p>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<ol style="list-style-type: decimal">
+<li>Very clean data files and readme files.</li>
+<li>Only analyzed the experiment results and not the PCA results</li>
+<li>Estimated marginal means and SEs do NOT reproduce for two reasons, 1) the methods state that <em>Slope</em> is in the model but the reported results are from a model not including <em>Slope</em>, and 2) the standard errors of the mean for the non-reference levels (Open and Shade) are the standard errors of the difference of these levels from the reference level (Cage) and not the standard errors of the means.</li>
+</ol>
+</div>
+<div id="set-up" class="section level1">
+<h1>Set up</h1>
+<pre class="r"><code>library(stringr)
+library(ggplot2)
+library(ggpubr)</code></pre>
+<pre><code>## Loading required package: magrittr</code></pre>
+<pre class="r"><code>library(lmerTest)</code></pre>
+<pre><code>## Loading required package: lme4</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lmerTest&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:lme4&#39;:
+## 
+##     lmer</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     step</code></pre>
+<pre class="r"><code>library(emmeans)
+library(data.table)
+
+data_folder &lt;- &quot;../data&quot;
+folder &lt;- &quot;Data from Interactions among predators and plant specificity protects herbivores from top predators&quot;
+
+# images need to be moved to /static/images/data from.../image.png
+knitr_path &lt;- FALSE</code></pre>
+</div>
+<div id="import" class="section level1">
+<h1>Import</h1>
+<p>Note, the unit identifier is not the same string but has the form “6-C-7TR” in <code>exp_1</code> and “X6.C.7TR” in <code>abundance</code></p>
+<pre class="r"><code># design
+fn &lt;- &quot;ExpeDesign_BirdExpe_Dec2014.csv&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+exp_1 &lt;- fread(file_path, header=TRUE)
+setnames(exp_1, old=&quot;V1&quot;, new=&quot;id&quot;)
+
+# arthropod abundance
+fn &lt;- &quot;ArthropodAbundances_BirdExpe_Dec2014.csv&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+abundance &lt;- fread(file_path, header=TRUE)
+
+#create id column of row id with same format as that in exp_1
+abundance[, id:=V1]
+abundance[, id:=str_replace(V1,&quot;X&quot;,&quot;&quot;)]
+abundance[, id:=gsub(&#39;.&#39;, &#39;-&#39;, id, fixed=TRUE)]
+# abundance$id
+
+# file for trophic identification for each arthropod
+fn &lt;- &quot;ArthropodTrophicGroup_BirdExpe_Dec2014.csv&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+trophic &lt;- fread(file_path, header=TRUE)
+setnames(trophic, old=&quot;V1&quot;, new=&quot;taxon&quot;)
+
+# file for taxonomic identification for each arthropod
+fn &lt;- &quot;ArthropodTaxonomy_BirdExpe_Dec2014.csv&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+taxonomic &lt;- fread(file_path, header=TRUE)
+setnames(taxonomic, old=&quot;V1&quot;, new=&quot;taxon&quot;)</code></pre>
+<p>Need to compute abundances within trophic levels and taxonomic levels and then merge with the treatment levels in <code>exp_1</code>.</p>
+<pre class="r"><code>taxa &lt;- setdiff(colnames(abundance), c(&quot;V1&quot;, &quot;id&quot;))
+# sum rows (count arthropods in each site)
+abundance[, total_n:=apply(abundance[, .SD, .SDcols=taxa], 1, sum)]
+
+predator_cols &lt;- trophic[TrophicGrp==&quot;Pred&quot;, taxon]
+abundance[, pred_n:=apply(abundance[, .SD, .SDcols=predator_cols], 1, sum)]
+
+herb_cols &lt;- trophic[TrophicGrp==&quot;Herb&quot;, taxon]
+abundance[, herb_n:=apply(abundance[, .SD, .SDcols=herb_cols], 1, sum)]
+
+# merge abundance into exp_1
+y_cols &lt;- c(&quot;id&quot;, &quot;total_n&quot;, &quot;pred_n&quot;, &quot;herb_n&quot;)
+exp_1 &lt;- merge(exp_1, abundance[, .SD, .SDcols=y_cols], by=&quot;id&quot;)
+
+# save this for adding columns and debugging
+working_exp_1 &lt;- copy(exp_1)</code></pre>
+</div>
+<div id="reproducibility" class="section level1">
+<h1>Reproducibility</h1>
+<div id="effect-on-total-predators" class="section level2">
+<h2>Effect on total predators</h2>
+<pre class="r"><code># &quot;Significance of the fixed factors were determined with REML t-tests and Satterthwaite&#39;s approximation on the intercept in each model (package lmerTest in R software)&quot;
+
+fit.pred &lt;- lmer(pred_n ~ Slope + Treatment + (1|Site), data=exp_1)
+(pred.emm &lt;- emmeans(fit.pred, specs=&quot;Treatment&quot;, lmer.df = &quot;satterthwaite&quot;))</code></pre>
+<pre><code>##  Treatment   emmean       SE   df  lower.CL upper.CL
+##  Cage      27.85417 4.703556 4.87 15.661731 40.04660
+##  Open      14.22917 4.703556 4.87  2.036731 26.42160
+##  Shade     16.41667 5.056510 6.48  4.263921 28.56941
+## 
+## Results are averaged over the levels of: Slope 
+## Degrees-of-freedom method: satterthwaite 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code>pred.anova &lt;- anova(fit.pred) #check Table S1 Appendix S3
+
+my.anova.table &lt;- data.table(response=&quot;total predator&quot;, pred.anova[&quot;Treatment&quot;,])</code></pre>
+<p>The authors report “intermediate predators were significantly more abundant in the exclosure treatments (estimated mean number of individuals ± SE: 27.9 ± 5.2) compared to both open (14.2 ± 2.6) and shade (16.4 ± 3.2)”</p>
+<p>The means are the same but the reported standard errors differ. The reported SEs come from the table of coefficients of the model fit <em>without</em> slope (contra methods).</p>
+<pre class="r"><code># using coefficients
+coef(summary(lmer(pred_n ~ Treatment + (1|Site), data=exp_1)))</code></pre>
+<pre><code>##                 Estimate Std. Error         df   t value     Pr(&gt;|t|)
+## (Intercept)     27.85417   5.226362   5.850404  5.329552 1.925249e-03
+## TreatmentOpen  -13.62500   2.624825 112.000000 -5.190823 9.440487e-07
+## TreatmentShade -11.43750   3.214740 112.000000 -3.557830 5.495296e-04</code></pre>
+<p>The reported standard errors of the mean for “open” and “shade” are the the SE of the <em>differences between means</em> of each from the exclosure (these are standard errors of differences).</p>
+<p>Checking the authors supplied code, they did fit the model without Slope as a fixed effect so I’ve refit here with the correct standard errors of the means for “Open” and “Shade”.</p>
+<pre class="r"><code>fit.pred &lt;- lmer(pred_n ~ Treatment + (1|Site), data=exp_1)
+(pred.emm &lt;- emmeans(fit.pred, specs=&quot;Treatment&quot;, lmer.df = &quot;satterthwaite&quot;))</code></pre>
+<pre><code>##  Treatment   emmean       SE   df  lower.CL upper.CL
+##  Cage      27.85417 5.226362 5.85 14.986034 40.72230
+##  Open      14.22917 5.226362 5.85  1.361034 27.09730
+##  Shade     16.41667 5.546144 7.41  3.446328 29.38701
+## 
+## Degrees-of-freedom method: satterthwaite 
+## Confidence level used: 0.95</code></pre>
+<p>and the table of contrasts is, which contrasts are used to generate the asterisks for Fig 1.</p>
+<pre class="r"><code>(pred.contr &lt;- contrast(pred.emm, method=&quot;revpairwise&quot;))</code></pre>
+<pre><code>##  contrast     estimate       SE  df t.ratio p.value
+##  Open - Cage  -13.6250 2.624825 112  -5.191  &lt;.0001
+##  Shade - Cage -11.4375 3.214740 112  -3.558  0.0016
+##  Shade - Open   2.1875 3.214740 112   0.680  0.7753
+## 
+## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+</div>
+<div id="effect-on-total-herbaceous" class="section level2">
+<h2>Effect on total herbaceous</h2>
+<pre class="r"><code>fit &lt;- lmer(herb_n ~ Slope + Treatment + (1|Site), data=exp_1)
+(herb.emm &lt;- emmeans(fit, specs=&quot;Treatment&quot;, lmer.df = &quot;satterthwaite&quot;))</code></pre>
+<pre><code>##  Treatment   emmean       SE   df lower.CL upper.CL
+##  Cage      89.04167 20.52954 5.18 36.81285 141.2705
+##  Open      84.85417 20.52954 5.18 32.62535 137.0830
+##  Shade     85.62500 22.51193 7.46 33.04728 138.2027
+## 
+## Results are averaged over the levels of: Slope 
+## Degrees-of-freedom method: satterthwaite 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code>herb.anova &lt;- anova(fit) #check Table S1 Appendix S3
+
+my.anova.table &lt;- rbind(my.anova.table,
+                        data.table(response=&quot;total herbaceous&quot;, herb.anova[&quot;Treatment&quot;,]))</code></pre>
+<p>The authors report: “exclosure: 89 ± 19.1, open: 84.9 ± 13.1, shade: 85.6 ± 16”</p>
+<p>Again, the means are the same but the reported standard errors differ. The differences are due to the same two errors in the authors analysis: 1) Slope not included in model per methods and 2) SEDs used instead of SEMs. Compare:</p>
+<pre class="r"><code>coef(summary(lmer(herb_n ~ Treatment + (1|Site), data=exp_1)))</code></pre>
+<pre><code>##                 Estimate Std. Error        df    t value    Pr(&gt;|t|)
+## (Intercept)    89.041667   19.08440   6.76119  4.6656793 0.002520101
+## TreatmentOpen  -4.187500   13.06329 112.00000 -0.3205548 0.749145118
+## TreatmentShade -3.416667   15.99920 112.00000 -0.2135524 0.831284396</code></pre>
+<p>Here is the table of corrected standard error of means for the model fit without Slope.</p>
+<pre class="r"><code>fit &lt;- lmer(herb_n ~ Treatment + (1|Site), data=exp_1)
+(herb.emm &lt;- emmeans(fit, specs=&quot;Treatment&quot;, lmer.df = &quot;satterthwaite&quot;))</code></pre>
+<pre><code>##  Treatment   emmean       SE    df lower.CL upper.CL
+##  Cage      89.04167 19.08440  6.76 43.58910 134.4942
+##  Open      84.85417 19.08440  6.76 39.40160 130.3067
+##  Shade     85.62500 21.20233 10.23 38.52417 132.7258
+## 
+## Degrees-of-freedom method: satterthwaite 
+## Confidence level used: 0.95</code></pre>
+<p>And the table of contrasts, which is used to get the asterisks for Figure 1</p>
+<pre class="r"><code>(herb.contr &lt;- contrast(herb.emm, method=&quot;revpairwise&quot;))</code></pre>
+<pre><code>##  contrast       estimate       SE  df t.ratio p.value
+##  Open - Cage  -4.1875000 13.06329 112  -0.321  0.9450
+##  Shade - Cage -3.4166667 15.99920 112  -0.214  0.9752
+##  Shade - Open  0.7708333 15.99920 112   0.048  0.9987
+## 
+## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+</div>
+<div id="anova-table-in-appendix-3-table-s1" class="section level2">
+<h2>ANOVA table in Appendix 3, Table S1</h2>
+<pre class="r"><code>knitr::kable(my.anova.table, digits=c(NA, 3, 3, 0, 4, 3, 3))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">response</th>
+<th align="right">Sum Sq</th>
+<th align="right">Mean Sq</th>
+<th align="right">NumDF</th>
+<th align="right">DenDF</th>
+<th align="right">F value</th>
+<th align="right">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">total predator</td>
+<td align="right">4866.075</td>
+<td align="right">2433.038</td>
+<td align="right">2</td>
+<td align="right">112</td>
+<td align="right">14.714</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">total herbaceous</td>
+<td align="right">454.446</td>
+<td align="right">227.223</td>
+<td align="right">2</td>
+<td align="right">112</td>
+<td align="right">0.055</td>
+<td align="right">0.946</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/images/Data%20from%20Interactions%20among%20predators%20and%20plant%20specificity%20protects%20herbivores%20from%20top%20predators/tableS1.png" /><!-- --></p>
+</div>
+<div id="fig-1" class="section level2">
+<h2>Fig 1</h2>
+<p><img src="/images/Data%20from%20Interactions%20among%20predators%20and%20plant%20specificity%20protects%20herbivores%20from%20top%20predators/fig1.png" /><!-- --></p>
+</div>
+<div id="subsetting-the-response" class="section level2">
+<h2>Subsetting the response</h2>
+<p>Will assume going forward that Slope is <em>not</em> in the model. Compare the means and SEs to the plots in Appendix 4, Fig. S6</p>
+<pre class="r"><code>exp_1 &lt;- copy(working_exp_1)
+spider_cols &lt;- taxonomic[Order==&quot;Araneae&quot;, taxon]
+pred_spider_cols &lt;- intersect(predator_cols, spider_cols)
+abundance[, spider_n:=apply(abundance[, .SD, .SDcols=pred_spider_cols], 1, sum)]
+
+insect_cols &lt;- taxonomic[Class==&quot;Insecta&quot;, taxon]
+pred_insect_cols &lt;- intersect(predator_cols, insect_cols)
+abundance[, pred_insect_n:=apply(abundance[, .SD, .SDcols=pred_insect_cols], 1, sum)]
+
+Hemiptera_cols &lt;- intersect(herb_cols, taxonomic[Order==&quot;Hemiptera&quot;, taxon])
+abundance[, hemiptera_n:=apply(abundance[, .SD, .SDcols=Hemiptera_cols], 1, sum)]
+
+Coleoptera_cols &lt;- intersect(herb_cols, taxonomic[Order==&quot;Coleoptera&quot;, taxon])
+abundance[, coleoptera_n:=apply(abundance[, .SD, .SDcols=Coleoptera_cols], 1, sum)]
+
+Lepidoptera_cols &lt;- intersect(herb_cols, taxonomic[Order==&quot;Lepidoptera&quot;, taxon])
+abundance[, lepidoptera_n:=apply(abundance[, .SD, .SDcols=Lepidoptera_cols], 1, sum)]
+
+Orthoptera_cols &lt;- intersect(herb_cols, taxonomic[Order==&quot;Orthoptera&quot;, taxon])
+abundance[, orthoptera_n:=apply(abundance[, .SD, .SDcols=Orthoptera_cols], 1, sum)]
+
+
+# merge abundance into exp_1
+y_cols &lt;- c(&quot;id&quot;, &quot;spider_n&quot;, &quot;pred_insect_n&quot;, &quot;hemiptera_n&quot;, &quot;coleoptera_n&quot;, &quot;lepidoptera_n&quot;, &quot;orthoptera_n&quot;)
+exp_1 &lt;- merge(exp_1, abundance[, .SD, .SDcols=y_cols], by=&quot;id&quot;)</code></pre>
+<div id="spiders" class="section level3">
+<h3>spiders</h3>
+<pre class="r"><code>fit &lt;- lmer(spider_n ~ Treatment + (1|Site), data=exp_1)
+emmeans(fit, specs=&quot;Treatment&quot;)</code></pre>
+<pre><code>##  Treatment   emmean       SE   df   lower.CL upper.CL
+##  Cage      22.89583 4.046980 6.18 13.0633494 32.72832
+##  Open       9.37500 4.046980 6.18 -0.4574840 19.20748
+##  Shade     10.41667 4.374035 8.41  0.4144201 20.41891
+## 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code># compare SEMs from coef table
+coef(summary(fit))</code></pre>
+<pre><code>##                 Estimate Std. Error         df   t value     Pr(&gt;|t|)
+## (Intercept)     22.89583   4.046980   6.181674  5.657510 1.183271e-03
+## TreatmentOpen  -13.52083   2.346970 112.000000 -5.760975 7.460152e-08
+## TreatmentShade -12.47917   2.874439 112.000000 -4.341427 3.119473e-05</code></pre>
+</div>
+<div id="predatory-insects" class="section level3">
+<h3>predatory insects</h3>
+<pre class="r"><code>fit &lt;- lmer(pred_insect_n ~ Treatment + (1|Site), data=exp_1)
+emmeans(fit, specs=&quot;Treatment&quot;)</code></pre>
+<pre><code>##  Treatment   emmean       SE   df lower.CL upper.CL
+##  Cage      4.395833 1.351147 5.99 1.088019 7.703647
+##  Open      4.541667 1.351147 5.99 1.233853 7.849481
+##  Shade     5.458333 1.445115 7.82 2.112190 8.804477
+## 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code># compare SEMs from coef table
+coef(summary(fit))</code></pre>
+<pre><code>##                 Estimate Std. Error         df   t value   Pr(&gt;|t|)
+## (Intercept)    4.3958333  1.3511474   5.987487 3.2534077 0.01744375
+## TreatmentOpen  0.1458333  0.7249249 112.000000 0.2011702 0.84093034
+## TreatmentShade 1.0625000  0.8878481 112.000000 1.1967137 0.23394520</code></pre>
+</div>
+<div id="hemiptera" class="section level3">
+<h3>Hemiptera</h3>
+<pre class="r"><code>fit &lt;- lmer(hemiptera_n ~ Treatment + (1|Site), data=exp_1)
+emmeans(fit, specs=&quot;Treatment&quot;)</code></pre>
+<pre><code>##  Treatment   emmean       SE    df lower.CL upper.CL
+##  Cage      53.85417 14.10847  7.93 21.26668 86.44165
+##  Open      60.25000 14.10847  7.93 27.66251 92.83749
+##  Shade     61.70833 16.36146 14.07 26.63387 96.78280
+## 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code># compare SEMs from coef table
+coef(summary(fit))</code></pre>
+<pre><code>##                 Estimate Std. Error         df   t value    Pr(&gt;|t|)
+## (Intercept)    53.854167   14.10847   7.925528 3.8171507 0.005200435
+## TreatmentOpen   6.395833   11.71737 112.000000 0.5458418 0.586260220
+## TreatmentShade  7.854167   14.35079 112.000000 0.5472984 0.585262675</code></pre>
+</div>
+<div id="coleoptera" class="section level3">
+<h3>Coleoptera</h3>
+<pre class="r"><code>fit &lt;- lmer(coleoptera_n ~ Treatment + (1|Site), data=exp_1)
+emmeans(fit, specs=&quot;Treatment&quot;)</code></pre>
+<pre><code>##  Treatment   emmean       SE   df lower.CL upper.CL
+##  Cage      3.687500 1.217957 6.10 0.719332 6.655668
+##  Open      4.416667 1.217957 6.10 1.448499 7.384835
+##  Shade     4.125000 1.310869 8.16 1.112660 7.137340
+## 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code># compare SEMs from coef table
+coef(summary(fit))</code></pre>
+<pre><code>##                 Estimate Std. Error         df   t value   Pr(&gt;|t|)
+## (Intercept)    3.6875000  1.2179572   6.102273 3.0276106 0.02268756
+## TreatmentOpen  0.7291667  0.6855051 112.000000 1.0636926 0.28975598
+## TreatmentShade 0.4375000  0.8395688 112.000000 0.5211008 0.60332536</code></pre>
+</div>
+<div id="lepidoptera" class="section level3">
+<h3>Lepidoptera</h3>
+<pre class="r"><code>fit &lt;- lmer(lepidoptera_n ~ Treatment + (1|Site), data=exp_1)
+emmeans(fit, specs=&quot;Treatment&quot;)</code></pre>
+<pre><code>##  Treatment   emmean       SE    df lower.CL upper.CL
+##  Cage      8.645833 1.880967  7.14 4.215098 13.07657
+##  Open      5.875000 1.880967  7.14 1.444264 10.30574
+##  Shade     6.458333 2.121986 11.44 1.809611 11.10706
+## 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code># compare SEMs from coef table
+coef(summary(fit))</code></pre>
+<pre><code>##                 Estimate Std. Error         df   t value    Pr(&gt;|t|)
+## (Intercept)     8.645833   1.880967   7.135342  4.596482 0.002373935
+## TreatmentOpen  -2.770833   1.389090 112.000000 -1.994711 0.048503271
+## TreatmentShade -2.187500   1.701281 112.000000 -1.285796 0.201166380</code></pre>
+</div>
+<div id="orthoptera" class="section level3">
+<h3>Orthoptera</h3>
+<pre class="r"><code>fit &lt;- lmer(orthoptera_n ~ Treatment + (1|Site), data=exp_1)
+emmeans(fit, specs=&quot;Treatment&quot;)</code></pre>
+<pre><code>##  Treatment   emmean        SE    df  lower.CL upper.CL
+##  Cage      1.520833 0.3180485  9.62 0.8083942 2.233273
+##  Open      1.208333 0.3180485  9.62 0.4958942 1.920773
+##  Shade     1.041667 0.3855323 19.95 0.2373205 1.846013
+## 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code># compare SEMs from coef table
+coef(summary(fit))</code></pre>
+<pre><code>##                  Estimate Std. Error         df   t value     Pr(&gt;|t|)
+## (Intercept)     1.5208333  0.3180485   9.622844  4.781766 0.0008282473
+## TreatmentOpen  -0.3125000  0.3081568 111.999999 -1.014094 0.3127236218
+## TreatmentShade -0.4791667  0.3774135 111.999999 -1.269607 0.2068564723</code></pre>
+</div>
+</div>
+<div id="fig-s6" class="section level2">
+<h2>Fig S6</h2>
+<pre class="r"><code>fn &lt;- &quot;figS6.png&quot;
+if(knitr_path==TRUE){
+  image_path &lt;- paste(&quot;../images&quot;, folder, fn, sep=&quot;/&quot;)
+}else{
+  image_path &lt;- paste(&quot;/images&quot;, folder, fn, sep=&quot;/&quot;)
+}
+knitr::include_graphics(image_path)</code></pre>
+<p><img src="/images/Data%20from%20Interactions%20among%20predators%20and%20plant%20specificity%20protects%20herbivores%20from%20top%20predators/figS6.png" /><!-- --></p>
+</div>
+</div>
+<div id="statistical-red-flags" class="section level1">
+<h1>Statistical red-flags</h1>
+<p>A quick model check of the residuals shows classic count response</p>
+<ol style="list-style-type: decimal">
+<li>The normal Q-Q shows 1) smaller than expected quantiles at low end (piled up closer to mean) and 2) way too big quantiles at the big end (right skewed)</li>
+<li>The sqrt(residuals) vs. fitted plot shows a strong positive increase indicating strong heteroskedasticity (increase in variance with increased conditional mean)</li>
+</ol>
+<p>This suggests that if estimates are the goal then the data should be fit with a generalized LMM. But if hypothesis testing is the goal then the normal assumption in the LMM is probably okay.</p>
+<pre class="r"><code>pred.residuals &lt;- residuals(fit.pred)
+exp_1[, pred.residuals := residuals(fit.pred)]
+exp_1[, pred.fitted := fitted(fit.pred)]
+ggqqplot(data=exp_1, x = &quot;pred.residuals&quot;, title=&quot;Normal Q-Q&quot;)</code></pre>
+<p><img src="/post/2019-01-13-data-from-interactions-among-predators-and-plant-specificity-protects-herbivores-from-top-predators_files/figure-html/model%20check-1.png" width="672" /></p>
+<pre class="r"><code>qplot(x=pred.fitted, y=sqrt(abs(pred.residuals)), data=exp_1) + geom_smooth(method=&quot;lm&quot;)</code></pre>
+<p><img src="/post/2019-01-13-data-from-interactions-among-predators-and-plant-specificity-protects-herbivores-from-top-predators_files/figure-html/model%20check-2.png" width="672" /></p>
+</div>
+
+    </article>
+
+    
+<ul class="article-share">
+  <li>
+    <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </li>
+  <li>
+    <div class="fb-share-button" data-href="/post/data-from-interactions-among-predators-and-plant-specificity-protects-herbivores-from-top-predators/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.10";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+  </li>
+  <li>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <g:plus action="share"></g:plus>
+  </li>
+  <li>
+    <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label-counter" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  </li>
+  <li>
+    <a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en"></a>
+    <script>!function(d,i){if(!d.getElementById(i)){var j=d.createElement("script");j.id=i;j.src="https://widgets.getpocket.com/v1/j/btn.js?v=1";var w=d.getElementById(i);d.body.appendChild(j);}}(document,"pocket-btn-js");</script>
+  </li>
+</ul>
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/data-from-frequency-of-virus-resistant-hosts-determines-experimental-community-dynamics/" data-toggle="tooltip" data-placement="top" title="Data from: Frequency of virus-resistant hosts determines experimental community dynamics">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">&copy; Copyright 2018 Jeffrey A. Walker</div>
+  <ul class="site-footer-items">
+    <li class="site-footer-item-about"><a href="/about/" title="About">About</a></li>
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/">Hugo</a>
+  </div>
+</div>
+    <script src="//yihui.name/js/math-code.js"></script>
+<script async
+src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+  <script src="/js/collapse.js"></script>
+  <script src="/js/dropdown.js"></script>
+  <script src="/js/transition.js"></script>
+
+
+</body>
+</html>
