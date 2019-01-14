@@ -229,7 +229,7 @@ my.anova.table &lt;- rbind(my.anova.table,
 <div id="reported-results-1" class="section level3">
 <h3>reported results</h3>
 <p>The authors report: “exclosure: 89 ± 19.1, open: 84.9 ± 13.1, shade: 85.6 ± 16”</p>
-<p>Again, the means are the same but the reported standard errors differ. The differences are due to the same two errors in the authors analysis: 1) Slope not included in model per methods and 2) SEDs used instead of SEMs. Compare:</p>
+<p>Again, the means are the same but the reported standard errors differ. The differences are due to the same two errors in the authors analysis: 1) Slope not included in model per methods and 2) SEDs of Open and Shade used instead of SEMs. Compare:</p>
 <pre class="r"><code>coef(summary(lmer(herb_n ~ Treatment + (1|Site), data=exp_1)))</code></pre>
 <pre><code>##                 Estimate Std. Error        df    t value    Pr(&gt;|t|)
 ## (Intercept)    89.041667   19.08440   6.76119  4.6656793 0.002520101
