@@ -6,9 +6,9 @@
   <title>Data from: Interactions among predators and plant specificity protects herbivores from top predators - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from: Interactions among predators and plant specificity protects herbivores from top predators - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from: Interactions among predators and plant specificity protects …" />
-  <meta name="description" content="Summary Set up Import Reproducibility Effect on total predators Effect on total herbaceous ANOVA table in Appendix 3, Table S1 Fig 1 Subsetting the response spiders predatory insects Hemiptera Coleoptera Lepidoptera Orthoptera  Fig S6  Statistical red-flags   Source: Bosc C, Roets F, Hui C, Pauw A (2018) Interactions among predators and plant specificity protect herbivores from top predators. Ecology 99(7): 1602-1609. https://doi.org/10.1002/ecy.2377 Additionally, please cite the Dryad data package:">
-  <meta property="og:description" content="Summary Set up Import Reproducibility Effect on total predators Effect on total herbaceous ANOVA table in Appendix 3, Table S1 Fig 1 Subsetting the response spiders predatory insects Hemiptera Coleoptera Lepidoptera Orthoptera  Fig S6  Statistical red-flags   Source: Bosc C, Roets F, Hui C, Pauw A (2018) Interactions among predators and plant specificity protect herbivores from top predators. Ecology 99(7): 1602-1609. https://doi.org/10.1002/ecy.2377 Additionally, please cite the Dryad data package:">
-  <meta name="twitter:description" content="Summary Set up Import Reproducibility Effect on total predators Effect on total herbaceous ANOVA table in Appendix 3, Table S1 Fig 1 Subsetting the response spiders predatory insects Hemiptera …">
+  <meta name="description" content="Summary Set up Import Reproducibility Effect on total predators my results reported results  Effect on total herbaceous my results reported results  ANOVA table in Appendix 3, Table S1 Fig 1 Subsetting the response spiders predatory insects Hemiptera Coleoptera Lepidoptera Orthoptera  Fig S6  Statistical red-flags   Source: Bosc C, Roets F, Hui C, Pauw A (2018) Interactions among predators and plant specificity protect herbivores from top predators.">
+  <meta property="og:description" content="Summary Set up Import Reproducibility Effect on total predators my results reported results  Effect on total herbaceous my results reported results  ANOVA table in Appendix 3, Table S1 Fig 1 Subsetting the response spiders predatory insects Hemiptera Coleoptera Lepidoptera Orthoptera  Fig S6  Statistical red-flags   Source: Bosc C, Roets F, Hui C, Pauw A (2018) Interactions among predators and plant specificity protect herbivores from top predators.">
+  <meta name="twitter:description" content="Summary Set up Import Reproducibility Effect on total predators my results reported results  Effect on total herbaceous my results reported results  ANOVA table in Appendix 3, Table S1 Fig 1 …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-interactions-among-predators-and-plant-specificity-protects-herbivores-from-top-predators/" />
@@ -55,8 +55,14 @@
 <li><a href="#set-up">Set up</a></li>
 <li><a href="#import">Import</a></li>
 <li><a href="#reproducibility">Reproducibility</a><ul>
-<li><a href="#effect-on-total-predators">Effect on total predators</a></li>
-<li><a href="#effect-on-total-herbaceous">Effect on total herbaceous</a></li>
+<li><a href="#effect-on-total-predators">Effect on total predators</a><ul>
+<li><a href="#my-results">my results</a></li>
+<li><a href="#reported-results">reported results</a></li>
+</ul></li>
+<li><a href="#effect-on-total-herbaceous">Effect on total herbaceous</a><ul>
+<li><a href="#my-results-1">my results</a></li>
+<li><a href="#reported-results-1">reported results</a></li>
+</ul></li>
 <li><a href="#anova-table-in-appendix-3-table-s1">ANOVA table in Appendix 3, Table S1</a></li>
 <li><a href="#fig-1">Fig 1</a></li>
 <li><a href="#subsetting-the-response">Subsetting the response</a><ul>
@@ -82,6 +88,7 @@
 <li>My script is independent and was written prior to opening the author’s script (they are in fact quite different, which is typical of R scripts)</li>
 <li>Only analyzed the experiment results and not the PCA results</li>
 <li>Estimated marginal means and SEs do NOT reproduce for two reasons, 1) the methods state that <em>Slope</em> is in the model but the reported results are from a model not including <em>Slope</em>, and 2) the standard errors of the mean for the non-reference levels (Open and Shade) are the standard errors of the difference of these levels from the reference level (Cage) and not the standard errors of the means.</li>
+<li>The ANOVA table results reproduce exactly.</li>
 <li>Model checking suggests the data should be analyzed by generalized LMM <em>if</em> the goal is parameter estimation.</li>
 </ol>
 </div>
@@ -156,7 +163,11 @@ working_exp_1 &lt;- copy(exp_1)</code></pre>
 <pre class="r"><code># &quot;Significance of the fixed factors were determined with REML t-tests and Satterthwaite&#39;s approximation on the intercept in each model (package lmerTest in R software)&quot;
 
 fit.pred &lt;- lmer(pred_n ~ Slope + Treatment + (1|Site), data=exp_1)
-(pred.emm &lt;- emmeans(fit.pred, specs=&quot;Treatment&quot;, lmer.df = &quot;satterthwaite&quot;))</code></pre>
+pred.anova &lt;- anova(fit.pred) #check Table S1 Appendix S3
+my.anova.table &lt;- data.table(response=&quot;total predator&quot;, pred.anova[&quot;Treatment&quot;,])</code></pre>
+<div id="my-results" class="section level3">
+<h3>my results</h3>
+<pre class="r"><code>(pred.emm &lt;- emmeans(fit.pred, specs=&quot;Treatment&quot;, lmer.df = &quot;satterthwaite&quot;))</code></pre>
 <pre><code>##  Treatment   emmean       SE   df  lower.CL upper.CL
 ##  Cage      27.85417 4.703556 4.87 15.661731 40.04660
 ##  Open      14.22917 4.703556 4.87  2.036731 26.42160
@@ -165,9 +176,9 @@ fit.pred &lt;- lmer(pred_n ~ Slope + Treatment + (1|Site), data=exp_1)
 ## Results are averaged over the levels of: Slope 
 ## Degrees-of-freedom method: satterthwaite 
 ## Confidence level used: 0.95</code></pre>
-<pre class="r"><code>pred.anova &lt;- anova(fit.pred) #check Table S1 Appendix S3
-
-my.anova.table &lt;- data.table(response=&quot;total predator&quot;, pred.anova[&quot;Treatment&quot;,])</code></pre>
+</div>
+<div id="reported-results" class="section level3">
+<h3>reported results</h3>
 <p>The authors report “intermediate predators were significantly more abundant in the exclosure treatments (estimated mean number of individuals ± SE: 27.9 ± 5.2) compared to both open (14.2 ± 2.6) and shade (16.4 ± 3.2)”</p>
 <p>The means are the same but the reported standard errors differ. The reported SEs come from the table of coefficients of the model fit <em>without</em> slope (contra methods).</p>
 <pre class="r"><code># using coefficients
@@ -196,10 +207,16 @@ coef(summary(lmer(pred_n ~ Treatment + (1|Site), data=exp_1)))</code></pre>
 ## 
 ## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
 </div>
+</div>
 <div id="effect-on-total-herbaceous" class="section level2">
 <h2>Effect on total herbaceous</h2>
 <pre class="r"><code>fit &lt;- lmer(herb_n ~ Slope + Treatment + (1|Site), data=exp_1)
-(herb.emm &lt;- emmeans(fit, specs=&quot;Treatment&quot;, lmer.df = &quot;satterthwaite&quot;))</code></pre>
+herb.anova &lt;- anova(fit) #check Table S1 Appendix S3
+my.anova.table &lt;- rbind(my.anova.table,
+                        data.table(response=&quot;total herbaceous&quot;, herb.anova[&quot;Treatment&quot;,]))</code></pre>
+<div id="my-results-1" class="section level3">
+<h3>my results</h3>
+<pre class="r"><code>(herb.emm &lt;- emmeans(fit, specs=&quot;Treatment&quot;, lmer.df = &quot;satterthwaite&quot;))</code></pre>
 <pre><code>##  Treatment   emmean       SE   df lower.CL upper.CL
 ##  Cage      89.04167 20.52954 5.18 36.81285 141.2705
 ##  Open      84.85417 20.52954 5.18 32.62535 137.0830
@@ -208,10 +225,9 @@ coef(summary(lmer(pred_n ~ Treatment + (1|Site), data=exp_1)))</code></pre>
 ## Results are averaged over the levels of: Slope 
 ## Degrees-of-freedom method: satterthwaite 
 ## Confidence level used: 0.95</code></pre>
-<pre class="r"><code>herb.anova &lt;- anova(fit) #check Table S1 Appendix S3
-
-my.anova.table &lt;- rbind(my.anova.table,
-                        data.table(response=&quot;total herbaceous&quot;, herb.anova[&quot;Treatment&quot;,]))</code></pre>
+</div>
+<div id="reported-results-1" class="section level3">
+<h3>reported results</h3>
 <p>The authors report: “exclosure: 89 ± 19.1, open: 84.9 ± 13.1, shade: 85.6 ± 16”</p>
 <p>Again, the means are the same but the reported standard errors differ. The differences are due to the same two errors in the authors analysis: 1) Slope not included in model per methods and 2) SEDs used instead of SEMs. Compare:</p>
 <pre class="r"><code>coef(summary(lmer(herb_n ~ Treatment + (1|Site), data=exp_1)))</code></pre>
@@ -237,6 +253,7 @@ my.anova.table &lt;- rbind(my.anova.table,
 ##  Shade - Open  0.7708333 15.99920 112   0.048  0.9987
 ## 
 ## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+</div>
 </div>
 <div id="anova-table-in-appendix-3-table-s1" class="section level2">
 <h2>ANOVA table in Appendix 3, Table S1</h2>
@@ -275,6 +292,7 @@ my.anova.table &lt;- rbind(my.anova.table,
 </tbody>
 </table>
 <p><img src="/images/Data%20from%20Interactions%20among%20predators%20and%20plant%20specificity%20protects%20herbivores%20from%20top%20predators/tableS1.png" /><!-- --></p>
+<p>These reproduce exactly</p>
 </div>
 <div id="fig-1" class="section level2">
 <h2>Fig 1</h2>

@@ -23,7 +23,8 @@ Data source: Bosc C, Roets F, Hui C, Pauw A (2018) Data from: Interactions among
 2. My script is independent and was written prior to opening the author's script (they are in fact quite different, which is typical of R scripts)
 3. Only analyzed the experiment results and not the PCA results
 4. Estimated marginal means and SEs do NOT reproduce for two reasons, 1) the methods state that *Slope* is in the model but the reported results are from a model not including *Slope*, and 2) the standard errors of the mean for the non-reference levels (Open and Shade) are the standard errors of the difference of these levels from the reference level (Cage) and not the standard errors of the means.
-5. Model checking suggests the data should be analyzed by generalized LMM *if* the goal is parameter estimation.
+5. The ANOVA table results reproduce exactly.
+6. Model checking suggests the data should be analyzed by generalized LMM *if* the goal is parameter estimation.
 
 # Set up
 ```{r setup, warning=FALSE, message=FALSE}
@@ -106,12 +107,16 @@ working_exp_1 <- copy(exp_1)
 # "Significance of the fixed factors were determined with REML t-tests and Satterthwaite's approximation on the intercept in each model (package lmerTest in R software)"
 
 fit.pred <- lmer(pred_n ~ Slope + Treatment + (1|Site), data=exp_1)
-(pred.emm <- emmeans(fit.pred, specs="Treatment", lmer.df = "satterthwaite"))
 pred.anova <- anova(fit.pred) #check Table S1 Appendix S3
-
 my.anova.table <- data.table(response="total predator", pred.anova["Treatment",])
 ```
 
+### my results
+```{r total-predator-my-results}
+(pred.emm <- emmeans(fit.pred, specs="Treatment", lmer.df = "satterthwaite"))
+```
+
+### reported results
 The authors report "intermediate predators were significantly more abundant in the exclosure treatments (estimated mean number of individuals ± SE: 27.9 ± 5.2) compared to both open (14.2 ± 2.6) and shade (16.4 ± 3.2)"
 
 The means are the same but the reported standard errors differ. The reported SEs come from the table of coefficients of the model fit *without* slope (contra methods). 
@@ -139,14 +144,18 @@ and the table of contrasts is, which contrasts are used to generate the asterisk
 ## Effect on total herbaceous
 ```{r total-herbaceous}
 fit <- lmer(herb_n ~ Slope + Treatment + (1|Site), data=exp_1)
-(herb.emm <- emmeans(fit, specs="Treatment", lmer.df = "satterthwaite"))
 herb.anova <- anova(fit) #check Table S1 Appendix S3
-
 my.anova.table <- rbind(my.anova.table,
                         data.table(response="total herbaceous", herb.anova["Treatment",]))
 
 ```
 
+### my results
+```{r total-herbaceous-my-results}
+(herb.emm <- emmeans(fit, specs="Treatment", lmer.df = "satterthwaite"))
+```
+
+### reported results
 The authors report: "exclosure: 89 ± 19.1, open: 84.9 ± 13.1, shade: 85.6 ± 16"
 
 Again, the means are the same but the reported standard errors differ. The differences are due to the same two errors in the authors analysis: 1) Slope not included in model per methods and 2) SEDs used instead of SEMs. Compare:
@@ -171,7 +180,7 @@ And the table of contrasts, which is used to get the asterisks for Figure 1
 
 ## ANOVA table in Appendix 3, Table S1
 
-```{r}
+```{r my-anova}
 knitr::kable(my.anova.table, digits=c(NA, 3, 3, 0, 4, 3, 3))
 ```
 
@@ -187,8 +196,9 @@ knitr::include_graphics(image_path)
 
 ```
 
-## Fig 1
+These reproduce exactly
 
+## Fig 1
 
 ```{r fig1, echo=FALSE}
 fn <- "fig1.png"
