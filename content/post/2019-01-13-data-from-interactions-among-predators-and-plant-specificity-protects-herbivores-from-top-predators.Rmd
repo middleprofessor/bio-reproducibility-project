@@ -24,7 +24,7 @@ Data source: Bosc C, Roets F, Hui C, Pauw A (2018) Data from: Interactions among
 3. Estimated marginal means and SEs do NOT reproduce for two reasons, 1) the methods state that *Slope* is in the model but the reported results are from a model not including *Slope*, and 2) the standard errors of the mean for the non-reference levels (Open and Shade) are the standard errors of the difference of these levels from the reference level (Cage) and not the standard errors of the means.
 
 # Set up
-```{r setup}
+```{r setup, warning=FALSE, message=FALSE}
 library(stringr)
 library(ggplot2)
 library(ggpubr)
