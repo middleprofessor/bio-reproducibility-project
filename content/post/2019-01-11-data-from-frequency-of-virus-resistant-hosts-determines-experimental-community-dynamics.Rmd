@@ -15,6 +15,12 @@ Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resi
 
 Data source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Data from: Frequency of virus-resistant hosts determines experimental community dynamics. Dryad Digital Repository. https://doi.org/10.5061/dryad.6r2p226
 
+# Summary
+
+1. Data sheets are missing a column for N treatment and Nodularia sheet is also missing columns for culture ID and percent resistant factor.
+2. The model for the RM ANOVA is not clear given their are two factors. Only clear given degrees of freedom reported in F ratios (which is about the only value of these)
+3. The ANOVA statistics reproduce for Chlorella and Rotifer only after excluding culture A3, which is present in these two data sets but missing from Nodularia and Phage. ANOVA statistics are similar for Nodularia (both tables) and for Phage (Table 1) but not Phage (Table 2).
+
 # Set up
 
 ```{r setup, message=FALSE, warning=FALSE}
@@ -33,7 +39,7 @@ file_path <- paste(data_folder, folder, fn, sep="/")
 # for working use =TRUE, for final html use =FALSE
 # images need to be moved to /static/images/data from.../image.png
 knitr_path <- FALSE
-images_folder <- "../../images" # for working and not final html
+images_folder <- "../images" # for working and not final html
 
 ```
 
@@ -48,9 +54,9 @@ The first sheet (Nodularia) has no columns labeling the treatment level for any 
 Create a function to process all the sheets the same.
 
 ```{r functions}
-pre_process_data <- function(dt_in){
+pre_process_data <- function(dt_in, wide=FALSE){
 # takes the raw imported sheet and process it for analysis
-# output is long format
+# output is long format if wide = FALSE
   
   dt <- copy(dt_in)
   # set column names
@@ -72,12 +78,16 @@ pre_process_data <- function(dt_in){
   
   # limit to weeks 0, 2,4 6, 8, 12, 20, need week zero for plots
   ycols <- as.character(c(0, 2, 4, 6, 8, 12, 20))
-  dt_long <- melt(dt, 
+  if(wide==TRUE){
+    dt_out <- dt[, .SD, .SDcols=c("resistant", "id", "N", ycols)]
+  }else{ #long format
+  dt_out <- melt(dt, 
                   id.vars=c("resistant", "id", "N"), 
                   measure.vars=ycols,
                   variable.name="week",
                   value.name="count")
-  return(dt_long)
+  }
+  return(dt_out)
 }
 
 ```
@@ -118,18 +128,56 @@ nodularia_long <- pre_process_data(nodularia)
 ```
 
 # Reproducibility
-## Table 1
 
+## missing data
+```{r missing report}
+ycols <- c("resistant", "id", "N", "2", "4", "6", "8", "12", "20")
+
+nodularia_wide <- pre_process_data(nodularia, wide=TRUE)[, .SD, .SDcols=ycols]
+# culture A3 is missing all counts so the design is unbalanced
+
+phage_wide <- pre_process_data(phage, wide=TRUE)[, .SD, .SDcols=ycols]
+# culture A3 is missing all counts, so design is unbalanced
+# F2-3, G1-4, H1-4 are missing week 4
+
+chlorella_wide <- pre_process_data(chlorella, wide=TRUE)[, .SD, .SDcols=ycols]
+# no missing
+
+rotifers_wide <- pre_process_data(rotifers, wide=TRUE)[, .SD, .SDcols=ycols]
+# no missing
+```
+
+The nodularia and phage datasets have missing data. Nodularia is missing culture A3 and so the design is imbalanced. Phage is missing culture A3 and week 4 measures in cultures F2-3, G1-4, H1-4. This raises question of how the authors set parameters for RM ANOVA in SPSS - listwise deletion or pairwise. Also note that the imbalance raises issues for Type III ss.
+
+## Table 1
+### what model?
+
+The reported F ratios have 21 degrees of freedom so the percent resistant factor cannot be in the model
+
+### AOV vs. lmer
+
+Effectively the same F, which is surprising giving lack of balance because of missing A3 in nodularia and phage. Slight difference for phage due to the missing values in F, G, and H cultures.
+
+```{r}
+
+summary(aov(count ~ N + Error(id), nodularia_long[week!=0]))$"Error: id"
+anova(lmer(count ~ N + (1|id), data=nodularia_long[week!=0]))
+
+summary(aov(count ~ N + Error(id), phage_long[week!=0]))$"Error: id"
+anova(lmer(count ~ N + (1|id), data=phage_long[week!=0]))
+
+summary(aov(count ~ N + Error(id), chlorella_long[week!=0]))$"Error: id"
+anova(lmer(count ~ N + (1|id), data=chlorella_long[week!=0]))
+
+summary(aov(count ~ N + Error(id), rotifers_long[week!=0]))$"Error: id"
+anova(lmer(count ~ N + (1|id), data=rotifers_long[week!=0]))
+```
+
+### AOV computation
+
+I'm using AOV but, as above, lmer wouldn't really differ.
 
 ```{r table 1 repro}
-
-show_full_table <- FALSE
-if(show_full_table==TRUE){
-  summary(aov(count ~ N + Error(id), nodularia_long[week!=0]))$"Error: id"
-  summary(aov(count ~ N + Error(id), phage_long[week!=0]))$"Error: id"
-  summary(aov(count ~ N + Error(id), chlorella_long[week!=0]))$"Error: id"
-  summary(aov(count ~ N + Error(id), rotifers_long[week!=0]))$"Error: id"
-}
 
 stats <- c("Df2", "F value1", "Pr(>F)1")
 aov1 <- unlist(summary(aov(count ~ N + Error(id), nodularia_long[week!=0]))$"Error: id")[stats]
@@ -139,10 +187,16 @@ aov4 <- unlist(summary(aov(count ~ N + Error(id), rotifers_long[week!=0]))$"Erro
 table_1 <- data.table(component=c("Nodularia", "Phage", "Chlorella", "Rotifer"),
                       rbind(aov1, aov2, aov3, aov4))
 setnames(table_1, old=colnames(table_1), new=c("component", "DDF", "F", "p"))
+
+```
+
+### Table 1 -- my results 
+```{r}
 knitr::kable(table_1, digits=c(NA, 0, 3, 3))
 
 ```
 
+### Table 1 -- reported results
 ```{r table_1, echo=FALSE}
 if(knitr_path==TRUE){
   image_path <- "../images/Data from Frequency of virus-resistant hosts determines experimental community dynamics/table1.png"
@@ -152,7 +206,31 @@ if(knitr_path==TRUE){
   knitr::include_graphics(image_path)
 ```
 
+My results are qualitatively similar -- are the differences simply software implementation differences? (this would seem large for that). Note that I have 22 DDF for Chlorella and Rotifer but the authors report 21 DDF for all groups, despite Chlorella and Rotifer not having missing data.
+
+### Did the authors throw out A3 for Chlorella and Rotifer?
+
+yes! Compare to reported Table 1
+
+```{r}
+summary(aov(count ~ N + Error(id), chlorella_long[week!=0 & id!="A3"]))$"Error: id"
+summary(aov(count ~ N + Error(id), rotifers_long[week!=0 & id!="A3"]))$"Error: id"
+
+```
+
 ## Table 2
+
+### AOV v lmer
+```{r AOV-lmer}
+summary(aov(count ~ resistant + Error(id), phage_long[N=="N_lim" & week!=0]))$"Error: id"
+anova(lmer(count ~ resistant + (1|id), phage_long[N=="N_lim" & week!=0]))
+
+summary(aov(count ~ resistant + Error(id), phage_long[N=="N_rich" & week!=0]))$"Error: id"
+anova(lmer(count ~ resistant + (1|id), phage_long[N=="N_rich" & week!=0]))
+
+```
+
+These are very different but the AOV results are closer to reported Table 2.
 
 ```{r table 2 repro}
 show_full_table <- FALSE
@@ -180,10 +258,16 @@ table_2 <- data.table(component=rep(c("Nodularia", "Phage", "Chlorella", "Rotife
                       treatment=rep(c("N_lim", "N_rich"), 2),
                       rbind(aov1a, aov1b, aov2a, aov2b, aov3a, aov3b, aov4a, aov4b))
 setnames(table_2, old=colnames(table_2), new=c("component", "treatment", "DDF", "F", "p"))
+
+```
+
+### Table 2 -- my results
+```{r}
 knitr::kable(table_2, digits=c(NA, NA, 0, 2, 5))
 
 ```
 
+### Table 2 -- reported
 ```{r table 2, echo=FALSE}
 if(knitr_path==TRUE){
   image_path <- "../images/Data from Frequency of virus-resistant hosts determines experimental community dynamics/table2.png"
@@ -191,6 +275,22 @@ if(knitr_path==TRUE){
   image_path <- "/images/Data from Frequency of virus-resistant hosts determines experimental community dynamics/table2.png"
 }
   knitr::include_graphics(image_path)
+```
+
+### Did the authors throw out A3 for Chlorella and Rotifer?
+
+yes. compare to reported table 2
+
+```{r}
+summary(aov(count ~ resistant + Error(id), 
+                            chlorella_long[N=="N_lim" & 
+                                             id!="A3" &
+                                             week!=0]))$"Error: id"
+summary(aov(count ~ resistant + Error(id), 
+                            rotifers_long[N=="N_lim" &
+                                            id!="A3" &
+                                            week!=0]))$"Error: id"
+
 ```
 
 ## Figure 2

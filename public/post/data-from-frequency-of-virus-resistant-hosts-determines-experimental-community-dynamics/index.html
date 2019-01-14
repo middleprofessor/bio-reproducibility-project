@@ -6,13 +6,9 @@
   <title>Data from: Frequency of virus-resistant hosts determines experimental community dynamics - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from: Frequency of virus-resistant hosts determines experimental community dynamics - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from: Frequency of virus-resistant hosts determines experimental …" />
-  <meta name="description" content="Set up Reproducibility Table 1 Table 2 Figure 2  statistical presentation   Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resistant hosts determines experimental community dynamics. Ecology 100(1): e02554. https://doi.org/10.1002/ecy.2554
-Data source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Data from: Frequency of virus-resistant hosts determines experimental community dynamics. Dryad Digital Repository. https://doi.org/10.5061/dryad.6r2p226
-Set up library(readxl) library(ggplot2) library(data.table) library(emmeans) library(lmerTest) library(ggpubr) data_folder &lt;- &quot;.">
-  <meta property="og:description" content="Set up Reproducibility Table 1 Table 2 Figure 2  statistical presentation   Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resistant hosts determines experimental community dynamics. Ecology 100(1): e02554. https://doi.org/10.1002/ecy.2554
-Data source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Data from: Frequency of virus-resistant hosts determines experimental community dynamics. Dryad Digital Repository. https://doi.org/10.5061/dryad.6r2p226
-Set up library(readxl) library(ggplot2) library(data.table) library(emmeans) library(lmerTest) library(ggpubr) data_folder &lt;- &quot;.">
-  <meta name="twitter:description" content="Set up Reproducibility Table 1 Table 2 Figure 2  statistical presentation   Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resistant hosts determines experimental …">
+  <meta name="description" content="Summary Set up Reproducibility missing data Table 1 what model? AOV vs. lmer AOV computation Table 1 – my results Table 1 – reported results Did the authors throw out A3 for Chlorella and Rotifer?  Table 2 AOV v lmer Table 2 – my results Table 2 – reported Did the authors throw out A3 for Chlorella and Rotifer?  Figure 2  statistical presentation   Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resistant hosts determines experimental community dynamics.">
+  <meta property="og:description" content="Summary Set up Reproducibility missing data Table 1 what model? AOV vs. lmer AOV computation Table 1 – my results Table 1 – reported results Did the authors throw out A3 for Chlorella and Rotifer?  Table 2 AOV v lmer Table 2 – my results Table 2 – reported Did the authors throw out A3 for Chlorella and Rotifer?  Figure 2  statistical presentation   Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resistant hosts determines experimental community dynamics.">
+  <meta name="twitter:description" content="Summary Set up Reproducibility missing data Table 1 what model? AOV vs. lmer AOV computation Table 1 – my results Table 1 – reported results Did the authors throw out A3 for Chlorella and Rotifer? …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-frequency-of-virus-resistant-hosts-determines-experimental-community-dynamics/" />
@@ -55,10 +51,24 @@ Set up library(readxl) library(ggplot2) library(data.table) library(emmeans) lib
 </aside>
       <div id="TOC">
 <ul>
+<li><a href="#summary">Summary</a></li>
 <li><a href="#set-up">Set up</a></li>
 <li><a href="#reproducibility">Reproducibility</a><ul>
-<li><a href="#table-1">Table 1</a></li>
-<li><a href="#table-2">Table 2</a></li>
+<li><a href="#missing-data">missing data</a></li>
+<li><a href="#table-1">Table 1</a><ul>
+<li><a href="#what-model">what model?</a></li>
+<li><a href="#aov-vs.lmer">AOV vs. lmer</a></li>
+<li><a href="#aov-computation">AOV computation</a></li>
+<li><a href="#table-1-my-results">Table 1 – my results</a></li>
+<li><a href="#table-1-reported-results">Table 1 – reported results</a></li>
+<li><a href="#did-the-authors-throw-out-a3-for-chlorella-and-rotifer">Did the authors throw out A3 for Chlorella and Rotifer?</a></li>
+</ul></li>
+<li><a href="#table-2">Table 2</a><ul>
+<li><a href="#aov-v-lmer">AOV v lmer</a></li>
+<li><a href="#table-2-my-results">Table 2 – my results</a></li>
+<li><a href="#table-2-reported">Table 2 – reported</a></li>
+<li><a href="#did-the-authors-throw-out-a3-for-chlorella-and-rotifer-1">Did the authors throw out A3 for Chlorella and Rotifer?</a></li>
+</ul></li>
 <li><a href="#figure-2">Figure 2</a></li>
 </ul></li>
 <li><a href="#statistical-presentation">statistical presentation</a></li>
@@ -67,6 +77,14 @@ Set up library(readxl) library(ggplot2) library(data.table) library(emmeans) lib
 
 <p>Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resistant hosts determines experimental community dynamics. Ecology 100(1): e02554. <a href="https://doi.org/10.1002/ecy.2554" class="uri">https://doi.org/10.1002/ecy.2554</a></p>
 <p>Data source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Data from: Frequency of virus-resistant hosts determines experimental community dynamics. Dryad Digital Repository. <a href="https://doi.org/10.5061/dryad.6r2p226" class="uri">https://doi.org/10.5061/dryad.6r2p226</a></p>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<ol style="list-style-type: decimal">
+<li>Data sheets are missing a column for N treatment and Nodularia sheet is also missing columns for culture ID and percent resistant factor.</li>
+<li>The model for the RM ANOVA is not clear given their are two factors. Only clear given degrees of freedom reported in F ratios (which is about the only value of these)</li>
+<li>The ANOVA statistics reproduce for Chlorella and Rotifer only after excluding culture A3, which is present in these two data sets but missing from Nodularia and Phage. ANOVA statistics are similar for Nodularia (both tables) and for Phage (Table 1) but not Phage (Table 2).</li>
+</ol>
+</div>
 <div id="set-up" class="section level1">
 <h1>Set up</h1>
 <pre class="r"><code>library(readxl)
@@ -84,7 +102,7 @@ file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
 # for working use =TRUE, for final html use =FALSE
 # images need to be moved to /static/images/data from.../image.png
 knitr_path &lt;- FALSE
-images_folder &lt;- &quot;../../images&quot; # for working and not final html</code></pre>
+images_folder &lt;- &quot;../images&quot; # for working and not final html</code></pre>
 <p>There is no guidance to the structure of the excel sheets and this structure is not obvious. There are 4 sheets: Nodularia, Phage, Rotifers, Chlorella. The last 3 sheets have the same structure and this seems to be</p>
 <ol style="list-style-type: decimal">
 <li>column A: percent native Nodularia (not phage resistant). Note the text states 3 levels (100%, 95%, and 50%), but the column has a 4th level – 99.5%</li>
@@ -93,9 +111,9 @@ images_folder &lt;- &quot;../../images&quot; # for working and not final html</c
 </ol>
 <p>The first sheet (Nodularia) has no columns labeling the treatment level for any factor. And there are clearly three sets of data that are stacked but the bottom two contain only 8 instead of 24 (or 30 with the 99.5% level) rows. I assume that the order of treatment levels is the same for this sheet as for the phage, chlorella, and rotifers sheet.</p>
 <p>Create a function to process all the sheets the same.</p>
-<pre class="r"><code>pre_process_data &lt;- function(dt_in){
+<pre class="r"><code>pre_process_data &lt;- function(dt_in, wide=FALSE){
 # takes the raw imported sheet and process it for analysis
-# output is long format
+# output is long format if wide = FALSE
   
   dt &lt;- copy(dt_in)
   # set column names
@@ -117,12 +135,16 @@ images_folder &lt;- &quot;../../images&quot; # for working and not final html</c
   
   # limit to weeks 0, 2,4 6, 8, 12, 20, need week zero for plots
   ycols &lt;- as.character(c(0, 2, 4, 6, 8, 12, 20))
-  dt_long &lt;- melt(dt, 
+  if(wide==TRUE){
+    dt_out &lt;- dt[, .SD, .SDcols=c(&quot;resistant&quot;, &quot;id&quot;, &quot;N&quot;, ycols)]
+  }else{ #long format
+  dt_out &lt;- melt(dt, 
                   id.vars=c(&quot;resistant&quot;, &quot;id&quot;, &quot;N&quot;), 
                   measure.vars=ycols,
                   variable.name=&quot;week&quot;,
                   value.name=&quot;count&quot;)
-  return(dt_long)
+  }
+  return(dt_out)
 }</code></pre>
 <p>Note that all replicates of G and H (resistant frequency = 50%) for week 4 are missing</p>
 <pre class="r"><code># phage
@@ -150,25 +172,91 @@ nodularia_long &lt;- pre_process_data(nodularia)</code></pre>
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
+<div id="missing-data" class="section level2">
+<h2>missing data</h2>
+<pre class="r"><code>ycols &lt;- c(&quot;resistant&quot;, &quot;id&quot;, &quot;N&quot;, &quot;2&quot;, &quot;4&quot;, &quot;6&quot;, &quot;8&quot;, &quot;12&quot;, &quot;20&quot;)
+
+nodularia_wide &lt;- pre_process_data(nodularia, wide=TRUE)[, .SD, .SDcols=ycols]
+# culture A3 is missing all counts so the design is unbalanced
+
+phage_wide &lt;- pre_process_data(phage, wide=TRUE)[, .SD, .SDcols=ycols]
+# culture A3 is missing all counts, so design is unbalanced
+# F2-3, G1-4, H1-4 are missing week 4
+
+chlorella_wide &lt;- pre_process_data(chlorella, wide=TRUE)[, .SD, .SDcols=ycols]
+# no missing
+
+rotifers_wide &lt;- pre_process_data(rotifers, wide=TRUE)[, .SD, .SDcols=ycols]
+# no missing</code></pre>
+<p>The nodularia and phage datasets have missing data. Nodularia is missing culture A3 and so the design is imbalanced. Phage is missing culture A3 and week 4 measures in cultures F2-3, G1-4, H1-4. This raises question of how the authors set parameters for RM ANOVA in SPSS - listwise deletion or pairwise. Also note that the imbalance raises issues for Type III ss.</p>
+</div>
 <div id="table-1" class="section level2">
 <h2>Table 1</h2>
-<pre class="r"><code>show_full_table &lt;- FALSE
-if(show_full_table==TRUE){
-  summary(aov(count ~ N + Error(id), nodularia_long[week!=0]))$&quot;Error: id&quot;
-  summary(aov(count ~ N + Error(id), phage_long[week!=0]))$&quot;Error: id&quot;
-  summary(aov(count ~ N + Error(id), chlorella_long[week!=0]))$&quot;Error: id&quot;
-  summary(aov(count ~ N + Error(id), rotifers_long[week!=0]))$&quot;Error: id&quot;
-}
-
-stats &lt;- c(&quot;Df2&quot;, &quot;F value1&quot;, &quot;Pr(&gt;F)1&quot;)
+<div id="what-model" class="section level3">
+<h3>what model?</h3>
+<p>The reported F ratios have 21 degrees of freedom so the percent resistant factor cannot be in the model</p>
+</div>
+<div id="aov-vs.lmer" class="section level3">
+<h3>AOV vs. lmer</h3>
+<p>Effectively the same F, which is surprising giving lack of balance because of missing A3 in nodularia and phage. Slight difference for phage due to the missing values in F, G, and H cultures.</p>
+<pre class="r"><code>summary(aov(count ~ N + Error(id), nodularia_long[week!=0]))$&quot;Error: id&quot;</code></pre>
+<pre><code>##           Df    Sum Sq   Mean Sq F value Pr(&gt;F)
+## N          1 3.679e+12 3.679e+12   0.038  0.846
+## Residuals 21 2.009e+15 9.569e+13</code></pre>
+<pre class="r"><code>anova(lmer(count ~ N + (1|id), data=nodularia_long[week!=0]))</code></pre>
+<pre><code>## Warning in as_lmerModLT(model, devfun): Model may not have converged with 1
+## eigenvalue close to zero: 4.8e-11</code></pre>
+<pre><code>## Type III Analysis of Variance Table with Satterthwaite&#39;s method
+##       Sum Sq    Mean Sq NumDF DenDF F value Pr(&gt;F)
+## N 3.6641e+11 3.6641e+11     1    21  0.0384 0.8464</code></pre>
+<pre class="r"><code>summary(aov(count ~ N + Error(id), phage_long[week!=0]))$&quot;Error: id&quot;</code></pre>
+<pre><code>##           Df    Sum Sq   Mean Sq F value Pr(&gt;F)
+## N          1 7.360e+12 7.360e+12   0.602  0.446
+## Residuals 21 2.566e+14 1.222e+13</code></pre>
+<pre class="r"><code>anova(lmer(count ~ N + (1|id), data=phage_long[week!=0]))</code></pre>
+<pre><code>## Warning in as_lmerModLT(model, devfun): Model may not have converged with 1
+## eigenvalue close to zero: 4.1e-11</code></pre>
+<pre><code>## Type III Analysis of Variance Table with Satterthwaite&#39;s method
+##       Sum Sq    Mean Sq NumDF      DenDF F value Pr(&gt;F)
+## N 7.3602e+12 7.3602e+12     1 7.5442e+40  0.5925 0.4415</code></pre>
+<pre class="r"><code>summary(aov(count ~ N + Error(id), chlorella_long[week!=0]))$&quot;Error: id&quot;</code></pre>
+<pre><code>##           Df    Sum Sq   Mean Sq F value Pr(&gt;F)
+## N          1 1.385e+14 1.385e+14   1.559  0.225
+## Residuals 22 1.954e+15 8.884e+13</code></pre>
+<pre class="r"><code>anova(lmer(count ~ N + (1|id), data=chlorella_long[week!=0]))</code></pre>
+<pre><code>## Warning in as_lmerModLT(model, devfun): Model may not have converged with 1
+## eigenvalue close to zero: 2.1e-11</code></pre>
+<pre><code>## Type III Analysis of Variance Table with Satterthwaite&#39;s method
+##       Sum Sq    Mean Sq NumDF DenDF F value Pr(&gt;F)
+## N 3.5283e+13 3.5283e+13     1    22   1.559 0.2249</code></pre>
+<pre class="r"><code>summary(aov(count ~ N + Error(id), rotifers_long[week!=0]))$&quot;Error: id&quot;</code></pre>
+<pre><code>##           Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## N          1  14194   14194   14.59 0.000935 ***
+## Residuals 22  21403     973                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(lmer(count ~ N + (1|id), data=rotifers_long[week!=0]))</code></pre>
+<pre><code>## Type III Analysis of Variance Table with Satterthwaite&#39;s method
+##   Sum Sq Mean Sq NumDF DenDF F value    Pr(&gt;F)    
+## N 6533.4  6533.4     1    22   14.59 0.0009354 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="aov-computation" class="section level3">
+<h3>AOV computation</h3>
+<p>I’m using AOV but, as above, lmer wouldn’t really differ.</p>
+<pre class="r"><code>stats &lt;- c(&quot;Df2&quot;, &quot;F value1&quot;, &quot;Pr(&gt;F)1&quot;)
 aov1 &lt;- unlist(summary(aov(count ~ N + Error(id), nodularia_long[week!=0]))$&quot;Error: id&quot;)[stats]
 aov2 &lt;- unlist(summary(aov(count ~ N + Error(id), phage_long[week!=0]))$&quot;Error: id&quot;)[stats]
 aov3 &lt;- unlist(summary(aov(count ~ N + Error(id), chlorella_long[week!=0]))$&quot;Error: id&quot;)[stats]
 aov4 &lt;- unlist(summary(aov(count ~ N + Error(id), rotifers_long[week!=0]))$&quot;Error: id&quot;)[stats]
 table_1 &lt;- data.table(component=c(&quot;Nodularia&quot;, &quot;Phage&quot;, &quot;Chlorella&quot;, &quot;Rotifer&quot;),
                       rbind(aov1, aov2, aov3, aov4))
-setnames(table_1, old=colnames(table_1), new=c(&quot;component&quot;, &quot;DDF&quot;, &quot;F&quot;, &quot;p&quot;))
-knitr::kable(table_1, digits=c(NA, 0, 3, 3))</code></pre>
+setnames(table_1, old=colnames(table_1), new=c(&quot;component&quot;, &quot;DDF&quot;, &quot;F&quot;, &quot;p&quot;))</code></pre>
+</div>
+<div id="table-1-my-results" class="section level3">
+<h3>Table 1 – my results</h3>
+<pre class="r"><code>knitr::kable(table_1, digits=c(NA, 0, 3, 3))</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -205,10 +293,60 @@ knitr::kable(table_1, digits=c(NA, 0, 3, 3))</code></pre>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="table-1-reported-results" class="section level3">
+<h3>Table 1 – reported results</h3>
 <p><img src="/images/Data%20from%20Frequency%20of%20virus-resistant%20hosts%20determines%20experimental%20community%20dynamics/table1.png" /><!-- --></p>
+<p>My results are qualitatively similar – are the differences simply software implementation differences? (this would seem large for that). Note that I have 22 DDF for Chlorella and Rotifer but the authors report 21 DDF for all groups, despite Chlorella and Rotifer not having missing data.</p>
+</div>
+<div id="did-the-authors-throw-out-a3-for-chlorella-and-rotifer" class="section level3">
+<h3>Did the authors throw out A3 for Chlorella and Rotifer?</h3>
+<p>yes! Compare to reported Table 1</p>
+<pre class="r"><code>summary(aov(count ~ N + Error(id), chlorella_long[week!=0 &amp; id!=&quot;A3&quot;]))$&quot;Error: id&quot;</code></pre>
+<pre><code>##           Df    Sum Sq   Mean Sq F value Pr(&gt;F)
+## N          1 1.634e+14 1.634e+14    1.79  0.195
+## Residuals 21 1.917e+15 9.129e+13</code></pre>
+<pre class="r"><code>summary(aov(count ~ N + Error(id), rotifers_long[week!=0 &amp; id!=&quot;A3&quot;]))$&quot;Error: id&quot;</code></pre>
+<pre><code>##           Df Sum Sq Mean Sq F value  Pr(&gt;F)   
+## N          1  13303   13303   13.07 0.00162 **
+## Residuals 21  21371    1018                   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
 </div>
 <div id="table-2" class="section level2">
 <h2>Table 2</h2>
+<div id="aov-v-lmer" class="section level3">
+<h3>AOV v lmer</h3>
+<pre class="r"><code>summary(aov(count ~ resistant + Error(id), phage_long[N==&quot;N_lim&quot; &amp; week!=0]))$&quot;Error: id&quot;</code></pre>
+<pre><code>##           Df    Sum Sq   Mean Sq F value   Pr(&gt;F)    
+## resistant  2 9.157e+13 4.578e+13   56.22 1.95e-05 ***
+## Residuals  8 6.515e+12 8.144e+11                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(lmer(count ~ resistant + (1|id), phage_long[N==&quot;N_lim&quot; &amp; week!=0]))</code></pre>
+<pre><code>## Warning in as_lmerModLT(model, devfun): Model may not have converged with 1
+## eigenvalue close to zero: 2.7e-11</code></pre>
+<pre><code>## Type III Analysis of Variance Table with Satterthwaite&#39;s method
+##               Sum Sq    Mean Sq NumDF DenDF F value  Pr(&gt;F)   
+## resistant 9.1566e+13 4.5783e+13     2   Inf  5.3207 0.00489 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(aov(count ~ resistant + Error(id), phage_long[N==&quot;N_rich&quot; &amp; week!=0]))$&quot;Error: id&quot;</code></pre>
+<pre><code>##           Df    Sum Sq   Mean Sq F value  Pr(&gt;F)    
+## resistant  2 1.501e+14 7.503e+13   79.56 1.9e-06 ***
+## Residuals  9 8.487e+12 9.430e+11                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(lmer(count ~ resistant + (1|id), phage_long[N==&quot;N_rich&quot; &amp; week!=0]))</code></pre>
+<pre><code>## Warning in as_lmerModLT(model, devfun): Model may not have converged with 1
+## eigenvalue close to zero: 1.9e-11</code></pre>
+<pre><code>## Type III Analysis of Variance Table with Satterthwaite&#39;s method
+##               Sum Sq    Mean Sq NumDF DenDF F value   Pr(&gt;F)   
+## resistant 1.5007e+14 7.5033e+13     2   Inf  5.7929 0.003049 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>These are very different but the AOV results are closer to reported Table 2.</p>
 <pre class="r"><code>show_full_table &lt;- FALSE
 if(show_full_table==TRUE){
   summary(aov(count ~ resistant + Error(id), nodularia_long[N==&quot;N_lim&quot; &amp; week!=0]))$&quot;Error: id&quot;
@@ -233,8 +371,11 @@ aov4b &lt;- unlist(summary(aov(count ~ resistant + Error(id), rotifers_long[N==&
 table_2 &lt;- data.table(component=rep(c(&quot;Nodularia&quot;, &quot;Phage&quot;, &quot;Chlorella&quot;, &quot;Rotifer&quot;), each=2),
                       treatment=rep(c(&quot;N_lim&quot;, &quot;N_rich&quot;), 2),
                       rbind(aov1a, aov1b, aov2a, aov2b, aov3a, aov3b, aov4a, aov4b))
-setnames(table_2, old=colnames(table_2), new=c(&quot;component&quot;, &quot;treatment&quot;, &quot;DDF&quot;, &quot;F&quot;, &quot;p&quot;))
-knitr::kable(table_2, digits=c(NA, NA, 0, 2, 5))</code></pre>
+setnames(table_2, old=colnames(table_2), new=c(&quot;component&quot;, &quot;treatment&quot;, &quot;DDF&quot;, &quot;F&quot;, &quot;p&quot;))</code></pre>
+</div>
+<div id="table-2-my-results" class="section level3">
+<h3>Table 2 – my results</h3>
+<pre class="r"><code>knitr::kable(table_2, digits=c(NA, NA, 0, 2, 5))</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -304,7 +445,31 @@ knitr::kable(table_2, digits=c(NA, NA, 0, 2, 5))</code></pre>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="table-2-reported" class="section level3">
+<h3>Table 2 – reported</h3>
 <p><img src="/images/Data%20from%20Frequency%20of%20virus-resistant%20hosts%20determines%20experimental%20community%20dynamics/table2.png" /><!-- --></p>
+</div>
+<div id="did-the-authors-throw-out-a3-for-chlorella-and-rotifer-1" class="section level3">
+<h3>Did the authors throw out A3 for Chlorella and Rotifer?</h3>
+<p>yes. compare to reported table 2</p>
+<pre class="r"><code>summary(aov(count ~ resistant + Error(id), 
+                            chlorella_long[N==&quot;N_lim&quot; &amp; 
+                                             id!=&quot;A3&quot; &amp;
+                                             week!=0]))$&quot;Error: id&quot;</code></pre>
+<pre><code>##           Df    Sum Sq   Mean Sq F value   Pr(&gt;F)    
+## resistant  2 6.614e+14 3.307e+14   38.38 7.93e-05 ***
+## Residuals  8 6.893e+13 8.616e+12                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(aov(count ~ resistant + Error(id), 
+                            rotifers_long[N==&quot;N_lim&quot; &amp;
+                                            id!=&quot;A3&quot; &amp;
+                                            week!=0]))$&quot;Error: id&quot;</code></pre>
+<pre><code>##           Df Sum Sq Mean Sq F value Pr(&gt;F)
+## resistant  2  30.71   15.36   1.461  0.288
+## Residuals  8  84.08   10.51</code></pre>
+</div>
 </div>
 <div id="figure-2" class="section level2">
 <h2>Figure 2</h2>
