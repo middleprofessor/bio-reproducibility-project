@@ -89,6 +89,12 @@
 </div>
 <div id="summary" class="section level1">
 <h1>Summary</h1>
+<ol style="list-style-type: decimal">
+<li>within the data file are two sets of columns with duplicate labesls: FRB5cmJul13 and FRB10cmJul13. The second set are within the FRL columns and I assumed these were FRL and not FRB</li>
+<li>ANOVA tables reproduce at the level of the p value less than or greater than 0.05. The F ratios do not reproduce, to an extent that reflects different model specifications. The denominator DF do not reproduce and some reported DDF should not be possible.</li>
+<li>The computation of the SE of the means for the figures was not given and there are several alternatives. The reported SEMS for figure one look similar to mine. The reported SEMs for figure 3 are far off and seem inconsistent with the post-hoc tests.</li>
+<li>One difference in post-hoc test “classification” into significance clusters.</li>
+</ol>
 </div>
 <div id="set-up" class="section level1">
 <h1>Set up</h1>
@@ -197,13 +203,13 @@ root &lt;- data.table(read_excel(file_path, range = cell_rows(1:16)))</code></pr
 FRB_cols &lt;- c(&quot;FRB5cmMar13&quot;, &quot;FRB5cmApr13&quot;, &quot;FRB5cmMay13&quot;, &quot;FRB5cmJun13&quot;, &quot;FRB5cmJul13&quot;, &quot;FRB5cmAug13&quot;, &quot;FRB5cmSep13&quot;, &quot;FRB5cmOct13&quot;, &quot;FRB5cmNov13&quot;, &quot;FRB5cmDec13&quot;, &quot;FRB5cmJan14&quot;, &quot;FRB5cmFeb14&quot;, &quot;FRB10cmMar13&quot;, &quot;FRB10cmApr13&quot;, &quot;FRB10cmMay13&quot;, &quot;FRB10cmJun13&quot;, &quot;FRB10cmJul13&quot;, &quot;FRB10cmAug13&quot;, &quot;FRB10cmSep13&quot;, &quot;FRB10cmOct13&quot;, &quot;FRB10cmNov13&quot;, &quot;FRB10cmDec13&quot;)
 # what are these &quot;FRB5cmJul13__1&quot;, &quot;FRB10cmJul13__1&quot; they have values more like FRL than FRB and physically they are within the FRL set of columns (in the exact place of FRL5cmJul and FRL10cmJul)
 frb &lt;- melt(root, id.vars=c(&#39;treatment&#39;, &#39;plot&#39;), measure.vars=FRB_cols, variable.name=&#39;label&#39;, value.name=&#39;FRB&#39;)
-frb[, treatment:=factor(treatment)] #CT-control; LA-litter addition; LR-litter removal
+frb[, treatment:=factor(treatment, c(&quot;LR&quot;, &quot;CT&quot;, &quot;LA&quot;))] #LR-litter removal; CT-control; LA-litter addition
 frb[, label:=as.character(label)]
 frb[, depth:=factor(ifelse(substr(label, 4, 4)==&#39;5&#39;, 5, 10))] # depth is 4th character in label
 frb[, month:=substr(label, nchar(label)-4, nchar(label)-2)] # month is in label
 dry &lt;- c(&#39;Jan&#39;, &#39;Feb&#39;, &#39;Mar&#39;, &#39;Apr&#39;) # wet is everything else
 # May-Dec is &quot;wet&quot; per fig S1
-frb[, season:=factor(ifelse(month %in% dry, &#39;dry&#39;, &#39;wet&#39;))]</code></pre>
+frb[, season:=factor(ifelse(month %in% dry, &#39;dry&#39;, &#39;wet&#39;), c(&quot;wet&quot;, &quot;dry&quot;))]</code></pre>
 <pre class="r"><code>ic_cols &lt;- c(&quot;ICAug13-Oct13&quot;, &quot;ICOct13-Jan14&quot;, &quot;ICJan14-Apr14&quot;)
 frb_prod &lt;- melt(root, id.vars=c(&#39;treatment&#39;, &#39;plot&#39;), measure.vars=ic_cols, variable.name=&#39;label&#39;, value.name=&#39;frb_prod&#39;)
 frb_prod[, season:=factor(ifelse(label==&quot;ICAug13-Oct13&quot;, &quot;wet&quot;, 
@@ -215,29 +221,29 @@ root[, FRL10cmJul13:=FRB10cmJul13__1]
 
 FRL_cols &lt;- c(&quot;FRL5cmJun13&quot;,    &quot;FRL5cmJul13&quot;,  &quot;FRL5cmAug13&quot;,  &quot;FRL5cmSep13&quot;,  &quot;FRL5cmOct13&quot;,  &quot;FRL5cmNov13&quot;,  &quot;FRL5cmDec13&quot;,  &quot;FRL5cmJan14&quot;,  &quot;FRL5cmFeb14&quot;,  &quot;FRL5cmMar14&quot;,  &quot;FRL5cmApr14&quot;,  &quot;FRL5cmMay14&quot;,  &quot;FRL10cmJun13&quot;, &quot;FRL10cmJul13&quot;, &quot;FRL10cmAug13&quot;, &quot;FRL10cmSep13&quot;, &quot;FRL10cmOct13&quot;, &quot;FRL10cmNov13&quot;, &quot;FRL10cmDec13&quot;, &quot;FRL10cmJan14&quot;, &quot;FRL10cmFeb14&quot;, &quot;FRL10cmMar14&quot;, &quot;FRL10cmApr14&quot;, &quot;FRL10cmMay14&quot;)
 frl &lt;- melt(root, id.vars=c(&#39;treatment&#39;, &#39;plot&#39;), measure.vars=FRL_cols, variable.name=&#39;label&#39;, value.name=&#39;FRL&#39;)
-frl[, treatment:=factor(treatment)] #CT-control; LA-litter addition; LR-litter removal
+frl[, treatment:=factor(treatment, c(&quot;LR&quot;, &quot;CT&quot;, &quot;LA&quot;))] #LR-litter removal; CT-control; LA-litter addition
 frl[, label:=as.character(label)]
 frl[, depth:=factor(ifelse(substr(label, 4, 4)==&#39;5&#39;, 5, 10))] # depth is 4th character in label
 frl[, month:=substr(label, nchar(label)-4, nchar(label)-2)] # month is in label
 dry &lt;- c(&#39;Jan&#39;, &#39;Feb&#39;, &#39;Mar&#39;, &#39;Apr&#39;) # wet is everything else
 # May-Dec is &quot;wet&quot; per fig S1
-frl[, season:=factor(ifelse(month %in% dry, &#39;dry&#39;, &#39;wet&#39;))]</code></pre>
+frl[, season:=factor(ifelse(month %in% dry, &#39;dry&#39;, &#39;wet&#39;), c(&quot;wet&quot;, &quot;dry&quot;))]</code></pre>
 <pre class="r"><code>Sur_cols &lt;- c(&quot;SurJul13&quot;, &quot;SurAug13&quot;,   &quot;SurSep13&quot;, &quot;SurOct13&quot;, &quot;SurNov13&quot;, &quot;SurDec13&quot;, &quot;SurJan14&quot;, &quot;SurFeb14&quot;, &quot;SurMar14&quot;, &quot;SurApr14&quot;, &quot;SurMay14&quot;)
 frl_surv &lt;- melt(root, id.vars=c(&#39;treatment&#39;, &#39;plot&#39;), measure.vars=Sur_cols, variable.name=&#39;label&#39;, value.name=&#39;FRL_surv&#39;)
-frl_surv[, treatment:=factor(treatment)] #CT-control; LA-litter addition; LR-litter removal
+frl_surv[, treatment:=factor(treatment, c(&quot;LR&quot;, &quot;CT&quot;, &quot;LA&quot;))] #LR-litter removal; CT-control; LA-litter addition
 frl_surv[, label:=as.character(label)]
 frl_surv[, month:=substr(label, nchar(label)-4, nchar(label)-2)] # month is in label
 dry &lt;- c(&#39;Jan&#39;, &#39;Feb&#39;, &#39;Mar&#39;, &#39;Apr&#39;) # wet is everything else
 # May-Dec is &quot;wet&quot; per fig S1
-frl_surv[, season:=factor(ifelse(month %in% dry, &#39;dry&#39;, &#39;wet&#39;))]</code></pre>
+frl_surv[, season:=factor(ifelse(month %in% dry, &#39;dry&#39;, &#39;wet&#39;), c(&quot;wet&quot;, &quot;dry&quot;))]</code></pre>
 <pre class="r"><code>pro_cols &lt;- c(&quot;ProJul13&quot;,   &quot;ProAug13&quot;, &quot;ProSep13&quot;, &quot;ProOct13&quot;, &quot;ProNov13&quot;, &quot;ProDec13&quot;, &quot;ProJan14&quot;, &quot;ProFeb14&quot;, &quot;ProMar14&quot;, &quot;ProApr14&quot;, &quot;ProMay14&quot;)
 frl_prod &lt;- melt(root, id.vars=c(&#39;treatment&#39;, &#39;plot&#39;), measure.vars=pro_cols, variable.name=&#39;label&#39;, value.name=&#39;FRL_prod&#39;)
-frl_prod[, treatment:=factor(treatment)] #CT-control; LA-litter addition; LR-litter removal
+frl_prod[, treatment:=factor(treatment, c(&quot;LR&quot;, &quot;CT&quot;, &quot;LA&quot;))] #LR-litter removal; CT-control; LA-litter addition
 frl_prod[, label:=as.character(label)]
 frl_prod[, month:=substr(label, nchar(label)-4, nchar(label)-2)] # month is in label
 dry &lt;- c(&#39;Jan&#39;, &#39;Feb&#39;, &#39;Mar&#39;, &#39;Apr&#39;) # wet is everything else
 # May-Dec is &quot;wet&quot; per fig S1
-frl_prod[, season:=factor(ifelse(month %in% dry, &#39;dry&#39;, &#39;wet&#39;))]</code></pre>
+frl_prod[, season:=factor(ifelse(month %in% dry, &#39;dry&#39;, &#39;wet&#39;), c(&quot;wet&quot;, &quot;dry&quot;))]</code></pre>
 </div>
 </div>
 <div id="reproducibility" class="section level1">
@@ -270,9 +276,9 @@ my.anova.table &lt;- rbind(my.anova.table,
 <div id="my-anova-results" class="section level3">
 <h3>My ANOVA results</h3>
 <pre class="r"><code>my.anova.table</code></pre>
-<pre><code>##    response depth NDF      DDF        F          p
-## 1:      FRB     5   1 9.999999 8.761855 0.01428707
-## 2:      FRB    10   1 8.000001 2.854446 0.12959288</code></pre>
+<pre><code>##    response depth NDF DDF        F          p
+## 1:      FRB     5   1  10 8.761856 0.01428706
+## 2:      FRB    10   1   8 2.854446 0.12959289</code></pre>
 </div>
 <div id="reported-anova-results" class="section level3">
 <h3>reported ANOVA results</h3>
@@ -338,8 +344,6 @@ frb10 &lt;- frb10_se2
 frb_sum &lt;- rbind(data.table(depth=5, frb5), data.table(depth=10, frb10))
 frb_sum[, Lower:=FRB-SE]
 frb_sum[, Upper:=FRB+SE]
-frb_sum[, season:=factor(season, c(&#39;wet&#39;, &#39;dry&#39;))]
-frb_sum[, treatment:=factor(treatment, c(&#39;LR&#39;, &#39;CT&#39;, &#39;LA&#39;))]
 pd &lt;- position_dodge(.6)
 gg &lt;- ggplot(data=frb_sum, aes(x=season, y=FRB, fill=treatment)) +
   geom_col(position=pd, width=0.6, color=&#39;black&#39;) +
@@ -358,9 +362,9 @@ gg</code></pre>
 <pre class="r"><code>fit5.emm &lt;- emmeans(frb5.fit, specs=c(&quot;treatment&quot;))
 contrast(fit5.emm, method=&quot;revpairwise&quot;)</code></pre>
 <pre><code>##  contrast  estimate    SE df t.ratio p.value
+##  CT - LR   49.03833 18.25 12   2.687  0.0483
+##  LA - LR   21.18167 18.25 12   1.161  0.4974
 ##  LA - CT  -27.85667 18.25 12  -1.526  0.3138
-##  LR - CT  -49.03833 18.25 12  -2.687  0.0483
-##  LR - LA  -21.18167 18.25 12  -1.161  0.4974
 ## 
 ## Results are averaged over the levels of: season 
 ## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
@@ -415,7 +419,6 @@ frb_prod.se &lt;- frb_prod[, .(N=.N,
               frb_prod=mean(frb_prod),
               SE=sd(frb_prod)/sqrt(.N)),
               by=.(treatment, season)]
-frb_prod.se[, treatment:=factor(treatment, c(&quot;LR&quot;, &quot;CT&quot;, &quot;LA&quot;))]
 pd &lt;- position_dodge(.6)
 gg &lt;- ggplot(data=frb_prod.se, aes(x=season, y=frb_prod, fill=treatment)) +
   geom_col(position=pd, width=0.6, color=&#39;black&#39;) +
@@ -694,9 +697,6 @@ frl5_se2 &lt;- frl5.p1[,.(N=.N,
               FRL=mean(FRL),
               SE=sd(FRL)/sqrt(.N)),
               by=.(treatment, season)]
-# re-order factors
-frl5_se2[, season:=factor(season, c(&quot;wet&quot;, &quot;dry&quot;))]
-frl5_se2[, treatment:=factor(treatment, c(&quot;LR&quot;, &quot;CT&quot;, &quot;LA&quot;))]
 pd &lt;- position_dodge(.6)
 gg1 &lt;- ggplot(data=frl5_se2, aes(x=season, y=FRL, fill=treatment)) +
   geom_col(position=pd, width=0.6, color=&#39;black&#39;) +
@@ -712,9 +712,6 @@ frl10_se2 &lt;- frl10.p1[,.(N=.N,
               FRL=mean(FRL),
               SE=sd(FRL)/sqrt(.N)),
               by=.(treatment, season)]
-# re-order factors
-frl10_se2[, season:=factor(season, c(&quot;wet&quot;, &quot;dry&quot;))]
-frl10_se2[, treatment:=factor(treatment, c(&quot;LR&quot;, &quot;CT&quot;, &quot;LA&quot;))]
 pd &lt;- position_dodge(.6)
 gg2 &lt;- ggplot(data=frl10_se2, aes(x=season, y=FRL, fill=treatment)) +
   geom_col(position=pd, width=0.6, color=&#39;black&#39;) +
@@ -730,9 +727,6 @@ frl_prod_se2 &lt;- frl_prod.p1[,.(N=.N,
               FRL_prod=mean(FRL_prod),
               SE=sd(FRL_prod)/sqrt(.N)),
               by=.(treatment, season)]
-# re-order factors
-frl_prod_se2[, season:=factor(season, c(&quot;wet&quot;, &quot;dry&quot;))]
-frl_prod_se2[, treatment:=factor(treatment, c(&quot;LR&quot;, &quot;CT&quot;, &quot;LA&quot;))]
 pd &lt;- position_dodge(.6)
 gg3 &lt;- ggplot(data=frl_prod_se2, aes(x=season, y=FRL_prod, fill=treatment)) +
   geom_col(position=pd, width=0.6, color=&#39;black&#39;) +
@@ -748,9 +742,6 @@ frl_surv_se2 &lt;- frl_surv.p1[,.(N=.N,
               FRL_surv=mean(FRL_surv),
               SE=sd(FRL_surv)/sqrt(.N)),
               by=.(treatment, season)]
-# re-order factors
-frl_surv_se2[, season:=factor(season, c(&quot;wet&quot;, &quot;dry&quot;))]
-frl_surv_se2[, treatment:=factor(treatment, c(&quot;LR&quot;, &quot;CT&quot;, &quot;LA&quot;))]
 pd &lt;- position_dodge(.6)
 gg4 &lt;- ggplot(data=frl_surv_se2, aes(x=season, y=FRL_surv, fill=treatment)) +
   geom_col(position=pd, width=0.6, color=&#39;black&#39;) +
@@ -797,69 +788,74 @@ frl5_se2</code></pre>
 <div id="post-hoc-tests-for-fig.-3" class="section level3">
 <h3>post hoc tests for fig. 3</h3>
 <p>fine root length 0-5cm</p>
-<pre class="r"><code>frl5.emm &lt;- emmeans(frl5.fit, specs=c(&quot;treatment&quot;, &quot;season&quot;))
+<pre class="r"><code>frl5.emm &lt;- emmeans(frl5.fit, specs=c(&quot;season&quot;, &quot;treatment&quot;))
 contrast(frl5.emm, method=&quot;revpairwise&quot;, simple = &quot;each&quot;, combine=FALSE)$&quot;simple contrasts for treatment&quot;</code></pre>
-<pre><code>## season = dry:
+<pre><code>## season = wet:
 ##  contrast estimate       SE    df t.ratio p.value
-##  LA - CT    -28.65 10.87222 16.85  -2.635  0.0438
-##  LR - CT    -47.00 10.87222 16.85  -4.323  0.0013
-##  LR - LA    -18.35 10.87222 16.85  -1.688  0.2386
-## 
-## season = wet:
-##  contrast estimate       SE    df t.ratio p.value
+##  CT - LR     19.45 10.21100 13.14   1.905  0.1762
+##  LA - LR     45.05 10.21100 13.14   4.412  0.0018
 ##  LA - CT     25.60 10.21100 13.14   2.507  0.0632
-##  LR - CT    -19.45 10.21100 13.14  -1.905  0.1762
-##  LR - LA    -45.05 10.21100 13.14  -4.412  0.0018
+## 
+## season = dry:
+##  contrast estimate       SE    df t.ratio p.value
+##  CT - LR     47.00 10.87222 16.85   4.323  0.0013
+##  LA - LR     18.35 10.87222 16.85   1.688  0.2386
+##  LA - CT    -28.65 10.87222 16.85  -2.635  0.0438
 ## 
 ## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<pre class="r"><code># CLD(frl5.emm) # not recommended as this is classification based on arbitrary boundaries</code></pre>
+<p>wet: LR: a, CT: ab, LA: b (reported a, a, b). CT does not reproduce dry: LR: a, CT: b, LA: a (reported a, b, a). reproduces</p>
 <p>fine root length 0-10 cm</p>
 <pre class="r"><code>frl10.emm &lt;- emmeans(frl10.fit, specs=c(&quot;treatment&quot;, &quot;season&quot;))
 contrast(frl10.emm, method=&quot;revpairwise&quot;, simple = &quot;each&quot;, combine=FALSE)$&quot;simple contrasts for treatment&quot;</code></pre>
-<pre><code>## season = dry:
+<pre><code>## season = wet:
 ##  contrast estimate       SE    df t.ratio p.value
-##  LA - CT   -59.750 14.64839 20.91  -4.079  0.0015
-##  LR - CT   -81.000 14.64839 20.91  -5.530  0.0001
-##  LR - LA   -21.250 14.64839 20.91  -1.451  0.3343
-## 
-## season = wet:
-##  contrast estimate       SE    df t.ratio p.value
+##  CT - LR    22.675 13.23068 14.03   1.714  0.2347
+##  LA - LR    50.225 13.23068 14.03   3.796  0.0052
 ##  LA - CT    27.550 13.23068 14.03   2.082  0.1295
-##  LR - CT   -22.675 13.23068 14.03  -1.714  0.2347
-##  LR - LA   -50.225 13.23068 14.03  -3.796  0.0052
+## 
+## season = dry:
+##  contrast estimate       SE    df t.ratio p.value
+##  CT - LR    81.000 14.64839 20.91   5.530  0.0001
+##  LA - LR    21.250 14.64839 20.91   1.451  0.3343
+##  LA - CT   -59.750 14.64839 20.91  -4.079  0.0015
 ## 
 ## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<p>wet: LR: a, CT: ab, LA: b (reported a, ab, b). reproduces dry: LR: a, CT: b, LA: a (reported a, b, a). reproduces</p>
 <p>fine root length production</p>
 <pre class="r"><code>frl_prod.emm &lt;- emmeans(frl_prod.fit, specs=c(&quot;treatment&quot;, &quot;season&quot;))
 contrast(frl_prod.emm, method=&quot;revpairwise&quot;, simple = &quot;each&quot;, combine=FALSE)$&quot;simple contrasts for treatment&quot;</code></pre>
-<pre><code>## season = dry:
+<pre><code>## season = wet:
 ##  contrast    estimate       SE    df t.ratio p.value
-##  LA - CT  -44.9000000 8.267297 32.10  -5.431  &lt;.0001
-##  LR - CT  -50.3500000 8.267297 32.10  -6.090  &lt;.0001
-##  LR - LA   -5.4500000 8.267297 32.10  -0.659  0.7885
-## 
-## season = wet:
-##  contrast    estimate       SE    df t.ratio p.value
+##  CT - LR    0.5428571 7.066365 17.72   0.077  0.9968
+##  LA - LR   15.4857143 7.066365 17.72   2.191  0.1003
 ##  LA - CT   14.9428571 7.066365 17.72   2.115  0.1153
-##  LR - CT   -0.5428571 7.066365 17.72  -0.077  0.9968
-##  LR - LA  -15.4857143 7.066365 17.72  -2.191  0.1003
+## 
+## season = dry:
+##  contrast    estimate       SE    df t.ratio p.value
+##  CT - LR   50.3500000 8.267297 32.10   6.090  &lt;.0001
+##  LA - LR    5.4500000 8.267297 32.10   0.659  0.7885
+##  LA - CT  -44.9000000 8.267297 32.10  -5.431  &lt;.0001
 ## 
 ## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<p>wet: LR: a, CT: a, LA: a (reported -, -, -). reproduces dry: LR: a, CT: b, LA: a (reported a, b, a). reproduces</p>
 <p>fine root length survival</p>
 <pre class="r"><code>frl_surv.emm &lt;- emmeans(frl_surv.fit, specs=c(&quot;treatment&quot;, &quot;season&quot;))
 contrast(frl_surv.emm, method=&quot;revpairwise&quot;, simple = &quot;each&quot;, combine=FALSE)$&quot;simple contrasts for treatment&quot;</code></pre>
-<pre><code>## season = dry:
+<pre><code>## season = wet:
 ##  contrast  estimate       SE    df t.ratio p.value
-##  LA - CT  -15.45000 11.32344 15.83  -1.364  0.3823
-##  LR - CT  -33.45000 11.32344 15.83  -2.954  0.0242
-##  LR - LA  -18.00000 11.32344 15.83  -1.590  0.2788
-## 
-## season = wet:
-##  contrast  estimate       SE    df t.ratio p.value
+##  CT - LR   15.77143 10.81538 13.20   1.458  0.3413
+##  LA - LR   33.57143 10.81538 13.20   3.104  0.0210
 ##  LA - CT   17.80000 10.81538 13.20   1.646  0.2619
-##  LR - CT  -15.77143 10.81538 13.20  -1.458  0.3413
-##  LR - LA  -33.57143 10.81538 13.20  -3.104  0.0210
+## 
+## season = dry:
+##  contrast  estimate       SE    df t.ratio p.value
+##  CT - LR   33.45000 11.32344 15.83   2.954  0.0242
+##  LA - LR   18.00000 11.32344 15.83   1.590  0.2788
+##  LA - CT  -15.45000 11.32344 15.83  -1.364  0.3823
 ## 
 ## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<p>wet: LR: a, CT: ab, LA: b (reported a, ab, b). reproduces dry: LR: a, CT: b, LA: ab (reported a, b, ab). reproduces</p>
 </div>
 </div>
 </div>

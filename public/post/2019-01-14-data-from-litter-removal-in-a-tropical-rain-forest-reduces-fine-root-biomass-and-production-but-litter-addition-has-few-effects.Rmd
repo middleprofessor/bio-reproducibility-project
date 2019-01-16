@@ -19,6 +19,10 @@ Rodtassana C, Tanner EVJ (2018) Litter removal in a tropical rain forest reduces
 Rodtassana C, Tanner EVJ (2018) Data from: Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects. Dryad Digital Repository. https://doi.org/10.5061/dryad.f1948
 
 # Summary
+1. within the data file are two sets of columns with duplicate labesls: FRB5cmJul13 and FRB10cmJul13. The second set are within the FRL columns and I assumed these were FRL and not FRB
+2. ANOVA tables reproduce at the level of the p value less than or greater than 0.05. The F ratios do not reproduce, to an extent that reflects different model specifications. The denominator DF do not reproduce and some reported DDF should not be possible.
+3. The computation of the SE of the means for the figures was not given and there are several alternatives. The reported SEMS for figure one look similar to mine. The reported SEMs for figure 3 are far off and seem inconsistent with the post-hoc tests. 
+4. One difference in post-hoc test "classification" into significance clusters.
 
 # Set up
 
@@ -140,13 +144,13 @@ data are in wide format -- reshape to long. Also need to create "season" factor 
 FRB_cols <- c("FRB5cmMar13", "FRB5cmApr13", "FRB5cmMay13", "FRB5cmJun13", "FRB5cmJul13", "FRB5cmAug13", "FRB5cmSep13", "FRB5cmOct13", "FRB5cmNov13", "FRB5cmDec13", "FRB5cmJan14", "FRB5cmFeb14", "FRB10cmMar13", "FRB10cmApr13", "FRB10cmMay13", "FRB10cmJun13", "FRB10cmJul13", "FRB10cmAug13", "FRB10cmSep13", "FRB10cmOct13", "FRB10cmNov13", "FRB10cmDec13")
 # what are these "FRB5cmJul13__1", "FRB10cmJul13__1" they have values more like FRL than FRB and physically they are within the FRL set of columns (in the exact place of FRL5cmJul and FRL10cmJul)
 frb <- melt(root, id.vars=c('treatment', 'plot'), measure.vars=FRB_cols, variable.name='label', value.name='FRB')
-frb[, treatment:=factor(treatment)] #CT-control; LA-litter addition; LR-litter removal
+frb[, treatment:=factor(treatment, c("LR", "CT", "LA"))] #LR-litter removal; CT-control; LA-litter addition
 frb[, label:=as.character(label)]
 frb[, depth:=factor(ifelse(substr(label, 4, 4)=='5', 5, 10))] # depth is 4th character in label
 frb[, month:=substr(label, nchar(label)-4, nchar(label)-2)] # month is in label
 dry <- c('Jan', 'Feb', 'Mar', 'Apr') # wet is everything else
 # May-Dec is "wet" per fig S1
-frb[, season:=factor(ifelse(month %in% dry, 'dry', 'wet'))]
+frb[, season:=factor(ifelse(month %in% dry, 'dry', 'wet'), c("wet", "dry"))]
 
 ```
 
@@ -165,36 +169,36 @@ root[, FRL10cmJul13:=FRB10cmJul13__1]
 
 FRL_cols <- c("FRL5cmJun13",	"FRL5cmJul13",	"FRL5cmAug13",	"FRL5cmSep13",	"FRL5cmOct13",	"FRL5cmNov13",	"FRL5cmDec13",	"FRL5cmJan14",	"FRL5cmFeb14",	"FRL5cmMar14",	"FRL5cmApr14",	"FRL5cmMay14",	"FRL10cmJun13",	"FRL10cmJul13",	"FRL10cmAug13",	"FRL10cmSep13",	"FRL10cmOct13",	"FRL10cmNov13",	"FRL10cmDec13",	"FRL10cmJan14",	"FRL10cmFeb14",	"FRL10cmMar14",	"FRL10cmApr14",	"FRL10cmMay14")
 frl <- melt(root, id.vars=c('treatment', 'plot'), measure.vars=FRL_cols, variable.name='label', value.name='FRL')
-frl[, treatment:=factor(treatment)] #CT-control; LA-litter addition; LR-litter removal
+frl[, treatment:=factor(treatment, c("LR", "CT", "LA"))] #LR-litter removal; CT-control; LA-litter addition
 frl[, label:=as.character(label)]
 frl[, depth:=factor(ifelse(substr(label, 4, 4)=='5', 5, 10))] # depth is 4th character in label
 frl[, month:=substr(label, nchar(label)-4, nchar(label)-2)] # month is in label
 dry <- c('Jan', 'Feb', 'Mar', 'Apr') # wet is everything else
 # May-Dec is "wet" per fig S1
-frl[, season:=factor(ifelse(month %in% dry, 'dry', 'wet'))]
+frl[, season:=factor(ifelse(month %in% dry, 'dry', 'wet'), c("wet", "dry"))]
 
 ```
 
 ```{r fine root length survival subset}
 Sur_cols <- c("SurJul13", "SurAug13",	"SurSep13",	"SurOct13",	"SurNov13",	"SurDec13",	"SurJan14",	"SurFeb14",	"SurMar14",	"SurApr14",	"SurMay14")
 frl_surv <- melt(root, id.vars=c('treatment', 'plot'), measure.vars=Sur_cols, variable.name='label', value.name='FRL_surv')
-frl_surv[, treatment:=factor(treatment)] #CT-control; LA-litter addition; LR-litter removal
+frl_surv[, treatment:=factor(treatment, c("LR", "CT", "LA"))] #LR-litter removal; CT-control; LA-litter addition
 frl_surv[, label:=as.character(label)]
 frl_surv[, month:=substr(label, nchar(label)-4, nchar(label)-2)] # month is in label
 dry <- c('Jan', 'Feb', 'Mar', 'Apr') # wet is everything else
 # May-Dec is "wet" per fig S1
-frl_surv[, season:=factor(ifelse(month %in% dry, 'dry', 'wet'))]
+frl_surv[, season:=factor(ifelse(month %in% dry, 'dry', 'wet'), c("wet", "dry"))]
 ```
 
 ```{r fine root length production subset}
 pro_cols <- c("ProJul13",	"ProAug13",	"ProSep13",	"ProOct13",	"ProNov13",	"ProDec13",	"ProJan14",	"ProFeb14",	"ProMar14",	"ProApr14",	"ProMay14")
 frl_prod <- melt(root, id.vars=c('treatment', 'plot'), measure.vars=pro_cols, variable.name='label', value.name='FRL_prod')
-frl_prod[, treatment:=factor(treatment)] #CT-control; LA-litter addition; LR-litter removal
+frl_prod[, treatment:=factor(treatment, c("LR", "CT", "LA"))] #LR-litter removal; CT-control; LA-litter addition
 frl_prod[, label:=as.character(label)]
 frl_prod[, month:=substr(label, nchar(label)-4, nchar(label)-2)] # month is in label
 dry <- c('Jan', 'Feb', 'Mar', 'Apr') # wet is everything else
 # May-Dec is "wet" per fig S1
-frl_prod[, season:=factor(ifelse(month %in% dry, 'dry', 'wet'))]
+frl_prod[, season:=factor(ifelse(month %in% dry, 'dry', 'wet'), c("wet", "dry"))]
 ```
 
 # Reproducibility
@@ -305,8 +309,6 @@ frb10 <- frb10_se2
 frb_sum <- rbind(data.table(depth=5, frb5), data.table(depth=10, frb10))
 frb_sum[, Lower:=FRB-SE]
 frb_sum[, Upper:=FRB+SE]
-frb_sum[, season:=factor(season, c('wet', 'dry'))]
-frb_sum[, treatment:=factor(treatment, c('LR', 'CT', 'LA'))]
 pd <- position_dodge(.6)
 gg <- ggplot(data=frb_sum, aes(x=season, y=FRB, fill=treatment)) +
   geom_col(position=pd, width=0.6, color='black') +
@@ -370,7 +372,6 @@ frb_prod.se <- frb_prod[, .(N=.N,
               frb_prod=mean(frb_prod),
               SE=sd(frb_prod)/sqrt(.N)),
               by=.(treatment, season)]
-frb_prod.se[, treatment:=factor(treatment, c("LR", "CT", "LA"))]
 pd <- position_dodge(.6)
 gg <- ggplot(data=frb_prod.se, aes(x=season, y=frb_prod, fill=treatment)) +
   geom_col(position=pd, width=0.6, color='black') +
@@ -516,9 +517,6 @@ frl5_se2 <- frl5.p1[,.(N=.N,
               FRL=mean(FRL),
               SE=sd(FRL)/sqrt(.N)),
               by=.(treatment, season)]
-# re-order factors
-frl5_se2[, season:=factor(season, c("wet", "dry"))]
-frl5_se2[, treatment:=factor(treatment, c("LR", "CT", "LA"))]
 pd <- position_dodge(.6)
 gg1 <- ggplot(data=frl5_se2, aes(x=season, y=FRL, fill=treatment)) +
   geom_col(position=pd, width=0.6, color='black') +
@@ -534,9 +532,6 @@ frl10_se2 <- frl10.p1[,.(N=.N,
               FRL=mean(FRL),
               SE=sd(FRL)/sqrt(.N)),
               by=.(treatment, season)]
-# re-order factors
-frl10_se2[, season:=factor(season, c("wet", "dry"))]
-frl10_se2[, treatment:=factor(treatment, c("LR", "CT", "LA"))]
 pd <- position_dodge(.6)
 gg2 <- ggplot(data=frl10_se2, aes(x=season, y=FRL, fill=treatment)) +
   geom_col(position=pd, width=0.6, color='black') +
@@ -552,9 +547,6 @@ frl_prod_se2 <- frl_prod.p1[,.(N=.N,
               FRL_prod=mean(FRL_prod),
               SE=sd(FRL_prod)/sqrt(.N)),
               by=.(treatment, season)]
-# re-order factors
-frl_prod_se2[, season:=factor(season, c("wet", "dry"))]
-frl_prod_se2[, treatment:=factor(treatment, c("LR", "CT", "LA"))]
 pd <- position_dodge(.6)
 gg3 <- ggplot(data=frl_prod_se2, aes(x=season, y=FRL_prod, fill=treatment)) +
   geom_col(position=pd, width=0.6, color='black') +
@@ -570,9 +562,6 @@ frl_surv_se2 <- frl_surv.p1[,.(N=.N,
               FRL_surv=mean(FRL_surv),
               SE=sd(FRL_surv)/sqrt(.N)),
               by=.(treatment, season)]
-# re-order factors
-frl_surv_se2[, season:=factor(season, c("wet", "dry"))]
-frl_surv_se2[, treatment:=factor(treatment, c("LR", "CT", "LA"))]
 pd <- position_dodge(.6)
 gg4 <- ggplot(data=frl_surv_se2, aes(x=season, y=FRL_surv, fill=treatment)) +
   geom_col(position=pd, width=0.6, color='black') +
@@ -614,9 +603,14 @@ frl5_se2.2
 ### post hoc tests for fig. 3
 fine root length 0-5cm
 ```{r}
-frl5.emm <- emmeans(frl5.fit, specs=c("treatment", "season"))
+frl5.emm <- emmeans(frl5.fit, specs=c("season", "treatment"))
 contrast(frl5.emm, method="revpairwise", simple = "each", combine=FALSE)$"simple contrasts for treatment"
+# CLD(frl5.emm) # not recommended as this is classification based on arbitrary boundaries
+
 ```
+
+wet: LR: a, CT: ab, LA: b (reported a, a, b). CT does not reproduce
+dry: LR: a, CT: b, LA: a (reported a, b, a). reproduces
 
 fine root length 0-10 cm
 ```{r}
@@ -624,6 +618,9 @@ frl10.emm <- emmeans(frl10.fit, specs=c("treatment", "season"))
 contrast(frl10.emm, method="revpairwise", simple = "each", combine=FALSE)$"simple contrasts for treatment"
 
 ```
+wet: LR: a, CT: ab, LA: b (reported a, ab, b). reproduces
+dry: LR: a, CT: b, LA: a (reported a, b, a). reproduces
+
 
 fine root length production
 ```{r}
@@ -631,6 +628,8 @@ frl_prod.emm <- emmeans(frl_prod.fit, specs=c("treatment", "season"))
 contrast(frl_prod.emm, method="revpairwise", simple = "each", combine=FALSE)$"simple contrasts for treatment"
 
 ```
+wet: LR: a, CT: a, LA: a (reported -, -, -). reproduces
+dry: LR: a, CT: b, LA: a (reported a, b, a). reproduces
 
 fine root length survival
 ```{r}
@@ -638,5 +637,8 @@ frl_surv.emm <- emmeans(frl_surv.fit, specs=c("treatment", "season"))
 contrast(frl_surv.emm, method="revpairwise", simple = "each", combine=FALSE)$"simple contrasts for treatment"
 
 ```
+wet: LR: a, CT: ab, LA: b (reported a, ab, b). reproduces
+dry: LR: a, CT: b, LA: ab (reported a, b, ab). reproduces
+
 # Statistical red-flags
 
