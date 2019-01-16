@@ -325,10 +325,6 @@ if(knitr_path==TRUE){
   knitr::include_graphics(image_path)
 ```
 
-# statistical presentation
-
-"The statistical analysis showed a lack of significant difference between N-lim and N-rich medium conditions for Nodularia, phage 2AV2 and Chlorella densities (F1,21 = 0.1, P > 0.05, F1,21 = 0.7, P > 0.05, and F1,21 = 1.8, P > 0.05, respectively; Table 1)"
-
-"In contrast, rotifer densities differed significantly between N-lim and N-rich medium conditions (F1,21 = 13.1, P < 0.05)"
+# Statistical presentation
 
 

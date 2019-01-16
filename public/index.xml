@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
-    <lastBuildDate>Sun, 13 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 14 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Data from: Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects</title>
+      <link>/post/data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects/</link>
+      <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects/</guid>
+      <description>Sources Summary Set up Functions  import Note in file Data inconsistencies Data pre-processing  Reproducibility Section: Fine root mass and production My ANOVA results reported ANOVA results Did the authors use a one way ANOVA with no random effects? Figure 1 post-hoc tests for fig 1 Fine root mass production effects of treatment on FRB and FRB production figure 2  Section: Fine root length: standing crop, production and survivorship table 1 Figure 3 post hoc tests for fig.</description>
+    </item>
     
     <item>
       <title>Data from: Interactions among predators and plant specificity protects herbivores from top predators</title>
@@ -27,18 +36,7 @@
       <pubDate>Fri, 11 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/data-from-frequency-of-virus-resistant-hosts-determines-experimental-community-dynamics/</guid>
-      <description>Summary Set up Reproducibility missing data Table 1 what model? AOV vs. lmer AOV computation Table 1 – my results Table 1 – reported results Did the authors throw out A3 for Chlorella and Rotifer?  Table 2 AOV v lmer Table 2 – my results Table 2 – reported Did the authors throw out A3 for Chlorella and Rotifer?  Figure 2  statistical presentation   Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resistant hosts determines experimental community dynamics.</description>
-    </item>
-    
-    <item>
-      <title>Data from Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects</title>
-      <link>/post/data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects/</link>
-      <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/post/data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects/</guid>
-      <description>Sources Rodtassana C, Tanner EVJ (2018) Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects. Ecology 99(3): 735-742. https://doi.org/10.1002/ecy.2143
-Rodtassana C, Tanner EVJ (2018) Data from: Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects. Dryad Digital Repository. https://doi.org/10.5061/dryad.f1948
- Background Reproducibility key Reproducibility: 1 (fails to reproduce). Not really close Reproducibility: 2 (reproduces to a similar value).</description>
+      <description>Summary Set up Reproducibility missing data Table 1 what model? AOV vs. lmer AOV computation Table 1 – my results Table 1 – reported results Did the authors throw out A3 for Chlorella and Rotifer?  Table 2 AOV v lmer Table 2 – my results Table 2 – reported Did the authors throw out A3 for Chlorella and Rotifer?  Figure 2  Statistical presentation   Source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Frequency of virus-resistant hosts determines experimental community dynamics.</description>
     </item>
     
     <item>
