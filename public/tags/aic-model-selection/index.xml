@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Aic Model Selection on The Biology Reproducibility Project</title>
+    <link>/tags/aic-model-selection/</link>
+    <description>Recent content in Aic Model Selection on The Biology Reproducibility Project</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
+    <lastBuildDate>Mon, 14 Jan 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/aic-model-selection/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Data from: Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects</title>
+      <link>/post/data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects/</link>
+      <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects/</guid>
+      <description>Sources Summary Caveats Set up Functions  import Note in file Data inconsistencies Data pre-processing  Reproducibility Section: Fine root mass and production My ANOVA results reported ANOVA results Did the authors use a one way ANOVA with no random effects? Figure 1 post-hoc tests for fig 1 Fine root mass production effects of treatment on FRB and FRB production figure 2  Section: Fine root length: standing crop, production and survivorship table 1 Figure 3 post hoc tests for fig.</description>
+    </item>
+    
+  </channel>
+</rss>

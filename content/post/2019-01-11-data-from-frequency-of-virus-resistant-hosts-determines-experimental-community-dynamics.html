@@ -5,7 +5,10 @@ author: Jeff Walker
 date: '2019-01-11'
 slug: data-from-frequency-of-virus-resistant-hosts-determines-experimental-community-dynamics
 categories: []
-tags: []
+tags:
+  - excel
+  - linear mixed model
+  - repeated measures anova
 subtitle: ''
 output:
   blogdown::html_page:
@@ -16,6 +19,7 @@ output:
 <div id="TOC">
 <ul>
 <li><a href="#summary">Summary</a></li>
+<li><a href="#caveats">Caveats</a></li>
 <li><a href="#set-up">Set up</a></li>
 <li><a href="#reproducibility">Reproducibility</a><ul>
 <li><a href="#missing-data">missing data</a></li>
@@ -49,6 +53,10 @@ output:
 <li>The ANOVA statistics reproduce for Chlorella and Rotifer only after excluding culture A3, which is present in these two data sets but missing from Nodularia and Phage. ANOVA statistics are similar for Nodularia (both tables) and for Phage (Table 1) but not Phage (Table 2).</li>
 </ol>
 </div>
+<div id="caveats" class="section level1">
+<h1>Caveats</h1>
+<p>Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author’s methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.</p>
+</div>
 <div id="set-up" class="section level1">
 <h1>Set up</h1>
 <pre class="r"><code>library(readxl)
@@ -56,6 +64,7 @@ library(ggplot2)
 library(data.table)
 library(emmeans)
 library(lmerTest)
+library(nlme)
 library(ggpubr)
 
 data_folder &lt;- &quot;../data&quot;
@@ -152,7 +161,7 @@ chlorella_wide &lt;- pre_process_data(chlorella, wide=TRUE)[, .SD, .SDcols=ycols
 
 rotifers_wide &lt;- pre_process_data(rotifers, wide=TRUE)[, .SD, .SDcols=ycols]
 # no missing</code></pre>
-<p>The nodularia and phage datasets have missing data. Nodularia is missing culture A3 and so the design is imbalanced. Phage is missing culture A3 and week 4 measures in cultures F2-3, G1-4, H1-4. This raises question of how the authors set parameters for RM ANOVA in SPSS - listwise deletion or pairwise. Also note that the imbalance raises issues for Type III ss.</p>
+<p>The nodularia and phage datasets have missing data. Nodularia is missing culture A3 and so the design is unbalanced. Phage is missing culture A3 and week 4 measures in cultures F2-3, G1-4, H1-4. This raises question of how the authors set parameters for RM ANOVA in SPSS - listwise deletion or pairwise. Also note that the imbalance raises issues for Type III ss.</p>
 </div>
 <div id="table-1" class="section level2">
 <h2>Table 1</h2>
@@ -173,6 +182,10 @@ rotifers_wide &lt;- pre_process_data(rotifers, wide=TRUE)[, .SD, .SDcols=ycols]
 <pre><code>## Type III Analysis of Variance Table with Satterthwaite&#39;s method
 ##       Sum Sq    Mean Sq NumDF DenDF F value Pr(&gt;F)
 ## N 3.6641e+11 3.6641e+11     1    21  0.0384 0.8464</code></pre>
+<pre class="r"><code>anova(lme(count ~ N, random = ~1|id, data=nodularia_long[week!=0], na.action=na.exclude))</code></pre>
+<pre><code>##             numDF denDF   F-value p-value
+## (Intercept)     1   115 11.452127  0.0010
+## N               1    21  0.038448  0.8464</code></pre>
 <pre class="r"><code>summary(aov(count ~ N + Error(id), phage_long[week!=0]))$&quot;Error: id&quot;</code></pre>
 <pre><code>##           Df    Sum Sq   Mean Sq F value Pr(&gt;F)
 ## N          1 7.360e+12 7.360e+12   0.602  0.446

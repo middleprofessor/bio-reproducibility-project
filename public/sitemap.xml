@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/post/data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss/</loc>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/post/data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects/</loc>
     <lastmod>2019-01-14T00:00:00+00:00</lastmod>
   </url>
@@ -52,6 +57,12 @@
   </url>
   
   <url>
+    <loc>/tags/aic-model-selection/</loc>
+    <lastmod>2019-01-14T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/anova/</loc>
     <lastmod>2018-06-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -63,8 +74,32 @@
   </url>
   
   <url>
+    <loc>/tags/clean-data/</loc>
+    <lastmod>2019-01-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/coefficient-table-error/</loc>
+    <lastmod>2019-01-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/csv/</loc>
+    <lastmod>2019-01-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/ecology/</loc>
     <lastmod>2018-06-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/excel/</loc>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -76,7 +111,7 @@
   
   <url>
     <loc>/tags/factorial/</loc>
-    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -88,7 +123,7 @@
   
   <url>
     <loc>/tags/linear-mixed-model/</loc>
-    <lastmod>2018-06-17T00:00:00+00:00</lastmod>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -112,13 +147,19 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2019-01-14T00:00:00+00:00</lastmod>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/regression-to-the-mean/</loc>
     <lastmod>2018-05-07T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/repeated-measures-anova/</loc>
+    <lastmod>2019-01-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -141,13 +182,19 @@
   
   <url>
     <loc>/tags/</loc>
-    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
+    <lastmod>2019-01-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-01-14T00:00:00+00:00</lastmod>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/transformed-response/</loc>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

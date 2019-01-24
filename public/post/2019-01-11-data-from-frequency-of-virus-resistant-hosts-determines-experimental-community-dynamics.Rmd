@@ -5,7 +5,10 @@ author: Jeff Walker
 date: '2019-01-11'
 slug: data-from-frequency-of-virus-resistant-hosts-determines-experimental-community-dynamics
 categories: []
-tags: []
+tags:
+  - excel
+  - linear mixed model
+  - repeated measures anova
 subtitle: ''
 output:
   blogdown::html_page:
@@ -21,6 +24,9 @@ Data source: Coloma S, Gaedke U, Sivonen K, Hiltunen T (2018) Data from: Frequen
 2. The model for the RM ANOVA is not clear given their are two factors. Only clear given degrees of freedom reported in F ratios (which is about the only value of these)
 3. The ANOVA statistics reproduce for Chlorella and Rotifer only after excluding culture A3, which is present in these two data sets but missing from Nodularia and Phage. ANOVA statistics are similar for Nodularia (both tables) and for Phage (Table 1) but not Phage (Table 2).
 
+# Caveats
+Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.
+
 # Set up
 
 ```{r setup, message=FALSE, warning=FALSE}
@@ -29,6 +35,7 @@ library(ggplot2)
 library(data.table)
 library(emmeans)
 library(lmerTest)
+library(nlme)
 library(ggpubr)
 
 data_folder <- "../data"
@@ -147,7 +154,7 @@ rotifers_wide <- pre_process_data(rotifers, wide=TRUE)[, .SD, .SDcols=ycols]
 # no missing
 ```
 
-The nodularia and phage datasets have missing data. Nodularia is missing culture A3 and so the design is imbalanced. Phage is missing culture A3 and week 4 measures in cultures F2-3, G1-4, H1-4. This raises question of how the authors set parameters for RM ANOVA in SPSS - listwise deletion or pairwise. Also note that the imbalance raises issues for Type III ss.
+The nodularia and phage datasets have missing data. Nodularia is missing culture A3 and so the design is unbalanced. Phage is missing culture A3 and week 4 measures in cultures F2-3, G1-4, H1-4. This raises question of how the authors set parameters for RM ANOVA in SPSS - listwise deletion or pairwise. Also note that the imbalance raises issues for Type III ss.
 
 ## Table 1
 ### what model?
@@ -162,6 +169,7 @@ Effectively the same F, which is surprising giving lack of balance because of mi
 
 summary(aov(count ~ N + Error(id), nodularia_long[week!=0]))$"Error: id"
 anova(lmer(count ~ N + (1|id), data=nodularia_long[week!=0]))
+anova(lme(count ~ N, random = ~1|id, data=nodularia_long[week!=0], na.action=na.exclude))
 
 summary(aov(count ~ N + Error(id), phage_long[week!=0]))$"Error: id"
 anova(lmer(count ~ N + (1|id), data=phage_long[week!=0]))

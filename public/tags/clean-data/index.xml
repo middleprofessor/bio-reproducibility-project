@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Clean Data on The Biology Reproducibility Project</title>
+    <link>/tags/clean-data/</link>
+    <description>Recent content in Clean Data on The Biology Reproducibility Project</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
+    <lastBuildDate>Sun, 13 Jan 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/clean-data/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Data from: Interactions among predators and plant specificity protects herbivores from top predators</title>
+      <link>/post/data-from-interactions-among-predators-and-plant-specificity-protects-herbivores-from-top-predators/</link>
+      <pubDate>Sun, 13 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-interactions-among-predators-and-plant-specificity-protects-herbivores-from-top-predators/</guid>
+      <description>Summary Caveats Set up Import Reproducibility Effect on total predators my results reported results  Effect on total herbaceous my results reported results  ANOVA table in Appendix 3, Table S1 Fig 1 Subsetting the response spiders predatory insects Hemiptera Coleoptera Lepidoptera Orthoptera  Fig S6  Statistical red-flags   Source: Bosc C, Roets F, Hui C, Pauw A (2018) Interactions among predators and plant specificity protect herbivores from top predators.</description>
+    </item>
+    
+  </channel>
+</rss>

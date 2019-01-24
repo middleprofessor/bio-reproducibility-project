@@ -1,0 +1,315 @@
+---
+title: 'Data from: Density-dependent positive feedbacks buffer aquatic plants from
+  interactive effects of eutrophication and predator loss'
+author: Jeff Walker
+date: '2019-01-16'
+slug: data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss
+categories: []
+tags:
+  - excel
+  - linear mixed model
+  - transformed response
+  - factorial
+subtitle: ''
+output:
+  blogdown::html_page:
+    toc: true
+---
+
+# Sources
+
+Source: Donadi S, Austin ÅN, Svartgren E, Eriksson BK, Hansen JP, Eklöf JS (2018) Density-dependent positive feedbacks buffer aquatic plants from interactive effects of eutrophication and predator loss. Ecology 99(11): 2515-2524. https://doi.org/10.1002/ecy.2501
+
+Data source: Donadi S, Austin ÅN, Svartgren E, Eriksson BK, Hansen JP, Eklöf JS (2018) Data from: Density-dependent positive feedbacks buffer aquatic plants from interactive effects of eutrophication and predator loss. Dryad Digital Repository. https://doi.org/10.5061/dryad.m1fb658
+
+# Summary
+
+# Caveats
+Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.
+
+# Set up
+```{r setup, message=FALSE, warning=FALSE}
+library(readxl)
+library(ggplot2)
+library(ggpubr)
+library(nlme)
+library(lmerTest)
+library(car)
+library(emmeans)
+library(data.table)
+library(lmtest)
+
+data_folder <- "../data"
+folder <- "Data from Density-dependent positive feedbacks buffer aquatic plants from interactive effects of eutrophication and predator loss"
+
+# images need to be moved to /static/images/data from.../image.png
+knitr_path <- FALSE
+
+```
+
+# Import
+```{r}
+fn <-"plant_grazer_data_SDonadi.xlsx"
+
+# open sheet "shoot level"
+sheet_i <- "Shoot level"
+file_path <- paste(data_folder, folder, fn, sep='/')
+shoot <- data.table(read_excel(file_path, sheet = sheet_i))
+shoot <- shoot[CAGE_TREAT!="uncaged"] # Delete CAGE_TREAT="uncaged" as these are not in main analysis
+shoot[, SITE:=factor(SITE)]
+shoot[, CAGE_ID:=factor(CAGE_ID)]
+shoot[, CAGE_TREAT:=factor(CAGE_TREAT)]
+shoot[, DENSITY_TREAT:=factor(DENSITY_TREAT)]
+shoot[, NUTRIENT_TREAT:=factor(NUTRIENT_TREAT)]
+
+# open sheet "cage level"
+sheet_i <- "Cage level"
+file_path <- paste(data_folder, folder, fn, sep='/')
+cage <- data.table(read_excel(file_path, sheet = sheet_i))
+cage <- cage[CAGE_TREAT!="uncaged"] # Delete CAGE_TREAT="uncaged" as these are not in main analysis
+cage[, SITE:=factor(SITE)]
+cage[, CAGE_ID:=factor(CAGE_ID)]
+cage[, CAGE_TREAT:=factor(CAGE_TREAT)]
+cage[, DENSITY_TREAT:=factor(DENSITY_TREAT)]
+cage[, NUTRIENT_TREAT:=factor(NUTRIENT_TREAT)]
+
+```
+## data cleaning
+
+```{r}
+shoot <- shoot[CAGE_TREAT!="uncaged"]
+```
+
+```{r, message=FALSE, warning=FALSE}
+shoot[, Strictly_epiphytic_algae_DW_g_Myrio:=as.numeric(Strictly_epiphytic_algae_DW_g_Myrio)]
+shoot[, scaled_Strictly_epiphytic_algae_DW_g_Myrio:=as.numeric(scaled_Strictly_epiphytic_algae_DW_g_Myrio)]
+shoot[, wind_fetch:=as.numeric(wind_fetch)]
+
+
+cage[, Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio:=as.numeric(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio)]
+cage[, Avgscaled_macrograzers_and_chirono_n_Myrio:=as.numeric(Avgscaled_macrograzers_and_chirono_n_Myrio)]
+cage[, wind_fetch:=as.numeric(wind_fetch)]
+
+```
+```{r are all combinations present, echo=FALSE, eval=FALSE}
+shoot[, .(mean=mean(ShootDW_g), N=.N), by=.(CAGE_TREAT, DENSITY_TREAT, NUTRIENT_TREAT)]
+```
+
+# Reproducibility
+
+## in-text
+
+>After 12 weeks, epiphytic algae biomass was 2.4 times higher in the large predatory fish exclosures (closed cages) than the fish access (open) cages but was unaffected by nutrient enrichment and plant density (main effect of cage treatment, F1,19 = 6.12, P = 0.020, Appendix S5, Fig. 2A)
+
+-- reproduces using an additive model (the methods and Table S1 imply interactions included) and ML estimation. See my Table S1 for full table. The reported ddf differs because it is reported "as if" the full-factorial model was used (df used for interactions).
+
+```{r}
+# additive  model
+fit <- lme(sqrt(scaled_Strictly_epiphytic_algae_DW_g_Myrio) ~ DENSITY_TREAT + CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, method="ML", data=shoot, na.action=na.exclude)
+knitr::kable(anova(fit, type = "marginal")["CAGE_TREAT",], digits=c(0,0,2,3))
+```
+
+>Plant density interacted with nutrient enrichment and exclusion of large fish (three-way interaction, Appendix S5) to affect plant performance: in closed cages (where algal bio- mass was generally higher, see above) and under nutrient- enriched conditions, high plant density increased individual plant biomass 4.7 times compared to medium plant density (Fisher’s LSD test, F2,19 = 6.19, P = 0.009, Fig. 3A)
+
+```{r}
+fit <- lme(ShootDW_g ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, method="ML", data=shoot)
+fit.emm <- emmeans(fit, specs=c("DENSITY_TREAT", "CAGE_TREAT", "NUTRIENT_TREAT"))
+cont1 <- data.table(summary(contrast(fit.emm, method="revpairwise", adjust="none")))[contrast=="3_high,closed,enriched - 2_intermediate,closed,enriched",]
+
+
+```
+
+## Appendix S5 Table S1
+The authors use nlme and not lme4
+
+```{r tableS1-repro, message=FALSE, warning=FALSE}
+# fit by REML
+fit1 <- lme(ShootDW_g ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, data=shoot)
+fit1.anova <- anova(fit1, type = "marginal")
+
+fit2 <- lme(sqrt(Sum_branch_length)  ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, data=shoot)
+fit2.anova <- anova(fit2, type = "marginal")
+
+fit3 <- lme(sqrt(N_tot_branches)  ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, data=shoot)
+fit3.anova <- anova(fit3, type = "marginal")
+
+fit4 <- lme(sqrt(Max_length_cm)  ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, data=shoot)
+fit4.anova <- anova(fit4, type = "marginal")
+
+fit5 <- lme(sqrt(scaled_Strictly_epiphytic_algae_DW_g_Myrio)  ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, data=shoot, na.action=na.exclude)
+fit5.anova <- anova(fit5, type = "marginal")
+
+# fit by ML
+fit1b <- lme(ShootDW_g ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, method="ML", data=shoot)
+fit1b.anova <- anova(fit1b, type = "marginal") # machts nichts
+
+fit2b <- lme(sqrt(Sum_branch_length)  ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, method="ML", data=shoot)
+fit2b.anova <- anova(fit2b, type = "marginal")
+
+fit3b <- lme(sqrt(N_tot_branches)  ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, method="ML", data=shoot)
+fit3b.anova <- anova(fit3b, type = "marginal")
+
+fit4b <- lme(sqrt(Max_length_cm)  ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, method="ML", data=shoot)
+fit4b.anova <- anova(fit4b, type = "marginal")
+
+fit5b <- lme(sqrt(scaled_Strictly_epiphytic_algae_DW_g_Myrio) ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, method="ML", data=shoot, na.action=na.exclude)
+fit5b.anova <- anova(fit5b, type = "marginal")
+
+ycols <- c("F-value", "p-value")
+df <- merge(fit1.anova, fit2.anova[, ycols], by=0, sort=FALSE)
+df <- df[,-1]
+row.names(df) <- row.names(fit1.anova)
+df <- merge(df, fit3.anova[, ycols], by=0, sort=FALSE)
+df <- df[,-1]
+row.names(df) <- row.names(fit1.anova)
+df <- merge(df, fit4.anova[, ycols], by=0, sort=FALSE)
+df <- df[,-1]
+row.names(df) <- row.names(fit1.anova)
+df <- merge(df, fit5.anova[, ycols], by=0, sort=FALSE)
+colnames(df) <- c("Term", "numDF", "denDF", "Plant biomass F", "Plant biomass p", "Branch length F", "Branch length p", "N branches F", "N branches p", "Stem length F", "Stem length p", "Algae biomass F", "Algae biomass p")
+table_s1_reml <- copy(df)
+knitr::kable(table_s1_reml, digits=c(NA, 0, 0, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3))
+
+ycols <- c("F-value", "p-value")
+df <- merge(fit1b.anova, fit2b.anova[, ycols], by=0, sort=FALSE)
+df <- df[,-1]
+row.names(df) <- row.names(fit1b.anova)
+df <- merge(df, fit3b.anova[, ycols], by=0, sort=FALSE)
+df <- df[,-1]
+row.names(df) <- row.names(fit1b.anova)
+df <- merge(df, fit4b.anova[, ycols], by=0, sort=FALSE)
+df <- df[,-1]
+row.names(df) <- row.names(fit1b.anova)
+df <- merge(df, fit5b.anova[, ycols], by=0, sort=FALSE)
+colnames(df) <- c("Term", "numDF", "denDF", "Plant biomass F", "Plant biomass p", "Branch length F", "Branch length p", "N branches F", "N branches p", "Stem length F", "Stem length p", "Algae biomass F", "Algae biomass p")
+table_s1_ml <- copy(df)
+knitr::kable(table_s1_ml, digits=c(NA, 0, 0, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3))
+
+```
+
+```{r tableS1, echo=FALSE}
+fn <- "tableS1.png"
+if(knitr_path==TRUE){
+  image_path <- paste("../images", folder, fn, sep="/")
+}else{
+  image_path <- paste("/images", folder, fn, sep="/")
+}
+knitr::include_graphics(image_path)
+
+```
+
+### reproducing epiphytic algae biomass columns
+
+An additive model for epiphyte biomass reproduces the first 6 rows of Table S1 (the last 4 are from the full factorial model fitted by ML). Found this not by trying to reproduce table but because I wanted to compare p-values of marginal effects with and without interactions in the model.
+
+```{r tableS1-explore}
+# 
+fit5c <- lme(sqrt(scaled_Strictly_epiphytic_algae_DW_g_Myrio) ~ DENSITY_TREAT + CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, method="ML", data=shoot, na.action=na.exclude)
+knitr::kable(anova(fit5c, type = "marginal"), digits=c(0,0,2,3))
+
+```
+
+1. branch length and stem length reproduce using REML
+
+2. plant biomass and number of branches reproduce using ML
+
+3. The main effects for epiphyte algae biomass reproduces using an additive model (no interactions) and ML while the interaction effects reproduce using the full factorial model and ML. I didn't see in the text that the authors used an additive model and the table suggests the full factorial model.
+
+No information in methods why the authors use REML for some responses and ML for others.
+
+## Appendix S5 Table S2
+
+```{r}
+# fit by REML
+fit6 <- lme(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE, method="REML", data=cage, na.action=na.exclude)
+anova(fit6, type = "marginal")
+fit6 <- lme(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio ~ DENSITY_TREAT + CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time + DENSITY_TREAT:CAGE_TREAT + DENSITY_TREAT:NUTRIENT_TREAT + CAGE_TREAT*NUTRIENT_TREAT + DENSITY_TREAT:CAGE_TREAT:NUTRIENT_TREAT, random = ~1|SITE, method="ML", data=cage, na.action=na.exclude)
+# - Density Treat
+fit6a <- lme(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio ~ CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time + DENSITY_TREAT:CAGE_TREAT + DENSITY_TREAT:NUTRIENT_TREAT + CAGE_TREAT*NUTRIENT_TREAT + DENSITY_TREAT:CAGE_TREAT:NUTRIENT_TREAT, random = ~1|SITE, method="ML", data=cage, na.action=na.exclude)
+anova(fit6a, type = "marginal")
+anova(fit6a, fit6, test=TRUE)
+lrtest(fit6, fit6a)
+
+```
+
+## Figure 2
+
+```{r}
+# raw SE
+shoot[, present_scaled_Strictly_epiphytic_algae_DW_g_Myrio:=ifelse(is.na(scaled_Strictly_epiphytic_algae_DW_g_Myrio),0,1)]
+fit5.raw_means <- shoot[, .(epiph_algae_biom=mean(scaled_Strictly_epiphytic_algae_DW_g_Myrio, na.rm=TRUE),
+                            sd=sd(scaled_Strictly_epiphytic_algae_DW_g_Myrio, na.rm=TRUE),
+                            N=sum(present_scaled_Strictly_epiphytic_algae_DW_g_Myrio)),
+                        by=.(NUTRIENT_TREAT, CAGE_TREAT, DENSITY_TREAT)]
+fit5.raw_means[, SE:=sd/sqrt(N)]
+# orderBy(~NUTRIENT_TREAT + CAGE_TREAT + DENSITY_TREAT, fit5.raw_means)
+
+pd <- position_dodge(0.9)
+gg1 <- ggplot(data=fit5.raw_means, aes(x=CAGE_TREAT, y=epiph_algae_biom, fill=DENSITY_TREAT)) +
+  geom_col(position=pd) +
+  geom_errorbar(aes(ymin=epiph_algae_biom-SE, ymax=epiph_algae_biom+SE), width=0.2, position=pd) +
+  facet_wrap(.~NUTRIENT_TREAT) +
+  NULL
+gg1
+```
+
+# Statistical Red-flags
+
+1. Two different methods (REML and ML) used for fitting models in the main ANOVA table (Appendix 5, Table S1)
+
+2. The ANOVA for algae biomass in Appendix 5, Table S1 is composite -- the main effects is the ANOVA from an additive model while the interactions are from the full-factorial model.
+
+3. The SE from the figures are based on raw data and do not represent the model and cannot be used to infer anything useful because 1) they do not take into account the random effects and they are taken from untransformed (not sqrt transformed) data. Note how 2*SE for many of the error bars would extend (often well) below zero.
+
+Figures that better represent the model (the last doesn't, but I use it to get "raw" or "unmodeled" SE that ignore random effects)
+```{r}
+# modeled SE using the full-factorial model and ML fit (not the additive model reported)
+fit5b.emm <- data.table(summary(emmeans(fit5b, 
+              specs=c("DENSITY_TREAT", "CAGE_TREAT","NUTRIENT_TREAT"))))
+fit5b.emm[, emmean.sq:=emmean^2]
+fit5b.emm[, SE.sq:=SE^2]
+
+# modeled SE using the additve model and ML fit
+fit5c.emm <- data.table(summary(emmeans(fit5c, 
+              specs=c("DENSITY_TREAT", "CAGE_TREAT","NUTRIENT_TREAT"))))
+fit5c.emm[, emmean.sq:=emmean^2]
+fit5c.emm[, SE.sq:=SE^2]
+
+# raw SE using transformed data then backtransformed
+fit5.raw_means <- shoot[, .(epiph_algae_biom=mean(sqrt(scaled_Strictly_epiphytic_algae_DW_g_Myrio), na.rm=TRUE),
+                            sd=sd(sqrt(scaled_Strictly_epiphytic_algae_DW_g_Myrio), na.rm=TRUE),
+                            N=sum(present_scaled_Strictly_epiphytic_algae_DW_g_Myrio)),
+                        by=.(NUTRIENT_TREAT, CAGE_TREAT, DENSITY_TREAT)]
+fit5.raw_means[, SE:=sd/sqrt(N)]
+fit5.raw_means[, raw_mean:=epiph_algae_biom^2]
+fit5.raw_means[, raw_SE:=SE^2]
+
+# full factorial model
+pd <- position_dodge(0.9)
+gg1b <- ggplot(data=fit5b.emm, aes(x=CAGE_TREAT, y=emmean.sq, fill=DENSITY_TREAT)) +
+  geom_col(position=pd) +
+  geom_errorbar(aes(ymin=emmean.sq-SE.sq, ymax=emmean.sq+SE.sq), width=0.2, position=pd) +
+  facet_wrap(.~NUTRIENT_TREAT) +
+  NULL
+gg1b
+
+# additive model
+pd <- position_dodge(0.9)
+gg1c <- ggplot(data=fit5c.emm, aes(x=CAGE_TREAT, y=emmean.sq, fill=DENSITY_TREAT)) +
+  geom_col(position=pd) +
+  geom_errorbar(aes(ymin=emmean.sq-SE.sq, ymax=emmean.sq+SE.sq), width=0.2, position=pd) +
+  facet_wrap(.~NUTRIENT_TREAT) +
+  NULL
+gg1c
+
+# raw backtransformed - SE reflect "pseudoreplication"
+pd <- position_dodge(0.9)
+gg1d <- ggplot(data=fit5.raw_means, aes(x=CAGE_TREAT, y=raw_mean, fill=DENSITY_TREAT)) +
+  geom_col(position=pd) +
+  geom_errorbar(aes(ymin=raw_mean-raw_SE, ymax=raw_mean+raw_SE), width=0.2, position=pd) +
+  facet_wrap(.~NUTRIENT_TREAT) +
+  NULL
+gg1d
+
+```
+

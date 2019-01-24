@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
-    <lastBuildDate>Tue, 19 Jun 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 14 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Aic Model Selection</title>
+      <link>/tags/aic-model-selection/</link>
+      <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/aic-model-selection/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Anova</title>
@@ -22,11 +31,47 @@
     </item>
     
     <item>
+      <title>Clean Data</title>
+      <link>/tags/clean-data/</link>
+      <pubDate>Sun, 13 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/clean-data/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Coefficient Table Error</title>
+      <link>/tags/coefficient-table-error/</link>
+      <pubDate>Sun, 13 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/coefficient-table-error/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Csv</title>
+      <link>/tags/csv/</link>
+      <pubDate>Sun, 13 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/csv/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Ecology</title>
       <link>/tags/ecology/</link>
       <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/ecology/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Excel</title>
+      <link>/tags/excel/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/excel/</guid>
       <description></description>
     </item>
     
@@ -42,7 +87,7 @@
     <item>
       <title>Factorial</title>
       <link>/tags/factorial/</link>
-      <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/factorial/</guid>
       <description></description>
@@ -60,7 +105,7 @@
     <item>
       <title>Linear Mixed Model</title>
       <link>/tags/linear-mixed-model/</link>
-      <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/linear-mixed-model/</guid>
       <description></description>
@@ -103,6 +148,15 @@
     </item>
     
     <item>
+      <title>Repeated Measures Anova</title>
+      <link>/tags/repeated-measures-anova/</link>
+      <pubDate>Fri, 11 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/repeated-measures-anova/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Reproducible</title>
       <link>/tags/reproducible/</link>
       <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
@@ -117,6 +171,15 @@
       <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/sequential-vs.-marginal-ss/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Transformed Response</title>
+      <link>/tags/transformed-response/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/transformed-response/</guid>
       <description></description>
     </item>
     

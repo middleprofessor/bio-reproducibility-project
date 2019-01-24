@@ -6,9 +6,9 @@
   <title>Data from: Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from: Litter removal in a tropical rain forest reduces fine root biomass and production but litter addition has few effects - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from: Litter removal in a tropical rain forest reduces fine root …" />
-  <meta name="description" content="Sources Summary Set up Functions  import Note in file Data inconsistencies Data pre-processing  Reproducibility Section: Fine root mass and production My ANOVA results reported ANOVA results Did the authors use a one way ANOVA with no random effects? Figure 1 post-hoc tests for fig 1 Fine root mass production effects of treatment on FRB and FRB production figure 2  Section: Fine root length: standing crop, production and survivorship table 1 Figure 3 post hoc tests for fig.">
-  <meta property="og:description" content="Sources Summary Set up Functions  import Note in file Data inconsistencies Data pre-processing  Reproducibility Section: Fine root mass and production My ANOVA results reported ANOVA results Did the authors use a one way ANOVA with no random effects? Figure 1 post-hoc tests for fig 1 Fine root mass production effects of treatment on FRB and FRB production figure 2  Section: Fine root length: standing crop, production and survivorship table 1 Figure 3 post hoc tests for fig.">
-  <meta name="twitter:description" content="Sources Summary Set up Functions  import Note in file Data inconsistencies Data pre-processing  Reproducibility Section: Fine root mass and production My ANOVA results reported ANOVA results Did the …">
+  <meta name="description" content="Sources Summary Caveats Set up Functions  import Note in file Data inconsistencies Data pre-processing  Reproducibility Section: Fine root mass and production My ANOVA results reported ANOVA results Did the authors use a one way ANOVA with no random effects? Figure 1 post-hoc tests for fig 1 Fine root mass production effects of treatment on FRB and FRB production figure 2  Section: Fine root length: standing crop, production and survivorship table 1 Figure 3 post hoc tests for fig.">
+  <meta property="og:description" content="Sources Summary Caveats Set up Functions  import Note in file Data inconsistencies Data pre-processing  Reproducibility Section: Fine root mass and production My ANOVA results reported ANOVA results Did the authors use a one way ANOVA with no random effects? Figure 1 post-hoc tests for fig 1 Fine root mass production effects of treatment on FRB and FRB production figure 2  Section: Fine root length: standing crop, production and survivorship table 1 Figure 3 post hoc tests for fig.">
+  <meta name="twitter:description" content="Sources Summary Caveats Set up Functions  import Note in file Data inconsistencies Data pre-processing  Reproducibility Section: Fine root mass and production My ANOVA results reported ANOVA results …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects/" />
@@ -44,6 +44,30 @@
       <hr class="article-title-bottom">
       <ul class="article-meta">
         <li class="article-meta-date"><time>January 14, 2019</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/excel/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            excel
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/linear-mixed-model/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            linear mixed model
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/aic-model-selection/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            AIC model selection
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/factorial/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            factorial
+          </a>&nbsp;
+        </li>
       </ul>
       
 <aside class="toc">
@@ -53,6 +77,7 @@
 <ul>
 <li><a href="#sources">Sources</a></li>
 <li><a href="#summary">Summary</a></li>
+<li><a href="#caveats">Caveats</a></li>
 <li><a href="#set-up">Set up</a><ul>
 <li><a href="#functions">Functions</a></li>
 </ul></li>
@@ -95,6 +120,10 @@
 <li>The computation of the SE of the means for the figures was not given and there are several alternatives. The reported SEMS for figure one look similar to mine. The reported SEMs for figure 3 are far off and seem inconsistent with the post-hoc tests.</li>
 <li>One difference in post-hoc test “classification” into significance clusters.</li>
 </ol>
+</div>
+<div id="caveats" class="section level1">
+<h1>Caveats</h1>
+<p>Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author’s methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.</p>
 </div>
 <div id="set-up" class="section level1">
 <h1>Set up</h1>
@@ -312,7 +341,8 @@ my.anova.table &lt;- rbind(my.anova.table,
 </div>
 <div id="figure-1" class="section level3">
 <h3>Figure 1</h3>
-<p>Hard to know what SEM is reported in Figure 1. These could be 1. SEM of the raw data, ignoring clustering effect of plot. This isn’t too useful unless its corrected for correlation. 2. SEM of the plot means averaged over months. This is not right because it could just as well be the SEM of the month means averaged over plots. 3. modeled SEM from the linear mixed model. I prefer this.</p>
+<pre class="r"><code>frb5.emm &lt;- summary(emmeans(frb5.fit, specs=c(&quot;treatment&quot;, &quot;season&quot;)))</code></pre>
+<p>Hard to know what SEM is reported in Figure 1. These could be 1. SEM of the raw data, ignoring clustering effect of plot. This isn’t too useful unless its corrected for correlated errors 2. SEM of the plot means averaged over months. This is not right because it could just as well be the SEM of the month means averaged over plots. 3. modeled SEM from the linear mixed model, which could be computed using the emmeans package. I prefer this.</p>
 <p>Given the variation in SEM bars in the reported fig. 1, I am assuming that the reported SEM is not #3. So, I compute both #1 and #2 here. It looks like the reported SEM are something like #2.</p>
 <pre class="r"><code>#1
 frb5_se1 &lt;- frb[depth==5,.(N=.N,
@@ -895,7 +925,9 @@ contrast(frl_surv.emm, method=&quot;revpairwise&quot;, simple = &quot;each&quot;
 </ul>
 
     <ul class="pager article-pager">
-      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-newer">
+          <a href="/post/data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss/" data-toggle="tooltip" data-placement="top" title="Data from: Density-dependent positive feedbacks buffer aquatic plants from interactive effects of eutrophication and predator loss">&lt; Newer</a>
+      </li>
       <li class="pager-older">
         <a href="/post/data-from-interactions-among-predators-and-plant-specificity-protects-herbivores-from-top-predators/" data-toggle="tooltip" data-placement="top" title="Data from: Interactions among predators and plant specificity protects herbivores from top predators">Older &gt;</a>
       </li>

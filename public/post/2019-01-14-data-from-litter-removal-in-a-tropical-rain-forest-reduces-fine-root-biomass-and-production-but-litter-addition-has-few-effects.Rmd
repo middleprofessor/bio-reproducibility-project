@@ -5,7 +5,11 @@ author: Jeff Walker
 date: '2019-01-14'
 slug: data-from-litter-removal-in-a-tropical-rain-forest-reduces-fine-root-biomass-and-production-but-litter-addition-has-few-effects
 categories: []
-tags: []
+tags:
+  - excel
+  - linear mixed model
+  - AIC model selection
+  - factorial
 subtitle: ''
 output:
   blogdown::html_page:
@@ -23,6 +27,9 @@ Rodtassana C, Tanner EVJ (2018) Data from: Litter removal in a tropical rain for
 2. ANOVA tables reproduce at the level of the p value less than or greater than 0.05. The F ratios do not reproduce, to an extent that reflects different model specifications. The denominator DF do not reproduce and some reported DDF should not be possible.
 3. The computation of the SE of the means for the figures was not given and there are several alternatives. The reported SEMS for figure one look similar to mine. The reported SEMs for figure 3 are far off and seem inconsistent with the post-hoc tests. 
 4. One difference in post-hoc test "classification" into significance clusters.
+
+# Caveats
+Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.
 
 # Set up
 
@@ -271,10 +278,14 @@ anova(lm(FRB ~ season, data=frb[depth=="10"]))
 
 ### Figure 1
 
+```{r frb modeled emm}
+frb5.emm <- summary(emmeans(frb5.fit, specs=c("treatment", "season")))
+```
+
 Hard to know what SEM is reported in Figure 1. These could be
-1. SEM of the raw data, ignoring clustering effect of plot. This isn't too useful unless its corrected for correlation.
+1. SEM of the raw data, ignoring clustering effect of plot. This isn't too useful unless its corrected for correlated errors
 2. SEM of the plot means averaged over months. This is not right because it could just as well be the SEM of the month means averaged over plots.
-3. modeled SEM from the linear mixed model. I prefer this.
+3. modeled SEM from the linear mixed model, which could be computed using the emmeans package. I prefer this.
 
 Given the variation in SEM bars in the reported fig. 1, I am assuming that the reported SEM is not #3. So, I compute both #1 and #2 here. It looks like the reported SEM are something like #2.
 
