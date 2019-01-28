@@ -111,7 +111,7 @@
   
   <url>
     <loc>/tags/factorial/</loc>
-    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+    <lastmod>2019-01-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -136,6 +136,12 @@
   <url>
     <loc>/tags/nested/</loc>
     <lastmod>2018-06-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/no-pooling-se-for-clustered-data-in-plots/</loc>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -181,6 +187,12 @@
   </url>
   
   <url>
+    <loc>/tags/simulate-this/</loc>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/</loc>
     <lastmod>2019-01-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -188,6 +200,12 @@
   
   <url>
     <loc>/</loc>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/three-way-factorial/</loc>
     <lastmod>2019-01-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>

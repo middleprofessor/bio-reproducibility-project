@@ -87,7 +87,7 @@
     <item>
       <title>Factorial</title>
       <link>/tags/factorial/</link>
-      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/factorial/</guid>
       <description></description>
@@ -126,6 +126,15 @@
       <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/nested/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>No Pooling Se for Clustered Data in Plots</title>
+      <link>/tags/no-pooling-se-for-clustered-data-in-plots/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/no-pooling-se-for-clustered-data-in-plots/</guid>
       <description></description>
     </item>
     
@@ -171,6 +180,24 @@
       <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/sequential-vs.-marginal-ss/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Simulate This</title>
+      <link>/tags/simulate-this/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/simulate-this/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Three Way Factorial</title>
+      <link>/tags/three-way-factorial/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/three-way-factorial/</guid>
       <description></description>
     </item>
     

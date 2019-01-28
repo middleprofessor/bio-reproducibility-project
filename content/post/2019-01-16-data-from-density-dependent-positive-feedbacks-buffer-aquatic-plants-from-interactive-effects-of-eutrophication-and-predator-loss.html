@@ -9,7 +9,9 @@ tags:
   - excel
   - linear mixed model
   - transformed response
-  - factorial
+  - three-way factorial
+  - no-pooling SE for clustered data in plots
+  - simulate this
 subtitle: ''
 output:
   blogdown::html_page:
@@ -27,14 +29,17 @@ output:
 <li><a href="#data-cleaning">data cleaning</a></li>
 </ul></li>
 <li><a href="#reproducibility">Reproducibility</a><ul>
-<li><a href="#in-text">in-text</a></li>
 <li><a href="#appendix-s5-table-s1">Appendix S5 Table S1</a><ul>
 <li><a href="#reproducing-epiphytic-algae-biomass-columns">reproducing epiphytic algae biomass columns</a></li>
 </ul></li>
+<li><a href="#in-text">in-text</a></li>
 <li><a href="#appendix-s5-table-s2">Appendix S5 Table S2</a></li>
 <li><a href="#figure-2">Figure 2</a></li>
 </ul></li>
-<li><a href="#statistical-red-flags">Statistical Red-flags</a></li>
+<li><a href="#statistical-red-flags">Statistical Red-flags</a><ul>
+<li><a href="#figure-red-flags">Figure red-flags</a></li>
+</ul></li>
+<li><a href="#simulate-this">Simulate this</a></li>
 </ul>
 </div>
 
@@ -45,6 +50,12 @@ output:
 </div>
 <div id="summary" class="section level1">
 <h1>Summary</h1>
+<ol style="list-style-type: decimal">
+<li><p>Data are easy to import and clean</p></li>
+<li><p>Results are based on the ANOVA tables in Appendix 5, Tables S1 and S2. Table S1 gives F and p for five responses and uses the same terms, ndf, and ddf columns for these 5 responses. Two of the responses (branch length and stem length) reproduce if the model is fit using REML. The other three responses (plant biomass, number of branches, and epiphyte biomass) reproduce if the model is fit using ML, <em>but</em> the epiphyte columns are a composite of two different fit models. The upper main effects rows reproduce only if the fit model is additive (no interactions). The lower interaction rows reproduce using the full-factorial model. This dual model is hidden by the structure of the table and nowhere (that I can fin) suggested in the methods or results.</p></li>
+<li><p>The statistics reported with the posthoc contrasts are not the actual test statistic or p-value but the ANOVA test statistic and p-value from the row of the ANOVA table that the authors use to justify the contrast without adjusting for multiplicity (Fisher LSD). This wasn’t immediately obvious and confused me. I didn’t see a LSD statistic or an undadjusted p-value specific to the contrast.</p></li>
+<li><p>The backward elimination statistics in Table S2 reproduce (I didn’t complete this but what I had done reproduced exactly).</p></li>
+</ol>
 </div>
 <div id="caveats" class="section level1">
 <h1>Caveats</h1>
@@ -60,7 +71,8 @@ library(lmerTest)
 library(car)
 library(emmeans)
 library(data.table)
-library(lmtest)
+library(lmtest) #?
+library(predictmeans)
 
 data_folder &lt;- &quot;../data&quot;
 folder &lt;- &quot;Data from Density-dependent positive feedbacks buffer aquatic plants from interactive effects of eutrophication and predator loss&quot;
@@ -108,46 +120,11 @@ cage[, wind_fetch:=as.numeric(wind_fetch)]</code></pre>
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
-<div id="in-text" class="section level2">
-<h2>in-text</h2>
-<blockquote>
-<p>After 12 weeks, epiphytic algae biomass was 2.4 times higher in the large predatory fish exclosures (closed cages) than the fish access (open) cages but was unaffected by nutrient enrichment and plant density (main effect of cage treatment, F1,19 = 6.12, P = 0.020, Appendix S5, Fig. 2A)</p>
-</blockquote>
-<p>– reproduces using an additive model (the methods and Table S1 imply interactions included) and ML estimation. See my Table S1 for full table. The reported ddf differs because it is reported “as if” the full-factorial model was used (df used for interactions).</p>
-<pre class="r"><code># additive  model
-fit &lt;- lme(sqrt(scaled_Strictly_epiphytic_algae_DW_g_Myrio) ~ DENSITY_TREAT + CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, method=&quot;ML&quot;, data=shoot, na.action=na.exclude)
-knitr::kable(anova(fit, type = &quot;marginal&quot;)[&quot;CAGE_TREAT&quot;,], digits=c(0,0,2,3))</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th></th>
-<th align="right">numDF</th>
-<th align="right">denDF</th>
-<th align="right">F-value</th>
-<th align="right">p-value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>CAGE_TREAT</td>
-<td align="right">1</td>
-<td align="right">26</td>
-<td align="right">6.12</td>
-<td align="right">0.02</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>Plant density interacted with nutrient enrichment and exclusion of large fish (three-way interaction, Appendix S5) to affect plant performance: in closed cages (where algal bio- mass was generally higher, see above) and under nutrient- enriched conditions, high plant density increased individual plant biomass 4.7 times compared to medium plant density (Fisher’s LSD test, F2,19 = 6.19, P = 0.009, Fig. 3A)</p>
-</blockquote>
-<pre class="r"><code>fit &lt;- lme(ShootDW_g ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, method=&quot;ML&quot;, data=shoot)
-fit.emm &lt;- emmeans(fit, specs=c(&quot;DENSITY_TREAT&quot;, &quot;CAGE_TREAT&quot;, &quot;NUTRIENT_TREAT&quot;))
-cont1 &lt;- data.table(summary(contrast(fit.emm, method=&quot;revpairwise&quot;, adjust=&quot;none&quot;)))[contrast==&quot;3_high,closed,enriched - 2_intermediate,closed,enriched&quot;,]</code></pre>
-</div>
 <div id="appendix-s5-table-s1" class="section level2">
 <h2>Appendix S5 Table S1</h2>
-<p>The authors use nlme and not lme4</p>
-<pre class="r"><code># fit by REML
+<p>Start with this table since it is the basis for the in-text results</p>
+<pre class="r"><code># The authors use nlme and not lme4
+# fit by REML
 fit1 &lt;- lme(ShootDW_g ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE/CAGE_ID, data=shoot)
 fit1.anova &lt;- anova(fit1, type = &quot;marginal&quot;)
 
@@ -619,60 +596,101 @@ knitr::kable(anova(fit5c, type = &quot;marginal&quot;), digits=c(0,0,2,3))</code
 <p>No information in methods why the authors use REML for some responses and ML for others.</p>
 </div>
 </div>
+<div id="in-text" class="section level2">
+<h2>in-text</h2>
+<blockquote>
+<p>After 12 weeks, epiphytic algae biomass was 2.4 times higher in the large predatory fish exclosures (closed cages) than the fish access (open) cages but was unaffected by nutrient enrichment and plant density (main effect of cage treatment, F1,19 = 6.12, P = 0.020, Appendix S5, Fig. 2A)</p>
+</blockquote>
+<p>– The ANOVA F and p reproduce using an additive model (the methods and Table S1 imply interactions included) and ML estimation. See my Table S1 for full table. The reported ddf differs from my table because the reported ddf report the ddf “as if” the full-factorial model were used.</p>
+<pre class="r"><code># additive  model
+knitr::kable(anova(fit5c, type = &quot;marginal&quot;)[&quot;CAGE_TREAT&quot;,], digits=c(0,0,2,3))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">numDF</th>
+<th align="right">denDF</th>
+<th align="right">F-value</th>
+<th align="right">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CAGE_TREAT</td>
+<td align="right">1</td>
+<td align="right">26</td>
+<td align="right">6.12</td>
+<td align="right">0.02</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># algae mass used the additive model
+fit.emm &lt;- data.table(summary(emmeans(fit5c, specs=&quot;CAGE_TREAT&quot;))) # marginal means
+a &lt;- (fit.emm[CAGE_TREAT==&quot;closed&quot;, emmean])^2
+b &lt;- (fit.emm[CAGE_TREAT==&quot;open&quot;, emmean])^2
+a/b</code></pre>
+<pre><code>## [1] 2.114262</code></pre>
+<p>This doesn’t reproduce. Here I try the raw means that do not account for clustered data and unbalanced design.</p>
+<pre class="r"><code>a &lt;- mean(shoot[CAGE_TREAT==&quot;closed&quot;, scaled_Strictly_epiphytic_algae_DW_g_Myrio], na.rm=TRUE)
+b &lt;- mean(shoot[CAGE_TREAT==&quot;open&quot;, scaled_Strictly_epiphytic_algae_DW_g_Myrio], na.rm=TRUE)
+a/b</code></pre>
+<pre><code>## [1] 2.416909</code></pre>
+<p>This reproduces. See section “Statistical Red-flag” #4</p>
+<blockquote>
+<p>Plant density interacted with nutrient enrichment and exclusion of large fish (three-way interaction, Appendix S5) to affect plant performance: in closed cages (where algal biomass was generally higher, see above) and under nutrient-enriched conditions, high plant density increased individual plant biomass 4.7 times compared to medium plant density (Fisher’s LSD test, F2,19 = 6.19, P = 0.009, Fig. 3A)</p>
+</blockquote>
+<p>I assumed that this p value was that for the post hoc comparison but it (and the F ratio) is from the row for the 3-way interaction in the ANOVA table, which I reproduce (see Table S1 below). For the actual p-value of this contrast, see “statistical red flags #3” below.</p>
+<p>I assume that “increase 4.7X” is the fraction increase. But this doesn’t reproduce.</p>
+<pre class="r"><code>fit.emm &lt;- data.table(summary(emmeans(fit1b, specs=c(&quot;CAGE_TREAT&quot;,&quot;DENSITY_TREAT&quot;,&quot;NUTRIENT_TREAT&quot;)))) # marginal means
+# is the fold-change correct?
+a &lt;- fit.emm[DENSITY_TREAT==&quot;3_high&quot; &amp; CAGE_TREAT==&quot;closed&quot; &amp; NUTRIENT_TREAT==&quot;enriched&quot;, emmean]
+b &lt;- fit.emm[DENSITY_TREAT==&quot;2_intermediate&quot; &amp; CAGE_TREAT==&quot;closed&quot; &amp; NUTRIENT_TREAT==&quot;enriched&quot;, emmean]
+(a-b)/b</code></pre>
+<pre><code>## [1] 4.012426</code></pre>
+<p>Here I used the raw means (ignoring the clustered structure) instead of the modeled means, and it does reproduce.</p>
+<pre class="r"><code>a &lt;- mean(shoot[DENSITY_TREAT==&quot;3_high&quot; &amp; CAGE_TREAT==&quot;closed&quot; &amp; NUTRIENT_TREAT==&quot;enriched&quot;, ShootDW_g], na.rm=TRUE)
+b &lt;- mean(shoot[DENSITY_TREAT==&quot;2_intermediate&quot; &amp; CAGE_TREAT==&quot;closed&quot; &amp; NUTRIENT_TREAT==&quot;enriched&quot;, ShootDW_g], na.rm=TRUE)
+(a-b)/b</code></pre>
+<pre><code>## [1] 3.744193</code></pre>
+<pre class="r"><code>a/b</code></pre>
+<pre><code>## [1] 4.744193</code></pre>
+<p>This reproduces if I use the raw means that do not account for the clustered data and unbalanced design and if the value is not the “increase” but simply the multiple (it didn’t increase 4.7X but is simply 4.7X bigger). See section “Statistical Red-flag” #4</p>
+<blockquote>
+<p>in closed cages … under nutrient-enriched conditions [and] high plant density … number of branches per plant 2.3 and 2.8 times (Fisher’s LSD test, F2,19 = 3.74, P = 0.043, Fig. 3B), compared to medium and low plant density, respectively.</p>
+</blockquote>
+<p>I assume the multiple is using raw data as above. Again, the ANOVA stats are for the 3-way interaction row in TABLE S1 and this p-value is not the p-value of the contrasts but of the three-way interaction. The contrast p-values were not reported but I compute these in “Statistical Red-flag” #5</p>
+</div>
 <div id="appendix-s5-table-s2" class="section level2">
 <h2>Appendix S5 Table S2</h2>
-<pre class="r"><code># fit by REML
-fit6 &lt;- lme(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio ~ DENSITY_TREAT*CAGE_TREAT*NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, random = ~1|SITE, method=&quot;REML&quot;, data=cage, na.action=na.exclude)
-anova(fit6, type = &quot;marginal&quot;)</code></pre>
-<pre><code>##                                         numDF denDF  F-value p-value
-## (Intercept)                                 1    20 0.075150  0.7868
-## DENSITY_TREAT                               2    20 3.253999  0.0598
-## CAGE_TREAT                                  1    20 0.008719  0.9265
-## NUTRIENT_TREAT                              1    20 0.000003  0.9987
-## wind_fetch                                  1    20 0.356991  0.5569
-## Actual_Retention_time                       1     1 0.008806  0.9404
-## DENSITY_TREAT:CAGE_TREAT                    2    20 1.502671  0.2466
-## DENSITY_TREAT:NUTRIENT_TREAT                2    20 0.192503  0.8264
-## CAGE_TREAT:NUTRIENT_TREAT                   1    20 0.091961  0.7648
-## DENSITY_TREAT:CAGE_TREAT:NUTRIENT_TREAT     2    20 0.050111  0.9512</code></pre>
-<pre class="r"><code>fit6 &lt;- lme(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio ~ DENSITY_TREAT + CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time + DENSITY_TREAT:CAGE_TREAT + DENSITY_TREAT:NUTRIENT_TREAT + CAGE_TREAT*NUTRIENT_TREAT + DENSITY_TREAT:CAGE_TREAT:NUTRIENT_TREAT, random = ~1|SITE, method=&quot;ML&quot;, data=cage, na.action=na.exclude)
-# - Density Treat
-fit6a &lt;- lme(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio ~ CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time + DENSITY_TREAT:CAGE_TREAT + DENSITY_TREAT:NUTRIENT_TREAT + CAGE_TREAT*NUTRIENT_TREAT + DENSITY_TREAT:CAGE_TREAT:NUTRIENT_TREAT, random = ~1|SITE, method=&quot;ML&quot;, data=cage, na.action=na.exclude)
-anova(fit6a, type = &quot;marginal&quot;)</code></pre>
-<pre><code>##                                         numDF denDF   F-value p-value
-## (Intercept)                                 1    20 0.4014458  0.5335
-## CAGE_TREAT                                  1    20 0.0045283  0.9470
-## NUTRIENT_TREAT                              1    20 0.0618499  0.8061
-## wind_fetch                                  1    20 0.2527563  0.6206
-## Actual_Retention_time                       1     1 1.8568510  0.4030
-## CAGE_TREAT:DENSITY_TREAT                    4    20 1.4253122  0.2620
-## NUTRIENT_TREAT:DENSITY_TREAT                2    20 0.3434530  0.7134
-## CAGE_TREAT:NUTRIENT_TREAT                   1    20 0.0026888  0.9592
-## CAGE_TREAT:NUTRIENT_TREAT:DENSITY_TREAT     2    20 0.1296206  0.8792</code></pre>
-<pre class="r"><code>anova(fit6a, fit6, test=TRUE)</code></pre>
-<pre><code>##       Model df      AIC      BIC    logLik
-## fit6a     1 16 601.4231 626.3087 -284.7115
-## fit6      2 16 601.4231 626.3087 -284.7115</code></pre>
-<pre class="r"><code>lrtest(fit6, fit6a)</code></pre>
-<pre><code>## Likelihood ratio test
-## 
-## Model 1: Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio ~ DENSITY_TREAT + 
-##     CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time + 
-##     DENSITY_TREAT:CAGE_TREAT + DENSITY_TREAT:NUTRIENT_TREAT + 
-##     CAGE_TREAT * NUTRIENT_TREAT + DENSITY_TREAT:CAGE_TREAT:NUTRIENT_TREAT
-## Model 2: Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio ~ CAGE_TREAT + 
-##     NUTRIENT_TREAT + wind_fetch + Actual_Retention_time + DENSITY_TREAT:CAGE_TREAT + 
-##     DENSITY_TREAT:NUTRIENT_TREAT + CAGE_TREAT * NUTRIENT_TREAT + 
-##     DENSITY_TREAT:CAGE_TREAT:NUTRIENT_TREAT
-##   #Df  LogLik Df Chisq Pr(&gt;Chisq)    
-## 1  16 -284.71                        
-## 2  16 -284.71  0     0  &lt; 2.2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Not completed here but what I’ve don reproduces so I assume the rest does.</p>
+<pre class="r"><code># fit by ML
+m1 &lt;- lme(sqrt(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio) ~ DENSITY_TREAT + CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time + DENSITY_TREAT:CAGE_TREAT + DENSITY_TREAT:NUTRIENT_TREAT + CAGE_TREAT*NUTRIENT_TREAT + DENSITY_TREAT:CAGE_TREAT:NUTRIENT_TREAT, random = ~1|SITE, method=&quot;ML&quot;, data=cage, na.action=na.exclude)
+t1 &lt;- drop1(m1,test=&quot;Chisq&quot;)
+
+# drop DENSITY_TREAT:CAGE_TREAT:NUTRIENT_TREAT
+m2 &lt;- lme(sqrt(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio) ~ DENSITY_TREAT + CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time + DENSITY_TREAT:CAGE_TREAT + DENSITY_TREAT:NUTRIENT_TREAT + CAGE_TREAT*NUTRIENT_TREAT, random = ~1|SITE, method=&quot;ML&quot;, data=cage, na.action=na.exclude)
+t2 &lt;- drop1(m2, test=&quot;Chisq&quot;)
+
+# drop CAGE_TREAT:NUTRIENT_TREAT
+m3 &lt;- lme(sqrt(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio) ~ DENSITY_TREAT + CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time + DENSITY_TREAT:CAGE_TREAT + DENSITY_TREAT:NUTRIENT_TREAT, random = ~1|SITE, method=&quot;ML&quot;, data=cage, na.action=na.exclude)
+t3 &lt;- drop1(m3, test=&quot;Chisq&quot;)
+
+# drop DENSITY_TREAT:NUTRIENT_TREAT
+m4 &lt;- lme(sqrt(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio) ~ DENSITY_TREAT + CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time + DENSITY_TREAT:CAGE_TREAT, random = ~1|SITE, method=&quot;ML&quot;, data=cage, na.action=na.exclude)
+t4 &lt;- drop1(m4, test=&quot;Chisq&quot;)
+
+# drop NUTRIENT_TREAT
+m5 &lt;- lme(sqrt(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio) ~ DENSITY_TREAT + CAGE_TREAT + wind_fetch + Actual_Retention_time + DENSITY_TREAT:CAGE_TREAT, random = ~1|SITE, method=&quot;ML&quot;, data=cage, na.action=na.exclude)
+t5 &lt;- drop1(m5, test=&quot;Chisq&quot;)</code></pre>
 </div>
 <div id="figure-2" class="section level2">
 <h2>Figure 2</h2>
-<pre class="r"><code># raw SE
+<blockquote>
+<p>Grazer abundance (measured at the cage level) was 2.3 times higher in nutrient-enriched than ambient cages (main effect of nutrient treatment, LRT = 3.93, df = 1, P = 0.047) and 2.6 times higher in closed than open cages (main effect of cage treatment, LRT = 5.24, df = 1, P = 0.022, Appendix S5, Fig. 2B). Meanwhile, grazer biomass was not affected by the treatments (Appendix S5, Fig. 2C).</p>
+</blockquote>
+<p>The figure reference is backwards here, Fig. 2b is Grazer biomass while Fig. 2C is grazer abundance.</p>
+<pre class="r"><code># 2A
+# raw SE
 shoot[, present_scaled_Strictly_epiphytic_algae_DW_g_Myrio:=ifelse(is.na(scaled_Strictly_epiphytic_algae_DW_g_Myrio),0,1)]
 fit5.raw_means &lt;- shoot[, .(epiph_algae_biom=mean(scaled_Strictly_epiphytic_algae_DW_g_Myrio, na.rm=TRUE),
                             sd=sd(scaled_Strictly_epiphytic_algae_DW_g_Myrio, na.rm=TRUE),
@@ -688,7 +706,55 @@ gg1 &lt;- ggplot(data=fit5.raw_means, aes(x=CAGE_TREAT, y=epiph_algae_biom, fill
   facet_wrap(.~NUTRIENT_TREAT) +
   NULL
 gg1</code></pre>
-<p><img src="/post/2019-01-16-data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="/post/2019-01-16-data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code># 2B Grazer biomass
+cage[, present_biomass:=ifelse(is.na(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio),0,1)] # need this for count
+biomass_means &lt;- cage[, .(raw_mean=mean(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio, na.rm=TRUE),
+  N=sum(present_biomass),
+  sd=sd(Avgscaled_macrograzers_and_chirono_AFDW_mg_Myrio, na.rm=TRUE)), by=.(NUTRIENT_TREAT, CAGE_TREAT, DENSITY_TREAT)]
+biomass_means[, raw_se:=sd/sqrt(N)]
+
+pd &lt;- position_dodge(0.9)
+gg2 &lt;- ggplot(data=biomass_means, aes(x=CAGE_TREAT, y=raw_mean, fill=DENSITY_TREAT)) +
+  geom_col(position=pd) +
+  geom_errorbar(aes(ymin=raw_mean-raw_se, ymax=raw_mean+raw_se), width=0.2, position=pd) +
+  facet_wrap(.~NUTRIENT_TREAT) +
+  NULL
+gg2</code></pre>
+<p><img src="/post/2019-01-16-data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<p>A little exploration of effects of grazer biomass</p>
+<pre class="r"><code>emmeans(m1, specs=c(&quot;NUTRIENT_TREAT&quot;, &quot;CAGE_TREAT&quot;, &quot;DENSITY_TREAT&quot;), type=&quot;response&quot;)</code></pre>
+<pre><code>##  NUTRIENT_TREAT CAGE_TREAT DENSITY_TREAT  response        SE df lower.CL
+##  ambient        closed     1_low          75.80842 141.37447  1        0
+##  enriched       closed     1_low         291.29918 283.37469  1        0
+##  ambient        open       1_low          17.56383  68.02111  1        0
+##  enriched       open       1_low         232.69576 249.11449  1        0
+##  ambient        closed     2_medium       49.81757 114.62538  1        0
+##  enriched       closed     2_medium      139.06713 234.81738  1        0
+##  ambient        open       2_medium       35.82574  97.24346  1        0
+##  enriched       open       2_medium       65.27431 132.56081  1        0
+##  ambient        closed     3_high        921.84912 495.87539  1        0
+##  enriched       closed     3_high        543.41831 380.47765  1        0
+##  ambient        open       3_high         56.80919 122.59068  1        0
+##  enriched       open       3_high         78.28846 143.61322  1        0
+##  upper.CL
+##  12513.48
+##  15018.31
+##  11514.46
+##  14162.18
+##  12151.40
+##  19125.94
+##  11925.05
+##  12615.37
+##  17988.61
+##  16130.01
+##  12291.93
+##  12536.24
+## 
+## Degrees-of-freedom method: containment 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the sqrt scale</code></pre>
+<p>wow! Those are big CIs!</p>
 </div>
 </div>
 <div id="statistical-red-flags" class="section level1">
@@ -696,55 +762,119 @@ gg1</code></pre>
 <ol style="list-style-type: decimal">
 <li><p>Two different methods (REML and ML) used for fitting models in the main ANOVA table (Appendix 5, Table S1)</p></li>
 <li><p>The ANOVA for algae biomass in Appendix 5, Table S1 is composite – the main effects is the ANOVA from an additive model while the interactions are from the full-factorial model.</p></li>
-<li><p>The SE from the figures are based on raw data and do not represent the model and cannot be used to infer anything useful because 1) they do not take into account the random effects and they are taken from untransformed (not sqrt transformed) data. Note how 2*SE for many of the error bars would extend (often well) below zero.</p></li>
+<li><p>The F-ratio/p value for the 3-way interaction in Table S1 is not the p value used to “protect” post hoc comparisons among levels of Density within some combination of Nutrients and Cage. With this complex of a design I don’t think there is any row of the ANOVA table that “protects” post-hoc comparisons. If one wants unadjusted p-values for a specific post-hoc comparison (I’m fine with this), I would use the contrast function of the emmeans package.</p></li>
 </ol>
-<p>Figures that better represent the model (the last doesn’t, but I use it to get “raw” or “unmodeled” SE that ignore random effects)</p>
-<pre class="r"><code># modeled SE using the full-factorial model and ML fit (not the additive model reported)
-fit5b.emm &lt;- data.table(summary(emmeans(fit5b, 
-              specs=c(&quot;DENSITY_TREAT&quot;, &quot;CAGE_TREAT&quot;,&quot;NUTRIENT_TREAT&quot;))))
-fit5b.emm[, emmean.sq:=emmean^2]
-fit5b.emm[, SE.sq:=SE^2]
+<pre class="r"><code># plant biomass ANOVA reproduced with ML so use fit1b
+fit.emm &lt;- emmeans(fit1b, specs=c(&quot;DENSITY_TREAT&quot;, &quot;CAGE_TREAT&quot;, &quot;NUTRIENT_TREAT&quot;))
+fit.contrast &lt;- data.table(summary(contrast(fit.emm, method=&quot;revpairwise&quot;, adjust=&quot;none&quot;)))[contrast==&quot;3_high,closed,enriched - 2_intermediate,closed,enriched&quot;,]
+fit.contrast$p.value</code></pre>
+<pre><code>## [1] 0.003445575</code></pre>
+<pre class="r"><code>fit.pm &lt;- predictmeans(fit1b, modelterm=&quot;DENSITY_TREAT:CAGE_TREAT:NUTRIENT_TREAT&quot;, pairwise = TRUE, plot=FALSE)</code></pre>
+<pre><code>## 
+##  The predicted means are estimated at 
+## 
+##            wind_fetch Actual_Retention_time 
+##              865.2457                0.2598</code></pre>
+<pre class="r"><code>fit.pm$&quot;Pairwise p-value&quot;[&quot;3_high:closed:enriched&quot;,&quot;2_intermediate:closed:enriched&quot;]</code></pre>
+<pre><code>## [1] 0.0024</code></pre>
+<p>I’m not sure why these differ, I would think they would be the same but its not clear to me how the “predictmeans” LSD pairwise comparison is computing t-values</p>
+<ol start="4" style="list-style-type: decimal">
+<li><p>The fold-changes given in the text are based on the means computed from the raw data and not from the model. This can sometimes be misleading. See <a href="https://cran.r-project.org/web/packages/emmeans/vignettes/basics.html" class="uri">https://cran.r-project.org/web/packages/emmeans/vignettes/basics.html</a></p></li>
+<li><p>p-values for number of branches</p></li>
+</ol>
+<p>Again, not sure why these differ, I would think they would be the same. Regardless these are the p-values that should be reported with a contrast.</p>
+<pre class="r"><code># number of branches reproduced with ML so use fit3b
+fit.emm &lt;- emmeans(fit3b, specs=c(&quot;DENSITY_TREAT&quot;, &quot;CAGE_TREAT&quot;, &quot;NUTRIENT_TREAT&quot;))
+fit.contrast &lt;- data.table(summary(contrast(fit.emm, method=&quot;revpairwise&quot;, adjust=&quot;none&quot;)))[contrast==&quot;3_high,closed,enriched - 2_intermediate,closed,enriched&quot;,]
+fit.contrast$p.value</code></pre>
+<pre><code>## [1] 0.02027803</code></pre>
+<pre class="r"><code>fit.pm &lt;- predictmeans(fit3b, modelterm=&quot;DENSITY_TREAT:CAGE_TREAT:NUTRIENT_TREAT&quot;, pairwise = TRUE, plot=FALSE)</code></pre>
+<pre><code>## 
+##  The predicted means are estimated at 
+## 
+##            wind_fetch Actual_Retention_time 
+##              865.2457                0.2598</code></pre>
+<pre class="r"><code>fit.pm$&quot;Pairwise p-value&quot;[&quot;3_high:closed:enriched&quot;,&quot;2_intermediate:closed:enriched&quot;]</code></pre>
+<pre><code>## [1] 0.0154</code></pre>
+<div id="figure-red-flags" class="section level2">
+<h2>Figure red-flags</h2>
+<p>The SE from the figures are based on raw data and do not represent the model and cannot be used to infer much of anything useful because 1) they do not take into account the random effects and they are taken from untransformed (not sqrt transformed) data. Note how 2*SE for many of the error bars would extend (often well) below zero.</p>
+<p>SEs from the model fit would probably be better but because of the hard limit at zero and the small sample size, these SEs look silly and are also not very useful. Probably the most useful would be CIs but, again, because of only 3 replicates, these CIs are huge and basically suggest noise. None of these are very satisfying ways of portraying the model results.</p>
+<pre class="r"><code># After 12 weeks, epiphytic algae biomass was 2.4 times higher in the large predatory fish exclosures (closed cages) than the fish access (open) cages but was unaffected by nutrient enrichment and plant density (main effect of cage treatment, F1,19 = 6.12, P = 0.020, Appendix S5, Fig. 2A).
 
-# modeled SE using the additve model and ML fit
-fit5c.emm &lt;- data.table(summary(emmeans(fit5c, 
-              specs=c(&quot;DENSITY_TREAT&quot;, &quot;CAGE_TREAT&quot;,&quot;NUTRIENT_TREAT&quot;))))
-fit5c.emm[, emmean.sq:=emmean^2]
-fit5c.emm[, SE.sq:=SE^2]
+# refit model with lmer, I prefer the &quot;(1|SITE) + (1|SITE:CAGE_ID)&quot; specification
+# refit additive model with lmer
+fit &lt;- lmer(sqrt(scaled_Strictly_epiphytic_algae_DW_g_Myrio) ~ DENSITY_TREAT + CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time + (1|SITE) + (1|SITE:CAGE_ID), REML=FALSE, data=shoot, na.action=na.exclude)
+fit.emm &lt;- emmeans(fit, specs=c(&quot;CAGE_TREAT&quot;))
+fit.emm</code></pre>
+<pre><code>##  CAGE_TREAT   emmean        SE    df   lower.CL upper.CL
+##  closed     1.657775 0.7790900 21.75  0.0409719 3.274578
+##  open       1.140108 0.7784317 21.49 -0.4765029 2.756720
+## 
+## Results are averaged over the levels of: DENSITY_TREAT, NUTRIENT_TREAT 
+## Degrees-of-freedom method: kenward-roger 
+## Results are given on the sqrt (not the response) scale. 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code>contrast(fit.emm, method=&quot;revpairwise&quot;, adjust=&quot;none&quot;)</code></pre>
+<pre><code>##  contrast        estimate        SE    df t.ratio p.value
+##  open - closed -0.5176664 0.2397631 48.96  -2.159  0.0358
+## 
+## Results are averaged over the levels of: DENSITY_TREAT, NUTRIENT_TREAT</code></pre>
+<pre class="r"><code>fit.emm.full &lt;- emmeans(fit, specs=c(&quot;CAGE_TREAT&quot;, &quot;DENSITY_TREAT&quot;,&quot;NUTRIENT_TREAT&quot;))
 
-# raw SE using transformed data then backtransformed
-fit5.raw_means &lt;- shoot[, .(epiph_algae_biom=mean(sqrt(scaled_Strictly_epiphytic_algae_DW_g_Myrio), na.rm=TRUE),
-                            sd=sd(sqrt(scaled_Strictly_epiphytic_algae_DW_g_Myrio), na.rm=TRUE),
-                            N=sum(present_scaled_Strictly_epiphytic_algae_DW_g_Myrio)),
-                        by=.(NUTRIENT_TREAT, CAGE_TREAT, DENSITY_TREAT)]
-fit5.raw_means[, SE:=sd/sqrt(N)]
-fit5.raw_means[, raw_mean:=epiph_algae_biom^2]
-fit5.raw_means[, raw_SE:=SE^2]
+# computing SE from fixed effect component only
+# modified from http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#lme4
+newdat &lt;- expand.grid(DENSITY_TREAT=levels(shoot$DENSITY_TREAT), 
+                      CAGE_TREAT=levels(shoot$CAGE_TREAT), 
+                      NUTRIENT_TREAT=levels(shoot$NUTRIENT_TREAT))
+newdat$wind_fetch &lt;- 0
+newdat$ Actual_Retention_time &lt;- 0
+fit.emm2 &lt;- data.table(newdat)
+fit.emm2[, emmean:=predict(fit, newdat, re.form=NA)]
+mm &lt;- model.matrix(~~ DENSITY_TREAT + CAGE_TREAT + NUTRIENT_TREAT + wind_fetch + Actual_Retention_time, newdat)
+# mm &lt;- model.matrix(terms(fit), fit.emm2)
+## or newdat$distance &lt;- mm %*% fixef(fm1)
+fit.emm2[, SE:=sqrt(diag(mm %*% tcrossprod(vcov(fit), mm)))]
+t_crit &lt;- 1.96
+fit.emm2[, lower.CL:=emmean-t_crit]
+fit.emm2[, upper.CL:=emmean+t_crit]
+# apparently this is what emmeans is doing (or close)
 
-# full factorial model
+# lme &quot;containment&quot; SE
 pd &lt;- position_dodge(0.9)
-gg1b &lt;- ggplot(data=fit5b.emm, aes(x=CAGE_TREAT, y=emmean.sq, fill=DENSITY_TREAT)) +
+gg1b &lt;- ggplot(data=summary(fit.emm), aes(x=CAGE_TREAT, y=emmean)) +
   geom_col(position=pd) +
-  geom_errorbar(aes(ymin=emmean.sq-SE.sq, ymax=emmean.sq+SE.sq), width=0.2, position=pd) +
-  facet_wrap(.~NUTRIENT_TREAT) +
+  geom_errorbar(aes(ymin=emmean-SE, ymax=emmean+SE), width=0.2, position=pd) +
+  #geom_errorbar(aes(ymin=lower.CL, ymax=upper.CL), width=0.2, position=pd) +
+  #facet_wrap(.~NUTRIENT_TREAT) +
   NULL
 gg1b</code></pre>
-<p><img src="/post/2019-01-16-data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<pre class="r"><code># additive model
-pd &lt;- position_dodge(0.9)
-gg1c &lt;- ggplot(data=fit5c.emm, aes(x=CAGE_TREAT, y=emmean.sq, fill=DENSITY_TREAT)) +
+<p><img src="/post/2019-01-16-data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>pd &lt;- position_dodge(0.9)
+gg1c &lt;- ggplot(data=fit.emm2, aes(x=CAGE_TREAT, y=emmean, fill=DENSITY_TREAT)) +
   geom_col(position=pd) +
-  geom_errorbar(aes(ymin=emmean.sq-SE.sq, ymax=emmean.sq+SE.sq), width=0.2, position=pd) +
+  geom_errorbar(aes(ymin=emmean-SE, ymax=emmean+SE), width=0.2, position=pd) +
+  #geom_errorbar(aes(ymin=lower.CL, ymax=upper.CL), width=0.2, position=pd) +
   facet_wrap(.~NUTRIENT_TREAT) +
   NULL
 gg1c</code></pre>
-<p><img src="/post/2019-01-16-data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
-<pre class="r"><code># raw backtransformed - SE reflect &quot;pseudoreplication&quot;
-pd &lt;- position_dodge(0.9)
-gg1d &lt;- ggplot(data=fit5.raw_means, aes(x=CAGE_TREAT, y=raw_mean, fill=DENSITY_TREAT)) +
-  geom_col(position=pd) +
-  geom_errorbar(aes(ymin=raw_mean-raw_SE, ymax=raw_mean+raw_SE), width=0.2, position=pd) +
-  facet_wrap(.~NUTRIENT_TREAT) +
-  NULL
-gg1d</code></pre>
-<p><img src="/post/2019-01-16-data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss_files/figure-html/unnamed-chunk-8-3.png" width="672" /></p>
+<p><img src="/post/2019-01-16-data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
+<pre class="r"><code># 
+# # lmer
+# pd &lt;- position_dodge(0.9)
+# gg1d &lt;- ggplot(data=summary(fit5_lmer_add.emm.response), aes(x=CAGE_TREAT, y=response, fill=DENSITY_TREAT)) +
+#   geom_col(position=pd) +
+#   #geom_errorbar(aes(ymin=response-SE, ymax=response+SE), width=0.2, position=pd) +
+#   geom_errorbar(aes(ymin=lower.CL, ymax=upper.CL), width=0.2, position=pd) +
+#   facet_wrap(.~NUTRIENT_TREAT) +
+#   NULL
+# gg1d
+
+
+# large SEs reflect the clustered data but this should really be modeled with a GLM</code></pre>
+</div>
+</div>
+<div id="simulate-this" class="section level1">
+<h1>Simulate this</h1>
+<p>Adjustment in posthoc tests basically lower the rate that we find structure in a structureless data set. What is the type I error rate of the rows in the ANOVA table in a three-way design?</p>
 </div>
