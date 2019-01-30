@@ -1,0 +1,97 @@
+---
+title: Data from Organic matter and nutrient inputs from large wildlife influence
+  ecosystem function in the Mara River, Africa
+author: Jeff Walker
+date: '2019-01-29'
+slug: data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa
+categories: []
+tags: []
+subtitle: ''
+output:
+  blogdown::html_page:
+    toc: true
+---
+
+# Sources
+
+# Summary
+
+# Set up
+
+```{r libraries, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(ggpubr)
+library(data.table)
+library(readxl)
+library(nlme)
+library(emmeans)
+```
+
+```{r import path}
+data_folder <- "../data"
+folder <- "Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa"
+
+# images need to be moved to /static/images/data from.../image.png
+knitr_path <- FALSE # run = TRUE to debug
+```
+
+# Import
+```{r import}
+fn <- "Subalusky_2018_mara_nutrient_dissolution_chambers.csv"
+file_path <- paste(data_folder, folder, fn, sep="/")
+dissolution <- fread(file_path)
+dissolution[, treatment:=factor(treatment, c("H 1", "H 5", "H 20", "W", "HW"))]
+```
+
+# Reproducibility
+## Nutrient dissolution rates
+### ANOVA
+>We analyzed each of the four response variables (NH4, SRP, DOC and DO) in response to treatment and time using a repeated measures ANOVA with the aov function in R (R Core Team 2018).
+
+>There were significant treatment effects of input type and concentration on NH4 (rm ANOVA, F=23.534,35, P<0.001), SRP (F=123.614,35, P<0.001), and DOC (F=27.964,35, P<0.001), and significant treatment by time interaction effects on NH4 (rm ANOVA, interaction, F=9.304,35, P<0.001) and SRP (F=7.594,35, P<0.001).
+
+Note there is no column for the random factor, which should be chamber, since there were three time measures within each chamber. I created one assuming that the order is uniform.
+
+```{r}
+# add chamber ID, this assumes chamber order is maintained
+dissolution[, chamber:=paste(treatment, rep(1:3), sep="-")]
+summary(aov(log(NH4.no0) ~ treatment*hours + Error(chamber), data=dissolution))
+```
+
+This does not reproduce. After some exploration, a simple fixed effects model reproduces, so this is not a repeated measures ANOVA
+
+```{r}
+fit.nh4 <- lm(log(NH4.no0) ~ treatment*hours, data=dissolution)
+summary(aov(fit.nh4))
+
+fit.srp <- lm(log(SRP.no0) ~ treatment*hours, data=dissolution)
+summary(aov(fit.srp))
+
+fit.doc <- lm(log(DOC.no0) ~ treatment*hours, data=dissolution)
+summary(aov(fit.doc))
+
+```
+
+### Posthoc pairwise comparisons
+> Concentrations of NH4, SRP and DOC increased with increasing hippo feces concentration, although treatment differences were only significant for SRP and DOC (except for low and medium concentrations for DOC) (pairwise t test, P<0.05 for all comparisons).
+>The wildebeest treatment was significantly higher in NH4 than the lowest concentration of hippo feces (P=0.017), and it was significantly higher in SRP and DOC than all concentrations of hippo feces (P<0.05 for all comparisons).
+
+It's not clear what this analysis is, especially given the large interaction, which makes pairwise comparisons conditional on the level of time. So are the comparisons at 24 hours? Or, complete pooling across time?
+
+Holm adjustment using the fit model. This isn't close.
+
+```{r}
+fit_nh4.emm <- emmeans(fit.nh4, specs="treatment")
+contrast(fit_nh4.emm, method="revpairwise", adjust="holm") # caution! ignores interaction
+
+```
+
+Pairwise t-tests, which ignore the modeled sigma (that is, each of these has a different estimate of the sigma based on only the pair compared) reproduce in patter but I got p=0.0073 for NH4:W vs. H1 and not p=0.017. Also I get p=0.10160 for DOC:H5 vs. H20 and not p < 0.05.
+
+```{r}
+pairwise.t.test(x=log(dissolution$NH4.no0), g=dissolution$treatment, p.adjust.method="holm")
+pairwise.t.test(x=log(dissolution$SRP.no0), g=dissolution$treatment, p.adjust.method="holm")
+pairwise.t.test(x=log(dissolution$DOC.no0), g=dissolution$treatment, p.adjust.method="holm")
+
+```
+

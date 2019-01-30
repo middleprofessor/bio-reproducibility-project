@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa - The Biology Reproducibility Project</title>
+  <meta property="og:title" content="Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa - The Biology Reproducibility Project" />
+  <meta name="twitter:title" content="Data from Organic matter and nutrient inputs from large wildlife …" />
+  <meta name="description" content="Sources Summary Set up Import Reproducibility Nutrient dissolution rates ANOVA Posthoc pairwise comparisons     Sources  Summary  Set up library(ggplot2) library(ggpubr) library(data.table) library(readxl) library(nlme) library(emmeans) data_folder &lt;- &quot;../data&quot; folder &lt;- &quot;Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa&quot; # images need to be moved to /static/images/data from.../image.png knitr_path &lt;- FALSE # run = TRUE to debug  Import fn &lt;- &quot;Subalusky_2018_mara_nutrient_dissolution_chambers.">
+  <meta property="og:description" content="Sources Summary Set up Import Reproducibility Nutrient dissolution rates ANOVA Posthoc pairwise comparisons     Sources  Summary  Set up library(ggplot2) library(ggpubr) library(data.table) library(readxl) library(nlme) library(emmeans) data_folder &lt;- &quot;../data&quot; folder &lt;- &quot;Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa&quot; # images need to be moved to /static/images/data from.../image.png knitr_path &lt;- FALSE # run = TRUE to debug  Import fn &lt;- &quot;Subalusky_2018_mara_nutrient_dissolution_chambers.">
+  <meta name="twitter:description" content="Sources Summary Set up Import Reproducibility Nutrient dissolution rates ANOVA Posthoc pairwise comparisons     Sources  Summary  Set up library(ggplot2) library(ggpubr) library(data.table) …">
+  <meta name="author" content=""/>
+  <meta property="og:site_name" content="The Biology Reproducibility Project" />
+  <meta property="og:url" content="/post/data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa/" />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    <h1 class="site-title"><a href="/">The Biology Reproducibility Project</a></h1>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-categories"><a href="/categories/" title="Categories">Categories</a></li>
+      <li class="site-navi-item-tags"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-archives"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+  </nav>
+</header>
+<hr class="site-header-bottom">
+
+  <div class="main" role="main">
+    <article class="article">
+      
+      
+      <h1 class="article-title">Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>January 29, 2019</time></li>
+      </ul>
+      
+<aside class="toc">
+  
+</aside>
+      <div id="TOC">
+<ul>
+<li><a href="#sources">Sources</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#set-up">Set up</a></li>
+<li><a href="#import">Import</a></li>
+<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#nutrient-dissolution-rates">Nutrient dissolution rates</a><ul>
+<li><a href="#anova">ANOVA</a></li>
+<li><a href="#posthoc-pairwise-comparisons">Posthoc pairwise comparisons</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="sources" class="section level1">
+<h1>Sources</h1>
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+</div>
+<div id="set-up" class="section level1">
+<h1>Set up</h1>
+<pre class="r"><code>library(ggplot2)
+library(ggpubr)
+library(data.table)
+library(readxl)
+library(nlme)
+library(emmeans)</code></pre>
+<pre class="r"><code>data_folder &lt;- &quot;../data&quot;
+folder &lt;- &quot;Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa&quot;
+
+# images need to be moved to /static/images/data from.../image.png
+knitr_path &lt;- FALSE # run = TRUE to debug</code></pre>
+</div>
+<div id="import" class="section level1">
+<h1>Import</h1>
+<pre class="r"><code>fn &lt;- &quot;Subalusky_2018_mara_nutrient_dissolution_chambers.csv&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+dissolution &lt;- fread(file_path)
+dissolution[, treatment:=factor(treatment, c(&quot;H 1&quot;, &quot;H 5&quot;, &quot;H 20&quot;, &quot;W&quot;, &quot;HW&quot;))]</code></pre>
+</div>
+<div id="reproducibility" class="section level1">
+<h1>Reproducibility</h1>
+<div id="nutrient-dissolution-rates" class="section level2">
+<h2>Nutrient dissolution rates</h2>
+<div id="anova" class="section level3">
+<h3>ANOVA</h3>
+<blockquote>
+<p>We analyzed each of the four response variables (NH4, SRP, DOC and DO) in response to treatment and time using a repeated measures ANOVA with the aov function in R (R Core Team 2018).</p>
+</blockquote>
+<blockquote>
+<p>There were significant treatment effects of input type and concentration on NH4 (rm ANOVA, F=23.534,35, P&lt;0.001), SRP (F=123.614,35, P&lt;0.001), and DOC (F=27.964,35, P&lt;0.001), and significant treatment by time interaction effects on NH4 (rm ANOVA, interaction, F=9.304,35, P&lt;0.001) and SRP (F=7.594,35, P&lt;0.001).</p>
+</blockquote>
+<p>Note there is no column for the random factor, which should be chamber, since there were three time measures within each chamber. I created one assuming that the order is uniform.</p>
+<pre class="r"><code># add chamber ID, this assumes chamber order is maintained
+dissolution[, chamber:=paste(treatment, rep(1:3), sep=&quot;-&quot;)]
+summary(aov(log(NH4.no0) ~ treatment*hours + Error(chamber), data=dissolution))</code></pre>
+<pre><code>## 
+## Error: chamber
+##           Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## treatment  4  95.77  23.943   36.41 6.22e-06 ***
+## Residuals 10   6.58   0.658                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Error: Within
+##                 Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## hours            1 112.97  112.97  97.234 4.25e-10 ***
+## treatment:hours  4  37.87    9.47   8.149 0.000238 ***
+## Residuals       25  29.04    1.16                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>This does not reproduce. After some exploration, a simple fixed effects model reproduces, so this is not a repeated measures ANOVA</p>
+<pre class="r"><code>fit.nh4 &lt;- lm(log(NH4.no0) ~ treatment*hours, data=dissolution)
+summary(aov(fit.nh4))</code></pre>
+<pre><code>##                 Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## treatment        4  95.77   23.94  23.526 1.65e-09 ***
+## hours            1 112.97  112.97 110.995 2.13e-12 ***
+## treatment:hours  4  37.87    9.47   9.302 3.14e-05 ***
+## Residuals       35  35.62    1.02                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>fit.srp &lt;- lm(log(SRP.no0) ~ treatment*hours, data=dissolution)
+summary(aov(fit.srp))</code></pre>
+<pre><code>##                 Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## treatment        4  327.0   81.75 123.610  &lt; 2e-16 ***
+## hours            1    5.8    5.84   8.835 0.005317 ** 
+## treatment:hours  4   20.1    5.02   7.592 0.000163 ***
+## Residuals       35   23.1    0.66                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>fit.doc &lt;- lm(log(DOC.no0) ~ treatment*hours, data=dissolution)
+summary(aov(fit.doc))</code></pre>
+<pre><code>##                 Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## treatment        4 250.12   62.53  27.963 1.81e-10 ***
+## hours            1   8.84    8.84   3.952   0.0547 .  
+## treatment:hours  4   7.91    1.98   0.885   0.4831    
+## Residuals       35  78.27    2.24                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="posthoc-pairwise-comparisons" class="section level3">
+<h3>Posthoc pairwise comparisons</h3>
+<blockquote>
+<p>Concentrations of NH4, SRP and DOC increased with increasing hippo feces concentration, although treatment differences were only significant for SRP and DOC (except for low and medium concentrations for DOC) (pairwise t test, P&lt;0.05 for all comparisons). The wildebeest treatment was significantly higher in NH4 than the lowest concentration of hippo feces (P=0.017), and it was significantly higher in SRP and DOC than all concentrations of hippo feces (P&lt;0.05 for all comparisons).</p>
+</blockquote>
+<p>It’s not clear what this analysis is, especially given the large interaction, which makes pairwise comparisons conditional on the level of time. So are the comparisons at 24 hours? Or, complete pooling across time?</p>
+<p>Holm adjustment using the fit model. This isn’t close.</p>
+<pre class="r"><code>fit_nh4.emm &lt;- emmeans(fit.nh4, specs=&quot;treatment&quot;)</code></pre>
+<pre><code>## NOTE: Results may be misleading due to involvement in interactions</code></pre>
+<pre class="r"><code>contrast(fit_nh4.emm, method=&quot;revpairwise&quot;, adjust=&quot;holm&quot;) # caution! ignores interaction</code></pre>
+<pre><code>##  contrast      estimate        SE df t.ratio p.value
+##  H 5 - H 1   1.19769259 0.4755705 35   2.518  0.0660
+##  H 20 - H 1  2.78786429 0.4755705 35   5.862  &lt;.0001
+##  H 20 - H 5  1.59017170 0.4755705 35   3.344  0.0099
+##  W - H 1     3.72439891 0.4755705 35   7.831  &lt;.0001
+##  W - H 5     2.52670632 0.4755705 35   5.313  &lt;.0001
+##  W - H 20    0.93653462 0.4755705 35   1.969  0.1706
+##  HW - H 1    3.66837140 0.4755705 35   7.714  &lt;.0001
+##  HW - H 5    2.47067881 0.4755705 35   5.195  0.0001
+##  HW - H 20   0.88050711 0.4755705 35   1.851  0.1706
+##  HW - W     -0.05602751 0.4755705 35  -0.118  0.9069
+## 
+## Results are given on the log (not the response) scale. 
+## P value adjustment: holm method for 10 tests</code></pre>
+<p>Pairwise t-tests, which ignore the modeled sigma (that is, each of these has a different estimate of the sigma based on only the pair compared) reproduce in patter but I got p=0.0073 for NH4:W vs. H1 and not p=0.017. Also I get p=0.10160 for DOC:H5 vs. H20 and not p &lt; 0.05.</p>
+<pre class="r"><code>pairwise.t.test(x=log(dissolution$NH4.no0), g=dissolution$treatment, p.adjust.method=&quot;holm&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  log(dissolution$NH4.no0) and dissolution$treatment 
+## 
+##      H 1    H 5    H 20   W     
+## H 5  0.9850 -      -      -     
+## H 20 0.0732 0.6304 -      -     
+## W    0.0073 0.1214 1.0000 -     
+## HW   0.0077 0.1214 1.0000 1.0000
+## 
+## P value adjustment method: holm</code></pre>
+<pre class="r"><code>pairwise.t.test(x=log(dissolution$SRP.no0), g=dissolution$treatment, p.adjust.method=&quot;holm&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  log(dissolution$SRP.no0) and dissolution$treatment 
+## 
+##      H 1     H 5     H 20    W     
+## H 5  2.5e-05 -       -       -     
+## H 20 1.9e-09 0.0068  -       -     
+## W    1.7e-15 2.3e-09 2.5e-05 -     
+## HW   1.3e-15 1.9e-09 2.5e-05 0.8814
+## 
+## P value adjustment method: holm</code></pre>
+<pre class="r"><code>pairwise.t.test(x=log(dissolution$DOC.no0), g=dissolution$treatment, p.adjust.method=&quot;holm&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  log(dissolution$DOC.no0) and dissolution$treatment 
+## 
+##      H 1     H 5     H 20    W      
+## H 5  0.00238 -       -       -      
+## H 20 6.8e-06 0.10160 -       -      
+## W    1.1e-09 0.00014 0.02949 -      
+## HW   1.1e-09 0.00014 0.02949 0.97000
+## 
+## P value adjustment method: holm</code></pre>
+</div>
+</div>
+</div>
+
+    </article>
+
+    
+<ul class="article-share">
+  <li>
+    <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </li>
+  <li>
+    <div class="fb-share-button" data-href="/post/data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.10";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+  </li>
+  <li>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <g:plus action="share"></g:plus>
+  </li>
+  <li>
+    <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label-counter" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  </li>
+  <li>
+    <a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en"></a>
+    <script>!function(d,i){if(!d.getElementById(i)){var j=d.createElement("script");j.id=i;j.src="https://widgets.getpocket.com/v1/j/btn.js?v=1";var w=d.getElementById(i);d.body.appendChild(j);}}(document,"pocket-btn-js");</script>
+  </li>
+</ul>
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss/" data-toggle="tooltip" data-placement="top" title="Data from: Density-dependent positive feedbacks buffer aquatic plants from interactive effects of eutrophication and predator loss">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">&copy; Copyright 2018 Jeffrey A. Walker</div>
+  <ul class="site-footer-items">
+    <li class="site-footer-item-about"><a href="/about/" title="About">About</a></li>
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/">Hugo</a>
+  </div>
+</div>
+    <script src="//yihui.name/js/math-code.js"></script>
+<script async
+src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+  <script src="/js/collapse.js"></script>
+  <script src="/js/dropdown.js"></script>
+  <script src="/js/transition.js"></script>
+
+
+</body>
+</html>

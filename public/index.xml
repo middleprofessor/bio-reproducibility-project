@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
-    <lastBuildDate>Wed, 16 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 29 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa</title>
+      <link>/post/data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa/</link>
+      <pubDate>Tue, 29 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa/</guid>
+      <description>Sources Summary Set up Import Reproducibility Nutrient dissolution rates ANOVA Posthoc pairwise comparisons     Sources  Summary  Set up library(ggplot2) library(ggpubr) library(data.table) library(readxl) library(nlme) library(emmeans) data_folder &amp;lt;- &amp;quot;../data&amp;quot; folder &amp;lt;- &amp;quot;Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa&amp;quot; # images need to be moved to /static/images/data from.../image.png knitr_path &amp;lt;- FALSE # run = TRUE to debug  Import fn &amp;lt;- &amp;quot;Subalusky_2018_mara_nutrient_dissolution_chambers.</description>
+    </item>
     
     <item>
       <title>Data from: Density-dependent positive feedbacks buffer aquatic plants from interactive effects of eutrophication and predator loss</title>
