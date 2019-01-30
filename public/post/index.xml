@@ -18,7 +18,7 @@
       <pubDate>Tue, 29 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa/</guid>
-      <description>Sources Summary Set up Import Reproducibility Nutrient dissolution rates ANOVA Posthoc pairwise comparisons     Sources  Summary  Set up library(ggplot2) library(ggpubr) library(data.table) library(readxl) library(nlme) library(emmeans) data_folder &amp;lt;- &amp;quot;../data&amp;quot; folder &amp;lt;- &amp;quot;Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa&amp;quot; # images need to be moved to /static/images/data from.../image.png knitr_path &amp;lt;- FALSE # run = TRUE to debug  Import fn &amp;lt;- &amp;quot;Subalusky_2018_mara_nutrient_dissolution_chambers.</description>
+      <description>Sources Summary Set up Import Reproducibility Nutrient dissolution rates Statistical methods ANOVA results Posthoc pairwise comparisons  Decomposition rates Statistical methods ANOVA results  Nutrient limitation Statistical method Results   Statistical red-flags   Sources  Summary  Set up library(broom) library(ggplot2) library(ggpubr) library(data.table) library(readxl) library(nlme) library(emmeans) data_folder &amp;lt;- &amp;quot;../data&amp;quot; folder &amp;lt;- &amp;quot;Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa&amp;quot; # images need to be moved to /static/images/data from.</description>
     </item>
     
     <item>

@@ -5,7 +5,8 @@ author: Jeff Walker
 date: '2019-01-29'
 slug: data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa
 categories: []
-tags: []
+tags:
+  - emtrends
 subtitle: ''
 output:
   blogdown::html_page:
@@ -21,10 +22,20 @@ output:
 <li><a href="#import">Import</a></li>
 <li><a href="#reproducibility">Reproducibility</a><ul>
 <li><a href="#nutrient-dissolution-rates">Nutrient dissolution rates</a><ul>
-<li><a href="#anova">ANOVA</a></li>
+<li><a href="#statistical-methods">Statistical methods</a></li>
+<li><a href="#anova-results">ANOVA results</a></li>
 <li><a href="#posthoc-pairwise-comparisons">Posthoc pairwise comparisons</a></li>
 </ul></li>
+<li><a href="#decomposition-rates">Decomposition rates</a><ul>
+<li><a href="#statistical-methods-1">Statistical methods</a></li>
+<li><a href="#anova-results-1">ANOVA results</a></li>
 </ul></li>
+<li><a href="#nutrient-limitation">Nutrient limitation</a><ul>
+<li><a href="#statistical-method">Statistical method</a></li>
+<li><a href="#results">Results</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#statistical-red-flags">Statistical red-flags</a></li>
 </ul>
 </div>
 
@@ -36,7 +47,8 @@ output:
 </div>
 <div id="set-up" class="section level1">
 <h1>Set up</h1>
-<pre class="r"><code>library(ggplot2)
+<pre class="r"><code>library(broom)
+library(ggplot2)
 library(ggpubr)
 library(data.table)
 library(readxl)
@@ -47,48 +59,78 @@ folder &lt;- &quot;Data from Organic matter and nutrient inputs from large wildl
 
 # images need to be moved to /static/images/data from.../image.png
 knitr_path &lt;- FALSE # run = TRUE to debug</code></pre>
+<pre class="r"><code>source(&quot;../R/clean_label.R&quot;) # bookdown</code></pre>
 </div>
 <div id="import" class="section level1">
 <h1>Import</h1>
-<pre class="r"><code>fn &lt;- &quot;Subalusky_2018_mara_nutrient_dissolution_chambers.csv&quot;
+<pre class="r"><code># dissolutin rates
+fn &lt;- &quot;Subalusky_2018_mara_nutrient_dissolution_chambers.csv&quot;
 file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
 dissolution &lt;- fread(file_path)
-dissolution[, treatment:=factor(treatment, c(&quot;H 1&quot;, &quot;H 5&quot;, &quot;H 20&quot;, &quot;W&quot;, &quot;HW&quot;))]</code></pre>
+dissolution[, treatment:=factor(treatment, c(&quot;H 1&quot;, &quot;H 5&quot;, &quot;H 20&quot;, &quot;W&quot;, &quot;HW&quot;))]
+
+# decomposition rates
+fn &lt;- &quot;Subalusky_2018_mara_hippo_feces_decomp_litterbags.csv&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+decomp &lt;- fread(file_path)
+colnames(decomp) &lt;- clean_label(colnames(decomp))
+# treatment =   experimental treatment, where A: 40 g fresh hippo feces; B: 10 g aged hippo feces; C: 10 g aged hippo feces + 20 g wildebeest tissue
+decomp[, treatment_recode:=ifelse(treatment==&quot;A&quot;, &quot;fresh&quot;,
+                                  ifelse(treatment==&quot;B&quot;, &quot;aged&quot;, &quot;wb&quot;))]
+decomp[, treatment_recode:=factor(treatment_recode, c(&quot;fresh&quot;, &quot;aged&quot;, &quot;wb&quot;))]
+
+# nutrient limitation
+fn &lt;- &quot;Subalusky_2018_mara_nutrient_limitation_assays.csv&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+limit &lt;- fread(file_path)</code></pre>
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
 <div id="nutrient-dissolution-rates" class="section level2">
 <h2>Nutrient dissolution rates</h2>
-<div id="anova" class="section level3">
-<h3>ANOVA</h3>
+<div id="statistical-methods" class="section level3">
+<h3>Statistical methods</h3>
 <blockquote>
 <p>We analyzed each of the four response variables (NH4, SRP, DOC and DO) in response to treatment and time using a repeated measures ANOVA with the aov function in R (R Core Team 2018).</p>
 </blockquote>
-<blockquote>
-<p>There were significant treatment effects of input type and concentration on NH4 (rm ANOVA, F=23.534,35, P&lt;0.001), SRP (F=123.614,35, P&lt;0.001), and DOC (F=27.964,35, P&lt;0.001), and significant treatment by time interaction effects on NH4 (rm ANOVA, interaction, F=9.304,35, P&lt;0.001) and SRP (F=7.594,35, P&lt;0.001).</p>
-</blockquote>
 <p>Note there is no column for the random factor, which should be chamber, since there were three time measures within each chamber. I created one assuming that the order is uniform.</p>
 <pre class="r"><code># add chamber ID, this assumes chamber order is maintained
-dissolution[, chamber:=paste(treatment, rep(1:3), sep=&quot;-&quot;)]
-summary(aov(log(NH4.no0) ~ treatment*hours + Error(chamber), data=dissolution))</code></pre>
-<pre><code>## 
-## Error: chamber
-##           Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+dissolution[, chamber:=paste(treatment, rep(1:3), sep=&quot;-&quot;)]</code></pre>
+</div>
+<div id="anova-results" class="section level3">
+<h3>ANOVA results</h3>
+<pre class="r"><code>summary(aov(log(NH4.no0) ~ treatment*hours + Error(chamber), data=dissolution))$&quot;Error: chamber&quot;</code></pre>
+<pre><code>##           Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## treatment  4  95.77  23.943   36.41 6.22e-06 ***
 ## Residuals 10   6.58   0.658                     
 ## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Error: Within
-##                 Df Sum Sq Mean Sq F value   Pr(&gt;F)    
-## hours            1 112.97  112.97  97.234 4.25e-10 ***
-## treatment:hours  4  37.87    9.47   8.149 0.000238 ***
-## Residuals       25  29.04    1.16                     
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(aov(log(SRP.no0) ~ treatment*hours + Error(chamber), data=dissolution))$&quot;Error: chamber&quot;</code></pre>
+<pre><code>##           Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## treatment  4  327.0   81.75   224.5 9.64e-10 ***
+## Residuals 10    3.6    0.36                     
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>This does not reproduce. After some exploration, a simple fixed effects model reproduces, so this is not a repeated measures ANOVA</p>
-<pre class="r"><code>fit.nh4 &lt;- lm(log(NH4.no0) ~ treatment*hours, data=dissolution)
-summary(aov(fit.nh4))</code></pre>
+<pre class="r"><code>summary(aov(log(DOC.no0) ~ treatment*hours + Error(chamber), data=dissolution))$&quot;Error: chamber&quot;</code></pre>
+<pre><code>##           Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## treatment  4 250.12   62.53    14.9 0.000323 ***
+## Residuals 10  41.97    4.20                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<blockquote>
+<p>There were significant treatment effects of input type and concentration on NH4 (rm ANOVA, F=23.53<span class="math inline">\(_{4,35}\)</span>, P&lt;0.001), SRP (F=123.61<span class="math inline">\(_{4,35}\)</span>, P&lt;0.001), and DOC (F=27.96<span class="math inline">\(_{4,35}\)</span>, P&lt;0.001), and significant treatment by time interaction effects on NH4 (rm ANOVA, interaction, F=9.304,35, P&lt;0.001) and SRP (F=7.594,35, P&lt;0.001).</p>
+</blockquote>
+<blockquote>
+<p>There were also significant treatment effects on DO (rm ANOVA, F=101.69<span class="math inline">\(_{4,35}\)</span>, P&lt;0.001)</p>
+</blockquote>
+<p>This does not reproduce.</p>
+<p>After some exploration, a simple fixed effects model reproduces, so this is not a repeated measures ANOVA, which raises Statistical Red Flag #1 (see below)</p>
+<pre class="r"><code>nh4.fit &lt;- lm(log(NH4.no0) ~ treatment*hours, data=dissolution)
+srp.fit &lt;- lm(log(SRP.no0) ~ treatment*hours, data=dissolution)
+doc.fit &lt;- lm(log(DOC.no0) ~ treatment*hours, data=dissolution)
+do.fit &lt;- lm(log(DO) ~ treatment*hours, data=dissolution)
+
+summary(aov(nh4.fit))</code></pre>
 <pre><code>##                 Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## treatment        4  95.77   23.94  23.526 1.65e-09 ***
 ## hours            1 112.97  112.97 110.995 2.13e-12 ***
@@ -96,8 +138,7 @@ summary(aov(fit.nh4))</code></pre>
 ## Residuals       35  35.62    1.02                     
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre class="r"><code>fit.srp &lt;- lm(log(SRP.no0) ~ treatment*hours, data=dissolution)
-summary(aov(fit.srp))</code></pre>
+<pre class="r"><code>summary(aov(srp.fit))</code></pre>
 <pre><code>##                 Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## treatment        4  327.0   81.75 123.610  &lt; 2e-16 ***
 ## hours            1    5.8    5.84   8.835 0.005317 ** 
@@ -105,8 +146,7 @@ summary(aov(fit.srp))</code></pre>
 ## Residuals       35   23.1    0.66                     
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre class="r"><code>fit.doc &lt;- lm(log(DOC.no0) ~ treatment*hours, data=dissolution)
-summary(aov(fit.doc))</code></pre>
+<pre class="r"><code>summary(aov(doc.fit))</code></pre>
 <pre><code>##                 Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## treatment        4 250.12   62.53  27.963 1.81e-10 ***
 ## hours            1   8.84    8.84   3.952   0.0547 .  
@@ -114,17 +154,25 @@ summary(aov(fit.doc))</code></pre>
 ## Residuals       35  78.27    2.24                     
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(aov(do.fit))</code></pre>
+<pre><code>##                 Df Sum Sq Mean Sq F value  Pr(&gt;F)    
+## treatment        4  32.87   8.218 101.687 &lt; 2e-16 ***
+## hours            1   1.48   1.477  18.269 0.00014 ***
+## treatment:hours  4   0.57   0.142   1.762 0.15864    
+## Residuals       35   2.83   0.081                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
 <div id="posthoc-pairwise-comparisons" class="section level3">
 <h3>Posthoc pairwise comparisons</h3>
 <blockquote>
-<p>Concentrations of NH4, SRP and DOC increased with increasing hippo feces concentration, although treatment differences were only significant for SRP and DOC (except for low and medium concentrations for DOC) (pairwise t test, P&lt;0.05 for all comparisons). The wildebeest treatment was significantly higher in NH4 than the lowest concentration of hippo feces (P=0.017), and it was significantly higher in SRP and DOC than all concentrations of hippo feces (P&lt;0.05 for all comparisons).</p>
+<p>If there was a significant treatment effect at α=0.05, we then performed a Tukey pairwise comparison test between treatments using the Holm method to adjust p values for multiple comparisons (Holm 1979, R Core Team 2018).</p>
 </blockquote>
-<p>It’s not clear what this analysis is, especially given the large interaction, which makes pairwise comparisons conditional on the level of time. So are the comparisons at 24 hours? Or, complete pooling across time?</p>
-<p>Holm adjustment using the fit model. This isn’t close.</p>
-<pre class="r"><code>fit_nh4.emm &lt;- emmeans(fit.nh4, specs=&quot;treatment&quot;)</code></pre>
+<p>Note that “Tukey pairwise comparison” is a specific kind of simultaneous posthoc test not the genral name for post hoc tests. And, it’s not clear what this analysis is, especially given the large interaction for NH4, which makes pairwise comparisons conditional on the level of time. So are the comparisons at 24 hours? Or, was there complete pooling across time?</p>
+<p>Here is the Holm adjustment using the pooled sigma from the fixed effect model for NH4. This isn’t close to the reported pattern of significance levels.</p>
+<pre class="r"><code>nh4.emm &lt;- emmeans(nh4.fit, specs=&quot;treatment&quot;)</code></pre>
 <pre><code>## NOTE: Results may be misleading due to involvement in interactions</code></pre>
-<pre class="r"><code>contrast(fit_nh4.emm, method=&quot;revpairwise&quot;, adjust=&quot;holm&quot;) # caution! ignores interaction</code></pre>
+<pre class="r"><code>contrast(nh4.emm, method=&quot;revpairwise&quot;, adjust=&quot;holm&quot;) # caution! ignores interaction</code></pre>
 <pre><code>##  contrast      estimate        SE df t.ratio p.value
 ##  H 5 - H 1   1.19769259 0.4755705 35   2.518  0.0660
 ##  H 20 - H 1  2.78786429 0.4755705 35   5.862  &lt;.0001
@@ -139,8 +187,8 @@ summary(aov(fit.doc))</code></pre>
 ## 
 ## Results are given on the log (not the response) scale. 
 ## P value adjustment: holm method for 10 tests</code></pre>
-<p>Pairwise t-tests, which ignore the modeled sigma (that is, each of these has a different estimate of the sigma based on only the pair compared) reproduce in patter but I got p=0.0073 for NH4:W vs. H1 and not p=0.017. Also I get p=0.10160 for DOC:H5 vs. H20 and not p &lt; 0.05.</p>
-<pre class="r"><code>pairwise.t.test(x=log(dissolution$NH4.no0), g=dissolution$treatment, p.adjust.method=&quot;holm&quot;)</code></pre>
+<p>Here I use pairwise t-test using both the pooled SD over all groups and the pooled SD for the two groups compared. Regardless, this raises Statistical Red Flag #2.</p>
+<pre class="r"><code>pairwise.t.test(x=log(dissolution$NH4.no0), g=dissolution$treatment, p.adjust.method=&quot;holm&quot;, pool.sd=TRUE)</code></pre>
 <pre><code>## 
 ##  Pairwise comparisons using t tests with pooled SD 
 ## 
@@ -153,7 +201,7 @@ summary(aov(fit.doc))</code></pre>
 ## HW   0.0077 0.1214 1.0000 1.0000
 ## 
 ## P value adjustment method: holm</code></pre>
-<pre class="r"><code>pairwise.t.test(x=log(dissolution$SRP.no0), g=dissolution$treatment, p.adjust.method=&quot;holm&quot;)</code></pre>
+<pre class="r"><code>pairwise.t.test(x=log(dissolution$SRP.no0), g=dissolution$treatment, p.adjust.method=&quot;holm&quot;, pool.sd=TRUE)</code></pre>
 <pre><code>## 
 ##  Pairwise comparisons using t tests with pooled SD 
 ## 
@@ -166,7 +214,7 @@ summary(aov(fit.doc))</code></pre>
 ## HW   1.3e-15 1.9e-09 2.5e-05 0.8814
 ## 
 ## P value adjustment method: holm</code></pre>
-<pre class="r"><code>pairwise.t.test(x=log(dissolution$DOC.no0), g=dissolution$treatment, p.adjust.method=&quot;holm&quot;)</code></pre>
+<pre class="r"><code>pairwise.t.test(x=log(dissolution$DOC.no0), g=dissolution$treatment, p.adjust.method=&quot;holm&quot;, pool.sd=TRUE)</code></pre>
 <pre><code>## 
 ##  Pairwise comparisons using t tests with pooled SD 
 ## 
@@ -179,6 +227,291 @@ summary(aov(fit.doc))</code></pre>
 ## HW   1.1e-09 0.00014 0.02949 0.97000
 ## 
 ## P value adjustment method: holm</code></pre>
+<pre class="r"><code>pairwise.t.test(x=log(dissolution$NH4.no0), g=dissolution$treatment, p.adjust.method=&quot;holm&quot;, pool.sd=FALSE)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with non-pooled SD 
+## 
+## data:  log(dissolution$NH4.no0) and dissolution$treatment 
+## 
+##      H 1   H 5   H 20  W    
+## H 5  1.000 -     -     -    
+## H 20 0.262 1.000 -     -    
+## W    0.032 0.234 1.000 -    
+## HW   0.032 0.234 1.000 1.000
+## 
+## P value adjustment method: holm</code></pre>
+<pre class="r"><code>pairwise.t.test(x=log(dissolution$SRP.no0), g=dissolution$treatment, p.adjust.method=&quot;holm&quot;, pool.sd=FALSE)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with non-pooled SD 
+## 
+## data:  log(dissolution$SRP.no0) and dissolution$treatment 
+## 
+##      H 1    H 5     H 20    W     
+## H 5  0.0188 -       -       -     
+## H 20 0.0019 1.0e-05 -       -     
+## W    0.0001 1.1e-09 3.8e-16 -     
+## HW   0.0001 2.8e-10 9.7e-15 0.3472
+## 
+## P value adjustment method: holm</code></pre>
+<pre class="r"><code>pairwise.t.test(x=log(dissolution$DOC.no0), g=dissolution$treatment, p.adjust.method=&quot;holm&quot;, pool.sd=FALSE)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with non-pooled SD 
+## 
+## data:  log(dissolution$DOC.no0) and dissolution$treatment 
+## 
+##      H 1    H 5     H 20    W     
+## H 5  0.0774 -       -       -     
+## H 20 0.0162 5.4e-09 -       -     
+## W    0.0023 3.5e-08 1.5e-05 -     
+## HW   0.0023 3.7e-08 1.5e-05 0.9144
+## 
+## P value adjustment method: holm</code></pre>
+<p>note – the design is balanced so Welch t-test would be the same</p>
+<blockquote>
+<p>Concentrations of NH4, SRP and DOC increased with increasing hippo feces concentration, although treatment differences were only significant for SRP and DOC (except for low and medium concentrations for DOC) (pairwise t test, P&lt;0.05 for all comparisons).</p>
+</blockquote>
+<p>the qualitative pattern reproduces except:</p>
+<p>using pool.sd=TRUE, DOC:H5 v H20 &gt; 0.05, not H1 v H5</p>
+<p>using pool.sd=FALSE, DOC: H5 v H20 &lt; 0.05 and H1 v H5 &lt; 0.05</p>
+<blockquote>
+<p>The wildebeest treatment was significantly higher in NH4 than the lowest concentration of hippo feces (P=0.017), and it was significantly higher in SRP and DOC than all concentrations of hippo feces (P&lt;0.05 for all comparisons).</p>
+</blockquote>
+<p>qualitatively reproduces except:</p>
+<p>using pool.sd=TRUE, NH4: w v H1, p= 0.0073, reported = (P=0.017)</p>
+<p>using pool.sd=FALSE, NH4: w v H1, p=0.0023, reported = (P=0.017)</p>
+<blockquote>
+<p>There were no significant differences between the wildebeest and hippo + wb treatments for NH4 or DOC; however, SRP was higher in the hippo + wb treatment as compared to the wildebeest treatment (p&lt;0.03)</p>
+</blockquote>
+<p>The w vs. wb treatment does not reproduce for SRP &gt; There was no significant difference in oxygen consumption between the high concentration of hippo feces, wildebeest and hippo + wb treatments.</p>
+<pre class="r"><code>pairwise.t.test(x=log(dissolution$DO), g=dissolution$treatment, p.adjust.method=&quot;holm&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  log(dissolution$DO) and dissolution$treatment 
+## 
+##      H 1     H 5     H 20 W
+## H 5  1.9e-08 -       -    -
+## H 20 5.4e-15 1.5e-05 -    -
+## W    2.6e-15 6.6e-06 1    -
+## HW   2.7e-15 6.6e-06 1    1
+## 
+## P value adjustment method: holm</code></pre>
+<p>This pattern reproduces using the non-pooled sigma (independent t-tests).</p>
 </div>
 </div>
+<div id="decomposition-rates" class="section level2">
+<h2>Decomposition rates</h2>
+<div id="statistical-methods-1" class="section level3">
+<h3>Statistical methods</h3>
+<blockquote>
+<p>We used a two-way ANOVA to analyze the influence of treatment (fresh, aged, with wildebeest) on decay rate. Presence of an interaction effect between treatment and time at α=0.05 indicated a significant effect of treatment on decay rate. We then conducted pairwise analyses of each treatment combination using one-way ANOVAs to determine how they differed from one another. We accounted for the number of pairwise comparison tests by using a Bonferroni adjusted α value of 0.0167 to indicate statistical significance. All statistical analyses in this paper were done in R version 3.3.2 (R Core Team 2018).</p>
+</blockquote>
+</div>
+<div id="anova-results-1" class="section level3">
+<h3>ANOVA results</h3>
+<blockquote>
+<p>There was a significant interaction between hippo feces treatment and time on the mass remaining (two-way ANOVA, interaction, F=3.19<span class="math inline">\(_2{},75}\)</span>, P=0.047), indicating an effect of treatment on decay rate (Table 1, Appendix S2: Fig. S2).</p>
+</blockquote>
+<pre class="r"><code>hippo_post &lt;- lm(hippo_post ~ treatment_recode*days, data=decomp)
+summary(aov(hippo_post))</code></pre>
+<pre><code>##                       Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## treatment_recode       2   82.1    41.1  23.329 1.32e-08 ***
+## days                   1  448.0   448.0 254.549  &lt; 2e-16 ***
+## treatment_recode:days  2   32.0    16.0   9.078 0.000295 ***
+## Residuals             75  132.0     1.8                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>This doesn’t reproduce. What does reproduce is using the column “ln_hippo_prop_rem”, which is the log of the column “adj_hippo_prop_rem”. So the response it is not the “mass remaining” but the log of the adjusted proportion of the mass remaining. This raises Statistical Red Flag #3.</p>
+<pre class="r"><code>decomp[, my_ln_hippo_prop_rem:=log(adj_hippo_prop_rem)]
+head(decomp[, .SD, .SDcols=c(&quot;ln_hippo_prop_rem&quot;, &quot;my_ln_hippo_prop_rem&quot;)])</code></pre>
+<pre><code>##    ln_hippo_prop_rem my_ln_hippo_prop_rem
+## 1:        0.00000000           0.00000000
+## 2:        0.00000000           0.00000000
+## 3:        0.00000000           0.00000000
+## 4:        0.14335032           0.14335032
+## 5:       -0.01834045          -0.01834045
+## 6:       -0.17065323          -0.17065323</code></pre>
+<pre class="r"><code>ln_hippo_prop_rem.fit &lt;- lm(ln_hippo_prop_rem ~ treatment_recode*days, data=decomp)
+summary(aov(ln_hippo_prop_rem.fit))</code></pre>
+<pre><code>##                       Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## treatment_recode       2   2.62    1.31  11.213 5.49e-05 ***
+## days                   1  40.53   40.53 346.773  &lt; 2e-16 ***
+## treatment_recode:days  2   0.75    0.37   3.192   0.0467 *  
+## Residuals             75   8.76    0.12                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<blockquote>
+<p>Fresh feces decayed faster than aged hippo feces (ANOVA, interaction, F=4.21<span class="math inline">\(_{1,56}\)</span>, P=0.045), although this was not significant after accounting for multiple comparisons. There was no significant difference between decay rate of fresh feces and aged feces with carcass (ANOVA, interaction, F=0.18<span class="math inline">\(_{1,49}\)</span>, P=0.671); however, aged feces with carcass decayed significantly faster than aged feces alone (ANOVA, interaction, F=8.20<span class="math inline">\(_{1,45}\)</span>, P=0.006).</p>
+</blockquote>
+<p>This reproduces (using “ln_hippo_prop_rem”) but the independent ANOVAs raises Statistical Red Flag #4</p>
+<pre class="r"><code>fit &lt;- lm(ln_hippo_prop_rem ~ treatment_recode*days, data=decomp[treatment_recode!=&quot;wb&quot;])
+summary(aov(fit))</code></pre>
+<pre><code>##                       Df Sum Sq Mean Sq F value Pr(&gt;F)    
+## treatment_recode       1   0.78    0.78   5.849 0.0189 *  
+## days                   1  31.96   31.96 240.167 &lt;2e-16 ***
+## treatment_recode:days  1   0.56    0.56   4.205 0.0450 *  
+## Residuals             56   7.45    0.13                   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>fit &lt;- lm(ln_hippo_prop_rem ~ treatment_recode*days, data=decomp[treatment_recode!=&quot;aged&quot;])
+summary(aov(fit))</code></pre>
+<pre><code>##                       Df Sum Sq Mean Sq F value  Pr(&gt;F)    
+## treatment_recode       1   2.58    2.58  17.257 0.00013 ***
+## days                   1  31.63   31.63 211.920 &lt; 2e-16 ***
+## treatment_recode:days  1   0.03    0.03   0.183 0.67080    
+## Residuals             49   7.31    0.15                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>fit &lt;- lm(ln_hippo_prop_rem ~ treatment_recode*days, data=decomp[treatment_recode!=&quot;fresh&quot;])
+summary(aov(fit))</code></pre>
+<pre><code>##                       Df Sum Sq Mean Sq F value  Pr(&gt;F)    
+## treatment_recode       1  0.594   0.594   9.663 0.00326 ** 
+## days                   1 17.862  17.862 290.813 &lt; 2e-16 ***
+## treatment_recode:days  1  0.504   0.504   8.198 0.00635 ** 
+## Residuals             45  2.764   0.061                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+<div id="nutrient-limitation" class="section level2">
+<h2>Nutrient limitation</h2>
+<div id="statistical-method" class="section level3">
+<h3>Statistical method</h3>
+<blockquote>
+<p>Data were square-root transformed to meet assumptions of normality. We used a two-way ANOVA to analyze the response of biofilms to different nutrient treatments at different sites in both 2011 and 2013. If there were significant interactions at α=0.05, we then used one-way ANOVAs to analyze treatment responses separately for each site, followed by Tukey’s HSD post-hoc test for multiple comparisons (R Core Team 2018).</p>
+</blockquote>
+</div>
+<div id="results" class="section level3">
+<h3>Results</h3>
+<blockquote>
+<p>Respiration (R) by heterotrophic biofilms responded differently to nutrient treatments at sites with and without large wildlife inputs in both 2011 (two-way ANOVA, interaction, F=5.40<span class="math inline">\(_{10,68}\)</span>, P&lt;0.001) and 2013 (F=3.67<span class="math inline">\(_{12,75}\)</span>, P&lt;0.001).</p>
+</blockquote>
+<p>Reproduces</p>
+<pre class="r"><code># heterotrophic: substrate = &quot;Sponge&quot;
+R_hetero_Y11.fit &lt;- lm(sqrt(CR.corr.no0) ~ treatment*site, data=limit[year==&quot;2011&quot; &amp; substrate==&quot;Sponge&quot;])
+summary(aov(R_hetero_Y11.fit))</code></pre>
+<pre><code>##                Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## treatment       5   1.93    0.39   1.952    0.097 .  
+## site            2  64.84   32.42 163.743  &lt; 2e-16 ***
+## treatment:site 10  10.85    1.09   5.481 6.33e-06 ***
+## Residuals      68  13.46    0.20                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>R_hetero_Y13.fit &lt;- lm(sqrt(CR.corr.no0) ~ treatment*site, data=limit[year==&quot;2013&quot; &amp; substrate==&quot;Sponge&quot;])
+summary(aov(R_hetero_Y13.fit))</code></pre>
+<pre><code>##                Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## treatment       6   0.50   0.083   1.177 0.327927    
+## site            2  39.59  19.793 279.248  &lt; 2e-16 ***
+## treatment:site 12   3.12   0.260   3.666 0.000241 ***
+## Residuals      75   5.32   0.071                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<blockquote>
+<p>At the No Wildlife site in 2011, R on the organic substrate increased significantly relative to the control in response to NH4+PO4 and to NO3+PO4 (one-way ANOVA, F=18.52$_{5,24}, P&lt;0.001; Tukey’s HSD, P=0.005 and P&lt;0.001, respectively), but not in response to any of the nutrients alone, indicating N and P co-limitation (Appendix S2: Fig. S3).</p>
+</blockquote>
+<p>Reproduces</p>
+<pre class="r"><code># site key: Site 1=&quot;no wildlife&quot;, Site 2=&quot;Hippo&quot;, Site 3=&quot;Hippo + wildebeast&quot;
+# nutrients added to agar cup; Ctl: control, C: carbon (only measured in 2013), H: ammonium, N: nitrate, P: phosphate, HP: ammonium + phosphate, NP: nitrate + phosphate
+fit &lt;- lm(sqrt(CR.corr.no0) ~ treatment, data=limit[year==&quot;2011&quot; &amp; substrate==&quot;Sponge&quot; &amp; site==&quot;Site 1&quot;])
+summary(aov(fit))</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## treatment    5  7.404   1.481   18.52 1.53e-07 ***
+## Residuals   24  1.919   0.080                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>TukeyHSD(aov(fit))$treatment[c(&quot;HP-Ctl&quot;, &quot;NP-Ctl&quot;),]</code></pre>
+<pre><code>##             diff       lwr      upr        p adj
+## HP-Ctl 0.7255561 0.1725791 1.278533 0.0054021017
+## NP-Ctl 0.9652852 0.4123081 1.518262 0.0001996743</code></pre>
+<pre class="r"><code>TukeyHSD(aov(fit))$treatment[c(&quot;H-Ctl&quot;, &quot;N-Ctl&quot;, &quot;P-Ctl&quot;),]</code></pre>
+<pre><code>##             diff        lwr        upr     p adj
+## H-Ctl -0.1634622 -0.7164392 0.38951490 0.9390785
+## N-Ctl -0.4680626 -1.0210396 0.08491448 0.1315282
+## P-Ctl  0.1725193 -0.3804578 0.72549636 0.9246336</code></pre>
+<blockquote>
+<p>Wildlife site in 2013, R increased significantly relative to the control in response to carbon (C), NH4+PO4 and PO4 (one-way ANOVA, F=19.22<span class="math inline">\(_{6,21}\)</span>, P&lt;0.001; Tukey’s HSD, P=0.006, P&lt;0.001, and P&lt;0.001, respectively). R did not increase in response to NH4 alone, or in response to PO4 in combination with NO3, suggesting primary P limitation with some N and P co-limitation along with C limitation</p>
+</blockquote>
+<pre class="r"><code>fit &lt;- lm(sqrt(CR.corr.no0) ~ treatment, data=limit[year==&quot;2013&quot; &amp; substrate==&quot;Sponge&quot; &amp; site==&quot;Site 1&quot;])
+summary(aov(fit))</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## treatment    6 2.0800  0.3467   19.22 1.57e-07 ***
+## Residuals   21 0.3787  0.0180                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>TukeyHSD(aov(fit))$treatment[c(&quot;Ctl-C&quot;, &quot;HP-Ctl&quot;, &quot;P-Ctl&quot;),]</code></pre>
+<pre><code>##              diff        lwr         upr        p adj
+## Ctl-C  -0.3835365 -0.6763715 -0.09070153 5.488410e-03
+## HP-Ctl  0.6153914  0.3393039  0.89147886 7.147611e-06
+## P-Ctl   0.8134293  0.4946310  1.13222768 8.622235e-07</code></pre>
+<pre class="r"><code>TukeyHSD(aov(fit))$treatment[c(&quot;N-Ctl&quot;, &quot;NP-Ctl&quot;),]</code></pre>
+<pre><code>##             diff        lwr       upr     p adj
+## N-Ctl  0.1545214 -0.1383135 0.4473564 0.6139750
+## NP-Ctl 0.2052370 -0.1135614 0.5240353 0.3917952</code></pre>
+<p>Reproduces</p>
+</div>
+</div>
+</div>
+<div id="statistical-red-flags" class="section level1">
+<h1>Statistical red-flags</h1>
+<ol style="list-style-type: decimal">
+<li><p>The reported statistics do not account for the clustered (non-independent) responses (contra the methods, which states that a repeated measures ANOVA was used).</p></li>
+<li><p>Independent t-tests or t-tests using the pooled SD are different models than the original fit model with different coefficients and estimates of the original error. The recommended best practice is posthoc tests using the fit model.</p></li>
+<li><p>Proportions have max variance at 0.5 and log transforms are not recommended. Instead logit or arcsine transforms are recommended for proportions. Also, the value of adj_hippo_prop_rem for row 4 is 1.1541341, which is not allowed for proportions (so one cannot take the arcsin or logit of this)</p></li>
+<li><p>The indepdendent ANOVAs are different models than the initial ANOVA with different model coefficients and estimates of the residual error (sigma). The recommended best practice is a posthoc test using the original full model.</p></li>
+</ol>
+<pre class="r"><code># original model with log transform but simulataneous pairwise comparison
+m1 &lt;- lm(ln_hippo_prop_rem ~ treatment_recode*days, data=decomp)
+emtrends(m1, pairwise ~ treatment_recode, var = &quot;days&quot;, adjust=&quot;none&quot;)</code></pre>
+<pre><code>## $emtrends
+##  treatment_recode  days.trend          SE df    lower.CL    upper.CL
+##  fresh            -0.03736580 0.002668978 75 -0.04268267 -0.03204892
+##  aged             -0.02836847 0.003127220 75 -0.03459821 -0.02213873
+##  wb               -0.03994258 0.004616349 75 -0.04913882 -0.03074634
+## 
+## Confidence level used: 0.95 
+## 
+## $contrasts
+##  contrast         estimate          SE df t.ratio p.value
+##  fresh - aged -0.008997324 0.004111320 75  -2.188  0.0318
+##  fresh - wb    0.002576783 0.005332366 75   0.483  0.6303
+##  aged - wb     0.011574106 0.005575857 75   2.076  0.0413</code></pre>
+<pre class="r"><code># &quot;none&quot; is used because the authors compare to the bonferroni 0.05/3
+
+# what about arcsin transform? - very different
+decomp[, adj_hippo_prop_rem_2:=ifelse(adj_hippo_prop_rem &gt; 1, 1, adj_hippo_prop_rem)]
+m2 &lt;- lm(asin(adj_hippo_prop_rem_2) ~ treatment_recode*days, data=decomp)
+emtrends(m2, pairwise ~ treatment_recode, var = &quot;days&quot;, adjust=&quot;none&quot;)</code></pre>
+<pre><code>## $emtrends
+##  treatment_recode  days.trend          SE df    lower.CL    upper.CL
+##  fresh            -0.01971311 0.002160026 75 -0.02401611 -0.01541012
+##  aged             -0.01732022 0.002530885 75 -0.02236200 -0.01227844
+##  wb               -0.02561110 0.003736049 75 -0.03305369 -0.01816851
+## 
+## Trends are based on the asin (transformed) scale 
+## Confidence level used: 0.95 
+## 
+## $contrasts
+##  contrast         estimate          SE df t.ratio p.value
+##  fresh - aged -0.002392895 0.003327325 75  -0.719  0.4743
+##  fresh - wb    0.005897988 0.004315527 75   1.367  0.1758
+##  aged - wb     0.008290882 0.004512587 75   1.837  0.0701</code></pre>
+<pre class="r"><code># using plot() m2 is better than m1
+
+# what about original log transform but with corrected adj_hippo_prop_rem? - not much different from original
+m1b &lt;- lm(log(adj_hippo_prop_rem_2) ~ treatment_recode*days, data=decomp)
+emtrends(m1b, pairwise ~ treatment_recode, var = &quot;days&quot;, adjust=&quot;none&quot;)</code></pre>
+<pre><code>## $emtrends
+##  treatment_recode  days.trend          SE df    lower.CL    upper.CL
+##  fresh            -0.03711786 0.002661837 75 -0.04242051 -0.03181521
+##  aged             -0.02836847 0.003118852 75 -0.03458154 -0.02215540
+##  wb               -0.03994258 0.004603996 75 -0.04911421 -0.03077095
+## 
+## Trends are based on the log (transformed) scale 
+## Confidence level used: 0.95 
+## 
+## $contrasts
+##  contrast         estimate          SE df t.ratio p.value
+##  fresh - aged -0.008749385 0.004100319 75  -2.134  0.0361
+##  fresh - wb    0.002824722 0.005318097 75   0.531  0.5969
+##  aged - wb     0.011574106 0.005560937 75   2.081  0.0408</code></pre>
 </div>
