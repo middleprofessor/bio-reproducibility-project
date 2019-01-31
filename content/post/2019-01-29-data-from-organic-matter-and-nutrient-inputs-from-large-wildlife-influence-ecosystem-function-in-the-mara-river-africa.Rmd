@@ -372,6 +372,8 @@ Reproduces.
 
 #### Results
 
+###
+
 # Statistical red-flags
 
 1. The reported statistics do not account for the clustered (non-independent) responses (contra the methods, which states that a repeated measures ANOVA was used).
