@@ -6,8 +6,8 @@
   <title>Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from Organic matter and nutrient inputs from large wildlife …" />
-  <meta name="description" content="Sources Summary Set up Import Reproducibility Nutrient dissolution rates Statistical methods ANOVA results Posthoc pairwise comparisons  Decomposition rates Statistical methods ANOVA results  Nutrient limitation Statistical method Results   Statistical red-flags   Sources  Summary  Set up library(broom) library(ggplot2) library(ggpubr) library(data.table) library(readxl) library(nlme) library(emmeans) data_folder &lt;- &quot;../data&quot; folder &lt;- &quot;Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa&quot; # images need to be moved to /static/images/data from.">
-  <meta property="og:description" content="Sources Summary Set up Import Reproducibility Nutrient dissolution rates Statistical methods ANOVA results Posthoc pairwise comparisons  Decomposition rates Statistical methods ANOVA results  Nutrient limitation Statistical method Results   Statistical red-flags   Sources  Summary  Set up library(broom) library(ggplot2) library(ggpubr) library(data.table) library(readxl) library(nlme) library(emmeans) data_folder &lt;- &quot;../data&quot; folder &lt;- &quot;Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa&quot; # images need to be moved to /static/images/data from.">
+  <meta name="description" content="Sources Summary Set up Import Reproducibility Nutrient dissolution rates Statistical methods ANOVA results Posthoc pairwise comparisons  Decomposition rates Statistical methods ANOVA results  Nutrient limitation Statistical method Respiration Results Chlorophyll a results  Ecosystem Function Statistical Methods Results   Statistical red-flags   Sources  Summary  Set up library(broom) library(ggplot2) library(ggpubr) library(data.table) library(readxl) library(nlme) library(emmeans) data_folder &lt;- &quot;../data&quot; folder &lt;- &quot;Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa&quot; # images need to be moved to /static/images/data from.">
+  <meta property="og:description" content="Sources Summary Set up Import Reproducibility Nutrient dissolution rates Statistical methods ANOVA results Posthoc pairwise comparisons  Decomposition rates Statistical methods ANOVA results  Nutrient limitation Statistical method Respiration Results Chlorophyll a results  Ecosystem Function Statistical Methods Results   Statistical red-flags   Sources  Summary  Set up library(broom) library(ggplot2) library(ggpubr) library(data.table) library(readxl) library(nlme) library(emmeans) data_folder &lt;- &quot;../data&quot; folder &lt;- &quot;Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa&quot; # images need to be moved to /static/images/data from.">
   <meta name="twitter:description" content="Sources Summary Set up Import Reproducibility Nutrient dissolution rates Statistical methods ANOVA results Posthoc pairwise comparisons  Decomposition rates Statistical methods ANOVA results  Nutrient …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
@@ -73,6 +73,11 @@
 </ul></li>
 <li><a href="#nutrient-limitation">Nutrient limitation</a><ul>
 <li><a href="#statistical-method">Statistical method</a></li>
+<li><a href="#respiration-results">Respiration Results</a></li>
+<li><a href="#chlorophyll-a-results">Chlorophyll a results</a></li>
+</ul></li>
+<li><a href="#ecosystem-function">Ecosystem Function</a><ul>
+<li><a href="#statistical-methods-2">Statistical Methods</a></li>
 <li><a href="#results">Results</a></li>
 </ul></li>
 </ul></li>
@@ -104,7 +109,7 @@ knitr_path &lt;- FALSE # run = TRUE to debug</code></pre>
 </div>
 <div id="import" class="section level1">
 <h1>Import</h1>
-<pre class="r"><code># dissolutin rates
+<pre class="r"><code># dissolution rates
 fn &lt;- &quot;Subalusky_2018_mara_nutrient_dissolution_chambers.csv&quot;
 file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
 dissolution &lt;- fread(file_path)
@@ -123,7 +128,13 @@ decomp[, treatment_recode:=factor(treatment_recode, c(&quot;fresh&quot;, &quot;a
 # nutrient limitation
 fn &lt;- &quot;Subalusky_2018_mara_nutrient_limitation_assays.csv&quot;
 file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
-limit &lt;- fread(file_path)</code></pre>
+limit &lt;- fread(file_path)
+
+# Ecosystem function
+# note there is another file with the raw data. This is the file of means from that file.
+fn &lt;- &quot;Subalusky_2018_mara_experimental_stream_tiles.csv&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+ecosystem &lt;- fread(file_path)</code></pre>
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
@@ -422,8 +433,8 @@ summary(aov(fit))</code></pre>
 <p>Data were square-root transformed to meet assumptions of normality. We used a two-way ANOVA to analyze the response of biofilms to different nutrient treatments at different sites in both 2011 and 2013. If there were significant interactions at α=0.05, we then used one-way ANOVAs to analyze treatment responses separately for each site, followed by Tukey’s HSD post-hoc test for multiple comparisons (R Core Team 2018).</p>
 </blockquote>
 </div>
-<div id="results" class="section level3">
-<h3>Results</h3>
+<div id="respiration-results" class="section level3">
+<h3>Respiration Results</h3>
 <blockquote>
 <p>Respiration (R) by heterotrophic biofilms responded differently to nutrient treatments at sites with and without large wildlife inputs in both 2011 (two-way ANOVA, interaction, F=5.40<span class="math inline">\(_{10,68}\)</span>, P&lt;0.001) and 2013 (F=3.67<span class="math inline">\(_{12,75}\)</span>, P&lt;0.001).</p>
 </blockquote>
@@ -447,6 +458,8 @@ summary(aov(R_hetero_Y13.fit))</code></pre>
 ## Residuals      75   5.32   0.071                     
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div id="site-1" class="section level4">
+<h4>Site 1</h4>
 <blockquote>
 <p>At the No Wildlife site in 2011, R on the organic substrate increased significantly relative to the control in response to NH4+PO4 and to NO3+PO4 (one-way ANOVA, F=18.52$_{5,24}, P&lt;0.001; Tukey’s HSD, P=0.005 and P&lt;0.001, respectively), but not in response to any of the nutrients alone, indicating N and P co-limitation (Appendix S2: Fig. S3).</p>
 </blockquote>
@@ -470,7 +483,7 @@ summary(aov(fit))</code></pre>
 ## N-Ctl -0.4680626 -1.0210396 0.08491448 0.1315282
 ## P-Ctl  0.1725193 -0.3804578 0.72549636 0.9246336</code></pre>
 <blockquote>
-<p>Wildlife site in 2013, R increased significantly relative to the control in response to carbon (C), NH4+PO4 and PO4 (one-way ANOVA, F=19.22<span class="math inline">\(_{6,21}\)</span>, P&lt;0.001; Tukey’s HSD, P=0.006, P&lt;0.001, and P&lt;0.001, respectively). R did not increase in response to NH4 alone, or in response to PO4 in combination with NO3, suggesting primary P limitation with some N and P co-limitation along with C limitation</p>
+<p>At the No Wildlife site in 2013, R increased significantly relative to the control in response to carbon (C), NH4+PO4 and PO4 (one-way ANOVA, F=19.22<span class="math inline">\(_{6,21}\)</span>, P&lt;0.001; Tukey’s HSD, P=0.006, P&lt;0.001, and P&lt;0.001, respectively). R did not increase in response to NH4 alone, or in response to PO4 in combination with NO3, suggesting primary P limitation with some N and P co-limitation along with C limitation</p>
 </blockquote>
 <pre class="r"><code>fit &lt;- lm(sqrt(CR.corr.no0) ~ treatment, data=limit[year==&quot;2013&quot; &amp; substrate==&quot;Sponge&quot; &amp; site==&quot;Site 1&quot;])
 summary(aov(fit))</code></pre>
@@ -489,6 +502,124 @@ summary(aov(fit))</code></pre>
 ## N-Ctl  0.1545214 -0.1383135 0.4473564 0.6139750
 ## NP-Ctl 0.2052370 -0.1135614 0.5240353 0.3917952</code></pre>
 <p>Reproduces</p>
+</div>
+<div id="site-2-and-3" class="section level4">
+<h4>Site 2 and 3</h4>
+<blockquote>
+<p>There were no significant effects of nutrient treatment on R at either the Hippo site or the Hippo + WB site, suggesting no nutrient limitation at those sites.</p>
+</blockquote>
+<pre class="r"><code>fit &lt;- lm(sqrt(CR.corr.no0) ~ treatment, data=limit[year==&quot;2011&quot; &amp; substrate==&quot;Sponge&quot; &amp; site==&quot;Site 2&quot;])
+summary(aov(fit))</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
+## treatment    5  3.487  0.6974    2.74 0.0427 *
+## Residuals   24  6.109  0.2545                 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>TukeyHSD(aov(fit))$treatment[c(&quot;H-Ctl&quot;, &quot;P-Ctl&quot;, &quot;N-Ctl&quot;, &quot;HP-Ctl&quot;, &quot;NP-Ctl&quot;),]</code></pre>
+<pre><code>##               diff       lwr        upr      p adj
+## H-Ctl  -0.49651970 -1.483107 0.49006782 0.63336376
+## P-Ctl  -0.07406682 -1.060654 0.91252071 0.99989444
+## N-Ctl  -0.41929163 -1.405879 0.56729590 0.77462304
+## HP-Ctl -0.74287951 -1.729467 0.24370802 0.22181349
+## NP-Ctl -0.96445944 -1.951047 0.02212809 0.05799027</code></pre>
+<pre class="r"><code>fit &lt;- lm(sqrt(CR.corr.no0) ~ treatment, data=limit[year==&quot;2013&quot; &amp; substrate==&quot;Sponge&quot; &amp; site==&quot;Site 2&quot;])
+summary(aov(fit))</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)
+## treatment    6  0.614 0.10233   1.205  0.334
+## Residuals   27  2.294 0.08495</code></pre>
+<pre class="r"><code>TukeyHSD(aov(fit))$treatment[c(&quot;H-Ctl&quot;, &quot;P-Ctl&quot;, &quot;N-Ctl&quot;, &quot;HP-Ctl&quot;, &quot;NP-Ctl&quot;),]</code></pre>
+<pre><code>##               diff        lwr       upr     p adj
+## H-Ctl  -0.09253428 -0.7144362 0.5293677 0.9990057
+## P-Ctl  -0.42720580 -1.0491077 0.1946962 0.3358384
+## N-Ctl  -0.23418011 -0.8560821 0.3877218 0.8889358
+## HP-Ctl -0.28117407 -0.9030760 0.3407279 0.7768327
+## NP-Ctl -0.16702455 -0.7889265 0.4548774 0.9763263</code></pre>
+<p>Reproduces</p>
+<pre class="r"><code>fit &lt;- lm(sqrt(CR.corr.no0) ~ treatment, data=limit[year==&quot;2011&quot; &amp; substrate==&quot;Sponge&quot; &amp; site==&quot;Site 3&quot;])
+summary(aov(fit))</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)
+## treatment    5  1.732  0.3465   1.275  0.313
+## Residuals   20  5.436  0.2718</code></pre>
+<pre class="r"><code>TukeyHSD(aov(fit))$treatment[c(&quot;H-Ctl&quot;, &quot;P-Ctl&quot;, &quot;N-Ctl&quot;, &quot;HP-Ctl&quot;, &quot;NP-Ctl&quot;),]</code></pre>
+<pre><code>##              diff       lwr       upr     p adj
+## H-Ctl  -0.5478455 -1.647137 0.5514464 0.6281603
+## P-Ctl  -0.2787022 -1.315125 0.7577201 0.9550266
+## N-Ctl  -0.1351988 -1.171621 0.9012236 0.9982755
+## HP-Ctl -0.6566995 -1.853457 0.5400579 0.5322726
+## NP-Ctl -0.6763893 -1.775681 0.4229026 0.4116556</code></pre>
+<pre class="r"><code>fit &lt;- lm(sqrt(CR.corr.no0) ~ treatment, data=limit[year==&quot;2013&quot; &amp; substrate==&quot;Sponge&quot; &amp; site==&quot;Site 3&quot;])
+summary(aov(fit))</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)
+## treatment    6  1.067 0.17790   1.817  0.133
+## Residuals   27  2.644 0.09792</code></pre>
+<pre class="r"><code>TukeyHSD(aov(fit))$treatment[c(&quot;H-Ctl&quot;, &quot;P-Ctl&quot;, &quot;N-Ctl&quot;, &quot;HP-Ctl&quot;, &quot;NP-Ctl&quot;),]</code></pre>
+<pre><code>##              diff        lwr       upr     p adj
+## H-Ctl  -0.3457392 -0.9752268 0.2837483 0.5924224
+## P-Ctl  -0.3238252 -0.9533128 0.3056623 0.6612798
+## N-Ctl  -0.3354401 -0.9649276 0.2940475 0.6249464
+## HP-Ctl  0.0346985 -0.6329739 0.7023709 0.9999979
+## NP-Ctl -0.1357190 -0.7652065 0.4937686 0.9923498</code></pre>
+<p>Reproduces</p>
+</div>
+</div>
+<div id="chlorophyll-a-results" class="section level3">
+<h3>Chlorophyll a results</h3>
+<blockquote>
+<p>There was no significant interaction between site and treatment for chl a in either 2011 (two-way ANOVA, interaction, F=1.92<span class="math inline">\(_{10,71}\)</span>, P=0.057) or 2013 (F=1.02<span class="math inline">\(_{12,77}\)</span>, P=0.444).</p>
+</blockquote>
+<pre class="r"><code>Chlor_hetero_Y11.fit &lt;- lm(sqrt(Chl.corr.no0) ~ treatment*site, data=limit[year==&quot;2011&quot; &amp; substrate==&quot;Glass&quot;])
+summary(aov(Chlor_hetero_Y11.fit))</code></pre>
+<pre><code>##                Df Sum Sq Mean Sq F value Pr(&gt;F)    
+## treatment       5  0.391   0.078   2.158 0.0684 .  
+## site            2  7.673   3.837 105.777 &lt;2e-16 ***
+## treatment:site 10  0.697   0.070   1.920 0.0563 .  
+## Residuals      71  2.575   0.036                   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>Chlor_hetero_Y13.fit &lt;- lm(sqrt(Chl.corr.no0) ~ treatment*site, data=limit[year==&quot;2013&quot; &amp; substrate==&quot;Glass&quot;])
+summary(aov(Chlor_hetero_Y13.fit))</code></pre>
+<pre><code>##                Df Sum Sq Mean Sq F value  Pr(&gt;F)    
+## treatment       6 0.4478  0.0746   2.471  0.0308 *  
+## site            2 1.8047  0.9023  29.873 2.5e-10 ***
+## treatment:site 12 0.3692  0.0308   1.018  0.4409    
+## Residuals      77 2.3259  0.0302                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Reproduces</p>
+<blockquote>
+<p>At the No Wildlife site in 2011, chl a on the inorganic substrate increased significantly relative to the control in response to NH4 (one-way ANOVA, F=3.47$_{5,24}, P=0.017; Tukey’s HSD, P=0.031), suggesting some N limitation (Appendix S2: Fig. S3). There were no significant effects of nutrients on chl a at either the Hippo site or the Hippo + WB site.</p>
+</blockquote>
+<pre class="r"><code>fit &lt;- lm(sqrt(Chl.corr.no0) ~ treatment, data=limit[year==&quot;2011&quot; &amp; substrate==&quot;Glass&quot; &amp; site==&quot;Site 1&quot;])
+summary(aov(fit))</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
+## treatment    5 0.4439 0.08878   3.465 0.0169 *
+## Residuals   24 0.6150 0.02562                 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>TukeyHSD(aov(fit))$treatment[c(&quot;H-Ctl&quot;, &quot;P-Ctl&quot;, &quot;N-Ctl&quot;, &quot;HP-Ctl&quot;, &quot;NP-Ctl&quot;),]</code></pre>
+<pre><code>##               diff         lwr       upr     p adj
+## H-Ctl   0.33476567  0.02173257 0.6477988 0.0312101
+## P-Ctl  -0.04833751 -0.36137060 0.2646956 0.9965348
+## N-Ctl   0.12354627 -0.18948683 0.4365794 0.8227697
+## HP-Ctl  0.10840744 -0.20462566 0.4214405 0.8880863
+## NP-Ctl  0.06721617 -0.24581693 0.3802493 0.9842836</code></pre>
+<p>Reproduces</p>
+</div>
+</div>
+<div id="ecosystem-function" class="section level2">
+<h2>Ecosystem Function</h2>
+<div id="statistical-methods-2" class="section level3">
+<h3>Statistical Methods</h3>
+<blockquote>
+<p>We transformed the data to meet assumptions of normality using log transformations for GPP and R and square root transformations for AFDM and chl a. We analyzed each of the four response variables (GPP, R, AFDM and chl a) throughout the duration of the experiment using a linear mixed-effect model run with the lme function in the nlme package in R (Pinheiro et al. 2016, R Core Team 2018). We fitted lme models with the restricted maximum likelihood method and a continuous autoregressive temporal correlation structure with day as the repeated factor. Treatment (control, hippo, wb, hippo+wb) and time (each of 4 weeks of measurement) were treated as fixed effects, and individual streams were treated as random effects. A significant interaction between treatment and time indicated different rates of biofilm growth by treatment. We then used lstrends in the lsmeans package to perform a Tukey pairwise comparison test between treatments for biofilm parameters over the duration of the experiment (Lenth 2016, R Core Team 2018). We also used one-way ANOVAs to analyze differences in standing stock biofilm parameters by treatment in the final week of the experiment.</p>
+</blockquote>
+</div>
+<div id="results" class="section level3">
+<h3>Results</h3>
+<pre class="r"><code>fit &lt;- lme(log(GPP.no0) ~ treatment, random = ~1|id, data=ecosystem)</code></pre>
+<blockquote>
+<p>The rate of biofilm growth in experimental streams was influenced by the presence of wildlife inputs. There was a significant interaction between treatment and time for GPP (lme, interaction effect, F=3.033,32, P=0.044) and chl a (lme, interaction effect, F=3.443,32, P=0.028) (Fig. 5) indicating the rates of change in GPP and chl a were different among treatments. The rate of increase was greatest in the Hippo + WB treatment as compared to the Control for both GPP (lstrends pairwise comparison, t ratio: -2.7632, P=0.044) and chl a (lstrends pairwise comparison, t ratio:-3.0832, P=0.021).</p>
+</blockquote>
 </div>
 </div>
 </div>

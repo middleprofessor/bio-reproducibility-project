@@ -44,7 +44,7 @@ source("../R/clean_label.R") # bookdown
 
 # Import
 ```{r import}
-# dissolutin rates
+# dissolution rates
 fn <- "Subalusky_2018_mara_nutrient_dissolution_chambers.csv"
 file_path <- paste(data_folder, folder, fn, sep="/")
 dissolution <- fread(file_path)
@@ -64,6 +64,12 @@ decomp[, treatment_recode:=factor(treatment_recode, c("fresh", "aged", "wb"))]
 fn <- "Subalusky_2018_mara_nutrient_limitation_assays.csv"
 file_path <- paste(data_folder, folder, fn, sep="/")
 limit <- fread(file_path)
+
+# Ecosystem function
+# note there is another file with the raw data. This is the file of means from that file.
+fn <- "Subalusky_2018_mara_experimental_stream_tiles.csv"
+file_path <- paste(data_folder, folder, fn, sep="/")
+ecosystem <- fread(file_path)
 
 ```
 
@@ -207,7 +213,7 @@ summary(aov(fit))
 ### Statistical method
 > Data were square-root transformed to meet assumptions of normality. We used a two-way ANOVA to analyze the response of biofilms to different nutrient treatments at different sites in both 2011 and 2013. If there were significant interactions at α=0.05, we then used one-way ANOVAs to analyze treatment responses separately for each site, followed by Tukey’s HSD post-hoc test for multiple comparisons (R Core Team 2018).
 
-### Results
+### Respiration Results
 
 > Respiration (R) by heterotrophic biofilms responded differently to nutrient treatments at sites with and without large wildlife inputs in both 2011 (two-way ANOVA, interaction, F=5.40$_{10,68}$, P<0.001) and 2013 (F=3.67$_{12,75}$, P<0.001). 
 
@@ -223,6 +229,8 @@ summary(aov(R_hetero_Y13.fit))
 
 ```
 
+#### Site 1
+
 >At the No Wildlife site in 2011, R on the organic substrate increased significantly relative to the control in response to NH4+PO4 and to NO3+PO4 (one-way ANOVA, F=18.52$_{5,24}, P<0.001; Tukey’s HSD, P=0.005 and P<0.001, respectively), but not in response to any of the nutrients alone, indicating N and P co-limitation (Appendix S2: Fig. S3). 
 
 Reproduces
@@ -237,7 +245,7 @@ TukeyHSD(aov(fit))$treatment[c("H-Ctl", "N-Ctl", "P-Ctl"),]
 
 ```
 
->Wildlife site in 2013, R increased significantly relative to the control in response to carbon (C), NH4+PO4 and PO4 (one-way ANOVA, F=19.22$_{6,21}$, P<0.001; Tukey’s HSD, P=0.006, P<0.001, and P<0.001, respectively). R did not increase in response to NH4 alone, or in response to PO4 in combination with NO3, suggesting primary P limitation with some N and P co-limitation along with C limitation 
+>At the No Wildlife site in 2013, R increased significantly relative to the control in response to carbon (C), NH4+PO4 and PO4 (one-way ANOVA, F=19.22$_{6,21}$, P<0.001; Tukey’s HSD, P=0.006, P<0.001, and P<0.001, respectively). R did not increase in response to NH4 alone, or in response to PO4 in combination with NO3, suggesting primary P limitation with some N and P co-limitation along with C limitation 
 
 ```{r}
 fit <- lm(sqrt(CR.corr.no0) ~ treatment, data=limit[year=="2013" & substrate=="Sponge" & site=="Site 1"])
@@ -247,6 +255,122 @@ TukeyHSD(aov(fit))$treatment[c("N-Ctl", "NP-Ctl"),]
 ```
 
 Reproduces
+
+#### Site 2 and 3
+> There were no significant effects of nutrient treatment on R at either the Hippo site or the Hippo + WB site, suggesting no nutrient limitation at those sites.
+
+```{r}
+fit <- lm(sqrt(CR.corr.no0) ~ treatment, data=limit[year=="2011" & substrate=="Sponge" & site=="Site 2"])
+summary(aov(fit))
+TukeyHSD(aov(fit))$treatment[c("H-Ctl", "P-Ctl", "N-Ctl", "HP-Ctl", "NP-Ctl"),]
+
+fit <- lm(sqrt(CR.corr.no0) ~ treatment, data=limit[year=="2013" & substrate=="Sponge" & site=="Site 2"])
+summary(aov(fit))
+TukeyHSD(aov(fit))$treatment[c("H-Ctl", "P-Ctl", "N-Ctl", "HP-Ctl", "NP-Ctl"),]
+
+```
+
+Reproduces
+
+```{r }
+fit <- lm(sqrt(CR.corr.no0) ~ treatment, data=limit[year=="2011" & substrate=="Sponge" & site=="Site 3"])
+summary(aov(fit))
+TukeyHSD(aov(fit))$treatment[c("H-Ctl", "P-Ctl", "N-Ctl", "HP-Ctl", "NP-Ctl"),]
+
+fit <- lm(sqrt(CR.corr.no0) ~ treatment, data=limit[year=="2013" & substrate=="Sponge" & site=="Site 3"])
+summary(aov(fit))
+TukeyHSD(aov(fit))$treatment[c("H-Ctl", "P-Ctl", "N-Ctl", "HP-Ctl", "NP-Ctl"),]
+
+```
+
+Reproduces
+
+### Chlorophyll a results
+
+>There was no significant interaction between site and treatment for chl a in either 2011 (two-way ANOVA, interaction, F=1.92$_{10,71}$, P=0.057) or 2013 (F=1.02$_{12,77}$, P=0.444).
+
+```{r}
+Chlor_hetero_Y11.fit <- lm(sqrt(Chl.corr.no0) ~ treatment*site, data=limit[year=="2011" & substrate=="Glass"])
+summary(aov(Chlor_hetero_Y11.fit))
+
+Chlor_hetero_Y13.fit <- lm(sqrt(Chl.corr.no0) ~ treatment*site, data=limit[year=="2013" & substrate=="Glass"])
+summary(aov(Chlor_hetero_Y13.fit))
+```
+
+Reproduces
+
+> At the No Wildlife site in 2011, chl a on the inorganic substrate increased significantly relative to the control in response to NH4 (one-way ANOVA, F=3.47$_{5,24}, P=0.017; Tukey’s HSD, P=0.031), suggesting some N limitation (Appendix S2: Fig. S3). There were no significant effects of nutrients on chl a at either the Hippo site or the Hippo + WB site.
+
+```{r}
+fit <- lm(sqrt(Chl.corr.no0) ~ treatment, data=limit[year=="2011" & substrate=="Glass" & site=="Site 1"])
+summary(aov(fit))
+TukeyHSD(aov(fit))$treatment[c("H-Ctl", "P-Ctl", "N-Ctl", "HP-Ctl", "NP-Ctl"),]
+
+```
+Reproduces
+
+## Ecosystem Function
+### Experimental Streams
+#### Statistical methods
+
+> We transformed the data to meet assumptions of normality using log transformations for GPP and R and square root transformations for AFDM and chl a. We analyzed each of the four response variables (GPP, R, AFDM and chl a) throughout the duration of the experiment using a linear mixed-effect model run with the lme function in the nlme package in R (Pinheiro et al. 2016, R Core Team 2018). We fitted lme models with the restricted maximum likelihood method and a continuous autoregressive temporal correlation structure with day as the repeated factor. Treatment (control, hippo, wb, hippo+wb) and time (each of 4 weeks of measurement) were treated as fixed effects, and individual streams were treated as random effects. A significant interaction between treatment and time indicated different rates of biofilm growth by treatment. We then used lstrends in the lsmeans package to perform a Tukey pairwise comparison test between treatments for biofilm parameters over the duration of the experiment (Lenth 2016, R Core Team 2018). We also used one-way ANOVAs to analyze differences in standing stock biofilm parameters by treatment in the final week of the experiment.
+
+#### Results
+
+> The rate of biofilm growth in experimental streams was influenced by the presence of wildlife inputs. There was a significant interaction between treatment and time for GPP (lme, interaction effect, F=3.03$_{3,32}$, P=0.044) 
+
+```{r}
+fit <- lme(log(GPP.no0) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=ecosystem, method="REML")
+anova(fit, type="marginal")
+
+fit <- lme((GPP.no0) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=ecosystem, method="REML")
+anova(fit, type="marginal")
+
+```
+
+log(GPP) (as specified in methods) does not reproduce but untransformed GPP (or GPP.no0) does reproduce. This makes a difference if using the p-value to guide further analyses.
+
+```{r}
+fit <- lme((GPP.no0) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=ecosystem, method="REML")
+anova(fit, type="marginal")
+```
+
+> There was a significant interaction between treatment and time for ... chl a (lme, interaction effect, F=3.44$_{3,32}$, P=0.028) 
+
+```{r}
+
+fit <- lme(sqrt(Chl) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=ecosystem, method="REML")
+anova(fit, type="marginal")
+
+fit <- lme((Chl) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=ecosystem, method="REML")
+anova(fit, type="marginal")
+
+fit <- lme(log(Chl) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=ecosystem, method="REML")
+anova(fit, type="marginal")
+
+```
+
+Sqrt(chl) (as specified in methods) does not reproduce. Untransformed chl does not reproduce. Log(chl) does reproduce.
+
+> The rate of increase was greatest in the Hippo + WB treatment as compared to the Control for both GPP (lstrends pairwise comparison, t ratio: -2.7632, P=0.044) and chl a (lstrends pairwise comparison, t ratio:-3.0832, P=0.021).
+
+```{r}
+# use the models that reproduce, not the models specified in methods
+m1 <- lme((GPP.no0) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=ecosystem, method="REML")
+emtrends(m1, pairwise ~ treatment, var = "days")
+
+m2 <- lme(log(Chl) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=ecosystem, method="REML")
+emtrends(m2, pairwise ~ treatment, var = "days")
+
+```
+
+Reproduces.
+
+### River Biofilms
+#### Statistical methods
+> Data were normally distributed with equal variance among sites, so we used a one-way ANOVA followed by Tukey’s HSD test for pairwise comparisons to test for differences among sites (R Core Team 2018). We then used independent t-tests to analyze differences in chl a and AFDM (for which we had sufficient data) by site with and without the presence of wildebeest carcasses at the Hippo + WB site. There were no significant differences between seasons for any of the three sites, so we then used a one-way ANOVA followed by Tukey’s HSD test to test for differences between the No Wildlife site, the Hippo site, the Hippo + WB site with carcasses and the Hippo + WB site without carcasses.
+
+#### Results
 
 # Statistical red-flags
 
