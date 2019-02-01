@@ -6,7 +6,10 @@ date: '2019-01-29'
 slug: data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa
 categories: []
 tags:
-  - emtrends
+  - ancova
+  - one-way anova
+  - tukey posthoc
+  - ancova slopes posthoc
 subtitle: ''
 output:
   blogdown::html_page:
