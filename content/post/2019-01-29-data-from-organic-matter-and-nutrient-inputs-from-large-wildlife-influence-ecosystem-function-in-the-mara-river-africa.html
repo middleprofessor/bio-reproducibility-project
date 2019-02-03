@@ -6,7 +6,10 @@ date: '2019-01-29'
 slug: data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa
 categories: []
 tags:
-  - emtrends
+  - ancova
+  - one-way anova
+  - tukey posthoc
+  - ancova slopes posthoc
 subtitle: ''
 output:
   blogdown::html_page:
@@ -36,8 +39,9 @@ output:
 <li><a href="#chlorophyll-a-results">Chlorophyll a results</a></li>
 </ul></li>
 <li><a href="#ecosystem-function">Ecosystem Function</a><ul>
-<li><a href="#statistical-methods-2">Statistical Methods</a></li>
-<li><a href="#results">Results</a></li>
+<li><a href="#experimental-streams">Experimental Streams</a></li>
+<li><a href="#river-biofilms">River Biofilms</a></li>
+<li><a href="#section"></a></li>
 </ul></li>
 </ul></li>
 <li><a href="#statistical-red-flags">Statistical red-flags</a></li>
@@ -46,9 +50,19 @@ output:
 
 <div id="sources" class="section level1">
 <h1>Sources</h1>
+<p>Subalusky AL, Dutton CL, Njoroge L, Rosi EJ, Post DM (2018) Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa. Ecology 99(11): 2558-2574. <a href="https://doi.org/10.1002/ecy.2509" class="uri">https://doi.org/10.1002/ecy.2509</a></p>
+<p>Subalusky AL, Dutton CL, Njoroge L, Rosi EJ, Post DM (2018) Data from: Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa. Dryad Digital Repository. <a href="https://doi.org/10.5061/dryad.g886d9v" class="uri">https://doi.org/10.5061/dryad.g886d9v</a></p>
 </div>
 <div id="summary" class="section level1">
 <h1>Summary</h1>
+<ol style="list-style-type: decimal">
+<li><p>The files are nearly perfectly clean.</p></li>
+<li><p>Nutrient dissolution: The authors do not use repeated measures anova as specified in the methods. The fixed effects ANOVA reproduce the ANOVA table. The post-hoc t-tests are reproduced qualitatively but not quantitatively.</p></li>
+<li><p>Decomposition rates: The ANOVA statistics reproduce using the column “ln_hippo_prop_rem”, which is not the column I inferred from either the methods or from the text description of the results.</p></li>
+<li><p>Nutrient limitation: Reproduces as specified.</p></li>
+<li><p>Ecosystem function: Experimental streams: The response log(GPP) (as specified in methods) does not reproduce but untransformed GPP does reproduce. The response Sqrt(chl) (as specified in methods) does not reproduce but log(chl) does reproduce. The rates of increase reproduce. River biofilms: All analyses reproduce at least qualitatively (I cannot check quantiative results where none were given). Treatment column had to be re-coded in order to reproduce.</p></li>
+<li><p>A few minor to moderate statistical red flags are noted.</p></li>
+</ol>
 </div>
 <div id="set-up" class="section level1">
 <h1>Set up</h1>
@@ -90,10 +104,15 @@ file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
 limit &lt;- fread(file_path)
 
 # Ecosystem function
-# note there is another file with the raw data. This is the file of means from that file.
 fn &lt;- &quot;Subalusky_2018_mara_experimental_stream_tiles.csv&quot;
 file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
-ecosystem &lt;- fread(file_path)</code></pre>
+stream &lt;- fread(file_path)
+
+# River biofilms
+# note there is another file with the raw data. This is the file of means from that file.
+fn &lt;- &quot;Subalusky_2018_mara_river_biofilm_summary_data.csv&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+river &lt;- fread(file_path)</code></pre>
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
@@ -179,7 +198,7 @@ summary(aov(nh4.fit))</code></pre>
 <blockquote>
 <p>If there was a significant treatment effect at α=0.05, we then performed a Tukey pairwise comparison test between treatments using the Holm method to adjust p values for multiple comparisons (Holm 1979, R Core Team 2018).</p>
 </blockquote>
-<p>Note that “Tukey pairwise comparison” is a specific kind of simultaneous posthoc test not the genral name for post hoc tests. And, it’s not clear what this analysis is, especially given the large interaction for NH4, which makes pairwise comparisons conditional on the level of time. So are the comparisons at 24 hours? Or, was there complete pooling across time?</p>
+<p>Note that “Tukey pairwise comparison” is a specific kind of simultaneous posthoc test not the general name for post hoc tests. And, it’s not clear what this analysis is, especially given the large interaction for NH4, which makes pairwise comparisons conditional on the level of time. So are the comparisons at 24 hours? Or, was there complete pooling across time?</p>
 <p>Here is the Holm adjustment using the pooled sigma from the fixed effect model for NH4. This isn’t close to the reported pattern of significance levels.</p>
 <pre class="r"><code>nh4.emm &lt;- emmeans(nh4.fit, specs=&quot;treatment&quot;)</code></pre>
 <pre><code>## NOTE: Results may be misleading due to involvement in interactions</code></pre>
@@ -567,18 +586,270 @@ summary(aov(fit))</code></pre>
 </div>
 <div id="ecosystem-function" class="section level2">
 <h2>Ecosystem Function</h2>
-<div id="statistical-methods-2" class="section level3">
-<h3>Statistical Methods</h3>
+<div id="experimental-streams" class="section level3">
+<h3>Experimental Streams</h3>
+<div id="statistical-methods-2" class="section level4">
+<h4>Statistical methods</h4>
 <blockquote>
 <p>We transformed the data to meet assumptions of normality using log transformations for GPP and R and square root transformations for AFDM and chl a. We analyzed each of the four response variables (GPP, R, AFDM and chl a) throughout the duration of the experiment using a linear mixed-effect model run with the lme function in the nlme package in R (Pinheiro et al. 2016, R Core Team 2018). We fitted lme models with the restricted maximum likelihood method and a continuous autoregressive temporal correlation structure with day as the repeated factor. Treatment (control, hippo, wb, hippo+wb) and time (each of 4 weeks of measurement) were treated as fixed effects, and individual streams were treated as random effects. A significant interaction between treatment and time indicated different rates of biofilm growth by treatment. We then used lstrends in the lsmeans package to perform a Tukey pairwise comparison test between treatments for biofilm parameters over the duration of the experiment (Lenth 2016, R Core Team 2018). We also used one-way ANOVAs to analyze differences in standing stock biofilm parameters by treatment in the final week of the experiment.</p>
 </blockquote>
 </div>
-<div id="results" class="section level3">
-<h3>Results</h3>
-<pre class="r"><code>fit &lt;- lme(log(GPP.no0) ~ treatment, random = ~1|id, data=ecosystem)</code></pre>
+<div id="results" class="section level4">
+<h4>Results</h4>
 <blockquote>
-<p>The rate of biofilm growth in experimental streams was influenced by the presence of wildlife inputs. There was a significant interaction between treatment and time for GPP (lme, interaction effect, F=3.033,32, P=0.044) and chl a (lme, interaction effect, F=3.443,32, P=0.028) (Fig. 5) indicating the rates of change in GPP and chl a were different among treatments. The rate of increase was greatest in the Hippo + WB treatment as compared to the Control for both GPP (lstrends pairwise comparison, t ratio: -2.7632, P=0.044) and chl a (lstrends pairwise comparison, t ratio:-3.0832, P=0.021).</p>
+<p>The rate of biofilm growth in experimental streams was influenced by the presence of wildlife inputs. There was a significant interaction between treatment and time for GPP (lme, interaction effect, F=3.03<span class="math inline">\(_{3,32}\)</span>, P=0.044)</p>
 </blockquote>
+<pre class="r"><code>fit &lt;- lme(log(GPP.no0) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method=&quot;REML&quot;)
+anova(fit, type=&quot;marginal&quot;)</code></pre>
+<pre><code>##                numDF denDF   F-value p-value
+## (Intercept)        1    32 0.0358325  0.8511
+## treatment          3     8 2.3139503  0.1525
+## days               1    32 0.8916191  0.3521
+## treatment:days     3    32 1.1330431  0.3505</code></pre>
+<pre class="r"><code>fit &lt;- lme((GPP.no0) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method=&quot;REML&quot;)
+anova(fit, type=&quot;marginal&quot;)</code></pre>
+<pre><code>##                numDF denDF   F-value p-value
+## (Intercept)        1    32 0.1959720  0.6610
+## treatment          3     8 1.0404178  0.4256
+## days               1    32 0.7817183  0.3832
+## treatment:days     3    32 3.0308241  0.0435</code></pre>
+<p>log(GPP) (as specified in methods) does not reproduce but untransformed GPP (or GPP.no0) does reproduce. This makes a difference if using the p-value to guide further analyses.</p>
+<pre class="r"><code>fit &lt;- lme((GPP.no0) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method=&quot;REML&quot;)
+anova(fit, type=&quot;marginal&quot;)</code></pre>
+<pre><code>##                numDF denDF   F-value p-value
+## (Intercept)        1    32 0.1959720  0.6610
+## treatment          3     8 1.0404178  0.4256
+## days               1    32 0.7817183  0.3832
+## treatment:days     3    32 3.0308241  0.0435</code></pre>
+<blockquote>
+<p>There was a significant interaction between treatment and time for … chl a (lme, interaction effect, F=3.44<span class="math inline">\(_{3,32}\)</span>, P=0.028)</p>
+</blockquote>
+<pre class="r"><code>fit &lt;- lme(sqrt(Chl) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method=&quot;REML&quot;)
+anova(fit, type=&quot;marginal&quot;)</code></pre>
+<pre><code>##                numDF denDF   F-value p-value
+## (Intercept)        1    32  1.037504  0.3160
+## treatment          3     8  0.742392  0.5561
+## days               1    32 12.825500  0.0011
+## treatment:days     3    32  4.007184  0.0157</code></pre>
+<pre class="r"><code>fit &lt;- lme((Chl) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method=&quot;REML&quot;)
+anova(fit, type=&quot;marginal&quot;)</code></pre>
+<pre><code>##                numDF denDF  F-value p-value
+## (Intercept)        1    32 0.656122  0.4239
+## treatment          3     8 1.064214  0.4167
+## days               1    32 3.010976  0.0923
+## treatment:days     3    32 4.959265  0.0061</code></pre>
+<pre class="r"><code>fit &lt;- lme(log(Chl) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method=&quot;REML&quot;)
+anova(fit, type=&quot;marginal&quot;)</code></pre>
+<pre><code>##                numDF denDF   F-value p-value
+## (Intercept)        1    32 167.65293  &lt;.0001
+## treatment          3     8   0.75683  0.5489
+## days               1    32  60.05165  &lt;.0001
+## treatment:days     3    32   3.44368  0.0281</code></pre>
+<p>Sqrt(chl) (as specified in methods) does not reproduce. Untransformed chl does not reproduce. Log(chl) does reproduce.</p>
+<blockquote>
+<p>The rate of increase was greatest in the Hippo + WB treatment as compared to the Control for both GPP (lstrends pairwise comparison, t ratio: -2.7632, P=0.044) and chl a (lstrends pairwise comparison, t ratio:-3.0832, P=0.021).</p>
+</blockquote>
+<pre class="r"><code># use the models that reproduce, not the models specified in methods
+m1 &lt;- lme((GPP.no0) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method=&quot;REML&quot;)
+emtrends(m1, pairwise ~ treatment, var = &quot;days&quot;)</code></pre>
+<pre><code>## $emtrends
+##  treatment        days.trend      SE df   lower.CL  upper.CL
+##  Control            1.701172 1.92408 32 -2.2180500  5.620393
+##  Hippo              2.580315 1.92408 32 -1.3389068  6.499537
+##  Hippo Wildebeest   9.205480 1.92408 32  5.2862584 13.124702
+##  Wildebeest         4.531453 1.92408 32  0.6122316  8.450675
+## 
+## Trends are based on the ( (transformed) scale 
+## Confidence level used: 0.95 
+## 
+## $contrasts
+##  contrast                        estimate       SE df t.ratio p.value
+##  Control - Hippo               -0.8791432 2.721059 32  -0.323  0.9881
+##  Control - Hippo Wildebeest    -7.5043084 2.721059 32  -2.758  0.0448
+##  Control - Wildebeest          -2.8302817 2.721059 32  -1.040  0.7274
+##  Hippo - Hippo Wildebeest      -6.6251652 2.721059 32  -2.435  0.0907
+##  Hippo - Wildebeest            -1.9511385 2.721059 32  -0.717  0.8896
+##  Hippo Wildebeest - Wildebeest  4.6740267 2.721059 32   1.718  0.3314
+## 
+## P value adjustment: tukey method for comparing a family of 4 estimates</code></pre>
+<pre class="r"><code>m2 &lt;- lme(log(Chl) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method=&quot;REML&quot;)
+emtrends(m2, pairwise ~ treatment, var = &quot;days&quot;)</code></pre>
+<pre><code>## $emtrends
+##  treatment        days.trend         SE df  lower.CL  upper.CL
+##  Control           0.1888508 0.02437005 32 0.1392106 0.2384910
+##  Hippo             0.2231760 0.02437005 32 0.1735358 0.2728162
+##  Hippo Wildebeest  0.2951255 0.02437005 32 0.2454853 0.3447657
+##  Wildebeest        0.2173685 0.02437005 32 0.1677284 0.2670087
+## 
+## Trends are based on the log (transformed) scale 
+## Confidence level used: 0.95 
+## 
+## $contrasts
+##  contrast                          estimate         SE df t.ratio p.value
+##  Control - Hippo               -0.034325184 0.03446445 32  -0.996  0.7528
+##  Control - Hippo Wildebeest    -0.106274698 0.03446445 32  -3.084  0.0207
+##  Control - Wildebeest          -0.028517706 0.03446445 32  -0.827  0.8410
+##  Hippo - Hippo Wildebeest      -0.071949514 0.03446445 32  -2.088  0.1788
+##  Hippo - Wildebeest             0.005807478 0.03446445 32   0.169  0.9983
+##  Hippo Wildebeest - Wildebeest  0.077756992 0.03446445 32   2.256  0.1300
+## 
+## P value adjustment: tukey method for comparing a family of 4 estimates</code></pre>
+<p>Reproduces.</p>
+</div>
+</div>
+<div id="river-biofilms" class="section level3">
+<h3>River Biofilms</h3>
+<div id="statistical-methods-3" class="section level4">
+<h4>Statistical methods</h4>
+<blockquote>
+<p>Data were normally distributed with equal variance among sites, so we used a one-way ANOVA followed by Tukey’s HSD test for pairwise comparisons to test for differences among sites (R Core Team 2018). We then used independent t-tests to analyze differences in chl a and AFDM (for which we had sufficient data) by site with and without the presence of wildebeest carcasses at the Hippo + WB site. There were no significant differences between seasons for any of the three sites, so we then used a one-way ANOVA followed by Tukey’s HSD test to test for differences between the No Wildlife site, the Hippo site, the Hippo + WB site with carcasses and the Hippo + WB site without carcasses.</p>
+</blockquote>
+</div>
+<div id="results-1" class="section level4">
+<h4>Results</h4>
+<blockquote>
+<p>GPP (n=4 per site) increased from the No Wildlife site to the Hippo site but was lowest at the Hippo + WB site (Fig. 6)</p>
+</blockquote>
+<pre class="r"><code>site_levels &lt;- c(&quot;No Wildlife&quot;, &quot;Hippo&quot;, &quot;Hippo + WB&quot;)
+river[, site_fac:=factor(ifelse(site==&quot;Site 1&quot;, site_levels[1],
+                           ifelse(site==&quot;Site 2&quot;, site_levels[2], site_levels[3])),
+                           site_levels)
+                           ]
+fit &lt;- lm(GPP ~ site_fac, data=river)
+(fit.emm &lt;- emmeans(fit, specs=&quot;site_fac&quot;))</code></pre>
+<pre><code>##  site_fac      emmean       SE df   lower.CL upper.CL
+##  No Wildlife 2.953233 1.141321  9  0.3713848 5.535081
+##  Hippo       5.745391 1.141321  9  3.1635430 8.327239
+##  Hippo + WB  1.671208 1.141321  9 -0.9106396 4.253056
+## 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code>contrast(fit.emm, method=&quot;revpairwise&quot;)</code></pre>
+<pre><code>##  contrast                  estimate       SE df t.ratio p.value
+##  Hippo - No Wildlife       2.792158 1.614072  9   1.730  0.2468
+##  Hippo + WB - No Wildlife -1.282024 1.614072  9  -0.794  0.7157
+##  Hippo + WB - Hippo       -4.074183 1.614072  9  -2.524  0.0758
+## 
+## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<p>reproduces qualitatively (cannot check quantitative)</p>
+<blockquote>
+<p>Chl a (n=6-8 per site) followed the same pattern, increasing from the No Wildlife site to the Hippo site (not significant), then decreasing from the Hippo site to the Hippo + WB site (one-way ANOVA, F=9.44<span class="math inline">\(_{2,19}\)</span>, P=0.001; Tukey’s HSD: P=0.001) (Fig. 6).</p>
+</blockquote>
+<pre class="r"><code>fit &lt;- lm(Chl ~ site_fac, data=river)
+anova(fit)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Chl
+##           Df   Sum Sq  Mean Sq F value   Pr(&gt;F)   
+## site_fac   2 0.087329 0.043665  9.4363 0.001426 **
+## Residuals 19 0.087919 0.004627                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>(fit.emm &lt;- emmeans(fit, specs=&quot;site_fac&quot;))</code></pre>
+<pre><code>##  site_fac        emmean         SE df     lower.CL   upper.CL
+##  No Wildlife 0.12675582 0.02405021 19  0.076418160 0.17709348
+##  Hippo       0.20849813 0.02777079 19  0.150373209 0.26662306
+##  Hippo + WB  0.04929859 0.02405021 19 -0.001039075 0.09963625
+## 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code>contrast(fit.emm, method=&quot;revpairwise&quot;)</code></pre>
+<pre><code>##  contrast                    estimate         SE df t.ratio p.value
+##  Hippo - No Wildlife       0.08174231 0.03673730 19   2.225  0.0924
+##  Hippo + WB - No Wildlife -0.07745724 0.03401213 19  -2.277  0.0837
+##  Hippo + WB - Hippo       -0.15919955 0.03673730 19  -4.333  0.0010
+## 
+## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<p>Reproduces.</p>
+<blockquote>
+<p>There was also a significant difference in chl a when comparing by site and season (one-way ANOVA, F=5.99<span class="math inline">\(_{3,18}\)</span>, P=0.005). The Hippo + WB site had significantly lower chl a than the Hippo site both when carcasses were present (Tukey’s HSD: P=0.015) and when they were not (Tukey’s HSD: P=0.009); however, there was no difference between the Hippo + WB site with and without carcasses (Tukey’s HSD: P=0.996).</p>
+</blockquote>
+<pre class="r"><code># river[, .(Chl=mean(Chl), N=.N), by=.(site.wb)]
+# fit &lt;- lm(Chl ~ site.wb, data=river)
+# anova(fit)
+# (fit.emm &lt;- emmeans(fit, specs=&quot;site.wb&quot;))
+# contrast(fit.emm, method=&quot;revpairwise&quot;)
+
+river[, site.wb2:=ifelse(site!=&quot;Site 3&quot;, site, site.wb)]
+fit &lt;- lm(Chl ~ site.wb2, data=river)
+anova(fit)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Chl
+##           Df   Sum Sq   Mean Sq F value   Pr(&gt;F)   
+## site.wb2   3 0.087559 0.0291864  5.9911 0.005133 **
+## Residuals 18 0.087689 0.0048716                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>(fit.emm &lt;- emmeans(fit, specs=&quot;site.wb2&quot;))</code></pre>
+<pre><code>##  site.wb2           emmean         SE df    lower.CL  upper.CL
+##  Site 1         0.12675582 0.02467688 18  0.07491161 0.1786000
+##  Site 2         0.20849813 0.02849441 18  0.14863360 0.2683627
+##  Site 3 - no wb 0.04393550 0.03489838 18 -0.02938328 0.1172543
+##  Site 3 - wb    0.05466167 0.03489838 18 -0.01865711 0.1279805
+## 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code>contrast(fit.emm, method=&quot;revpairwise&quot;)</code></pre>
+<pre><code>##  contrast                        estimate         SE df t.ratio p.value
+##  Site 2 - Site 1               0.08174231 0.03769456 18   2.169  0.1699
+##  Site 3 - no wb - Site 1      -0.08282032 0.04274161 18  -1.938  0.2479
+##  Site 3 - no wb - Site 2      -0.16456263 0.04505362 18  -3.653  0.0090
+##  Site 3 - wb - Site 1         -0.07209415 0.04274161 18  -1.687  0.3589
+##  Site 3 - wb - Site 2         -0.15383646 0.04505362 18  -3.415  0.0149
+##  Site 3 - wb - Site 3 - no wb  0.01072617 0.04935377 18   0.217  0.9962
+## 
+## P value adjustment: tukey method for comparing a family of 4 estimates</code></pre>
+<p>Reproduces. However, the column “site.wb” is not coded correctly for this and I had to recode the column to reproduce.</p>
+<blockquote>
+<p>Both R (n=4 per site) and AFDM (n=6-7 per site) also increased from the No Wildlife site to the Hippo site (not significant). However, R and AFDM were very similar between the Hippo site and the Hippo + WB site.</p>
+</blockquote>
+<pre class="r"><code>fit &lt;- lm(CR ~ site_fac, data=river)
+anova(fit)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: CR
+##           Df Sum Sq Mean Sq F value Pr(&gt;F)
+## site_fac   2 1.8268 0.91339  2.5353 0.1339
+## Residuals  9 3.2425 0.36027</code></pre>
+<pre class="r"><code>(fit.emm &lt;- emmeans(fit, specs=&quot;site_fac&quot;))</code></pre>
+<pre><code>##  site_fac        emmean        SE df  lower.CL    upper.CL
+##  No Wildlife -0.6957567 0.3001145  9 -1.374663 -0.01685062
+##  Hippo       -1.4178005 0.3001145  9 -2.096707 -0.73889440
+##  Hippo + WB  -1.5990238 0.3001145  9 -2.277930 -0.92011767
+## 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code>contrast(fit.emm, method=&quot;revpairwise&quot;)</code></pre>
+<pre><code>##  contrast                   estimate        SE df t.ratio p.value
+##  Hippo - No Wildlife      -0.7220438 0.4244259  9  -1.701  0.2568
+##  Hippo + WB - No Wildlife -0.9032671 0.4244259  9  -2.128  0.1388
+##  Hippo + WB - Hippo       -0.1812233 0.4244259  9  -0.427  0.9054
+## 
+## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<pre class="r"><code>fit &lt;- lm(AFDM ~ site_fac, data=river)
+anova(fit)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: AFDM
+##           Df   Sum Sq   Mean Sq F value Pr(&gt;F)
+## site_fac   2 0.013404 0.0067020  1.5617 0.2401
+## Residuals 16 0.068665 0.0042916</code></pre>
+<pre class="r"><code>(fit.emm &lt;- emmeans(fit, specs=&quot;site_fac&quot;))</code></pre>
+<pre><code>##  site_fac       emmean         SE df   lower.CL  upper.CL
+##  No Wildlife 0.1231336 0.02476054 16 0.07064362 0.1756236
+##  Hippo       0.1825391 0.02674444 16 0.12584338 0.2392347
+##  Hippo + WB  0.1726380 0.02674444 16 0.11594230 0.2293336
+## 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code>contrast(fit.emm, method=&quot;revpairwise&quot;)</code></pre>
+<pre><code>##  contrast                    estimate         SE df t.ratio p.value
+##  Hippo - No Wildlife       0.05940544 0.03644652 16   1.630  0.2622
+##  Hippo + WB - No Wildlife  0.04950436 0.03644652 16   1.358  0.3852
+##  Hippo + WB - Hippo       -0.00990108 0.03782234 16  -0.262  0.9630
+## 
+## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<p>Qualitatively reproduces.</p>
+</div>
+</div>
+<div id="section" class="section level3">
+<h3></h3>
 </div>
 </div>
 </div>
@@ -587,7 +858,7 @@ summary(aov(fit))</code></pre>
 <ol style="list-style-type: decimal">
 <li><p>The reported statistics do not account for the clustered (non-independent) responses (contra the methods, which states that a repeated measures ANOVA was used).</p></li>
 <li><p>Independent t-tests or t-tests using the pooled SD are different models than the original fit model with different coefficients and estimates of the original error. The recommended best practice is posthoc tests using the fit model.</p></li>
-<li><p>Proportions have max variance at 0.5 and log transforms are not recommended. Instead logit or arcsine transforms are recommended for proportions. Also, the value of adj_hippo_prop_rem for row 4 is 1.1541341, which is not allowed for proportions (so one cannot take the arcsin or logit of this)</p></li>
+<li><p>Proportions have max variance at 0.5 and log transforms are not best practice. Instead logit or arcsine transforms are a better practice for proportions. Also, the value of adj_hippo_prop_rem for row 4 is 1.1541341, which is not allowed for proportions (so one cannot take the arcsin or logit of this)</p></li>
 <li><p>The indepdendent ANOVAs are different models than the initial ANOVA with different model coefficients and estimates of the residual error (sigma). The recommended best practice is a posthoc test using the original full model.</p></li>
 </ol>
 <pre class="r"><code># original model with log transform but simulataneous pairwise comparison

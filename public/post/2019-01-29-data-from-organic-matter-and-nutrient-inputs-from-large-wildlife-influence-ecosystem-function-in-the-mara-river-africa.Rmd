@@ -6,7 +6,10 @@ date: '2019-01-29'
 slug: data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa
 categories: []
 tags:
-  - emtrends
+  - ancova
+  - one-way anova
+  - tukey posthoc
+  - ancova slopes posthoc
 subtitle: ''
 output:
   blogdown::html_page:
@@ -15,7 +18,23 @@ output:
 
 # Sources
 
+Subalusky AL, Dutton CL, Njoroge L, Rosi EJ, Post DM (2018) Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa. Ecology 99(11): 2558-2574. https://doi.org/10.1002/ecy.2509
+
+Subalusky AL, Dutton CL, Njoroge L, Rosi EJ, Post DM (2018) Data from: Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa. Dryad Digital Repository. https://doi.org/10.5061/dryad.g886d9v
+
 # Summary
+
+1. The files are nearly perfectly clean.
+
+2. Nutrient dissolution: The authors do not use repeated measures anova as specified in the methods. The fixed effects ANOVA reproduce the ANOVA table. The post-hoc t-tests are reproduced qualitatively but not quantitatively.
+
+3. Decomposition rates: The ANOVA statistics reproduce using the column "ln_hippo_prop_rem", which is not the column I inferred from either the methods or from the text description of the results.
+
+4. Nutrient limitation: Reproduces as specified.
+
+5. Ecosystem function: Experimental streams: The response log(GPP) (as specified in methods) does not reproduce but untransformed GPP does reproduce. The response Sqrt(chl) (as specified in methods) does not reproduce but log(chl) does reproduce. The rates of increase reproduce. River biofilms: All analyses reproduce at least qualitatively (I cannot check quantiative results where none were given). Treatment column had to be re-coded in order to reproduce.
+
+6. A few minor to moderate statistical red flags are noted.
 
 # Set up
 
@@ -66,10 +85,15 @@ file_path <- paste(data_folder, folder, fn, sep="/")
 limit <- fread(file_path)
 
 # Ecosystem function
-# note there is another file with the raw data. This is the file of means from that file.
 fn <- "Subalusky_2018_mara_experimental_stream_tiles.csv"
 file_path <- paste(data_folder, folder, fn, sep="/")
-ecosystem <- fread(file_path)
+stream <- fread(file_path)
+
+# River biofilms
+# note there is another file with the raw data. This is the file of means from that file.
+fn <- "Subalusky_2018_mara_river_biofilm_summary_data.csv"
+file_path <- paste(data_folder, folder, fn, sep="/")
+river <- fread(file_path)
 
 ```
 
@@ -117,7 +141,7 @@ summary(aov(do.fit))
 
 >If there was a significant treatment effect at α=0.05, we then performed a Tukey pairwise comparison test between treatments using the Holm method to adjust p values for multiple comparisons (Holm 1979, R Core Team 2018).
 
-Note that "Tukey pairwise comparison" is a specific kind of simultaneous posthoc test not the genral name for post hoc tests. And, it's not clear what this analysis is, especially given the large interaction for NH4, which makes pairwise comparisons conditional on the level of time. So are the comparisons at 24 hours? Or, was there complete pooling across time?
+Note that "Tukey pairwise comparison" is a specific kind of simultaneous posthoc test not the general name for post hoc tests. And, it's not clear what this analysis is, especially given the large interaction for NH4, which makes pairwise comparisons conditional on the level of time. So are the comparisons at 24 hours? Or, was there complete pooling across time?
 
 Here is the Holm adjustment using the pooled sigma from the fixed effect model for NH4. This isn't close to the reported pattern of significance levels.
 
@@ -310,18 +334,131 @@ TukeyHSD(aov(fit))$treatment[c("H-Ctl", "P-Ctl", "N-Ctl", "HP-Ctl", "NP-Ctl"),]
 Reproduces
 
 ## Ecosystem Function
+### Experimental Streams
+#### Statistical methods
 
-### Statistical Methods
 > We transformed the data to meet assumptions of normality using log transformations for GPP and R and square root transformations for AFDM and chl a. We analyzed each of the four response variables (GPP, R, AFDM and chl a) throughout the duration of the experiment using a linear mixed-effect model run with the lme function in the nlme package in R (Pinheiro et al. 2016, R Core Team 2018). We fitted lme models with the restricted maximum likelihood method and a continuous autoregressive temporal correlation structure with day as the repeated factor. Treatment (control, hippo, wb, hippo+wb) and time (each of 4 weeks of measurement) were treated as fixed effects, and individual streams were treated as random effects. A significant interaction between treatment and time indicated different rates of biofilm growth by treatment. We then used lstrends in the lsmeans package to perform a Tukey pairwise comparison test between treatments for biofilm parameters over the duration of the experiment (Lenth 2016, R Core Team 2018). We also used one-way ANOVAs to analyze differences in standing stock biofilm parameters by treatment in the final week of the experiment.
 
-### Results
+#### Results
+
+> The rate of biofilm growth in experimental streams was influenced by the presence of wildlife inputs. There was a significant interaction between treatment and time for GPP (lme, interaction effect, F=3.03$_{3,32}$, P=0.044) 
 
 ```{r}
-fit <- lme(log(GPP.no0) ~ treatment, random = ~1|id, data=ecosystem)
+fit <- lme(log(GPP.no0) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method="REML")
+anova(fit, type="marginal")
+
+fit <- lme((GPP.no0) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method="REML")
+anova(fit, type="marginal")
+
 ```
 
+log(GPP) (as specified in methods) does not reproduce but untransformed GPP (or GPP.no0) does reproduce. This makes a difference if using the p-value to guide further analyses.
 
-> The rate of biofilm growth in experimental streams was influenced by the presence of wildlife inputs. There was a significant interaction between treatment and time for GPP (lme, interaction effect, F=3.033,32, P=0.044) and chl a (lme, interaction effect, F=3.443,32, P=0.028) (Fig. 5) indicating the rates of change in GPP and chl a were different among treatments. The rate of increase was greatest in the Hippo + WB treatment as compared to the Control for both GPP (lstrends pairwise comparison, t ratio: -2.7632, P=0.044) and chl a (lstrends pairwise comparison, t ratio:-3.0832, P=0.021).
+```{r}
+fit <- lme((GPP.no0) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method="REML")
+anova(fit, type="marginal")
+```
+
+> There was a significant interaction between treatment and time for ... chl a (lme, interaction effect, F=3.44$_{3,32}$, P=0.028) 
+
+```{r}
+
+fit <- lme(sqrt(Chl) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method="REML")
+anova(fit, type="marginal")
+
+fit <- lme((Chl) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method="REML")
+anova(fit, type="marginal")
+
+fit <- lme(log(Chl) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method="REML")
+anova(fit, type="marginal")
+
+```
+
+Sqrt(chl) (as specified in methods) does not reproduce. Untransformed chl does not reproduce. Log(chl) does reproduce.
+
+> The rate of increase was greatest in the Hippo + WB treatment as compared to the Control for both GPP (lstrends pairwise comparison, t ratio: -2.7632, P=0.044) and chl a (lstrends pairwise comparison, t ratio:-3.0832, P=0.021).
+
+```{r}
+# use the models that reproduce, not the models specified in methods
+m1 <- lme((GPP.no0) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method="REML")
+emtrends(m1, pairwise ~ treatment, var = "days")
+
+m2 <- lme(log(Chl) ~ treatment*days, random = ~ 1|id, correlation=corCAR1(form = ~ days | id), data=stream, method="REML")
+emtrends(m2, pairwise ~ treatment, var = "days")
+
+```
+
+Reproduces.
+
+### River Biofilms
+#### Statistical methods
+> Data were normally distributed with equal variance among sites, so we used a one-way ANOVA followed by Tukey’s HSD test for pairwise comparisons to test for differences among sites (R Core Team 2018). We then used independent t-tests to analyze differences in chl a and AFDM (for which we had sufficient data) by site with and without the presence of wildebeest carcasses at the Hippo + WB site. There were no significant differences between seasons for any of the three sites, so we then used a one-way ANOVA followed by Tukey’s HSD test to test for differences between the No Wildlife site, the Hippo site, the Hippo + WB site with carcasses and the Hippo + WB site without carcasses.
+
+#### Results
+>GPP (n=4 per site) increased from the No Wildlife site to the Hippo site but was lowest at the Hippo + WB site (Fig. 6)
+
+```{r}
+site_levels <- c("No Wildlife", "Hippo", "Hippo + WB")
+river[, site_fac:=factor(ifelse(site=="Site 1", site_levels[1],
+                           ifelse(site=="Site 2", site_levels[2], site_levels[3])),
+                           site_levels)
+                           ]
+fit <- lm(GPP ~ site_fac, data=river)
+(fit.emm <- emmeans(fit, specs="site_fac"))
+contrast(fit.emm, method="revpairwise")
+```
+
+reproduces qualitatively (cannot check quantitative)
+
+> Chl a (n=6-8 per site) followed the same pattern, increasing from the No Wildlife site to the Hippo site (not significant), then decreasing from the Hippo site to the Hippo + WB site (one-way ANOVA, F=9.44$_{2,19}$, P=0.001; Tukey’s HSD: P=0.001) (Fig. 6).
+
+```{r}
+fit <- lm(Chl ~ site_fac, data=river)
+anova(fit)
+(fit.emm <- emmeans(fit, specs="site_fac"))
+contrast(fit.emm, method="revpairwise")
+
+```
+
+Reproduces.
+
+> There was also a significant difference in chl a when comparing by site and season (one-way ANOVA, F=5.99$_{3,18}$, P=0.005). The Hippo + WB site had significantly lower chl a than the Hippo site both when carcasses were present (Tukey’s HSD: P=0.015) and when they were not (Tukey’s HSD: P=0.009); however, there was no difference between the Hippo + WB site with and without carcasses (Tukey’s HSD: P=0.996).
+
+```{r}
+# river[, .(Chl=mean(Chl), N=.N), by=.(site.wb)]
+# fit <- lm(Chl ~ site.wb, data=river)
+# anova(fit)
+# (fit.emm <- emmeans(fit, specs="site.wb"))
+# contrast(fit.emm, method="revpairwise")
+
+river[, site.wb2:=ifelse(site!="Site 3", site, site.wb)]
+fit <- lm(Chl ~ site.wb2, data=river)
+anova(fit)
+(fit.emm <- emmeans(fit, specs="site.wb2"))
+contrast(fit.emm, method="revpairwise")
+
+```
+
+Reproduces. However, the column "site.wb" is not coded correctly for this and I had to recode the column to reproduce.
+
+> Both R (n=4 per site) and AFDM (n=6-7 per site) also increased from the No Wildlife site to the Hippo site (not significant). However, R and AFDM were very similar between the Hippo site and the Hippo + WB site.
+
+```{r}
+fit <- lm(CR ~ site_fac, data=river)
+anova(fit)
+(fit.emm <- emmeans(fit, specs="site_fac"))
+contrast(fit.emm, method="revpairwise")
+
+fit <- lm(AFDM ~ site_fac, data=river)
+anova(fit)
+(fit.emm <- emmeans(fit, specs="site_fac"))
+contrast(fit.emm, method="revpairwise")
+
+```
+
+Qualitatively reproduces.
+
+###
 
 # Statistical red-flags
 
@@ -329,7 +466,7 @@ fit <- lme(log(GPP.no0) ~ treatment, random = ~1|id, data=ecosystem)
 
 2. Independent t-tests or t-tests using the pooled SD are different models than the original fit model with different coefficients and estimates of the original error. The recommended best practice is posthoc tests using the fit model.
 
-3. Proportions have max variance at 0.5 and log transforms are not recommended. Instead logit or arcsine transforms are recommended for proportions. Also, the value of adj_hippo_prop_rem for row 4 is 1.1541341, which is not allowed for proportions (so one cannot take the arcsin or logit of this)
+3. Proportions have max variance at 0.5 and log transforms are not best practice. Instead logit or arcsine transforms are a better practice for proportions. Also, the value of adj_hippo_prop_rem for row 4 is 1.1541341, which is not allowed for proportions (so one cannot take the arcsin or logit of this)
 
 4. The indepdendent ANOVAs are different models than the initial ANOVA with different model coefficients and estimates of the residual error (sigma). The recommended best practice is a posthoc test using the original full model.
 

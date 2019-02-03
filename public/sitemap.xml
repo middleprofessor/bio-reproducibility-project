@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/post/data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance-of-a-predator-colour-polymorphism/</loc>
+    <lastmod>2019-02-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/post/data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa/</loc>
     <lastmod>2019-01-29T00:00:00+00:00</lastmod>
   </url>
@@ -68,6 +73,18 @@
   </url>
   
   <url>
+    <loc>/tags/ancova/</loc>
+    <lastmod>2019-01-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/ancova-slopes-posthoc/</loc>
+    <lastmod>2019-01-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/anova/</loc>
     <lastmod>2018-06-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -103,12 +120,6 @@
   </url>
   
   <url>
-    <loc>/tags/emtrends/</loc>
-    <lastmod>2019-01-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/tags/excel/</loc>
     <lastmod>2019-01-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -123,6 +134,12 @@
   <url>
     <loc>/tags/factorial/</loc>
     <lastmod>2019-01-14T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/generalized-linear-mixed-model/</loc>
+    <lastmod>2019-02-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -145,6 +162,18 @@
   </url>
   
   <url>
+    <loc>/tags/loglinear-model/</loc>
+    <lastmod>2019-02-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/multinomial-response/</loc>
+    <lastmod>2019-02-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/nested/</loc>
     <lastmod>2018-06-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -157,6 +186,12 @@
   </url>
   
   <url>
+    <loc>/tags/one-way-anova/</loc>
+    <lastmod>2019-01-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/physiology/</loc>
     <lastmod>2018-06-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -164,7 +199,7 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2019-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -211,7 +246,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -224,6 +259,12 @@
   <url>
     <loc>/tags/transformed-response/</loc>
     <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/tukey-posthoc/</loc>
+    <lastmod>2019-01-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

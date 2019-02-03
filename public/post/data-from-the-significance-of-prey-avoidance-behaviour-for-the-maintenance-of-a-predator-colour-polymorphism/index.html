@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism - The Biology Reproducibility Project</title>
+  <meta property="og:title" content="Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism - The Biology Reproducibility Project" />
+  <meta name="twitter:title" content="Data from: The significance of prey avoidance behaviour for the …" />
+  <meta name="description" content="Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. Behavioral Ecology, online in advance of print. https://doi.org/10.1093/beheco/ary129
+Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. Dryad Digital Repository. https://doi.">
+  <meta property="og:description" content="Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. Behavioral Ecology, online in advance of print. https://doi.org/10.1093/beheco/ary129
+Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. Dryad Digital Repository. https://doi.">
+  <meta name="twitter:description" content="Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. …">
+  <meta name="author" content=""/>
+  <meta property="og:site_name" content="The Biology Reproducibility Project" />
+  <meta property="og:url" content="/post/data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance-of-a-predator-colour-polymorphism/" />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    <h1 class="site-title"><a href="/">The Biology Reproducibility Project</a></h1>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-categories"><a href="/categories/" title="Categories">Categories</a></li>
+      <li class="site-navi-item-tags"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-archives"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+  </nav>
+</header>
+<hr class="site-header-bottom">
+
+  <div class="main" role="main">
+    <article class="article">
+      
+      
+      <h1 class="article-title">Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>February 2, 2019</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/generalized-linear-mixed-model/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            generalized linear mixed model
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/multinomial-response/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            multinomial response
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/loglinear-model/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            loglinear model
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+<aside class="toc">
+  
+</aside>
+      <div id="sources" class="section level1">
+<h1>Sources</h1>
+<p>Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. Behavioral Ecology, online in advance of print. <a href="https://doi.org/10.1093/beheco/ary129" class="uri">https://doi.org/10.1093/beheco/ary129</a></p>
+<p>Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. Dryad Digital Repository. <a href="https://doi.org/10.5061/dryad.792r3k1" class="uri">https://doi.org/10.5061/dryad.792r3k1</a></p>
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+</div>
+<div id="setup" class="section level1">
+<h1>Setup</h1>
+<pre class="r"><code>library(ggplot2)
+library(readxl)
+library(data.table)
+library(lme4)
+library(lmerTest)
+library(emmeans)
+library(cowplot)</code></pre>
+<pre class="r"><code>data_folder &lt;- &quot;../data&quot;
+folder &lt;- &quot;Data from The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism&quot;
+
+# images need to be moved to /static/images/data from.../image.png
+knitr_path &lt;- FALSE # run = TRUE to debug</code></pre>
+</div>
+<div id="import" class="section level1">
+<h1>Import</h1>
+<pre class="r"><code>fn &lt;- &quot;Data from prey avoidance and predator colour polymorphism.xlsx&quot;
+sheet_i &lt;- &quot;Experiment 1&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+exp1 &lt;- data.table(read_excel(file_path, sheet=sheet_i))
+exp1[, Flower:=factor(Flower)]
+exp1[, Spider:=factor(Spider)]</code></pre>
+</div>
+<div id="reproducibility" class="section level1">
+<h1>Reproducibility</h1>
+<div id="expeiment-1" class="section level2">
+<h2>Expeiment 1</h2>
+<div id="statistical-methods" class="section level3">
+<h3>statistical methods</h3>
+<blockquote>
+<p>Treatments were performed in temporal blocks, with each combination offlower species and treatment being applied once in each block. Spiders and treatment-flower combinations were chosen randomly within blocks.</p>
+</blockquote>
+<blockquote>
+<p>Honeybee responses in Experiment 1 were analyzed with generalized linear mixed models (GLMMs) with binomial errors and block as a random effect. Binomial responses were: 1) accepted versus not accepted (reject + ignore), 2) accepted versus rejected (with ignored flowers excluded), and 3) inspected (accept + reject) versus not inspected (ignore). Differences between spider treatments were analyzed by comparing a model containing all 4 treatments to a model where the 3 spider treatments were collapsed into one and contrasted with the control.</p>
+</blockquote>
+</div>
+<div id="cleaning-and-recoding" class="section level3">
+<h3>cleaning and recoding</h3>
+<ol style="list-style-type: decimal">
+<li><p>There is no column identifying block; I will assume that the data are organized into the blocks.</p></li>
+<li><p>The key for the codes in the column “Response” is not given. The responses are “ignored”, “reject”, “accept” and the codes are 1, 2, 3. It took some trial-and-error to match the code with the response, which must be 1=accept, 2=reject, 3, = ignore</p></li>
+</ol>
+<p>2a. Response[952] has a code value of 13. trial-and-error recoding this to 1 reproduced exactly two of three F values in the first row of Table 1.</p>
+<ol start="3" style="list-style-type: decimal">
+<li><p>I attempted to reproduce using three binomial models, one for each response category. This required recoding the “response” column to three separate columns.</p></li>
+<li><p>The column Spider also needed to be recoded to binary (control, not control) for the ANOVA.</p></li>
+</ol>
+<pre class="r"><code>n_combos &lt;- length(levels(exp1$Flower)) * length(levels(exp1$Spider))
+n_blocks &lt;- nrow(exp1)/n_combos
+exp1[, block:=rep(1:n_blocks, each=n_combos)]
+
+# trial-and-error for item 952
+inc &lt;- which(exp1$Response==13)
+exp1[inc, Response:=1] 
+
+exp1[, R1:=ifelse(Response==1, 1, 0)] # 1= accept, 0 = not accept
+exp1[, R2:=ifelse(Response==1, 1, 
+                  ifelse(Response==2, 0, NA))] # 1= accept, 0 = reject, NA = ignore
+exp1[, R3:=ifelse(Response==3, 0, 1)] # 1 = inspect (reject or accept), 0 = ignore
+
+
+exp1[, Spider_binary:=ifelse(Spider==&quot;control&quot;, &quot;control&quot;, &quot;spider&quot;)]</code></pre>
+</div>
+<div id="table-1" class="section level3">
+<h3>Table 1</h3>
+<pre class="r"><code>m1.R1 &lt;- glmer(R1 ~ Flower*Spider_binary + (1|block), family=binomial, data=exp1)
+(test1a &lt;- drop1(m1.R1, test=&quot;Chisq&quot;))</code></pre>
+<pre><code>## Single term deletions
+## 
+## Model:
+## R1 ~ Flower * Spider_binary + (1 | block)
+##                      Df    AIC    LRT Pr(Chi)
+## &lt;none&gt;                  731.08               
+## Flower:Spider_binary  2 728.47 1.3916  0.4987</code></pre>
+<pre class="r"><code>m2.R1 &lt;- glmer(R1 ~ Flower + Spider_binary + (1|block), family=binomial, data=exp1)
+(test1b &lt;- drop1(m2.R1, test=&quot;Chisq&quot;))</code></pre>
+<pre><code>## Single term deletions
+## 
+## Model:
+## R1 ~ Flower + Spider_binary + (1 | block)
+##               Df    AIC     LRT   Pr(Chi)    
+## &lt;none&gt;           728.47                      
+## Flower         2 846.43 121.953 &lt; 2.2e-16 ***
+## Spider_binary  1 753.34  26.869 2.177e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>m1.R2 &lt;- glmer(R2 ~ Flower*Spider_binary + (1|block), family=binomial, data=exp1)
+(test2a &lt;- drop1(m1.R2, test=&quot;Chisq&quot;))</code></pre>
+<pre><code>## Single term deletions
+## 
+## Model:
+## R2 ~ Flower * Spider_binary + (1 | block)
+##                      Df    AIC    LRT Pr(Chi)
+## &lt;none&gt;                  449.14               
+## Flower:Spider_binary  2 446.76 1.6154  0.4459</code></pre>
+<pre class="r"><code>m2.R2 &lt;- glmer(R2 ~ Flower + Spider_binary + (1|block), family=binomial, data=exp1)
+(test2b &lt;- drop1(m2.R2, test=&quot;Chisq&quot;))</code></pre>
+<pre><code>## Single term deletions
+## 
+## Model:
+## R2 ~ Flower + Spider_binary + (1 | block)
+##               Df    AIC    LRT   Pr(Chi)    
+## &lt;none&gt;           446.76                     
+## Flower         2 519.35 76.593 &lt; 2.2e-16 ***
+## Spider_binary  1 462.00 17.242 3.291e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>m1.R3 &lt;- glmer(R3 ~ Flower*Spider_binary + (1|block), family=binomial, data=exp1)
+(test3a &lt;- drop1(m1.R3, test=&quot;Chisq&quot;))</code></pre>
+<pre><code>## Single term deletions
+## 
+## Model:
+## R3 ~ Flower * Spider_binary + (1 | block)
+##                      Df    AIC   LRT Pr(Chi)
+## &lt;none&gt;                  1496.1              
+## Flower:Spider_binary  2 1495.4 3.324  0.1898</code></pre>
+<pre class="r"><code>m2.R3 &lt;- glmer(R3 ~ Flower + Spider_binary + (1|block), family=binomial, data=exp1)
+(test3b &lt;- drop1(m2.R3, test=&quot;Chisq&quot;))</code></pre>
+<pre><code>## Single term deletions
+## 
+## Model:
+## R3 ~ Flower + Spider_binary + (1 | block)
+##               Df    AIC    LRT   Pr(Chi)    
+## &lt;none&gt;           1495.4                     
+## Flower         2 1539.6 48.234 3.358e-11 ***
+## Spider_binary  1 1502.1  8.733  0.003124 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="reported-table-1" class="section level3">
+<h3>reported table 1</h3>
+<p><img src="/images/Data%20from%20The%20significance%20of%20prey%20avoidance%20behaviour%20for%20the%20maintenance%20of%20a%20predator%20colour%20polymorphism/table1.png" /><!-- --></p>
+<div id="my-table-1" class="section level4">
+<h4>my table 1</h4>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Response</th>
+<th align="right">Spider</th>
+<th align="right">Flower</th>
+<th align="right">Interaction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Accepted v not accepted</td>
+<td align="right">26.869</td>
+<td align="right">121.953</td>
+<td align="right">1.392</td>
+</tr>
+<tr class="even">
+<td align="left">Accepted v rejected</td>
+<td align="right">17.242</td>
+<td align="right">76.593</td>
+<td align="right">1.615</td>
+</tr>
+<tr class="odd">
+<td align="left">Inspected v not inspected</td>
+<td align="right">8.733</td>
+<td align="right">48.234</td>
+<td align="right">3.324</td>
+</tr>
+</tbody>
+</table>
+<p>Effectively reproduces. The first two numbers in row one are exact. Differences could be to different algorthms between versions. I don’t think they are due to differences in coding.</p>
+</div>
+</div>
+<div id="effect-of-spider-treatments" class="section level3">
+<h3>Effect of spider treatments</h3>
+<blockquote>
+<p>No significant differences were found among spider treatments: the effect of collapsing the spider treatments together in the statistical model was not significant for any of the response variables: accepted versus not accepted (χ2 = 2.718, df = 6, P = 0.843), accepted versus rejected (χ2 = 3.477, df = 6, P = 0.747), and inspected versus not inspected (χ2 = 6.484, df = 6, P = 0.371).</p>
+</blockquote>
+<pre class="r"><code>m3.R1 &lt;- glmer(R1 ~ Flower*Spider + (1|block), family=binomial, data=exp1)
+anova(m1.R1, m3.R1, test=&quot;Chisq&quot;) # this reproduces</code></pre>
+<pre><code>## Data: exp1
+## Models:
+## m1.R1: R1 ~ Flower * Spider_binary + (1 | block)
+## m3.R1: R1 ~ Flower * Spider + (1 | block)
+##       Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
+## m1.R1  7 731.08 766.71 -358.54   717.08                         
+## m3.R1 13 740.36 806.54 -357.18   714.36 2.7184      6     0.8433</code></pre>
+<pre class="r"><code>m3.R2 &lt;- glmer(R2 ~ Flower*Spider + (1|block), family=binomial, data=exp1)
+anova(m1.R2, m3.R2, test=&quot;Chisq&quot;)</code></pre>
+<pre><code>## Data: exp1
+## Models:
+## m1.R2: R2 ~ Flower * Spider_binary + (1 | block)
+## m3.R2: R2 ~ Flower * Spider + (1 | block)
+##       Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
+## m1.R2  7 449.14 477.34 -217.57   435.14                         
+## m3.R2 13 457.58 509.94 -215.79   431.58 3.5639      6     0.7355</code></pre>
+<pre class="r"><code>m3.R3 &lt;- glmer(R3 ~ Flower*Spider + (1|block), family=binomial, data=exp1)</code></pre>
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl =
+## control$checkConv, : Model failed to converge with max|grad| = 0.00288191
+## (tol = 0.001, component 1)</code></pre>
+<pre class="r"><code>anova(m1.R3, m3.R3, test=&quot;Chisq&quot;)</code></pre>
+<pre><code>## Data: exp1
+## Models:
+## m1.R3: R3 ~ Flower * Spider_binary + (1 | block)
+## m3.R3: R3 ~ Flower * Spider + (1 | block)
+##       Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
+## m1.R3  7 1496.1 1531.7 -741.04   1482.1                         
+## m3.R3 13 1502.1 1568.2 -738.04   1476.1 6.0128      6     0.4218</code></pre>
+<p>“accepted versus not accepted” reproduces exactly; the other two are close</p>
+</div>
+<div id="figure-1" class="section level3">
+<h3>Figure 1</h3>
+<pre class="r"><code>m3_R1.emm &lt;- emmeans(m3.R1, specs=c(&quot;Flower&quot;, &quot;Spider&quot;), type=&quot;response&quot;)
+m3_R2.emm &lt;- emmeans(m3.R2, specs=c(&quot;Flower&quot;, &quot;Spider&quot;), type=&quot;response&quot;)
+m3_R3.emm &lt;- emmeans(m3.R3, specs=c(&quot;Flower&quot;, &quot;Spider&quot;), type=&quot;response&quot;)
+
+pd &lt;- position_dodge(0.9)
+gg1 &lt;- ggplot(data=summary(m3_R1.emm), aes(x=Flower, y=prob, fill=Spider)) +
+  geom_col(position=pd) +
+  geom_errorbar(aes(ymin=asymp.LCL, ymax=asymp.UCL), position=pd, width=0.2) +
+  coord_cartesian(ylim=c(0, 0.8)) +
+  ggtitle(&quot;Accept&quot;) +
+  NULL
+gg2 &lt;- ggplot(data=summary(m3_R2.emm), aes(x=Flower, y=prob, fill=Spider)) +
+  geom_col(position=pd) +
+  geom_errorbar(aes(ymin=asymp.LCL, ymax=asymp.UCL), position=pd, width=0.2) +
+  coord_cartesian(ylim=c(0, 0.8)) +
+  ggtitle(&quot;Accept after inspection&quot;) +
+  NULL
+gg3 &lt;- ggplot(data=summary(m3_R3.emm), aes(x=Flower, y=prob, fill=Spider)) +
+  geom_col(position=pd) +
+  geom_errorbar(aes(ymin=asymp.LCL, ymax=asymp.UCL), position=pd, width=0.2) +
+  coord_cartesian(ylim=c(0, 0.8)) +
+  ggtitle(&quot;Inspect&quot;) +
+  NULL
+plot_grid(gg1, gg2, gg3, nrow=3)</code></pre>
+<p><img src="/post/2019-02-02-data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance-of-a-predator-colour-polymorphism_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="statistical-red-flags" class="section level1">
+<h1>Statistical Red Flags</h1>
+</div>
+
+    </article>
+
+    
+<ul class="article-share">
+  <li>
+    <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </li>
+  <li>
+    <div class="fb-share-button" data-href="/post/data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance-of-a-predator-colour-polymorphism/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.10";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+  </li>
+  <li>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <g:plus action="share"></g:plus>
+  </li>
+  <li>
+    <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label-counter" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  </li>
+  <li>
+    <a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en"></a>
+    <script>!function(d,i){if(!d.getElementById(i)){var j=d.createElement("script");j.id=i;j.src="https://widgets.getpocket.com/v1/j/btn.js?v=1";var w=d.getElementById(i);d.body.appendChild(j);}}(document,"pocket-btn-js");</script>
+  </li>
+</ul>
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa/" data-toggle="tooltip" data-placement="top" title="Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">&copy; Copyright 2018 Jeffrey A. Walker</div>
+  <ul class="site-footer-items">
+    <li class="site-footer-item-about"><a href="/about/" title="About">About</a></li>
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/">Hugo</a>
+  </div>
+</div>
+    <script src="//yihui.name/js/math-code.js"></script>
+<script async
+src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+  <script src="/js/collapse.js"></script>
+  <script src="/js/dropdown.js"></script>
+  <script src="/js/transition.js"></script>
+
+
+</body>
+</html>
