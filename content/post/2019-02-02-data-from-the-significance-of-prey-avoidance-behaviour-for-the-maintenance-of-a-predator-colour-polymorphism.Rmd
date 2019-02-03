@@ -7,8 +7,7 @@ slug: data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance
 categories: []
 tags:
   - generalized linear mixed model
-  - multinomial response
-  - loglinear model
+  - binomial response
 subtitle: ''
 ---
 
@@ -178,7 +177,7 @@ anova(m1.R3, m3.R3, test="Chisq")
 
 ### Figure 1
 
-```{r, fig.asp = 1.5}
+```{r}
 m3_R1.emm <- emmeans(m3.R1, specs=c("Flower", "Spider"), type="response")
 m3_R2.emm <- emmeans(m3.R2, specs=c("Flower", "Spider"), type="response")
 m3_R3.emm <- emmeans(m3.R3, specs=c("Flower", "Spider"), type="response")
@@ -202,8 +201,25 @@ gg3 <- ggplot(data=summary(m3_R3.emm), aes(x=Flower, y=prob, fill=Spider)) +
   coord_cartesian(ylim=c(0, 0.8)) +
   ggtitle("Inspect") +
   NULL
+
+# See myfig1 chunk for plot
+```
+
+```{r fig1, echo=FALSE}
+fn <- "fig1.png"
+if(knitr_path==TRUE){
+  image_path <- paste("../images", folder, fn, sep="/")
+}else{
+  image_path <- paste("/images", folder, fn, sep="/")
+}
+knitr::include_graphics(image_path)
+
+```
+
+```{r myfig1, fig.asp = 1.5, echo=FALSE}
 plot_grid(gg1, gg2, gg3, nrow=3)
 ```
 
+The CIs differ. My CIs are computed from the model fit using emmeans. These are much more uniform than the reported CIs. The reported CIs may be from confint(fit_model)
 
 # Statistical Red Flags
