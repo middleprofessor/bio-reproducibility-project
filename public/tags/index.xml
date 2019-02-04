@@ -49,6 +49,15 @@
     </item>
     
     <item>
+      <title>Binomial Response</title>
+      <link>/tags/binomial-response/</link>
+      <pubDate>Sat, 02 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/binomial-response/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Clean Data</title>
       <link>/tags/clean-data/</link>
       <pubDate>Sun, 13 Jan 2019 00:00:00 +0000</pubDate>
@@ -144,24 +153,6 @@
       <pubDate>Mon, 07 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/linear-model/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Loglinear Model</title>
-      <link>/tags/loglinear-model/</link>
-      <pubDate>Sat, 02 Feb 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/loglinear-model/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Multinomial Response</title>
-      <link>/tags/multinomial-response/</link>
-      <pubDate>Sat, 02 Feb 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/multinomial-response/</guid>
       <description></description>
     </item>
     

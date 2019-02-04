@@ -7,8 +7,7 @@ slug: data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance
 categories: []
 tags:
   - generalized linear mixed model
-  - multinomial response
-  - loglinear model
+  - binomial response
 subtitle: ''
 ---
 
@@ -35,23 +34,32 @@ library(cowplot)</code></pre>
 folder &lt;- &quot;Data from The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism&quot;
 
 # images need to be moved to /static/images/data from.../image.png
-knitr_path &lt;- FALSE # run = TRUE to debug</code></pre>
+knitr_path &lt;- FALSE # run = TRUE to debug
+
+source(&quot;../R/clean_label.R&quot;) # bookdown</code></pre>
 </div>
 <div id="import" class="section level1">
 <h1>Import</h1>
 <pre class="r"><code>fn &lt;- &quot;Data from prey avoidance and predator colour polymorphism.xlsx&quot;
-sheet_i &lt;- &quot;Experiment 1&quot;
 file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
-exp1 &lt;- data.table(read_excel(file_path, sheet=sheet_i))
+sheet_1 &lt;- &quot;Experiment 1&quot;
+exp1 &lt;- data.table(read_excel(file_path, sheet=sheet_1))
 exp1[, Flower:=factor(Flower)]
-exp1[, Spider:=factor(Spider)]</code></pre>
+exp1[, Spider:=factor(Spider)]
+
+sheet_2 &lt;- &quot;Experiment 2&quot;
+exp2 &lt;- data.table(read_excel(file_path, sheet=sheet_2))
+colnames(exp2) &lt;- clean_label(colnames(exp2))
+exp2[, Treatment_1:=factor(Treatment_1)]
+exp2[, Treatment_2:=factor(Treatment_2)]
+exp2[, Day_fac:=factor(Day)] # create a new column with day as factor</code></pre>
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
-<div id="expeiment-1" class="section level2">
-<h2>Expeiment 1</h2>
+<div id="experiment-1" class="section level2">
+<h2>Experiment 1</h2>
 <div id="statistical-methods" class="section level3">
-<h3>statistical methods</h3>
+<h3>Statistical methods</h3>
 <blockquote>
 <p>Treatments were performed in temporal blocks, with each combination offlower species and treatment being applied once in each block. Spiders and treatment-flower combinations were chosen randomly within blocks.</p>
 </blockquote>
@@ -252,8 +260,138 @@ gg3 &lt;- ggplot(data=summary(m3_R3.emm), aes(x=Flower, y=prob, fill=Spider)) +
   coord_cartesian(ylim=c(0, 0.8)) +
   ggtitle(&quot;Inspect&quot;) +
   NULL
-plot_grid(gg1, gg2, gg3, nrow=3)</code></pre>
-<p><img src="/post/2019-02-02-data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance-of-a-predator-colour-polymorphism_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+
+# See myfig1 chunk for plot</code></pre>
+<p><img src="/images/Data%20from%20The%20significance%20of%20prey%20avoidance%20behaviour%20for%20the%20maintenance%20of%20a%20predator%20colour%20polymorphism/fig1.png" /><!-- --></p>
+<p><img src="/post/2019-02-02-data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance-of-a-predator-colour-polymorphism_files/figure-html/myfig1-1.png" width="672" /></p>
+<p>The CIs differ. My CIs are computed from the model fit using emmeans. These are much more uniform than the reported CIs. The reported CIs may be from confint(fit_model)</p>
+</div>
+</div>
+<div id="experiment-2" class="section level2">
+<h2>Experiment 2</h2>
+<div id="statistical-methods-1" class="section level3">
+<h3>Statistical Methods</h3>
+<blockquote>
+<p>For Experiment 2, the differences in number of rejections of flowers by honeybees in Offer 1 (maximum = 10) between those harboring red and yellow spiders, and among the 4 days on which trials took place, were analyzed using a non-parametric 2-way analysis of variance. Responses to spider treatments in Offer 2 were analyzed using generalized linear models (GLMs) with binomial errors. Three binary response variables were used: 1) accepted (fed + land) versus not accepted, 2) fed versus not fed, and 3) whether or not the number of presentations which were rejected in Offer 2 was higher than in Offer 1. For the first 2 of these variables, 2 separate models were fitted, one considering only the rst attempt to present a flower to a honeybee in Offer 2, and the other considering all attempts to present the flower (maximum = 10; i.e., did the bee ever land/feed?). We expected that any effect of learned aversion to spiders encountered in Offer 1 would be strongest in the first of these 2 analyses. Day of study (1–4) was included as a fixed factor to account for changes in honeybee behavior over time. In all models, the signi cance of each term was assessed using a chi-squared test statistic after backward deletion from a saturated model. A sep- arate chi-squared test was used to assess the difference in the pro- portion of bee responses in each rejection speed class (slow, fast and very fast) among spider treatments for the first presentation of flowers in Offer 2 in Experiment 2.</p>
+</blockquote>
+</div>
+<div id="offer-1-nonparametric-2-way-anova" class="section level3">
+<h3>Offer 1 – nonparametric 2-way ANOVA</h3>
+<blockquote>
+<p>“no significant overall effect of spider color…(2-way nonparametric Anova: H = 0.40, df = 1 P = 0.529) (Figure 2)”… “no significant effect of the day of study” (H = 3.43, df = 3, P = 0.331) the interaction between spider color and day of study…was not significant (H = 7.46, df = 3, P = 0.060)</p>
+</blockquote>
+<p>Notes on analysis 1. The reported df for <span class="math inline">\(Day\)</span> indicates the authors coded Day as a factor and not numeric.</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>The authors give no detail on <em>which</em> non-parametric 2-way ANOVA was used, so I used a trial-and-error with several R packages.</p></li>
+<li><p>The hint of which non-parametric test used is the report of the testic statistic as “H”.</p></li>
+</ol>
+<pre class="r"><code>library(WRS2)
+library(Rfit)
+library(ART)
+library(ARTool)
+library(rcompanion)</code></pre>
+<pre class="r"><code>#Rfit
+raov(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
+<pre><code>## 
+## Robust ANOVA Table
+##                     DF      RD Mean RD        F p-value
+## Day_fac              3 5.85802 1.95267  4.64794 0.00389
+## Treatment_1          1 5.85802 5.85802 13.94381 0.00027
+## Day_fac:Treatment_1  3 5.85802 1.95267  4.64794 0.00389</code></pre>
+<pre class="r"><code>aligned.rank.transform(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2, SS.type=&quot;III&quot;)$significance</code></pre>
+<pre><code>##                        Sum Sq Df  F value      Pr(&gt;F)
+## Day_fac             10583.428  3 1.705653 0.168327007
+## Treatment_1          8166.206  1 3.944339 0.048863931
+## Day_fac:Treatment_1 28213.294  3 4.830531 0.003079765</code></pre>
+<pre class="r"><code>t2way(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
+<pre><code>## Call:
+## t2way(formula = Rejects_in_offer_1 ~ Day_fac * Treatment_1, data = exp2)
+## 
+##                      value p.value
+## Day_fac             2.8604   0.438
+## Treatment_1         1.0210   0.316
+## Day_fac:Treatment_1 8.4184   0.056</code></pre>
+<pre class="r"><code>pbad2way(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
+<pre><code>## Call:
+## pbad2way(formula = Rejects_in_offer_1 ~ Day_fac * Treatment_1, 
+##     data = exp2)
+## 
+##                     p.value
+## Day_fac              0.4491
+## Treatment_1          0.1903
+## Day_fac:Treatment_1  0.0701</code></pre>
+<pre class="r"><code>scheirerRayHare(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
+<pre><code>## 
+## DV:  Rejects_in_offer_1 
+## Observations:  157 
+## D:  0.8977682 
+## MS total:  2067.167</code></pre>
+<pre><code>##                      Df Sum Sq      H p.value
+## Day_fac               3   4666 2.5141 0.47275
+## Treatment_1           1   2136 1.1512 0.28330
+## Day_fac:Treatment_1   3  15179 8.1791 0.04245
+## Residuals           149 267529</code></pre>
+<pre class="r"><code>scheirerRayHare(Rejects_in_offer_1 ~ Treatment_1*Day_fac, data=exp2)</code></pre>
+<pre><code>## 
+## DV:  Rejects_in_offer_1 
+## Observations:  157 
+## D:  0.8977682 
+## MS total:  2067.167</code></pre>
+<pre><code>##                      Df Sum Sq      H p.value
+## Treatment_1           1   2128 1.1467 0.28425
+## Day_fac               3   4674 2.5187 0.47193
+## Treatment_1:Day_fac   3  15179 8.1791 0.04245
+## Residuals           149 267529</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Reported H</th>
+<th align="right">Reported p</th>
+<th align="right">my H</th>
+<th align="right">my p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.40</td>
+<td align="right">0.529</td>
+<td align="right">1.147</td>
+<td align="right">0.284</td>
+</tr>
+<tr class="even">
+<td align="right">3.43</td>
+<td align="right">0.331</td>
+<td align="right">2.519</td>
+<td align="right">0.472</td>
+</tr>
+<tr class="odd">
+<td align="right">7.46</td>
+<td align="right">0.060</td>
+<td align="right">8.179</td>
+<td align="right">0.042</td>
+</tr>
+</tbody>
+</table>
+<p>The Scheirer-Ray-Hare Test has an H statistic and is qualitatively similar to the reported results but does not reproduce quantitatively.</p>
+<p>The coding of <span class="math inline">\(Day\)</span>, and the interpretation of the test statistic, in combination with the plot, raises Statistical Red Flat no. 1.</p>
+</div>
+<div id="figure-2" class="section level3">
+<h3>Figure 2</h3>
+<p>There is no indication on how the SE was computed – are these raw SE or some robust SE given the non-parametric hypothesis test? They look close-to but not quite uniform, as if they were computed from a model.</p>
+<pre class="r"><code># raw SE
+# there are no NA so .N is accurate
+exp2_sum_a &lt;- exp2[, .(mean=mean(Rejects_in_offer_1),
+                       SE=sd(Rejects_in_offer_1)/sqrt(.N)), by=.(Day_fac, Treatment_1)]
+pd &lt;- position_dodge(0.9)
+ggplot(data=exp2_sum_a, aes(x=Day_fac, y=mean, fill=Treatment_1)) +
+  geom_col(position=pd) +
+  geom_errorbar(aes(ymin=mean-SE, ymax=mean+SE),
+                position=pd,
+                width=.2) +
+  NULL</code></pre>
+<p><img src="/post/2019-02-02-data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance-of-a-predator-colour-polymorphism_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="/images/Data%20from%20The%20significance%20of%20prey%20avoidance%20behaviour%20for%20the%20maintenance%20of%20a%20predator%20colour%20polymorphism/fig2.png" /><!-- --></p>
+<p>This seems to reproduce (the raw SE). The figure itself is addressed in Statistical Red Flag #1.</p>
 </div>
 </div>
 </div>

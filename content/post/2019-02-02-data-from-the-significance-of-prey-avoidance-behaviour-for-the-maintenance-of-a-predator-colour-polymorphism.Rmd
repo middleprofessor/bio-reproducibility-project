@@ -38,22 +38,31 @@ folder <- "Data from The significance of prey avoidance behaviour for the mainte
 # images need to be moved to /static/images/data from.../image.png
 knitr_path <- FALSE # run = TRUE to debug
 
+source("../R/clean_label.R") # bookdown
 ```
 
 # Import
 ```{r}
 fn <- "Data from prey avoidance and predator colour polymorphism.xlsx"
-sheet_i <- "Experiment 1"
 file_path <- paste(data_folder, folder, fn, sep="/")
-exp1 <- data.table(read_excel(file_path, sheet=sheet_i))
+sheet_1 <- "Experiment 1"
+exp1 <- data.table(read_excel(file_path, sheet=sheet_1))
 exp1[, Flower:=factor(Flower)]
 exp1[, Spider:=factor(Spider)]
+
+sheet_2 <- "Experiment 2"
+exp2 <- data.table(read_excel(file_path, sheet=sheet_2))
+colnames(exp2) <- clean_label(colnames(exp2))
+exp2[, Treatment_1:=factor(Treatment_1)]
+exp2[, Treatment_2:=factor(Treatment_2)]
+exp2[, Day_fac:=factor(Day)] # create a new column with day as factor
+
 ```
 
 
 # Reproducibility
-## Expeiment 1
-### statistical methods
+## Experiment 1
+### Statistical methods
 > Treatments were performed in temporal blocks, with each combination offlower species and treatment being applied once in each block. Spiders and treatment-flower combinations were chosen randomly within blocks.
 
 >Honeybee responses in Experiment 1 were analyzed with generalized linear mixed models (GLMMs) with binomial errors and block as a random effect. Binomial responses were: 1) accepted versus not accepted (reject + ignore), 2) accepted versus rejected (with ignored flowers excluded), and 3) inspected (accept + reject) versus not inspected (ignore). Differences between spider treatments were analyzed by comparing a model containing all 4 treatments to a model where the 3 spider treatments were collapsed into one and contrasted with the control.
@@ -221,5 +230,99 @@ plot_grid(gg1, gg2, gg3, nrow=3)
 ```
 
 The CIs differ. My CIs are computed from the model fit using emmeans. These are much more uniform than the reported CIs. The reported CIs may be from confint(fit_model)
+
+## Experiment 2
+
+### Statistical Methods
+> For Experiment 2, the differences in number of rejections of flowers by honeybees in Offer 1 (maximum = 10) between those harboring red and yellow spiders, and among the 4 days on which trials took place, were analyzed using a non-parametric 2-way analysis of variance. Responses to spider treatments in Offer 2 were analyzed using generalized linear models (GLMs) with binomial errors. Three binary response variables were used: 1) accepted (fed + land) versus not accepted, 2) fed versus not fed, and 3) whether or not the number of presentations which were rejected in Offer 2 was higher than in Offer 1. For the first 2 of these variables, 2 separate models were fitted, one considering only the  rst attempt to present a flower to a honeybee in Offer 2, and the other considering all attempts to present the flower (maximum = 10; i.e., did the bee ever land/feed?). We expected that any effect of learned aversion to spiders encountered in Offer 1 would be strongest in the first of these 2 analyses. Day of study (1–4) was included as a fixed factor to account for changes in honeybee behavior over time. In all models, the signi cance of each term was assessed using a chi-squared test statistic after backward deletion from a saturated model. A sep- arate chi-squared test was used to assess the difference in the pro- portion of bee responses in each rejection speed class (slow, fast and very fast) among spider treatments for the first presentation of flowers in Offer 2 in Experiment 2. 
+
+### Offer 1 -- nonparametric 2-way ANOVA
+
+> "no significant overall effect of spider color...(2-way nonparametric Anova: H = 0.40, df = 1 P = 0.529) (Figure 2)"...
+> "no significant effect of the day of study" (H = 3.43, df = 3, P = 0.331)
+> the interaction between spider color and day of study...was not significant (H = 7.46, df = 3, P = 0.060)
+
+Notes on analysis
+1. The reported df for $Day$ indicates the authors coded Day as a factor and not numeric. 
+
+2. The authors give no detail on *which* non-parametric 2-way ANOVA was used, so I used a trial-and-error with several R packages.
+
+3. The hint of which non-parametric test used is the report of the testic statistic as "H".
+
+```{r nonparametric libraries, message=FALSE}
+library(WRS2)
+library(Rfit)
+library(ART)
+library(ARTool)
+library(rcompanion)
+```
+
+```{r}
+#Rfit
+raov(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)
+
+```
+
+```{r}
+aligned.rank.transform(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2, SS.type="III")$significance
+
+```
+
+```{r}
+t2way(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)
+pbad2way(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)
+```
+
+```{r}
+scheirerRayHare(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)
+scheirerRayHare(Rejects_in_offer_1 ~ Treatment_1*Day_fac, data=exp2)
+```
+
+```{r exp2-offer1-table, echo=FALSE}
+my_H <- scheirerRayHare(Rejects_in_offer_1 ~ Treatment_1*Day_fac, data=exp2, verbose=FALSE)$H
+my_p <- scheirerRayHare(Rejects_in_offer_1 ~ Treatment_1*Day_fac, data=exp2, verbose=FALSE)$p.value
+reported_H <- c(0.4, 3.43, 7.46)
+reported_p <- c(.529, .331, .060)
+knitr::kable(data.table("Reported H"=reported_H,
+                        "Reported p"=reported_p,
+                        "my H"=my_H[1:3],
+                        "my p"=my_p[1:3]
+                        ), digits=c(3,3,3,3))
+```
+
+The Scheirer-Ray-Hare Test has an H statistic and is qualitatively similar to the reported results but does not reproduce quantitatively.
+
+The coding of $Day$, and the interpretation of the test statistic, in combination with the plot, raises Statistical Red Flat no. 1.
+
+### Figure 2
+
+There is no indication on how the SE was computed -- are these raw SE or some robust SE given the non-parametric hypothesis test? They look close-to but not quite uniform, as if they were computed from a model.
+
+```{r}
+# raw SE
+# there are no NA so .N is accurate
+exp2_sum_a <- exp2[, .(mean=mean(Rejects_in_offer_1),
+                       SE=sd(Rejects_in_offer_1)/sqrt(.N)), by=.(Day_fac, Treatment_1)]
+pd <- position_dodge(0.9)
+ggplot(data=exp2_sum_a, aes(x=Day_fac, y=mean, fill=Treatment_1)) +
+  geom_col(position=pd) +
+  geom_errorbar(aes(ymin=mean-SE, ymax=mean+SE),
+                position=pd,
+                width=.2) +
+  NULL
+```
+
+```{r fig2, echo=FALSE}
+fn <- "fig2.png"
+if(knitr_path==TRUE){
+  image_path <- paste("../images", folder, fn, sep="/")
+}else{
+  image_path <- paste("/images", folder, fn, sep="/")
+}
+knitr::include_graphics(image_path)
+
+```
+
+This seems to reproduce (the raw SE). The figure itself is addressed in Statistical Red Flag #1. 
 
 # Statistical Red Flags
