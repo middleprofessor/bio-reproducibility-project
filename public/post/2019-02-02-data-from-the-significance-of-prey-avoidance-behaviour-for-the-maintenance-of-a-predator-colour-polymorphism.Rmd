@@ -19,6 +19,24 @@ Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T 
 
 # Summary
 
+1. For experiment 1, there is no column for Block and no key for the numeric coding of the response. I had to assume block was in order and use trial-and-error to determing coding. Response[952] has a code value of 13; I used trial-and-error to recode this to 1. The responses for the binomial models were not given but needed to be constructed from the column of the response (which is why the key to this column is necessary)
+
+2. For experiment 2, the columns Rejects_in_offer_2 and Behaviour_upon_acceptance_offer_2 contain the value "NA", which typically indicates missing. However there is one case of Behaviour_upon_acceptance_offer_2 that has no value, so really is missing (or just not recorded.). I ran the analysis coding NA as a factor level "not accepted" and as indicating missing. The analyses in columns 3 and 4 of table 2 support the coding as "not accepted", the analysis in column 5 of table 2 supports the coding as missing. See #7 below. As in experiment 1, the columns for the response for the GLM had to be constructed from other columns (here, Behaviour_upon_acceptance_offer_2 and Rejects_in_offer_2), which is why the ambiguity in interpreting "NA" (not accepted or missing?) is critical.
+
+3. For experiment 2, there is no detail on the "non-parametric 2 way ANOVA"; I tried several and failed to reproduce the results but find the same qualitative pattern. However, the authors use p > 0.05 as an indicator of "no effect" and this p-value for the interaction varies around 0.05 in the different non-parametric tests.
+
+4. I reproduce the first two columns of Table 2. Note the reported X^2 for Offer 1:Day is reported as 0.014, which is the p-value and not X^2.
+
+5. I cannot reproduce the third column of Table 2. My stats are similar, but different enough to suggest some kind of coding difference.
+
+6. I reproduce the fourth column of Table 2, except for a very slight difference (two the second decimal place) in the X^2 of Treatment_1:Day interaction.
+
+7. I cannot reproduce the fifth column of Table 2. My stats are closer if Rejects_in_offer_2 is coded as missing, so there is lots of missing rows for the analysis. But this doesn't make sense and it is not consistent with columns 3 and 4 which reproduce when these rows are coded as "not accepted". If not accepted, then the number of rejects in offer 2 is greater than offer 1 (because those that didn't accept in offer 1 were thrown out).
+
+8. The ambiguity in construction of the response columns for the binomial model supports the idea that results are more reproducible if the data includes the response columns that are input to the models. This runs the risk of a reviewer blindly accepting that these response columns were constructed correctly but it does make it easier to see how the authors constructed the binary values from the multiple values in the column of raw responses.
+
+9. Coding of "Day" in experiment 2 is inconsistent. In the non-parametric ANOVA, "Day" is coded as categorical factor (note the 3 df for this effect) but in the GLM it is coded as a continuous covariate (only 1 df).
+
 # Setup
 ```{r warning=FALSE, message=FALSE}
 library(ggplot2)
@@ -68,7 +86,7 @@ exp2[, Day_fac:=factor(Day)] # create a new column with day as factor
 >Honeybee responses in Experiment 1 were analyzed with generalized linear mixed models (GLMMs) with binomial errors and block as a random effect. Binomial responses were: 1) accepted versus not accepted (reject + ignore), 2) accepted versus rejected (with ignored flowers excluded), and 3) inspected (accept + reject) versus not inspected (ignore). Differences between spider treatments were analyzed by comparing a model containing all 4 treatments to a model where the 3 spider treatments were collapsed into one and contrasted with the control.
 
 ### cleaning and recoding
-
+#### Exp 1
 1. There is no column identifying block; I will assume that the data are organized into the blocks.
 
 2. The key for the codes in the column "Response" is not given. The responses are "ignored", "reject", "accept" and the codes are 1, 2, 3. It took some trial-and-error to match the code with the response, which must be 1=accept, 2=reject, 3, = ignore
@@ -97,6 +115,8 @@ exp1[, R3:=ifelse(Response==3, 0, 1)] # 1 = inspect (reject or accept), 0 = igno
 exp1[, Spider_binary:=ifelse(Spider=="control", "control", "spider")]
 ```
 
+change the response for row number 952 to see which reproduces.
+
 ```{r trial-and-error, echo=FALSE, eval=FALSE}
 exp1[inc, R1:=1] 
 m1.R1 <- glmer(R1 ~ Flower*Spider_binary + (1|block), family=binomial, data=exp1)
@@ -116,6 +136,8 @@ drop1(m1.R1, test="Chisq")
 m2.R1 <- glmer(R1 ~ Flower + Spider_binary + (1|block), family=binomial, data=exp1)
 drop1(m2.R1, test="Chisq")
 
+# The first reproduces so change "13" to "1"
+exp1[inc, R1:=1] # making sure that if this runs, this code is replaced as it reproduces
 ```
 
 ### Table 1
@@ -165,7 +187,7 @@ table1 <- data.table(Response=responses,
 knitr::kable(table1, digits=c(NA, 3, 3, 3))
 ```
 
-Effectively reproduces. The first two numbers in row one are exact. Differences could be to different algorthms between versions. I don't think they are due to differences in coding.
+Effectively reproduces. Two of the X^2 stats in row one are exact. Differences could be to different algorithms between versions. I don't think they are due to differences in coding.
 
 ### Effect of spider treatments
 
@@ -231,10 +253,16 @@ plot_grid(gg1, gg2, gg3, nrow=3)
 
 The CIs differ. My CIs are computed from the model fit using emmeans. These are much more uniform than the reported CIs. The reported CIs may be from confint(fit_model)
 
+```{r fig1-ci, eval=FALSE}
+ci1 <- confint(m3.R1)
+ci2 <- confint(m3.R2)
+ci3 <- confint(m3.R3)
+```
+
 ## Experiment 2
 
 ### Statistical Methods
-> For Experiment 2, the differences in number of rejections of flowers by honeybees in Offer 1 (maximum = 10) between those harboring red and yellow spiders, and among the 4 days on which trials took place, were analyzed using a non-parametric 2-way analysis of variance. Responses to spider treatments in Offer 2 were analyzed using generalized linear models (GLMs) with binomial errors. Three binary response variables were used: 1) accepted (fed + land) versus not accepted, 2) fed versus not fed, and 3) whether or not the number of presentations which were rejected in Offer 2 was higher than in Offer 1. For the first 2 of these variables, 2 separate models were fitted, one considering only the  rst attempt to present a flower to a honeybee in Offer 2, and the other considering all attempts to present the flower (maximum = 10; i.e., did the bee ever land/feed?). We expected that any effect of learned aversion to spiders encountered in Offer 1 would be strongest in the first of these 2 analyses. Day of study (1–4) was included as a fixed factor to account for changes in honeybee behavior over time. In all models, the signi cance of each term was assessed using a chi-squared test statistic after backward deletion from a saturated model. A sep- arate chi-squared test was used to assess the difference in the pro- portion of bee responses in each rejection speed class (slow, fast and very fast) among spider treatments for the first presentation of flowers in Offer 2 in Experiment 2. 
+> For Experiment 2, the differences in number of rejections of flowers by honeybees in Offer 1 (maximum = 10) between those harboring red and yellow spiders, and among the 4 days on which trials took place, were analyzed using a non-parametric 2-way analysis of variance.
 
 ### Offer 1 -- nonparametric 2-way ANOVA
 
@@ -290,13 +318,13 @@ knitr::kable(data.table("Reported H"=reported_H,
                         ), digits=c(3,3,3,3))
 ```
 
-The Scheirer-Ray-Hare Test has an H statistic and is qualitatively similar to the reported results but does not reproduce quantitatively.
+None of the non-parametric tests reproduce the results. The aligned rank transform function is not close. The trimmed mean and M-estimator function reproduce in the sense of a similar pattern of test-statistic and p-value. The Scheirer-Ray-Hare Test has an H statistic and is qualitatively similar to the reported results but does not reproduce exactly.
 
-The coding of $Day$, and the interpretation of the test statistic, in combination with the plot, raises Statistical Red Flat no. 1.
+The coding of $Day$, and the interpretation of the test statistic, in combination with the plot, raises Statistical Red Flag no. 1.
 
 ### Figure 2
 
-There is no indication on how the SE was computed -- are these raw SE or some robust SE given the non-parametric hypothesis test? They look close-to but not quite uniform, as if they were computed from a model.
+There is no indication on how the SE was computed -- are these raw SE or some robust SE given the non-parametric hypothesis test?
 
 ```{r}
 # raw SE
@@ -325,4 +353,194 @@ knitr::include_graphics(image_path)
 
 This seems to reproduce (the raw SE). The figure itself is addressed in Statistical Red Flag #1. 
 
+### Offer 2
+#### Statistical methods
+>Responses to spider treatments in Offer 2 were analyzed using generalized linear models (GLMs) with binomial errors. Three binary response variables were used: 1) accepted (fed + land) versus not accepted, 2) fed versus not fed, and 3) whether or not the number of presentations which were rejected in Offer 2 was higher than in Offer 1. For the first 2 of these variables, 2 separate models were fitted, one considering only the first attempt to present a flower to a honeybee in Offer 2, and the other considering all attempts to present the flower (maximum = 10; i.e., did the bee ever land/feed?). 
+
+#### Clean and recode data
+>If a honeybee which had already experienced an attack failed to accept the flower in Offer 2, we recorded the number of rejections as 10.
+
+The column "Rejects_in_offer_2" includes values "NA" which could be the code for missing or could be short for "not accepted". Note that a value of 10 is "not accepted" so if NA is "not accepted" then why two codes for the same thing? Or, if NA is missing then why so many and why would they be missing? Maybe NA is missing because the bee was lost between offer 2, so that the NA in column Behaviour_upon_acceptance_offer_2 can mean 2 things -- missing or "not accepted"
+
+```{r clean-offer2, warning=FALSE}
+# "NA" in $Rejects_in_offer_2$ is probably "not accepted" and not missing
+# this will convert these to missing, so think about how this effects subsequent analysis
+exp2[, Rejects_in_offer_2:=as.numeric(Rejects_in_offer_2)] # recode NA as missing
+exp2[, Rejects_in_offer_2b:=ifelse(is.na(Rejects_in_offer_2),10,Rejects_in_offer_2)] # recode NA to 10
+
+```
+
+Likewise, in the the column "Behaviour_upon_acceptance_offer_2", the value "NA" is probably "not accepted" and not missing. But there *is* a missing value that is read in as NA not "NA". I am interpreting this as "NA" and converting this instead of leaving it as missing but will explore both.
+
+```{r clean-Behaviour_upon_acceptance_offer_2}
+# Again "NA" is probably "not accepted". But there is one missing value assigned NA. is this "NA" or truly missing?
+which_na <- which(is.na(exp2$Behaviour_upon_acceptance_offer_2))
+
+# copy column which will leave the value as missing
+exp2[, Behaviour_upon_acceptance_offer_2.na:=Behaviour_upon_acceptance_offer_2]
+# change value in original column to "NA"
+exp2[which_na, Behaviour_upon_acceptance_offer_2:="NA"]
+# make both columns factors
+exp2[, Behaviour_upon_acceptance_offer_2:=factor(Behaviour_upon_acceptance_offer_2)]
+exp2[, Behaviour_upon_acceptance_offer_2.na:=factor(Behaviour_upon_acceptance_offer_2.na)]
+
+```
+
+The binary responses described above are not in the data. I've created three binary columns based on my interpretation. Also, R2 is ambiguous, is it "Feed vs. Land" within the subset that accepted, or is it "Feed vs. NA + Land"?
+
+```{r create-response-columns}
+# R1: accepted (Land | Feed) vs. neither
+exp2[, R1:=ifelse(Behaviour_upon_acceptance_offer_2=="NA",0,1)] # coded NA as "not accepted"
+exp2[, R1.na:=ifelse(Behaviour_upon_acceptance_offer_2.na=="NA",0,1)] # coded NA "not accepted" but the entry with the missing value is left missing
+exp2[!is.na(Rejects_in_offer_2), R1b:=ifelse(Behaviour_upon_acceptance_offer_2=="NA",0,1)] # coded NA as "not accepted"
+
+# R2: Feed vs. non-feed, several alternatives
+exp2[R1==1, R2:=ifelse(Behaviour_upon_acceptance_offer_2=="Feed", 1, 0)] #subset
+exp2[, R2b:=ifelse(Behaviour_upon_acceptance_offer_2=="Feed", 1, 0)] # v NA + Land, with missing recoded as "NA"
+exp2[, R2b.na:=ifelse(Behaviour_upon_acceptance_offer_2.na=="Feed", 1, 0)] # v NA + Land with missing left as missing
+
+# R3: Rejects offer 2 > Rejects offer 1
+exp2[, R3:=ifelse(Rejects_in_offer_2 > Rejects_in_offer_1, 1, 0)] # NA coded as missing
+exp2[, R3b:=ifelse(Rejects_in_offer_2b > Rejects_in_offer_1, 1, 0)] # NA recoded as 10
+```
+
+#### Table 2
+
+> Responses to spider treatments in Offer 2 were analyzed using generalized linear models (GLMs) with binomial errors. Three binary response variables were used: 1) accepted (fed + land) versus not accepted, 2) fed versus not fed, and 3) whether or not the number of presentations which were rejected in Offer 2 was higher than in Offer 1. For the first 2 of these variables, 2 separate models were fitted, one considering only the first attempt to present a flower to a honeybee in Offer 2, and the other considering all attempts to present the flower (maximum = 10; i.e., did the bee ever land/feed?). We expected that any effect of learned aversion to spiders encountered in Offer 1 would be strongest in the first of these 2 analyses. Day of study (1–4) was included as a fixed factor to account for changes in honeybee behavior over time. In all models, the significance of each term was assessed using a chi-squared test statistic after backward deletion from a saturated model. A sep- arate chi-squared test was used to assess the difference in the pro- portion of bee responses in each rejection speed class (slow, fast and very fast) among spider treatments for the first presentation of flowers in Offer 2 in Experiment 2.
+
+It took me a lot of time to recognize that I need to create two more binary response columns "one considering only the first attempt to present a flower to a honeybee in Offer 2, and the other considering all attempts to present the flower".
+```{r}
+exp2[, R1.1:=ifelse(Behaviour_upon_acceptance_offer_2=="NA" | Rejects_in_offer_2 > 0,0,1)]
+exp2[R1.1==1, R2.1:=ifelse(Behaviour_upon_acceptance_offer_2=="Feed", 1, 0)]
+exp2[, R2.1b:=ifelse(Behaviour_upon_acceptance_offer_2=="NA"  | Behaviour_upon_acceptance_offer_2=="Land" | Rejects_in_offer_2 > 0, 0, 1)]
+# R2.1b reproduces
+```
+
+```{r table2}
+fn <- "table2.png"
+if(knitr_path==TRUE){
+  image_path <- paste("../images", folder, fn, sep="/")
+}else{
+  image_path <- paste("/images", folder, fn, sep="/")
+}
+knitr::include_graphics(image_path)
+
+```
+
+1. First presentation in offer 2 -- Land
+```{r}
+m1 <- glm(R1.1 ~ Treatment_1 + Treatment_2 + Day + Treatment_1:Treatment_2 + Treatment_1:Day + Treatment_2:Day + Treatment_1:Treatment_2:Day, family=binomial, data=exp2)
+m2=update(m1,~.-Treatment_1:Treatment_2:Day)
+anova(m1, m2, test="Chisq") # remove Treatment_1:Treatment_2:Day from model
+
+m3 <- update(m2,~.-Treatment_2:Day)
+anova(m2, m3, test="Chisq")
+
+m4 <- update(m3,~.-Treatment_1:Day)
+anova(m3, m4, test="Chisq")
+
+m5 <- update(m3,~.-Treatment_1:Treatment_2)
+anova(m3, m5, test="Chisq")
+
+m6 <- update(m5,~.-Treatment_1:Day)
+anova(m5, m6, test="Chisq")
+
+m7 <- update(m5,~.-Treatment_2)
+anova(m5, m7, test="Chisq")
+
+m8 <- update(m7,~.-Treatment_1:Day)
+anova(m7, m8, test="Chisq")
+
+anova(m7, test="Chisq")
+anova(glm(R1.1 ~ Treatment_1 + Day + Treatment_1:Day, family=binomial, data=exp2), test="Chisq")
+anova(glm(R1.1 ~ Day + Treatment_1 + Treatment_1:Day, family=binomial, data=exp2), test="Chisq")
+
+```
+
+This reproduces but the ANOVA table for remaining terms left in the model are type I sum of squares; this makes only a trivial difference. The backward elimination raises statistical red flag #3. The coding of Day is raised in statistical red flag #4
+
+2. First presentation in offer 2 -- Feed. I'm expediting this to moving to final model, assuming the elimination is reproducible (as for "Land")
+
+```{r}
+anova(glm(R2.1b ~ Treatment_1 + Day + Treatment_1:Day, family=binomial, data=exp2), test="Chisq")
+
+```
+
+reproduces using "Feed vs. NA + Land". Note the X^2 for Offer 1 X Day is reported as 0.014, which is the p-value and not X^2.
+
+3. All presentations in offer 2 -- Land. I'm expediting this to moving to final model, assuming the elimination is reproducible (as for #1)
+
+```{r}
+# NA="not accepted" in Rejects_in_offer_2, recoded missing value as "not accepted"
+anova(glm(R1 ~ Treatment_1 + Day + Treatment_1:Day, family=binomial, data=exp2), test="Chisq")
+
+# NA="not accepted" in Rejects_in_offer_2, left missing value as missing
+anova(glm(R1.na ~ Treatment_1 + Day + Treatment_1:Day, family=binomial, data=exp2), test="Chisq")
+
+# NA=missing in Rejects_in_offer_2
+anova(glm(R1b ~ Treatment_1 + Day + Treatment_1:Day, family=binomial, data=exp2), test="Chisq")
+
+
+```
+None reproduces but codeing the missing value in "Behaviour_upon_acceptance_offer_2" as missing is a a bit closer than coding it as the factor level "NA". But then see #4
+
+4. All presentations in offer 2 -- Feed. I'm expediting this to moving to final model, assuming the elimination is reproducible (as for #1)
+
+```{r}
+
+# subset (Feed vs. Land, not accepted excluded)
+anova(glm(R2 ~ Treatment_1 + Treatment_2 + Day + Treatment_1:Treatment_2 + 
+    Treatment_1:Day, family=binomial, data=exp2), test="Chisq")
+# Feed vs. Land + not accepted, with missing value recoded as "NA"
+anova(glm(R2b ~ Treatment_1 + Treatment_2 + Day + Treatment_1:Treatment_2 + 
+    Treatment_1:Day, family=binomial, data=exp2), test="Chisq")
+# Feed vs. Land + not accepted, with missing value left as NA
+anova(glm(R2b.na ~ Treatment_1 + Treatment_2 + Day + Treatment_1:Treatment_2 + 
+    Treatment_1:Day, family=binomial, data=exp2), test="Chisq")
+
+```
+
+Reproduces exactly (other than very slight difference in X^2 value for Treatment_1:Day) if missing value is coded as factor level "NA" (this is response R2b)
+
+5. Difference in number of rejections between Offer 1 and Offer 2
+
+```{r}
+anova(glm(R3 ~ Treatment_1 + Treatment_2 + Treatment_1:Treatment_2, family=binomial, data=exp2), test="Chisq") # treating NA as missing
+anova(glm(R3b ~ Treatment_1 + Treatment_2 + Treatment_1:Treatment_2, family=binomial, data=exp2), test="Chisq") # treating NA as "not accepted" and recoded Rejects=10
+
+
+```
+
+Neither reproduces but the model with Rejects_in_offer_2 coding NA=missing is much closer. This raises a puzzle. If these are truly missing then these rows should not be analyzed in #3 and #4 (columns 3 and 4) but I could only reproduce 4 (and come close to 3) with these rows.
+
+#### Figure 4
+
+
+```{r}
+
+```
+
 # Statistical Red Flags
+1. Day is coded as categorical so takes 2 df from residual. This may have been necessary for the particular 2-way non-parametric ANOVA used.
+
+```{r}
+# parametric
+anova(lm(Rejects_in_offer_1 ~ Treatment_1*Day, data=exp2)) # type 1 but just peaking at interaction
+anova(lm(Rejects_in_offer_1 ~ Treatment_1*Day_fac, data=exp2)) # type 1 but just peaking at interaction
+
+# ART package
+aligned.rank.transform(Rejects_in_offer_1 ~ Treatment_1*Day, data=exp2, SS.type="III")$significance
+aligned.rank.transform(Rejects_in_offer_1 ~ Treatment_1*Day_fac, data=exp2, SS.type="III")$significance
+
+# WRS2 package
+ancova(Rejects_in_offer_1 ~ Treatment_1*Day, data=exp2)
+#ancboot(Rejects_in_offer_1 ~ Treatment_1*Day, data=exp2)
+t2way(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)
+
+```
+
+2. Figure 2 is highly suggestive of a big interaction between Treatment and Day. The authors use the p-value to state "no significant interaction" so this is ambiguous if they are stating "no interaction" (side note: p-values and not effects are significant or not signficant). Interpreting no effect for an interaction is risky - these have lower power than the main effects and, more generally, interactions are ubiquitous. I am fine with modeling a factorial design without the interaction to looked at smoothed effects but with this plot and estimate of the interaction effect and its CI, I would conclude that the size of the treatment effect is conditional on day (large on day 1 and very small on day 4).
+
+3. Backward elimination (or any kind of model selection without dividing into test and training sets) tends to overfit the data, resulting in inflated effect sizes and optimistic p-values.
+
+4. Coding of "Day" is inconsistent. In the non-parametric ANOVA, "Day" is coded as categorical factor (note the 3 df for this effect) but in the GLM it is coded as a continuous covariate (only 1 df).
