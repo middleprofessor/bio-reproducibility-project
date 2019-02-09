@@ -336,9 +336,9 @@ raov(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
 ##     data = exp2)
 ## 
 ##                     p.value
-## Day_fac              0.5092
-## Treatment_1          0.1736
-## Day_fac:Treatment_1  0.0718</code></pre>
+## Day_fac              0.5042
+## Treatment_1          0.1987
+## Day_fac:Treatment_1  0.0601</code></pre>
 <pre class="r"><code>scheirerRayHare(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
 <pre><code>## 
 ## DV:  Rejects_in_offer_1 
@@ -847,8 +847,8 @@ t2way(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
 ## Treatment_1         1.0210   0.316
 ## Day_fac:Treatment_1 8.4184   0.056</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li><p>Figure 2 is highly suggestive of a big interaction between Treatment and Day. The authors use the p-value to state “no significant interaction” so this is ambiguous if they are stating “no interaction” (side note: p-values and not effects are significant or not signficant). Interpreting no effect for an interaction is risky - these have lower power than the main effects and, more generally, interactions are ubiquitous. I am fine with modeling a factorial design without the interaction to looked at smoothed effects but with this plot and estimate of the interaction effect and its CI, I would conclude that the size of the treatment effect is conditional on day (large on day 1 and very small on day 4).</p></li>
+<li><p>Figure 2 is highly suggestive of a big interaction between Treatment and Day. The authors use the p-value to state “no significant interaction” so this is ambiguous if they are stating “no interaction” (side note: p-values and not effects are significant or not signficant). Interpreting no effect for an interaction is risky - these have lower power than the main effects and, more generally, interactions are ubiquitous. I am fine with modeling a factorial design without the interaction to look at smoothed effects but with this plot and estimate of the interaction effect and its CI, I would conclude that the size of the treatment effect is conditional on day (large on day 1 and very small on day 4).</p></li>
 <li><p>Backward elimination (or any kind of model selection without dividing into test and training sets) tends to overfit the data, resulting in inflated effect sizes and optimistic p-values.</p></li>
-<li><p>Coding of “Day” is inconsistent. In the non-parametric ANOVA, “Day” is coded as categorical factor (note the 3 df for this effect) but in the GLM it is coded as a continuous covariate (only 1 df).</p></li>
+<li><p>Coding of “Day” is inconsistent. In the non-parametric ANOVA, “Day” is coded as categorical factor (note the 3 df for this effect) but in the GLM it is coded as a continuous covariate (only 1 df). This may have been convenience for use of functions but it is a good example of the many choices we make and the effects of these choices on p-values as one reason why a hypothesis test strategy (as opposed to just p-values), with a sharp test boundary, is a poor practice.</p></li>
 </ol>
 </div>
