@@ -353,7 +353,7 @@ knitr::include_graphics(image_path)
 
 ```
 
-This seems to reproduce (the raw SE). The figure itself is addressed in Statistical Red Flag #1. 
+This seems to reproduce (the raw SE). The figure itself is addressed in Statistical Red Flag #2. 
 
 ### Offer 2
 #### Statistical methods
