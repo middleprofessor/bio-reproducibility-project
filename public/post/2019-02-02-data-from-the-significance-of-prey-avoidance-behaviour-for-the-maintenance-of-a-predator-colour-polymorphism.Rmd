@@ -23,19 +23,21 @@ Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T 
 
 2. For experiment 2, the columns Rejects_in_offer_2 and Behaviour_upon_acceptance_offer_2 contain the value "NA", which typically indicates missing. However there is one case of Behaviour_upon_acceptance_offer_2 that has no value, so really is missing (or just not recorded.). I ran the analysis coding NA as a factor level "not accepted" and as indicating missing. The analyses in columns 3 and 4 of table 2 support the coding as "not accepted", the analysis in column 5 of table 2 supports the coding as missing. See #7 below. As in experiment 1, the columns for the response for the GLM had to be constructed from other columns (here, Behaviour_upon_acceptance_offer_2 and Rejects_in_offer_2), which is why the ambiguity in interpreting "NA" (not accepted or missing?) is critical.
 
-3. For experiment 2, there is no detail on the "non-parametric 2 way ANOVA"; I tried several and failed to reproduce the results but find the same qualitative pattern. However, the authors use p > 0.05 as an indicator of "no effect" and this p-value for the interaction varies around 0.05 in the different non-parametric tests.
+3. Experiment 1: Table 1 effectively reproduces. Two of the X^2 stats in row one are exact but remaining statistics are only close. The in-text ANOVA statistics for effects of the different spider treatments reproduces exactly for "accepted versus not accepted"; the other two are close.
 
-4. I reproduce the first two columns of Table 2. Note the reported X^2 for Offer 1:Day is reported as 0.014, which is the p-value and not X^2.
+4. For experiment 2, there is no detail on the "non-parametric 2 way ANOVA"; I tried several and failed to reproduce the results but find the same qualitative pattern. However, the authors use p > 0.05 as an indicator of "no effect" and this p-value for the interaction varies around 0.05 in the different non-parametric tests.
+
+5. I reproduce the first two columns of Table 2. Note the reported X^2 for Offer 1:Day is reported as 0.014, which is the p-value and not X^2.
 
 5. I cannot reproduce the third column of Table 2. My stats are similar, but different enough to suggest some kind of coding difference.
 
-6. I reproduce the fourth column of Table 2, except for a very slight difference (two the second decimal place) in the X^2 of Treatment_1:Day interaction.
+7. I reproduce the fourth column of Table 2, except for a very slight difference (two the second decimal place) in the X^2 of Treatment_1:Day interaction.
 
-7. I cannot reproduce the fifth column of Table 2. My stats are closer if Rejects_in_offer_2 is coded as missing, so there is lots of missing rows for the analysis. But this doesn't make sense and it is not consistent with columns 3 and 4 which reproduce when these rows are coded as "not accepted". If not accepted, then the number of rejects in offer 2 is greater than offer 1 (because those that didn't accept in offer 1 were thrown out).
+8. I cannot reproduce the fifth column of Table 2. My stats are closer if Rejects_in_offer_2 is coded as missing, so there is lots of missing rows for the analysis. But this doesn't make sense and it is not consistent with columns 3 and 4 which reproduce when these rows are coded as "not accepted". If not accepted, then the number of rejects in offer 2 is greater than offer 1 (because those that didn't accept in offer 1 were thrown out).
 
-8. The ambiguity in construction of the response columns for the binomial model supports the idea that results are more reproducible if the data includes the response columns that are input to the models. This runs the risk of a reviewer blindly accepting that these response columns were constructed correctly but it does make it easier to see how the authors constructed the binary values from the multiple values in the column of raw responses.
+9. The ambiguity in construction of the response columns for the binomial model supports the idea that results are more reproducible if the data includes the response columns that are input to the models. This runs the risk of a reviewer blindly accepting that these response columns were constructed correctly but it does make it easier to see how the authors constructed the binary values from the multiple values in the column of raw responses.
 
-9. Coding of "Day" in experiment 2 is inconsistent. In the non-parametric ANOVA, "Day" is coded as categorical factor (note the 3 df for this effect) but in the GLM it is coded as a continuous covariate (only 1 df).
+10. Coding of "Day" in experiment 2 is inconsistent. In the non-parametric ANOVA, "Day" is coded as categorical factor (note the 3 df for this effect) but in the GLM it is coded as a continuous covariate (only 1 df).
 
 # Setup
 ```{r warning=FALSE, message=FALSE}

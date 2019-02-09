@@ -73,6 +73,7 @@ Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T 
 <ol style="list-style-type: decimal">
 <li><p>For experiment 1, there is no column for Block and no key for the numeric coding of the response. I had to assume block was in order and use trial-and-error to determing coding. Response[952] has a code value of 13; I used trial-and-error to recode this to 1. The responses for the binomial models were not given but needed to be constructed from the column of the response (which is why the key to this column is necessary)</p></li>
 <li><p>For experiment 2, the columns Rejects_in_offer_2 and Behaviour_upon_acceptance_offer_2 contain the value “NA”, which typically indicates missing. However there is one case of Behaviour_upon_acceptance_offer_2 that has no value, so really is missing (or just not recorded.). I ran the analysis coding NA as a factor level “not accepted” and as indicating missing. The analyses in columns 3 and 4 of table 2 support the coding as “not accepted”, the analysis in column 5 of table 2 supports the coding as missing. See #7 below. As in experiment 1, the columns for the response for the GLM had to be constructed from other columns (here, Behaviour_upon_acceptance_offer_2 and Rejects_in_offer_2), which is why the ambiguity in interpreting “NA” (not accepted or missing?) is critical.</p></li>
+<li><p>Experiment 1: Table 1 effectively reproduces. Two of the X^2 stats in row one are exact but remaining statistics are only close. The in-text ANOVA statistics for effects of the different spider treatments reproduces exactly for “accepted versus not accepted”; the other two are close.</p></li>
 <li><p>For experiment 2, there is no detail on the “non-parametric 2 way ANOVA”; I tried several and failed to reproduce the results but find the same qualitative pattern. However, the authors use p &gt; 0.05 as an indicator of “no effect” and this p-value for the interaction varies around 0.05 in the different non-parametric tests.</p></li>
 <li><p>I reproduce the first two columns of Table 2. Note the reported X^2 for Offer 1:Day is reported as 0.014, which is the p-value and not X^2.</p></li>
 <li><p>I cannot reproduce the third column of Table 2. My stats are similar, but different enough to suggest some kind of coding difference.</p></li>
@@ -385,9 +386,9 @@ raov(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
 ##     data = exp2)
 ## 
 ##                     p.value
-## Day_fac              0.5259
-## Treatment_1          0.1920
-## Day_fac:Treatment_1  0.0568</code></pre>
+## Day_fac              0.4975
+## Treatment_1          0.1953
+## Day_fac:Treatment_1  0.0668</code></pre>
 <pre class="r"><code>scheirerRayHare(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
 <pre><code>## 
 ## DV:  Rejects_in_offer_1 
