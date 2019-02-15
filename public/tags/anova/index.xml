@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
-    <lastBuildDate>Tue, 19 Jun 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 15 Feb 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/anova/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Data from: Habitat management alters thermal opportunity</title>
+      <link>/post/data-from-habitat-management-alters-thermal-opportunity/</link>
+      <pubDate>Fri, 15 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-habitat-management-alters-thermal-opportunity/</guid>
+      <description> Sources Summary Set up Import Reproducibility Statistical Red Flags   Sources  Summary  Set up  Import  Reproducibility  Statistical Red Flags  </description>
+    </item>
     
     <item>
       <title>Data from Critical thermal limits affected differently by developmental and adult thermal fluctuations</title>

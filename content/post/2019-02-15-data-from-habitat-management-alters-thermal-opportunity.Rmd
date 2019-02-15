@@ -1,0 +1,25 @@
+---
+title: 'Data from: Habitat management alters thermal opportunity'
+author: Jeff Walker
+date: '2019-02-15'
+slug: data-from-habitat-management-alters-thermal-opportunity
+categories: []
+tags:
+  - anova
+subtitle: ''
+output:
+  blogdown::html_page:
+    toc: true
+---
+
+# Sources
+
+# Summary
+
+# Set up
+
+# Import
+
+# Reproducibility
+
+# Statistical Red Flags

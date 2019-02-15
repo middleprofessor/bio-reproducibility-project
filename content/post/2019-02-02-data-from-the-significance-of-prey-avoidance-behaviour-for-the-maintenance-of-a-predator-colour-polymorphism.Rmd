@@ -9,6 +9,9 @@ tags:
   - generalized linear mixed model
   - binomial response
 subtitle: ''
+output:
+  blogdown::html_page:
+    toc: true
 ---
 
 # Sources

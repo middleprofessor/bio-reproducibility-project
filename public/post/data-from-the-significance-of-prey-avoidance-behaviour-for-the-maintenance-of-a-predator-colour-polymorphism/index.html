@@ -6,11 +6,9 @@
   <title>Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from: The significance of prey avoidance behaviour for the …" />
-  <meta name="description" content="Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. Behavioral Ecology, online in advance of print. https://doi.org/10.1093/beheco/ary129
-Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. Dryad Digital Repository. https://doi.">
-  <meta property="og:description" content="Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. Behavioral Ecology, online in advance of print. https://doi.org/10.1093/beheco/ary129
-Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. Dryad Digital Repository. https://doi.">
-  <meta name="twitter:description" content="Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. …">
+  <meta name="description" content="Sources Summary Setup Import Reproducibility Experiment 1 Statistical methods cleaning and recoding Table 1 reported table 1 Effect of spider treatments Figure 1  Experiment 2 Statistical Methods Offer 1 – nonparametric 2-way ANOVA Figure 2 Offer 2   Statistical Red Flags   Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism.">
+  <meta property="og:description" content="Sources Summary Setup Import Reproducibility Experiment 1 Statistical methods cleaning and recoding Table 1 reported table 1 Effect of spider treatments Figure 1  Experiment 2 Statistical Methods Offer 1 – nonparametric 2-way ANOVA Figure 2 Offer 2   Statistical Red Flags   Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism.">
+  <meta name="twitter:description" content="Sources Summary Setup Import Reproducibility Experiment 1 Statistical methods cleaning and recoding Table 1 reported table 1 Effect of spider treatments Figure 1  Experiment 2 Statistical Methods …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance-of-a-predator-colour-polymorphism/" />
@@ -63,7 +61,33 @@ Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T 
 <aside class="toc">
   
 </aside>
-      <div id="sources" class="section level1">
+      <div id="TOC">
+<ul>
+<li><a href="#sources">Sources</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#import">Import</a></li>
+<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#experiment-1">Experiment 1</a><ul>
+<li><a href="#statistical-methods">Statistical methods</a></li>
+<li><a href="#cleaning-and-recoding">cleaning and recoding</a></li>
+<li><a href="#table-1">Table 1</a></li>
+<li><a href="#reported-table-1">reported table 1</a></li>
+<li><a href="#effect-of-spider-treatments">Effect of spider treatments</a></li>
+<li><a href="#figure-1">Figure 1</a></li>
+</ul></li>
+<li><a href="#experiment-2">Experiment 2</a><ul>
+<li><a href="#statistical-methods-1">Statistical Methods</a></li>
+<li><a href="#offer-1-nonparametric-2-way-anova">Offer 1 – nonparametric 2-way ANOVA</a></li>
+<li><a href="#figure-2">Figure 2</a></li>
+<li><a href="#offer-2">Offer 2</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#statistical-red-flags">Statistical Red Flags</a></li>
+</ul>
+</div>
+
+<div id="sources" class="section level1">
 <h1>Sources</h1>
 <p>Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. Behavioral Ecology, online in advance of print. <a href="https://doi.org/10.1093/beheco/ary129" class="uri">https://doi.org/10.1093/beheco/ary129</a></p>
 <p>Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism. Dryad Digital Repository. <a href="https://doi.org/10.5061/dryad.792r3k1" class="uri">https://doi.org/10.5061/dryad.792r3k1</a></p>
@@ -386,9 +410,9 @@ raov(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
 ##     data = exp2)
 ## 
 ##                     p.value
-## Day_fac              0.5042
-## Treatment_1          0.1987
-## Day_fac:Treatment_1  0.0601</code></pre>
+## Day_fac              0.4441
+## Treatment_1          0.1886
+## Day_fac:Treatment_1  0.0618</code></pre>
 <pre class="r"><code>scheirerRayHare(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
 <pre><code>## 
 ## DV:  Rejects_in_offer_1 
@@ -935,7 +959,9 @@ t2way(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
 </ul>
 
     <ul class="pager article-pager">
-      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-newer">
+          <a href="/post/data-from-habitat-management-alters-thermal-opportunity/" data-toggle="tooltip" data-placement="top" title="Data from: Habitat management alters thermal opportunity">&lt; Newer</a>
+      </li>
       <li class="pager-older">
         <a href="/post/data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa/" data-toggle="tooltip" data-placement="top" title="Data from Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa">Older &gt;</a>
       </li>
