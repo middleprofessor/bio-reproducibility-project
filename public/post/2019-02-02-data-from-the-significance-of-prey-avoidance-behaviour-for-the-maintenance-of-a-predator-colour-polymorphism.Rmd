@@ -43,7 +43,7 @@ Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T 
 10. Coding of "Day" in experiment 2 is inconsistent. In the non-parametric ANOVA, "Day" is coded as categorical factor (note the 3 df for this effect) but in the GLM it is coded as a continuous covariate (only 1 df).
 
 # Setup
-```{r warning=FALSE, message=FALSE}
+```{r setup, warning=FALSE, message=FALSE}
 library(ggplot2)
 library(readxl)
 library(data.table)

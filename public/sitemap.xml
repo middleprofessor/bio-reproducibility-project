@@ -161,6 +161,12 @@
   </url>
   
   <url>
+    <loc>/tags/jmp/</loc>
+    <lastmod>2019-02-15T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/linear-mixed-model/</loc>
     <lastmod>2019-01-16T00:00:00+00:00</lastmod>
     <priority>0</priority>

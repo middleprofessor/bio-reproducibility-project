@@ -6,6 +6,7 @@ slug: data-from-habitat-management-alters-thermal-opportunity
 categories: []
 tags:
   - anova
+  - JMP
 subtitle: ''
 output:
   blogdown::html_page:
@@ -17,28 +18,430 @@ output:
 <ul>
 <li><a href="#sources">Sources</a></li>
 <li><a href="#summary">Summary</a></li>
-<li><a href="#set-up">Set up</a></li>
+<li><a href="#setup">Setup</a></li>
 <li><a href="#import">Import</a></li>
-<li><a href="#reproducibility">Reproducibility</a></li>
+<li><a href="#cleaning">Cleaning</a></li>
+<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#selected-temperatures-and-thermal-quality-of-habitat">Selected temperatures and thermal quality of habitat</a><ul>
+<li><a href="#thermal-preference-tset">Thermal preference (Tset)</a></li>
+<li><a href="#thermal-quality-of-habitat-de">Thermal quality of habitat (de)</a></li>
+<li><a href="#table-1">Table 1</a></li>
+<li><a href="#encounter-rates">Encounter rates</a></li>
+<li><a href="#fig-2">Fig 2</a></li>
+</ul></li>
+<li><a href="#lizard-body-temperatures-and-extent-of-thermoregulation">Lizard body temperatures and extent of thermoregulation</a></li>
+</ul></li>
 <li><a href="#statistical-red-flags">Statistical Red Flags</a></li>
 </ul>
 </div>
 
 <div id="sources" class="section level1">
 <h1>Sources</h1>
+<p>Neel LK, McBrayer LD (2018) Habitat management alters thermal opportunity. Functional Ecology 32(8): 2029-2039. <a href="https://doi.org/10.1111/1365-2435.13123" class="uri">https://doi.org/10.1111/1365-2435.13123</a></p>
+<p>Neel LK, McBrayer LD (2018) Data from: Habitat management alters thermal opportunity. Dryad Digital Repository. <a href="https://doi.org/10.5061/dryad.g7s12pk" class="uri">https://doi.org/10.5061/dryad.g7s12pk</a></p>
 </div>
 <div id="summary" class="section level1">
 <h1>Summary</h1>
 </div>
-<div id="set-up" class="section level1">
-<h1>Set up</h1>
+<div id="setup" class="section level1">
+<h1>Setup</h1>
+<pre class="r"><code>library(ggplot2)
+library(data.table)
+library(emmeans)
+library(car)
+library(lubridate)
+library(MASS)
+library(DHARMa)</code></pre>
+<pre class="r"><code>data_folder &lt;- &quot;../data&quot;
+folder &lt;- &quot;Data from Habitat management alters thermal opportunity&quot;
+
+# images need to be moved to /static/images/data from.../image.png
+knitr_path &lt;- FALSE # run = TRUE to debug
+
+source(&quot;../R/clean_label.R&quot;) # bookdown</code></pre>
 </div>
 <div id="import" class="section level1">
 <h1>Import</h1>
+<pre class="r"><code>fn &lt;- &quot;FE- thermal index data.csv&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+exp1 &lt;- fread(file_path)
+colnames(exp1) &lt;- clean_label(colnames(exp1))
+
+fn &lt;- &quot;FE- encounter rate data.csv&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+exp2 &lt;- fread(file_path)
+colnames(exp2) &lt;- clean_label(colnames(exp2))</code></pre>
+</div>
+<div id="cleaning" class="section level1">
+<h1>Cleaning</h1>
+<pre class="r"><code># discovered when doing kruskal-wallis
+# there are many observations where habitat_type is &quot;&quot; (an empty space)
+unique(exp1$habitat_type) # there is a &quot;&quot; present</code></pre>
+<pre><code>## [1] &quot;&quot;    &quot;SPS&quot; &quot;LLP&quot;</code></pre>
+<pre class="r"><code>exp1[, habitat_type:=factor(ifelse(habitat_type==&quot;&quot;, NA, habitat_type))]
+exp1[, time_of_day:=factor(ifelse(time_of_day==&quot;&quot;, NA, time_of_day))]
+
+#convert time from string to time
+time.step1 &lt;- format(strptime(exp1$time, &quot;%I:%M:%S %p&quot;), format=&quot;%H:%M:%S&quot;)
+time.step2 &lt;- as.POSIXct(time.step1,format=&quot;%H:%M:%S&quot;)
+exp1[, dtime := hour(time.step2) + minute(time.step2)/60 + second(time.step2)/3600]</code></pre>
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
+<div id="selected-temperatures-and-thermal-quality-of-habitat" class="section level2">
+<h2>Selected temperatures and thermal quality of habitat</h2>
+<div id="thermal-preference-tset" class="section level3">
+<h3>Thermal preference (Tset)</h3>
+<blockquote>
+<p>Thermal preference (Tset) did not differ between lizards from sand pine scrub and longleaf pine habitats (ANOVA; F1, 66 = 0.002; P &lt; 0.96).</p>
+</blockquote>
+<p>The linear model used for Tset is not clear. The DDF is 66 which means there is either a continuous covariate in the model or one observation was removed. The only method mentioning covariate is “temperature” for analyses of “accuracy of thermoregulation”. Not sure what “temperature” is as there are multiple temperature-type variables in the file.</p>
+<pre class="r"><code>anova(lm(Tset ~ habitat_type, data=exp1))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Tset
+##              Df  Sum Sq Mean Sq F value Pr(&gt;F)
+## habitat_type  1   0.058 0.05823  0.0248 0.8754
+## Residuals    67 157.399 2.34924</code></pre>
+<pre class="r"><code>anova(lm(Tset ~ Te_30 + habitat_type, data=exp1))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Tset
+##              Df  Sum Sq Mean Sq F value Pr(&gt;F)
+## Te_30         1   0.291 0.29119  0.1203 0.7299
+## habitat_type  1   0.096 0.09560  0.0395 0.8431
+## Residuals    61 147.660 2.42066</code></pre>
+<pre class="r"><code>anova(lm(Tset ~ Te_60 + habitat_type, data=exp1))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Tset
+##              Df  Sum Sq Mean Sq F value Pr(&gt;F)
+## Te_60         1   0.013 0.01262   0.005 0.9438
+## habitat_type  1   0.671 0.67100   0.267 0.6076
+## Residuals    51 128.179 2.51331</code></pre>
+<pre class="r"><code>anova(lm(Tset ~ Ta + habitat_type, data=exp1))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Tset
+##              Df  Sum Sq Mean Sq F value Pr(&gt;F)
+## Ta            1 0.00754 0.00754  0.0103 0.9239
+## habitat_type  1 0.55537 0.55537  0.7618 0.4320
+## Residuals     4 2.91612 0.72903</code></pre>
+<pre class="r"><code>anova(lm(Tset ~ Tb + habitat_type, data=exp1))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Tset
+##              Df  Sum Sq Mean Sq F value Pr(&gt;F)
+## Tb            1   3.804  3.8038  1.6392 0.2049
+## habitat_type  1   0.501  0.5010  0.2159 0.6437
+## Residuals    66 153.152  2.3205</code></pre>
+<pre class="r"><code>anova(lm(Tset ~ Tsub + habitat_type, data=exp1))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Tset
+##              Df Sum Sq Mean Sq F value   Pr(&gt;F)   
+## Tsub          1 21.724 21.7244 10.2023 0.003288 **
+## habitat_type  1  0.400  0.4004  0.1881 0.667639   
+## Residuals    30 63.881  2.1294                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(lm(Tset ~  habitat_type + Tb, data=exp1))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Tset
+##              Df  Sum Sq Mean Sq F value Pr(&gt;F)
+## habitat_type  1   0.058  0.0582  0.0251 0.8746
+## Tb            1   4.247  4.2466  1.8301 0.1807
+## Residuals    66 153.152  2.3205</code></pre>
+<p>None reproduce. Tb (active field temperature of lizard at time of capture) as covariate gives the reported DDF and it makes sense as “temperature”</p>
+<blockquote>
+<p>The Tset range, or the central 80% of all body temperatures selected in the thermal gradient, was 35.40 – 38.57°C.</p>
+</blockquote>
+<pre class="r"><code>quantile(exp1$Tset, c(.1, .9), na.rm=TRUE)</code></pre>
+<pre><code>##     10%     90% 
+## 35.4074 38.4868</code></pre>
+<p>Reproduces except the slight difference in how the upper quantile is computed.</p>
+<blockquote>
+<p>and the median selected Tb was 37.25°C for all lizards across the two habitat types (Fig. 1)</p>
+</blockquote>
+<pre class="r"><code>median(exp1$Tb, na.rm=TRUE)</code></pre>
+<pre><code>## [1] 34.1</code></pre>
+<pre class="r"><code>median(exp1$Tset, na.rm=TRUE)</code></pre>
+<pre><code>## [1] 37.25636</code></pre>
+<p>This reproduces only if by “median selected Tb” the authors mean the median temperature selected in the Tset test, but this would be a very misleading use of “Tb” (as a general shortening of body temperature) given that they define Tb as the active field temperature in the text and the column Tb is this active field temperature measure.</p>
+</div>
+<div id="thermal-quality-of-habitat-de" class="section level3">
+<h3>Thermal quality of habitat (de)</h3>
+<blockquote>
+<p>Thermal quality of habitat (de) did not differ between longleaf pine and sand pine scrub habitats when tested across 800 to 1300 hours (Nonparametric Wilcoxon: χ21,63 = 1.78; P &lt; 0.18).</p>
+</blockquote>
+<pre class="r"><code>wilcox.test(de ~ habitat_type, data=exp1)</code></pre>
+<pre><code>## 
+##  Wilcoxon rank sum test
+## 
+## data:  de by habitat_type
+## W = 358, p-value = 0.1851
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+<pre class="r"><code>kruskal.test(de ~ habitat_type, data=exp1, na.action=&quot;na.omit&quot;)</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  de by habitat_type
+## Kruskal-Wallis chi-squared = 1.7873, df = 1, p-value = 0.1813</code></pre>
+<p>This reproduces if using K-W and not Wilcoxan rank sum. The reported statistic seems to be the K-W chi-square and not the Wilcoxan W. Maybe JMP defaults to K-W given the habitat_type = “”, although the de value for these cases is NA, so it simply did K-W with 2 groups.</p>
+<blockquote>
+<p>However, these habitats have very different canopy cover, thus mornings (800 - 1000) were compared to midday (1100-1300) to reduce diel variation. Longleaf pine habitats had greater thermal quality (evident by lower de values) in the middle of the day ( = 3.24), compared to in the mornings ( = 6.79) (Nonparametric Wilcoxon: χ21, 42 = 14.31; P = 0.0002). Conversely, in sand pine scrub habitats, there was a higher thermal quality in the mornings ( = 4.85), compared to in the midday ( = 11.53) (Nonparametric Wilcoxon: χ21, 23 = 6.31; P = 0.01; Table 1).</p>
+</blockquote>
+<pre class="r"><code># is &quot;time_of_day&quot; column the early/middle split?
+qplot(x=time_of_day, y=dtime, data=exp1[time_of_day!=&quot;&quot;])</code></pre>
+<p><img src="/post/2019-02-15-data-from-habitat-management-alters-thermal-opportunity_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code># if it is then the mapping from time to time_of_day is wrong
+
+
+# re-map time to a new time_of_day column based on what the author&#39;s write
+exp1[, my_time_of_day:=factor(ifelse(dtime &gt;= 8.0 &amp; dtime &lt;= 10.0, &quot;E&quot;,
+                           ifelse(dtime &gt;= 11.0 &amp; dtime &lt;= 13.0, &quot;M&quot;, NA)))]
+
+
+# analysis based on author&#39;s mapping to time_of_day
+
+exp1[!is.na(habitat_type) &amp; !is.na(time_of_day) &amp; !is.na(de),
+     .(N=.N, 
+       median_de=median(de, na.rm=TRUE), 
+       mean_de=mean(de, na.rm=TRUE),
+              SE=sd(de)/sqrt(.N)), 
+     by=.(habitat_type, time_of_day)]</code></pre>
+<pre><code>##    habitat_type time_of_day  N median_de   mean_de        SE
+## 1:          SPS           E 18    3.8125  5.009004 0.7531904
+## 2:          LLP           M 26    2.5545  3.248854 0.4178828
+## 3:          LLP           E 17    7.7790  6.798889 0.7713213
+## 4:          SPS           M  3   11.6510 11.531667 0.3219650</code></pre>
+<pre class="r"><code>kruskal.test(de ~ time_of_day, data=exp1[habitat_type==&quot;LLP&quot;], na.action=&quot;na.omit&quot;)</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  de by time_of_day
+## Kruskal-Wallis chi-squared = 11.581, df = 1, p-value = 0.0006663</code></pre>
+<pre class="r"><code>kruskal.test(de ~ time_of_day, data=exp1[habitat_type==&quot;SPS&quot;], na.action=&quot;na.omit&quot;)</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  de by time_of_day
+## Kruskal-Wallis chi-squared = 6.3131, df = 1, p-value = 0.01198</code></pre>
+<pre class="r"><code># analysis based on my mapping to time_of_day
+exp1[!is.na(habitat_type) &amp; !is.na(my_time_of_day),
+     .(median_de=median(de, na.rm=TRUE), 
+       mean_de=mean(de, na.rm=TRUE)), 
+     by=.(habitat_type, my_time_of_day)]</code></pre>
+<pre><code>##    habitat_type my_time_of_day median_de   mean_de
+## 1:          SPS              E  4.452500  5.646898
+## 2:          LLP              M  2.904298  3.282627
+## 3:          LLP              E  7.975868  8.047085
+## 4:          SPS              M 12.020000 12.020000</code></pre>
+<pre class="r"><code>kruskal.test(de ~ my_time_of_day, data=exp1[habitat_type==&quot;LLP&quot;], na.action=&quot;na.omit&quot;)</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  de by my_time_of_day
+## Kruskal-Wallis chi-squared = 17.369, df = 1, p-value = 3.077e-05</code></pre>
+<pre class="r"><code>kruskal.test(de ~ my_time_of_day, data=exp1[habitat_type==&quot;SPS&quot;], na.action=&quot;na.omit&quot;)</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  de by my_time_of_day
+## Kruskal-Wallis chi-squared = 2.625, df = 1, p-value = 0.1052</code></pre>
+<ol style="list-style-type: decimal">
+<li>The mapping from time to “time_of_day” bins “E” (early) and “M” (midday) is not what they state in the text. Note that in Table 1 the “Daily” line suggests that the mapping for “E” is 8-11AM but even this isn’t consistent with the time_of_day column.</li>
+<li>The point estimates reproduce if the authors time_of_day is used and the point estimates are means, except for SPS/E.</li>
+<li>A Kruskal-Wallis test reproduces the reported Wilcoxan result if the authors time_of_day is used for the SPS subset but not the LLP subset, which is interesting given the reverse reproduction for the point estimate</li>
+</ol>
+</div>
+<div id="table-1" class="section level3">
+<h3>Table 1</h3>
+<p><img src="/images/Data%20from%20Habitat%20management%20alters%20thermal%20opportunity/table1.png" /><!-- --></p>
+<ol style="list-style-type: decimal">
+<li>Values for sand pine scrub reproduce except that the correct <span class="math inline">\(n\)</span> is 18 and not 21.</li>
+<li>The reported value for <span class="math inline">\(d_e\)</span> in the text is 4.85 which differs from that in the table. My value using the author’s mapping of time to early/mid reproduces the tabled value.</li>
+<li>Values for Longleaf pine reproduce for midday but fail to reproduce for early (using author’s mapping). Our sample sizes are the same.</li>
+<li>Early + midday <span class="math inline">\(n\)</span> adds up to “daily” which suggests that maybe they intended Early to map from 8:00AM to 11:AM.</li>
+</ol>
+<pre class="r"><code># analysis based on my mapping to time_of_day from 8-11 to &quot;E&quot;
+# re-map time to a new time_of_day column based on 8-11
+exp1[, my_time_of_day2:=factor(ifelse(dtime &gt;= 8.0 &amp; dtime &lt; 11.0, &quot;E&quot;,
+                           ifelse(dtime &gt;= 11.0 &amp; dtime &lt;= 13.0, &quot;M&quot;, NA)))]
+
+
+exp1[!is.na(habitat_type) &amp; !is.na(my_time_of_day2) &amp; !is.na(de),
+     .(N=.N,
+       median_de=median(de, na.rm=TRUE), 
+       mean_de=mean(de, na.rm=TRUE)), 
+     by=.(habitat_type, my_time_of_day2)]</code></pre>
+<pre><code>##    habitat_type my_time_of_day2  N median_de   mean_de
+## 1:          SPS               E 18  3.812500  5.009004
+## 2:          LLP               M 24  2.904298  3.282627
+## 3:          LLP               E 14  7.931934  7.538936
+## 4:          SPS               M  1 12.020000 12.020000</code></pre>
+<pre class="r"><code>kruskal.test(de ~ my_time_of_day2, data=exp1[habitat_type==&quot;LLP&quot;], na.action=&quot;na.omit&quot;)</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  de by my_time_of_day2
+## Kruskal-Wallis chi-squared = 13.63, df = 1, p-value = 0.0002226</code></pre>
+<pre class="r"><code>kruskal.test(de ~ my_time_of_day2, data=exp1[habitat_type==&quot;SPS&quot;], na.action=&quot;na.omit&quot;)</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  de by my_time_of_day2
+## Kruskal-Wallis chi-squared = 2.7, df = 1, p-value = 0.1003</code></pre>
+<p>The analysis raises statistical red flag #1</p>
+</div>
+<div id="encounter-rates" class="section level3">
+<h3>Encounter rates</h3>
+<blockquote>
+<p>Field observations confirmed that longleaf pine populations were more likely to be encountered in the midday (1100-1300) compared to in the mornings (800-1000) (Nonparametric Wilcoxon: χ21, 50 = 11.08; P = 0.0009; Fig. 2). Conversely, in sand pine scrub habitats lizards were more likely to be encountered in mornings than in midday (Nonparametric Wilcoxon: χ21, 49 = 5.78; P = 0.01).</p>
+</blockquote>
+<pre class="r"><code>exp2[, Early.Midday:=factor(ifelse(Early.Midday==&quot;&quot;, NA, Early.Midday))]
+kruskal.test(number_seen ~ Early.Midday, data=exp2[habitat_type==&quot;LLP&quot;])</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  number_seen by Early.Midday
+## Kruskal-Wallis chi-squared = 11.09, df = 1, p-value = 0.000868</code></pre>
+<pre class="r"><code>kruskal.test(number_seen ~ Early.Midday, data=exp2[habitat_type==&quot;SPS&quot;])</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  number_seen by Early.Midday
+## Kruskal-Wallis chi-squared = 5.7859, df = 1, p-value = 0.01616</code></pre>
+<p>Reproduces</p>
+</div>
+<div id="fig-2" class="section level3">
+<h3>Fig 2</h3>
+<pre class="r"><code>exp2_sum &lt;- exp2[!is.na(number_seen), 
+                 .(number_seen=mean(number_seen),
+                   SE=sd(number_seen)/sqrt(.N)),
+                 by=.(hour, habitat_type)]
+pd &lt;- position_dodge(0.9)
+gg &lt;- ggplot(data=exp2_sum, aes(x=hour, y=number_seen, fill=habitat_type)) +
+  geom_col(position=pd) +
+  geom_errorbar(aes(ymin=number_seen-SE, ymax=number_seen+SE), position=pd, width=0.2)+
+  NULL
+gg</code></pre>
+<p><img src="/post/2019-02-15-data-from-habitat-management-alters-thermal-opportunity_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>This reproduces. The pattern of means for SPS raises statistical red flag #2</p>
+</div>
+</div>
+<div id="lizard-body-temperatures-and-extent-of-thermoregulation" class="section level2">
+<h2>Lizard body temperatures and extent of thermoregulation</h2>
+<blockquote>
+<p>Across all populations and independent of time of day, when environmental temperatures were unfavorably low (Te &lt; Tset), the slope was 0.34 (R2 = 0.30; F1, 44 = 16.73; P = 0.0002; Fig. 3).</p>
+</blockquote>
+<p>There are two Te columns (Te30 and Te60). Te30 reproduces (except for ANOVA F and P).</p>
+<pre class="r"><code>fit &lt;- lm(db ~ de, data=exp1[Te_30 &lt; Tset])
+coef(fit)</code></pre>
+<pre><code>## (Intercept)          de 
+##   1.7930539   0.3395025</code></pre>
+<pre class="r"><code>summary(fit)$r.squared</code></pre>
+<pre><code>## [1] 0.3068485</code></pre>
+<pre class="r"><code>anova(fit)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: db
+##           Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## de         1  66.063  66.063  19.478 6.505e-05 ***
+## Residuals 44 149.232   3.392                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>fit &lt;- lm(db ~ de, data=exp1[Te_60 &lt; Tset])
+coef(fit)</code></pre>
+<pre><code>## (Intercept)          de 
+##   1.7966682   0.3637457</code></pre>
+<pre class="r"><code>summary(fit)$r.squared</code></pre>
+<pre><code>## [1] 0.330456</code></pre>
+<pre class="r"><code>anova(fit)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: db
+##           Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## de         1  69.419  69.419  19.742 6.843e-05 ***
+## Residuals 40 140.651   3.516                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The slope and <span class="math inline">\(R^2\)</span> reproduce. The anova DF reproduces. F (and P) does not.</p>
+<blockquote>
+<p>In contrast when environmental temperatures were unfavorably high (Te &gt; Tset), the slope was - 0.48 (R2 = 0.37; F1, 17 = 9.33; P = 0.0076; Fig. 3).</p>
+</blockquote>
+<pre class="r"><code>fit &lt;- lm(db ~ de, data=exp1[Te_30 &gt; Tset])
+coef(fit)</code></pre>
+<pre><code>## (Intercept)          de 
+##   3.6578274  -0.4818012</code></pre>
+<pre class="r"><code>summary(fit)$r.squared</code></pre>
+<pre><code>## [1] 0.300622</code></pre>
+<pre class="r"><code>anova(fit)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: db
+##           Df Sum Sq Mean Sq F value  Pr(&gt;F)  
+## de         1 16.094 16.0939  6.8775 0.01848 *
+## Residuals 16 37.441  2.3401                  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Slope reproduces. <span class="math inline">\(R^2\)</span> does not reproduce. ANOVA DF does not reproduce. ANOVA F (and P) does not reproduce.</p>
+<blockquote>
+<p>Regardless of habitat type, thermoregulatory precision increases as thermal quality decreases (i.e., lower db as de increases). Although when unfavorably high temperatures (i.e., high db due to high Te) were experienced, the degree of thermoregulatory precision was significantly greater relative to thermal quality of habitat (ANCOVA: F1, 63 = 14.10; P = 0.0004). Results reflect all data collected during the sampling period (800 – 1300).</p>
+</blockquote>
+</div>
 </div>
 <div id="statistical-red-flags" class="section level1">
 <h1>Statistical Red Flags</h1>
+<ol style="list-style-type: decimal">
+<li><p>In the analysis of thermal quality (<span class="math inline">\(de\)</span>), posthoc subsetting (habitat type and time of day) increases type I error (and suggest patterns that aren’t there). The conversion of a continuous time to bins (early and mid) is especially arbitrary and can effect results based on how one bins the time. Finally, the author’s mapping from time to time bins (“time of day”) is not what they state the mapping is in the paper.</p></li>
+<li><p>The pattern of means in Fig. 2 for the SPS group highlights potential problems with transforming a continuous covarite into discrete groups. A better alternative than dividing time into early and middsay is to simply model time as a continuous variable. Here I do this and fit the data with a linear model and two generalized linear models (negative binomial and poisson). I don’t spend any time here model checking but the results suggest much more caution about the author’s conclusion</p></li>
+</ol>
+<pre class="r"><code># models with an hour x habitat type interaction. Adding the interaction effect to the slope shows the slope with SPS is negative but has a relatively big SE
+
+# fit.nb &lt;-glm.nb(number_seen ~ hour*habitat_type, data=exp2)
+# this may indicate poisson is a better model
+
+fit.pois &lt;-glm(number_seen ~ hour*habitat_type, family=poisson, data=exp2)
+coef(summary(fit.pois))</code></pre>
+<pre><code>##                        Estimate Std. Error   z value    Pr(&gt;|z|)
+## (Intercept)          -0.5484522 0.55731406 -0.984099 0.325066851
+## hour                  0.1655074 0.05048121  3.278595 0.001043253
+## habitat_typeSPS       2.2792546 0.76948172  2.962065 0.003055836
+## hour:habitat_typeSPS -0.2393631 0.07372032 -3.246908 0.001166661</code></pre>
+<pre class="r"><code>fit.lm &lt;-lm(number_seen ~ hour*habitat_type, data=exp2)
+coef(summary(fit.lm))</code></pre>
+<pre><code>##                        Estimate Std. Error   t value     Pr(&gt;|t|)
+## (Intercept)          -2.2934066  1.5050087 -1.523849 0.1301994983
+## hour                  0.5409341  0.1406327  3.846431 0.0001941179
+## habitat_typeSPS       6.9642001  2.0374886  3.418031 0.0008641814
+## hour:habitat_typeSPS -0.7367697  0.1963190 -3.752922 0.0002716986</code></pre>
+<pre class="r"><code># limiting the fit to the SPS data
+fit.pois &lt;-glm(number_seen ~ hour, family=poisson, data=exp2[habitat_type==&quot;SPS&quot;,])
+coef(summary(fit.pois))</code></pre>
+<pre><code>##                Estimate Std. Error   z value   Pr(&gt;|z|)
+## (Intercept)  1.73080238 0.53056871  3.262164 0.00110565
+## hour        -0.07385563 0.05372459 -1.374708 0.16922199</code></pre>
+<pre class="r"><code>fit.lm &lt;-lm(number_seen ~ hour, data=exp2[habitat_type==&quot;SPS&quot;,])
+coef(summary(fit.lm))</code></pre>
+<pre><code>##               Estimate Std. Error   t value     Pr(&gt;|t|)
+## (Intercept)  4.6707935  1.2407098  3.764614 0.0003648498
+## hour        -0.1958357  0.1237433 -1.582596 0.1184431908</code></pre>
+<pre class="r"><code># model check the poisson fit - okay, not bad.
+n_sim &lt;- 250
+simulationOutput &lt;- simulateResiduals(fittedModel=fit.pois, n=n_sim, refit=TRUE)
+plot(simulationOutput)</code></pre>
+<pre><code>## DHARMa::plotResiduals - low number of unique predictor values, consider setting asFactor = T
+## DHARMa::plotResiduals - low number of unique predictor values, consider setting asFactor = T</code></pre>
+<p><img src="/post/2019-02-15-data-from-habitat-management-alters-thermal-opportunity_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<pre class="r"><code>testDispersion(simulationOutput)</code></pre>
+<p><img src="/post/2019-02-15-data-from-habitat-management-alters-thermal-opportunity_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
+<pre><code>## 
+##  DHARMa nonparametric dispersion test via mean deviance residual
+##  fitted vs. simulated-refitted
+## 
+## data:  simulationOutput
+## dispersion = 0.77764, p-value = 0.208
+## alternative hypothesis: two.sided</code></pre>
 </div>
