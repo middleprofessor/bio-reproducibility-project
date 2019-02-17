@@ -7,6 +7,8 @@ categories: []
 tags:
   - anova
   - JMP
+  - continuous interaction
+  - subsetting
 subtitle: ''
 output:
   blogdown::html_page:
@@ -80,6 +82,7 @@ unique(exp1$habitat_type) # there is a &quot;&quot; present</code></pre>
 <pre><code>## [1] &quot;&quot;    &quot;SPS&quot; &quot;LLP&quot;</code></pre>
 <pre class="r"><code>exp1[, habitat_type:=factor(ifelse(habitat_type==&quot;&quot;, NA, habitat_type))]
 exp1[, time_of_day:=factor(ifelse(time_of_day==&quot;&quot;, NA, time_of_day))]
+exp1[, Hot.cold_te:=factor(ifelse(Hot.cold_te==&quot;&quot;, NA, Hot.cold_te))]
 
 #convert time from string to time
 time.step1 &lt;- format(strptime(exp1$time, &quot;%I:%M:%S %p&quot;), format=&quot;%H:%M:%S&quot;)
@@ -367,7 +370,7 @@ coef(fit)</code></pre>
 ## Residuals 40 140.651   3.516                      
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>The slope and <span class="math inline">\(R^2\)</span> reproduce. The anova DF reproduces. F (and P) does not.</p>
+<p>The slope and <span class="math inline">\(R^2\)</span> reproduce using Te_30. The anova DF reproduces. F (and P) does not.</p>
 <blockquote>
 <p>In contrast when environmental temperatures were unfavorably high (Te &gt; Tset), the slope was - 0.48 (R2 = 0.37; F1, 17 = 9.33; P = 0.0076; Fig. 3).</p>
 </blockquote>
@@ -388,8 +391,51 @@ coef(fit)</code></pre>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>Slope reproduces. <span class="math inline">\(R^2\)</span> does not reproduce. ANOVA DF does not reproduce. ANOVA F (and P) does not reproduce.</p>
 <blockquote>
-<p>Regardless of habitat type, thermoregulatory precision increases as thermal quality decreases (i.e., lower db as de increases). Although when unfavorably high temperatures (i.e., high db due to high Te) were experienced, the degree of thermoregulatory precision was significantly greater relative to thermal quality of habitat (ANCOVA: F1, 63 = 14.10; P = 0.0004). Results reflect all data collected during the sampling period (800 – 1300).</p>
+<p>Regardless of habitat type, thermoregulatory precision increases as thermal quality decreases (i.e., lower db as de increases).</p>
 </blockquote>
+<pre class="r"><code>qplot(x=de, y=db, color=habitat_type, data=exp1[!is.na(habitat_type),]) + geom_smooth(method=&quot;lm&quot;)</code></pre>
+<p><img src="/post/2019-02-15-data-from-habitat-management-alters-thermal-opportunity_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>qplot(x=de, y=db, color=Hot.cold_te, data=exp1[!is.na(Hot.cold_te),]) + geom_smooth(method=&quot;lm&quot;)</code></pre>
+<p><img src="/post/2019-02-15-data-from-habitat-management-alters-thermal-opportunity_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
+<p>This doesn’t reproduce. In general, thermoregulatory precision increases (db gets smaller) as habitat quality gets better (de gets smaller). I plot using two different views of the data, by habitat type and by the direction of Te - Tset (used in the next result). Only when Te &gt; Tset (“H”) does db decrease as de increases.</p>
+<blockquote>
+<p>Although when unfavorably high temperatures (i.e., high db due to high Te) were experienced, the degree of thermoregulatory precision was significantly greater relative to thermal quality of habitat (ANCOVA: F1, 63 = 14.10; P = 0.0004).</p>
+</blockquote>
+<p>This doesn’t seem correct qualitatively based simply on the plot of db against de by sign of Te - Tset. That is there is a strong interaction so that when de is high (thermally poor habitat), thermoregulatory precision is greater (db is smaller) when Te &gt; Tset (“H”) than when Te &lt; Tset (“C”).</p>
+<p>For the ANCOVA, I assume the sign of <span class="math inline">\(Te_30 - Tset\)</span> is mapped into the column “Hot.cold_te” and the model fit is either <code>db ~ de*Hot.cold_te</code> or <code>db ~ de + Hot.cold_te</code>.</p>
+<ol style="list-style-type: decimal">
+<li>First check the mapping from sign of <span class="math inline">\(Te_30 - Tset\)</span> to Hot.cold_te</li>
+</ol>
+<pre class="r"><code>qplot(x=Hot.cold_te, y=(Te_30-Tset), data=exp1[!is.na(Hot.cold_te),])</code></pre>
+<p><img src="/post/2019-02-15-data-from-habitat-management-alters-thermal-opportunity_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>One value of “C” is positive and one value of “H” is negative. I don’t know if the author’s mapping is a bug or intentional (based on something else).</p>
+<ol start="2" style="list-style-type: decimal">
+<li>ANCOVA models</li>
+</ol>
+<pre class="r"><code># &quot;Accuracy in thermoregulation (db) is defined as the deviation of field active body temperatures (Tb) from the preferred temperature (Tset).&quot; -- db is only positive so must be the absolute deviation.
+# &quot;The thermal quality of the habitat (de) is defined as the deviations of operative temperatures (Te) from the preferred temperature range (Tset). Thermal quality (de) is typically regarded as high for values less than 3 and low for values greater than 5&quot; -- again its the absolute deviation
+anova(lm(db ~ de*Hot.cold_te, data=exp1))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: db
+##                Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## de              1  59.808  59.808 19.6662 4.082e-05 ***
+## Hot.cold_te     1  19.583  19.583  6.4393 0.0138248 *  
+## de:Hot.cold_te  1  41.628  41.628 13.6882 0.0004759 ***
+## Residuals      59 179.429   3.041                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(lm(db ~ de+Hot.cold_te, data=exp1))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: db
+##             Df  Sum Sq Mean Sq F value  Pr(&gt;F)    
+## de           1  59.808  59.808 16.2333 0.00016 ***
+## Hot.cold_te  1  19.583  19.583  5.3152 0.02461 *  
+## Residuals   60 221.057   3.684                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Neither model reproduces. The reported residual DF is 63. This suggests n=66 if the fit model is additive or n=67 if the interaction was included. The reported residual DF for the two ANOVA below and above Tset are 17 and 44 or n=18 + 45 = 63. So something is missing.</p>
 </div>
 </div>
 <div id="statistical-red-flags" class="section level1">
@@ -434,9 +480,9 @@ simulationOutput &lt;- simulateResiduals(fittedModel=fit.pois, n=n_sim, refit=TR
 plot(simulationOutput)</code></pre>
 <pre><code>## DHARMa::plotResiduals - low number of unique predictor values, consider setting asFactor = T
 ## DHARMa::plotResiduals - low number of unique predictor values, consider setting asFactor = T</code></pre>
-<p><img src="/post/2019-02-15-data-from-habitat-management-alters-thermal-opportunity_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="/post/2019-02-15-data-from-habitat-management-alters-thermal-opportunity_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <pre class="r"><code>testDispersion(simulationOutput)</code></pre>
-<p><img src="/post/2019-02-15-data-from-habitat-management-alters-thermal-opportunity_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
+<p><img src="/post/2019-02-15-data-from-habitat-management-alters-thermal-opportunity_files/figure-html/unnamed-chunk-17-2.png" width="672" /></p>
 <pre><code>## 
 ##  DHARMa nonparametric dispersion test via mean deviance residual
 ##  fitted vs. simulated-refitted

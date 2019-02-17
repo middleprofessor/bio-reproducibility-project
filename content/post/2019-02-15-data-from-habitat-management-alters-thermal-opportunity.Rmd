@@ -7,6 +7,8 @@ categories: []
 tags:
   - anova
   - JMP
+  - continuous interaction
+  - subsetting
 subtitle: ''
 output:
   blogdown::html_page:
@@ -66,6 +68,7 @@ colnames(exp2) <- clean_label(colnames(exp2))
 unique(exp1$habitat_type) # there is a "" present
 exp1[, habitat_type:=factor(ifelse(habitat_type=="", NA, habitat_type))]
 exp1[, time_of_day:=factor(ifelse(time_of_day=="", NA, time_of_day))]
+exp1[, Hot.cold_te:=factor(ifelse(Hot.cold_te=="", NA, Hot.cold_te))]
 
 #convert time from string to time
 time.step1 <- format(strptime(exp1$time, "%I:%M:%S %p"), format="%H:%M:%S")
@@ -242,7 +245,7 @@ anova(fit)
 
 ```
 
-The slope and $R^2$ reproduce. The anova DF reproduces. F (and P) does not.
+The slope and $R^2$ reproduce using Te_30. The anova DF reproduces. F (and P) does not.
 
 >In contrast when environmental temperatures were unfavorably high (Te > Tset), the slope was - 0.48 (R2 = 0.37; F1, 17 = 9.33; P = 0.0076; Fig. 3).
 
@@ -255,11 +258,39 @@ anova(fit)
 
 Slope reproduces. $R^2$ does not reproduce. ANOVA DF does not reproduce. ANOVA F (and P) does not reproduce.
 
->Regardless of habitat type, thermoregulatory precision increases as thermal quality decreases (i.e., lower db as de increases). Although when unfavorably high temperatures (i.e., high db due to high Te) were experienced, the degree of thermoregulatory precision was significantly greater relative to thermal quality of habitat (ANCOVA: F1, 63 = 14.10; P = 0.0004). Results reflect all data collected during the sampling period (800 – 1300).
+>Regardless of habitat type, thermoregulatory precision increases as thermal quality decreases (i.e., lower db as de increases). 
 
-```{r}
+```{r warning=FALSE}
+qplot(x=de, y=db, color=habitat_type, data=exp1[!is.na(habitat_type),]) + geom_smooth(method="lm")
+
+qplot(x=de, y=db, color=Hot.cold_te, data=exp1[!is.na(Hot.cold_te),]) + geom_smooth(method="lm")
+
 ```
 
+This doesn't reproduce. In general, thermoregulatory precision increases (db gets smaller) as habitat quality gets better (de gets smaller). I plot using two different views of the data, by habitat type and by the direction of Te - Tset (used in the next result). Only when Te > Tset ("H") does db decrease as de increases.
+
+>Although when unfavorably high temperatures (i.e., high db due to high Te) were experienced, the degree of thermoregulatory precision was significantly greater relative to thermal quality of habitat (ANCOVA: F1, 63 = 14.10; P = 0.0004).
+
+This doesn't seem correct qualitatively based simply on the plot of db against de by sign of Te - Tset. That is there is a strong interaction so that when de is high (thermally poor habitat), thermoregulatory precision is greater (db is smaller) when Te > Tset ("H") than when Te < Tset ("C").
+
+For the ANCOVA, I assume the sign of $Te_30 - Tset$ is mapped into the column "Hot.cold_te" and the model fit is either `db ~ de*Hot.cold_te` or `db ~ de + Hot.cold_te`. 
+
+1. First check the mapping from sign of $Te_30 - Tset$ to Hot.cold_te
+
+```{r warning=FALSE, message=FALSE}
+qplot(x=Hot.cold_te, y=(Te_30-Tset), data=exp1[!is.na(Hot.cold_te),])
+```
+
+One value of "C" is positive and one value of "H" is negative. I don't know if the author's mapping is a bug or intentional (based on something else).
+
+2. ANCOVA models
+```{r, warning=FALSE, message=FALSE}
+# "Accuracy in thermoregulation (db) is defined as the deviation of field active body temperatures (Tb) from the preferred temperature (Tset)." -- db is only positive so must be the absolute deviation.
+# "The thermal quality of the habitat (de) is defined as the deviations of operative temperatures (Te) from the preferred temperature range (Tset). Thermal quality (de) is typically regarded as high for values less than 3 and low for values greater than 5" -- again its the absolute deviation
+anova(lm(db ~ de*Hot.cold_te, data=exp1))
+anova(lm(db ~ de+Hot.cold_te, data=exp1))
+```
+Neither model reproduces. The reported residual DF is 63. This suggests n=66 if the fit model is additive or n=67 if the interaction was included. The reported residual DF for the two ANOVA below and above Tset are 17 and 44 or n=18 + 45 = 63. So something is missing.
 
 # Statistical Red Flags
 
@@ -291,4 +322,3 @@ plot(simulationOutput)
 testDispersion(simulationOutput)
 
 ```
-
