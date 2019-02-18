@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring - The Biology Reproducibility Project</title>
+  <meta property="og:title" content="Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring - The Biology Reproducibility Project" />
+  <meta name="twitter:title" content="Data from: Perceived threats of infanticide reduce maternal allocation …" />
+  <meta name="description" content="Sources Summary Setup Import Reproducibility Offspring weight  Statistical Red Flags   Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. https://doi.org/10.1111/1365-2435.13146
+Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Dryad Digital Repository.">
+  <meta property="og:description" content="Sources Summary Setup Import Reproducibility Offspring weight  Statistical Red Flags   Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. https://doi.org/10.1111/1365-2435.13146
+Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Dryad Digital Repository.">
+  <meta name="twitter:description" content="Sources Summary Setup Import Reproducibility Offspring weight  Statistical Red Flags   Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during …">
+  <meta name="author" content=""/>
+  <meta property="og:site_name" content="The Biology Reproducibility Project" />
+  <meta property="og:url" content="/post/data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring/" />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    <h1 class="site-title"><a href="/">The Biology Reproducibility Project</a></h1>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-categories"><a href="/categories/" title="Categories">Categories</a></li>
+      <li class="site-navi-item-tags"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-archives"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+  </nav>
+</header>
+<hr class="site-header-bottom">
+
+  <div class="main" role="main">
+    <article class="article">
+      
+      
+      <h1 class="article-title">Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>February 18, 2019</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/linear-mixed-model/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            linear mixed model
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/spss/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            SPSS
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+<aside class="toc">
+  
+</aside>
+      <div id="TOC">
+<ul>
+<li><a href="#sources">Sources</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#import">Import</a></li>
+<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#offspring-weight">Offspring weight</a></li>
+</ul></li>
+<li><a href="#statistical-red-flags">Statistical Red Flags</a></li>
+</ul>
+</div>
+
+<div id="sources" class="section level1">
+<h1>Sources</h1>
+<p>Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. <a href="https://doi.org/10.1111/1365-2435.13146" class="uri">https://doi.org/10.1111/1365-2435.13146</a></p>
+<p>Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Dryad Digital Repository. <a href="https://doi.org/10.5061/dryad.762k24f" class="uri">https://doi.org/10.5061/dryad.762k24f</a></p>
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+</div>
+<div id="setup" class="section level1">
+<h1>Setup</h1>
+<pre class="r"><code>library(ggplot2)
+library(readxl)
+library(data.table)
+library(emmeans)
+library(nlme)
+library(lme4)
+library(lmerTest)
+library(afex)</code></pre>
+<pre class="r"><code>data_folder &lt;- &quot;../data&quot;
+folder &lt;- &quot;Data from Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring&quot;
+
+# images need to be moved to /static/images/data from.../image.png
+knitr_path &lt;- FALSE # run = TRUE to debug
+
+source(&quot;../R/clean_label.R&quot;) # bookdown</code></pre>
+</div>
+<div id="import" class="section level1">
+<h1>Import</h1>
+<p>The single sheet contains all experiments in blocks glued wide</p>
+<pre class="r"><code>fn &lt;- &quot;LBE paper data.xlsx&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+
+# exp1
+exp1 &lt;- data.table(read_excel(file_path, range=&quot;A1:E185&quot;))
+colnames(exp1) &lt;- clean_label(colnames(exp1))
+exp1[, Treatment:=factor(Treatment)]
+
+exp2 &lt;- data.table(read_excel(file_path, range=&quot;F1:H45&quot;))
+colnames(exp2) &lt;- clean_label(colnames(exp2))
+exp2[, Treatment:=factor(Treatment)]</code></pre>
+</div>
+<div id="reproducibility" class="section level1">
+<h1>Reproducibility</h1>
+<div id="offspring-weight" class="section level2">
+<h2>Offspring weight</h2>
+<blockquote>
+<p>The mean birth weight of novel male treatment pups (1.619± 0.432g) was not significantly different from that of the familiar male treatment (1.628 ± 0.433g; ANOVA: weight: F1, 182= 0.022, p= 0.882; litter size: F1,42= 0.070, p= 0.792).</p>
+</blockquote>
+<pre class="r"><code># birth weight
+exp1[,.(birth=mean(birth),
+        SE=sd(birth)/sqrt(.N)), by=Treatment]</code></pre>
+<pre><code>##    Treatment    birth         SE
+## 1:       LBE 1.619080 0.04633439
+## 2:        MC 1.628012 0.04398077</code></pre>
+<pre class="r"><code>anova(lm(birth ~ Treatment, data=exp1))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: birth
+##            Df Sum Sq  Mean Sq F value Pr(&gt;F)
+## Treatment   1  0.004 0.003659  0.0195  0.889
+## Residuals 182 34.075 0.187226</code></pre>
+<pre class="r"><code># litter size
+anova(lm(Littersize ~ Treatment, data=exp2))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Littersize
+##           Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Treatment  1  0.061 0.06098  0.0702 0.7923
+## Residuals 42 36.484 0.86868</code></pre>
+<p>Reproduces</p>
+<p>and identifies LBE = novel male treatment, MC = familiar male treatment</p>
+<blockquote>
+<p>To analyse the differences in offspring growth rate we used repeated measures ANOVA reporting within-subjects effects. Mauchly’s Test of Sphericity indicated that the assumption of sphericity had been violated (χ2(2) = 34.210, p = &lt;0.001), therefore degrees of freedom were corrected using Greenhouse-Geisser adjusted degrees of freedom. There was a difference in growth rate between the treatments but there was no effect of sex (treatment: F1.7,310=7.49, p= 0.001; interaction between treatment and time: F1.7,310=5668, p= &lt;0.001; sex x treatment: F1.6,306=1.3, p= 0.270).</p>
+</blockquote>
+<pre class="r"><code>exp1[, ID:=1:nrow(exp1)]
+exp1_long &lt;- melt(exp1, id.vars = c(&quot;Treatment&quot;, &quot;Sex&quot;, &quot;ID&quot;), variable.name=&quot;Time&quot;, value.name = &quot;Weight&quot;)
+exp1_long[, ID:=factor(ID)]
+(fit.car &lt;- aov_car(Weight ~ Treatment*Sex*Time + Error(ID/Time), data=exp1_long))</code></pre>
+<pre><code>## Converting to factor: Sex</code></pre>
+<pre><code>## Contrasts set to contr.sum for the following variables: Treatment, Sex</code></pre>
+<pre><code>## Anova Table (Type 3 tests)
+## 
+## Response: Weight
+##               Effect           df  MSE           F   ges p.value
+## 1          Treatment       1, 180 1.85     7.30 **   .02    .008
+## 2                Sex       1, 180 1.85        0.36 .0009     .55
+## 3      Treatment:Sex       1, 180 1.85      5.60 *   .01     .02
+## 4               Time 1.70, 306.53 1.20 5670.13 ***   .94  &lt;.0001
+## 5     Treatment:Time 1.70, 306.53 1.20     7.57 **   .02    .001
+## 6           Sex:Time 1.70, 306.53 1.20        1.28  .004     .28
+## 7 Treatment:Sex:Time 1.70, 306.53 1.20        2.27  .007     .11
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1
+## 
+## Sphericity correction method: GG</code></pre>
+<pre class="r"><code>#(fit.ez &lt;- aov_ez(&quot;ID&quot;, &quot;Weight&quot;, exp1_long, between=c(&quot;Treatment&quot;, &quot;Sex&quot;), within=&quot;Time&quot;))
+# (fit_nice &lt;- aov_ez(&quot;id&quot;,&quot;value&quot;,obk.long,between=c(&quot;treatment&quot;),within=c(&quot;phase&quot;)))
+#summary(fit.ez)</code></pre>
+</div>
+</div>
+<div id="statistical-red-flags" class="section level1">
+<h1>Statistical Red Flags</h1>
+</div>
+
+    </article>
+
+    
+<ul class="article-share">
+  <li>
+    <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </li>
+  <li>
+    <div class="fb-share-button" data-href="/post/data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.10";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+  </li>
+  <li>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <g:plus action="share"></g:plus>
+  </li>
+  <li>
+    <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label-counter" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  </li>
+  <li>
+    <a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en"></a>
+    <script>!function(d,i){if(!d.getElementById(i)){var j=d.createElement("script");j.id=i;j.src="https://widgets.getpocket.com/v1/j/btn.js?v=1";var w=d.getElementById(i);d.body.appendChild(j);}}(document,"pocket-btn-js");</script>
+  </li>
+</ul>
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/data-from-habitat-management-alters-thermal-opportunity/" data-toggle="tooltip" data-placement="top" title="Data from: Habitat management alters thermal opportunity">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">&copy; Copyright 2018 Jeffrey A. Walker</div>
+  <ul class="site-footer-items">
+    <li class="site-footer-item-about"><a href="/about/" title="About">About</a></li>
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/">Hugo</a>
+  </div>
+</div>
+    <script src="//yihui.name/js/math-code.js"></script>
+<script async
+src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+  <script src="/js/collapse.js"></script>
+  <script src="/js/dropdown.js"></script>
+  <script src="/js/transition.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+---
+title: 'Data from: Perceived threats of infanticide reduce maternal allocation during
+  lactation and lead to elevated oxidative damage in offspring'
+author: Jeff Walker
+date: '2019-02-18'
+slug: data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring
+categories: []
+tags:
+  - linear mixed model
+  - SPSS
+subtitle: ''
+output:
+  blogdown::html_page:
+    toc: true
+---
+
+# Sources
+
+Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. https://doi.org/10.1111/1365-2435.13146
+
+Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Dryad Digital Repository. https://doi.org/10.5061/dryad.762k24f
+
+# Summary
+
+# Setup
+```{r libraries, message=FALSE}
+library(ggplot2)
+library(readxl)
+library(data.table)
+library(emmeans)
+library(nlme)
+library(lme4)
+library(lmerTest)
+library(afex)
+```
+
+```{r}
+data_folder <- "../data"
+folder <- "Data from Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring"
+
+# images need to be moved to /static/images/data from.../image.png
+knitr_path <- FALSE # run = TRUE to debug
+
+source("../R/clean_label.R") # bookdown
+```
+
+# Import
+The single sheet contains all experiments in blocks glued wide
+```{r}
+fn <- "LBE paper data.xlsx"
+file_path <- paste(data_folder, folder, fn, sep="/")
+
+# exp1
+exp1 <- data.table(read_excel(file_path, range="A1:E185"))
+colnames(exp1) <- clean_label(colnames(exp1))
+exp1[, Treatment:=factor(Treatment)]
+
+exp2 <- data.table(read_excel(file_path, range="F1:H45"))
+colnames(exp2) <- clean_label(colnames(exp2))
+exp2[, Treatment:=factor(Treatment)]
+
+```
+
+# Reproducibility
+## Offspring weight
+
+>The mean birth weight of novel male treatment pups (1.619± 0.432g) was not significantly different from that of the familiar male treatment (1.628 ± 0.433g; ANOVA: weight: F1, 182= 0.022, p= 0.882; litter size: F1,42= 0.070, p= 0.792).
+
+```{r}
+# birth weight
+exp1[,.(birth=mean(birth),
+        SE=sd(birth)/sqrt(.N)), by=Treatment]
+anova(lm(birth ~ Treatment, data=exp1))
+
+# litter size
+anova(lm(Littersize ~ Treatment, data=exp2))
+
+```
+Reproduces
+
+and identifies LBE = novel male treatment, MC = familiar male treatment
+
+>To analyse the differences in offspring growth rate we used repeated measures ANOVA reporting within-subjects effects. Mauchly's Test of Sphericity indicated that the assumption of sphericity had been violated (χ2(2) = 34.210, p = <0.001), therefore degrees of freedom were corrected using Greenhouse-Geisser adjusted degrees of freedom. There was a difference in growth rate between the treatments but there was no effect of sex (treatment: F1.7,310=7.49, p= 0.001; interaction between treatment and time: F1.7,310=5668, p= <0.001; sex x treatment: F1.6,306=1.3, p= 0.270).
+
+```{r}
+exp1[, ID:=1:nrow(exp1)]
+exp1_long <- melt(exp1, id.vars = c("Treatment", "Sex", "ID"), variable.name="Time", value.name = "Weight")
+exp1_long[, ID:=factor(ID)]
+(fit.car <- aov_car(Weight ~ Treatment*Sex*Time + Error(ID/Time), data=exp1_long))
+#(fit.ez <- aov_ez("ID", "Weight", exp1_long, between=c("Treatment", "Sex"), within="Time"))
+# (fit_nice <- aov_ez("id","value",obk.long,between=c("treatment"),within=c("phase")))
+#summary(fit.ez)
+```
+
+# Statistical Red Flags
