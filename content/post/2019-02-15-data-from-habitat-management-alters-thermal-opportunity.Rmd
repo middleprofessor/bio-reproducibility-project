@@ -9,6 +9,7 @@ tags:
   - JMP
   - continuous interaction
   - subsetting
+  - best practice recommendations
 subtitle: ''
 output:
   blogdown::html_page:
@@ -22,6 +23,16 @@ Neel LK, McBrayer LD (2018) Habitat management alters thermal opportunity. Funct
 Neel LK, McBrayer LD (2018) Data from: Habitat management alters thermal opportunity. Dryad Digital Repository. https://doi.org/10.5061/dryad.g7s12pk
 
 # Summary
+
+1. Matching analysis to file is not clear
+2. The models used for the ANOVA or the non-parametric test are mostly unclear and ambiguous
+3. Many of the analyses fail to reproduce. Some of these appear to be because the authors analyzed either more or less data than that in the file. Some may be because of a different model (#2)
+4. The mapping from time to the factor time_of_day with levels "E" and "M" is not what is stated in the text.
+5. The authors report the residual df for many of the non-parametric (as well as parametric) tests. There aren't residual df in these tests but it is helpful regardless to understand failure to replicate. There are many discrepancies between the residual DF in my attempts to reproduce and the reported residual DF (again see #3)
+6. The statement "Regardless of habitat type, thermoregulatory precision increases as thermal quality decreases (i.e., lower db as de increases)" - is reported incorrectly as precision increases as thermal quality increases.
+7. I cannot understand the statement "Although when unfavorably high temperatures (i.e., high db due to high Te) were experienced, the degree of thermoregulatory precision was significantly greater relative to thermal quality of habitat (ANCOVA: F1, 63 = 14.10; P = 0.0004)" but I do give an interpretation which is consistent with the data and seems to be the key result in the abstract.
+8. The analysis of "performance breadth" doesn't define performance breadth. It's hard for me to reover the numbers given the differences in results due to data differences on top on not knowing what "performance breadth" is.
+9. The column "thermal window" may be "performance breadth". Regardless, the first 7 observations of this column are Ctmax - Ctmin but the remaining columns are not this.
 
 # Setup
 
@@ -58,6 +69,17 @@ file_path <- paste(data_folder, folder, fn, sep="/")
 exp2 <- fread(file_path)
 colnames(exp2) <- clean_label(colnames(exp2))
 
+fn <- "FE- sprint data.csv"
+file_path <- paste(data_folder, folder, fn, sep="/")
+exp3 <- fread(file_path)
+colnames(exp3) <- clean_label(colnames(exp3))
+exp3[, habitat:=factor(habitat)]
+
+fn <- "FE- CT limit data.csv"
+file_path <- paste(data_folder, folder, fn, sep="/")
+exp4 <- fread(file_path)
+colnames(exp4) <- clean_label(colnames(exp4))
+
 ```
 
 # Cleaning
@@ -81,22 +103,14 @@ exp1[, dtime := hour(time.step2) + minute(time.step2)/60 + second(time.step2)/36
 ### Thermal preference (Tset)
 >Thermal preference (Tset) did not differ between lizards from sand pine scrub and longleaf pine habitats (ANOVA; F1, 66 = 0.002; P < 0.96).
 
-The linear model used for Tset is not clear. The DDF is 66 which means there is either a continuous covariate in the model or one observation was removed. The only method mentioning covariate is "temperature" for analyses of "accuracy of thermoregulation". Not sure what "temperature" is as there are multiple temperature-type variables in the file.
+The linear model used for Tset is not clear. The DDF is 66 which means there is either a continuous covariate in the model or one observation was removed.
 
 ```{r}
 anova(lm(Tset ~ habitat_type, data=exp1))
 
-anova(lm(Tset ~ Te_30 + habitat_type, data=exp1))
-anova(lm(Tset ~ Te_60 + habitat_type, data=exp1))
-anova(lm(Tset ~ Ta + habitat_type, data=exp1))
-anova(lm(Tset ~ Tb + habitat_type, data=exp1))
-anova(lm(Tset ~ Tsub + habitat_type, data=exp1))
-
-anova(lm(Tset ~  habitat_type + Tb, data=exp1))
-
 ```
 
-None reproduce. Tb (active field temperature of lizard at time of capture) as covariate gives the reported DDF and it makes sense as "temperature"
+Does not reproduce (at least quantitatively)
 
 >The Tset range, or the central 80% of all body temperatures selected in the thermal gradient, was 35.40 – 38.57°C.
 
@@ -116,20 +130,21 @@ median(exp1$Tset, na.rm=TRUE)
 This reproduces only if by "median selected Tb" the authors mean the median temperature selected in the Tset test, but this would be a very misleading use of "Tb" (as a general shortening of body temperature) given that they define Tb as the active field temperature in the text and the column Tb is this active field temperature measure.
 
 ### Thermal quality of habitat (de)
->Thermal quality of habitat (de) did not differ between longleaf pine and sand pine scrub habitats when tested across 800 to 1300 hours (Nonparametric Wilcoxon: χ21,63 = 1.78; P < 0.18).
+>Thermal quality of habitat (de) did not differ between longleaf pine and sand pine scrub habitats when tested across 800 to 1300 hours (Nonparametric Wilcoxon: $\chi^2$1,63 = 1.78; P < 0.18).
 
 ```{r}
+anova(lm(de ~ habitat_type, data=exp1))
 wilcox.test(de ~ habitat_type, data=exp1)
 kruskal.test(de ~ habitat_type, data=exp1, na.action="na.omit")
 ```
 
-This reproduces if using K-W and not Wilcoxan rank sum. The reported statistic seems to be the K-W chi-square and not the Wilcoxan W. Maybe JMP defaults to K-W given the habitat_type = "", although the de value for these cases is NA, so it simply did K-W with 2 groups.
+This reproduces using Kruskal-Wallis and not Wilcoxan rank sum. JMP states it automatically does KW if groups > 2 but in their own example (online) they output both Wilcoxan test (normal approximation) and KW test ($\chi^2$ approximation) for data with only two groups. The authors are reporting a residual DF, maybe from an anova table using the same model? My residual df (for ANOVA) is 62 not 63.
 
->However, these habitats have very different canopy cover, thus mornings (800 - 1000) were compared to midday (1100-1300) to reduce diel variation. Longleaf pine habitats had greater thermal quality (evident by lower de values) in the middle of the day ( = 3.24), compared to in the mornings ( = 6.79) (Nonparametric Wilcoxon: χ21, 42 = 14.31; P = 0.0002). Conversely, in sand pine scrub habitats, there was a higher thermal quality in the mornings ( = 4.85), compared to in the midday ( = 11.53) (Nonparametric Wilcoxon: χ21, 23 = 6.31; P = 0.01; Table 1).
+>However, these habitats have very different canopy cover, thus mornings (800 - 1000) were compared to midday (1100-1300) to reduce diel variation. Longleaf pine habitats had greater thermal quality (evident by lower de values) in the middle of the day ( = 3.24), compared to in the mornings ( = 6.79) (Nonparametric Wilcoxon: $\chi^2$1, 42 = 14.31; P = 0.0002). Conversely, in sand pine scrub habitats, there was a higher thermal quality in the mornings ( = 4.85), compared to in the midday ( = 11.53) (Nonparametric Wilcoxon: $\chi^2$1, 23 = 6.31; P = 0.01; Table 1).
 
 ```{r}
 # is "time_of_day" column the early/middle split?
-qplot(x=time_of_day, y=dtime, data=exp1[time_of_day!=""])
+qplot(x=time_of_day, y=dtime, data=exp1[time_of_day!="" & !is.na(de) & !is.na(db), ])
 # if it is then the mapping from time to time_of_day is wrong
 
 
@@ -159,7 +174,7 @@ kruskal.test(de ~ my_time_of_day, data=exp1[habitat_type=="SPS"], na.action="na.
 
 ```
 
-1. The mapping from time to "time_of_day" bins "E" (early) and "M" (midday) is not what they state in the text. Note that in Table 1 the "Daily" line suggests that the mapping for "E" is 8-11AM but even this isn't consistent with the time_of_day column.
+1. The mapping from time to "time_of_day" bins "E" (early) and "M" (midday) is not what they state in the text. The mapping is 8-11:30 and 11:30-1600. Note that in Table 1 the "Daily" line suggests that the mapping for "E" is 8-11AM which would be consistant with the mapping only if times up to 11:30 round down to 11 as the demarcation is about 11:30. Finally note the multiple observations higher than 1300 HR.
 2. The point estimates reproduce if the authors time_of_day is used and the point estimates are means, except for SPS/E.
 3. A Kruskal-Wallis test reproduces the reported Wilcoxan result if the authors time_of_day is used for the SPS subset but not the LLP subset, which is interesting given the reverse reproduction for the point estimate
 
@@ -200,7 +215,7 @@ The analysis raises statistical red flag #1
 
 ### Encounter rates
 
->Field observations confirmed that longleaf pine populations were more likely to be encountered in the midday (1100-1300) compared to in the mornings (800-1000) (Nonparametric Wilcoxon: χ21, 50 = 11.08; P = 0.0009; Fig. 2). Conversely, in sand pine scrub habitats lizards were more likely to be encountered in mornings than in midday (Nonparametric Wilcoxon: χ21, 49 = 5.78; P = 0.01).
+>Field observations confirmed that longleaf pine populations were more likely to be encountered in the midday (1100-1300) compared to in the mornings (800-1000) (Nonparametric Wilcoxon: $\chi^2$1, 50 = 11.08; P = 0.0009; Fig. 2). Conversely, in sand pine scrub habitats lizards were more likely to be encountered in mornings than in midday (Nonparametric Wilcoxon: $\chi^2$1, 49 = 5.78; P = 0.01).
 
 ```{r}
 exp2[, Early.Midday:=factor(ifelse(Early.Midday=="", NA, Early.Midday))]
@@ -271,7 +286,7 @@ This doesn't reproduce. In general, thermoregulatory precision increases (db get
 
 >Although when unfavorably high temperatures (i.e., high db due to high Te) were experienced, the degree of thermoregulatory precision was significantly greater relative to thermal quality of habitat (ANCOVA: F1, 63 = 14.10; P = 0.0004).
 
-This doesn't seem correct qualitatively based simply on the plot of db against de by sign of Te - Tset. That is there is a strong interaction so that when de is high (thermally poor habitat), thermoregulatory precision is greater (db is smaller) when Te > Tset ("H") than when Te < Tset ("C").
+I cannot understand what is begin stated here, I think what the authors are trying to say here and in the sentence above is "thermoregulatory precision gets worse as thermal quality of habitat gets worse in both habitats (that is, the slope of db on de is positive in both habitats. However, when conditioned on the direction of Te - Tset, thermoregulatory precision gets worse as thermal quality of habitat gets worse when Te - Tset is negative (colder than thermal optimum habitat) but better when Te-Tset is positive (hotter than thermal optimum habitat)." If this is what they are trying to say, then the data support this.
 
 For the ANCOVA, I assume the sign of $Te_30 - Tset$ is mapped into the column "Hot.cold_te" and the model fit is either `db ~ de*Hot.cold_te` or `db ~ de + Hot.cold_te`. 
 
@@ -284,13 +299,163 @@ qplot(x=Hot.cold_te, y=(Te_30-Tset), data=exp1[!is.na(Hot.cold_te),])
 One value of "C" is positive and one value of "H" is negative. I don't know if the author's mapping is a bug or intentional (based on something else).
 
 2. ANCOVA models
+Methods
+> We used Analysis of Covariance (ANCOVA) to determine the effects of habitat thermal quality on accuracy of thermoregulation with temperature as a covariate. 
+
+What temperature? Tb? Te_30? Regardless, I am at a loss what the fit model is. If the authors are claiming there is a difference between positive (hot) and negative (cold) deviations from optimal thermal habitat in how db responds to de, the model must be something like `db ~ de*Hot.cold_te` but then is "temperature" (Te_30?) also added in as stated in the methods?
+
 ```{r, warning=FALSE, message=FALSE}
 # "Accuracy in thermoregulation (db) is defined as the deviation of field active body temperatures (Tb) from the preferred temperature (Tset)." -- db is only positive so must be the absolute deviation.
 # "The thermal quality of the habitat (de) is defined as the deviations of operative temperatures (Te) from the preferred temperature range (Tset). Thermal quality (de) is typically regarded as high for values less than 3 and low for values greater than 5" -- again its the absolute deviation
-anova(lm(db ~ de*Hot.cold_te, data=exp1))
-anova(lm(db ~ de+Hot.cold_te, data=exp1))
+con3 <- list(Hot.cold_te=contr.sum) # change the contrasts coding for the model matrix
+Anova(lm(db ~ de*Hot.cold_te, data=exp1, contrasts=con3), type="3")
+Anova(lm(db ~ Te_30 + de*Hot.cold_te, data=exp1, contrasts=con3), type="3")
+Anova(lm(db ~ Tb + de*Hot.cold_te, data=exp1, contrasts=con3), type="3")
+
+#>Although when unfavorably high temperatures (i.e., high db due to high Te) were experienced, the degree of thermoregulatory precision was significantly greater relative to thermal quality of habitat (ANCOVA: F1, 63 = 14.10; P = 0.0004).
+# my interpretation: when Te is high (and db is high), db is lower (than what?)
+
 ```
-Neither model reproduces. The reported residual DF is 63. This suggests n=66 if the fit model is additive or n=67 if the interaction was included. The reported residual DF for the two ANOVA below and above Tset are 17 and 44 or n=18 + 45 = 63. So something is missing.
+No model reproduces. The first (without a temperature covariate) is close, at least for the interaction effect which could be the term one might use to support the statement. Regardless, the reported residual DF is 63. This suggests n=66 if the fit model is additive or n=67 if the interaction was included. The reported residual DF for the two ANOVAs above, using the same data dived by above/below Tset are 17 and 44, so that is n=18 + 45 = 63. So something is missing.
+
+This leads to Best Practices Recommendation #1.
+
+>The accuracy of thermoregulation, i.e. the correspondence of field active Tb to Tset (db), was the same across all longleaf pine and sand pine scrub populations (Nonparametric Wilcoxon: $\chi^2$1, 68 = 0.61; P = 0.76).
+
+```{r}
+exp1[!is.na(db) & !is.na(habitat_type), .(N=.N)]
+kruskal.test(db ~ habitat_type, data=exp1)
+```
+The p-value does not reproduce. The $\chi^2$ reproduces and DF is the same. Regardless, the analysis raises statistical red flag #3
+
+>The index of thermoregulatory effectiveness (E) typically ranges from zero, where animals are thermoconforming, to 1, indicating more careful regulation of body temperature. Individuals in longleaf pine habitats were significantly more effective when thermoregulating (E: = 0.60 ± 0.04) relative to individuals in sand pine scrub habitat (E: = 0.45 ± 0.05; ANOVA: F1, 59 = 4.03; P = 0.04; Table 2).
+
+```{r}
+exp1[!is.na(E), .(mean_E=mean(E),
+                  N=.N,
+                  SE=sd(E)/sqrt(.N)),
+     by=.(habitat_type)]
+```
+
+Niether mean/SE reproduces although that for SPS is close. LLP has large values that are skewing the distribution. What if I arbitrarily just limit to observations with E <= 1?
+
+```{r}
+exp1[!is.na(E) & E<=1, .(mean_E=mean(E),
+                  N=.N,
+                  SE=sd(E)/sqrt(.N)),
+     by=.(habitat_type)]
+```
+
+LLP mean/SE reproduces. SPS is close. Excluding these values is addressed in Statistical red flag #4.
+
+```{r}
+fit <- lm(E ~ habitat_type, data=exp1[E<=1,])
+anova(fit)
+```
+Limiting to $E \le 1$ is close but residual DF differs (which is probably why F differs).
+
+The analysis here is addressed in Statistical red flag #4
+
+>Time of day was included as a covariate when comparing diel shifts in thermal parameters during statistical analysis. 
+
+>There were no diel shifts in thermoregulatory effectiveness in either longleaf pine or sand pine scrub populations (Nonparametric Wilcoxon: $\chi^2$1, 55 = 0.07; P = 0.78).
+
+The methods statement suggest the authors used either ANCOVA (if time is the covariate) or two-way ANOVA (if the factor time_of_day is the covariate) but I don't think JMP does either with rank-based non-parametric. The results statement has only a single result, so it's not a non-parametric test within each habitat_type separately.
+
+```{r}
+anova(lm(E ~ time_of_day, data=exp1[E <= 1, ]))
+kruskal.test(E ~ time_of_day, data=exp1[E <= 1, ])
+```
+
+Does not reproduce. My ANOVA does have 55 residual df.
+
+Regardless, here is a plot using both the authors' E just to see if the interpretation makes sense in light of the data. See also statistical red flag #5
+
+```{r warning=FALSE}
+pd <- position_dodge(0.9)
+gg <- ggplot(data=exp1[!is.na(habitat_type) & E <=1,], aes(x=time_of_day, y=E, color=habitat_type, group=habitat_type)) +
+  geom_point(position=pd)
+gg
+
+```
+
+The data are not inconsistent with a reduction in E in the afternoon in SPS but there are few midday data points. Also, note that afternoon sampling of lizards in LLP was much heavier than SPS, that the E in the midday for LLP is highly variable. See also statistical red flag #5
+
+## Thermal performance curves and critical thermal limits
+
+>The performance breadth of lizards did not differ between longleaf pine (n = 35) and sand pine scrub (n = 21) populations (ANOVA: F1, 55 = 0.108; P = 0.74).
+
+There are two data sets with thermal limits: "FE- sprint data.csv" and "FE- CT limit data.csv". The latter is a subset of the former (not additional or different data).
+
+Performance breadth is not defined. I'll assume its CTmax - CTmin, which is the column "thermal_window" in the file "FE- sprint data.csv".
+
+Problems with "FE- sprint data.csv" data
+1. thermal_window = Ctmax - Ctmin for first 7 observations but not for remaining observations
+2. There are NA values for thermal_window despite the CTmax and CTmin measures occurring.
+
+```{r}
+exp3[, my_thermal_window:=Ctmax-Ctmin]
+```
+
+```{r}
+anova(lm(thermal_window ~ habitat, data=exp3))
+anova(lm(my_thermal_window ~ habitat, data=exp3))
+```
+
+Neither reproduces but F and P are close if I use my computation of thermal breadth. The different residual df suggests the authors are analyzing more data than is in the file.
+
+>The performance breadth in longleaf pine populations spanned 35.17 - 40.07°C. The performance breadth in sand pine scrub populations spanned 34.25 - 39.37°C (Table 3).
+
+I don't know what these numbers are. They look like, but are a little smaller than, Ctmax. They are much too large for what I am interpreting as performance breadth (the column thermal window). These numbers are in table 3, so it appears that they are a function of the column B80 and Topt, but I cannot recover the numbers.
+
+> The upper limit of the performance breadth was significantly higher in sand pine scrub than longleaf pine populations (Nonparametric Wilcoxon: χ21, 55 = 9.06; P = 0.002). The lower limit of the performance breadth was not different between habitat types (ANOVA: F1, 55 = 1.80; P = 0.18).
+
+Since I cannot recover what is being analyzed, I'm skipping these (I do note that the pattern is almost equal to simply analying Ctmin and Ctmax)
+
+> The thermal optimum for sprinting (Topt) was higher in sand pine scrub populations ( = 39.2 ± 0.28°C), than in longleaf pine populations ( = 38.3 ± 0.21°C) (Nonparametric Wilcoxon: $\chi^2$1, 55 = 6.72; P = 0.009; Fig. 4).
+
+```{r}
+exp3[, .(Topt=mean(Topt),
+         N=.N,
+         SE=sd(Topt)/sqrt(.N)),
+     by=.(habitat)]
+kruskal.test(Topt ~ habitat, data=exp3)
+```
+Does not replicate. Again there is a discrepancy in N based on the residual df reported.
+
+> The upper critical thermal limit (CTmax) was also significantly higher in sand pine scrub populations ( = 41.17 ± 0.23°C; Fig. 4) than in longleaf pine populations ( = 40.37 ± 0.18°C; Nonparametric Wilcoxon: $\chi^2$1, 54 = 10.42; P = 0.002).
+
+```{r}
+exp3[, .(Ctmax=mean(Ctmax),
+         N=.N,
+         SE=sd(Ctmax)/sqrt(.N)),
+     by=.(habitat)]
+
+kruskal.test(Ctmax ~ habitat, data=exp3)
+```
+Neither point estimates/SE nor hypothesis test reproduces. Again, the authors seem to be analyzing more data than provided.
+
+> The lowercritical thermal limit (CTmin) did not differ between habitat types, although the CTmin in sand pine scrub populations was 0.8°C higher than in longleaf populations (ANOVA: F1,53 = 2.80; P = 0.10; Fig. 4).
+
+```{r}
+exp3[, .(Ctmin=mean(Ctmin),
+         N=.N,
+         SE=sd(Ctmin)/sqrt(.N)),
+     by=.(habitat)]
+
+kruskal.test(Ctmin ~ habitat, data=exp3)
+
+```
+
+Again, doesn't reproduce and again, the reported results are probably from more data than are in available file. The statment itself raises Statistical red flag #6
+
+> The predicted maximum sprint speed (Pmax) did not differ between habitat types (Nonparametric Wilcoxon: $\chi^2$1, 55 = 0.85; P = 0.35).
+
+```{r}
+kruskal.test(Pmax ~ habitat, data=exp3)
+```
+
+does not reproduce. Again, the reported results seem to be from more data than available.
 
 # Statistical Red Flags
 
@@ -322,3 +487,71 @@ plot(simulationOutput)
 testDispersion(simulationOutput)
 
 ```
+
+3. The statement
+>The accuracy of thermoregulation, i.e. the correspondence of field active Tb to Tset (db), was the same across all longleaf pine and sand pine scrub populations (Nonparametric Wilcoxon: $\chi^2$1, 68 = 0.61; P = 0.76).
+
+is based on the misconception that P > 0.05 is evidence for the null ("the same"). Based on the figure above plotting db vs. de conditional on habitat type we have
+
+```{r}
+fit <- lm(db ~ de*habitat_type, data=exp1)
+coef(summary(fit))
+```
+
+The slope for SPS is 4.5X bigger than that for LLP with the consequence that SPS is much less accurate at high de.
+
+4. The analysis is confouded by observations that should have low E actually having high E. This requires some explanation. db should range from 0 when perfectly thermoregulating to de which is what the non-regulating models are doing. A problem with db/de is that as either is close to zero, this ratio varies wildly. Or, measurement error in either will also make the ratio vary wildly. The authors used $\abs(1 - \frac{db}{de})$ as the value of E. Take observation 68, where db=4.105 and de=2.095, so the lizard is thermoregulating worse than a model. But by taking the absolute value, its E is 0.96, so is scored as (essentially) perfectly thermoregulating.
+
+One way to analyze these without this confounding would be to assign E=0 to any observation with db > de. This only occurs when de is low (probably due to de not really being de for that lizard). Given that we expect E to be near 1 when de is near zero (because it should be easy to thermoregulate) and decrease as de gets bigger, then these observations scored zero should be excluded because they probably reflect measurement error.
+
+After re-computing E this way, the final intepretation is the same (lizards in LLP are more effective thermoregulators than lizards in SPS) but my analysis supports this assertion. Regardless, E seems like a dangerous measure given the problems in its computation.
+
+Finally, I note that Diaz 1997 (cited by the author) gives what must be the incorrect formula for E as they define it a 1 - de/db. This doesn't make sense because db should range from zero up to de (the authors used 1 - db/de).
+
+```{r warning=FALSE}
+#exp1[!is.na(db), .SD, .SDcols=c("db", "de", "E", "my.E")]
+exp1[, my.E:=ifelse(db>=de, 0, 1-(db/de))]
+#exp1[!is.na(db) & my.E==0, .SD, .SDcols=c("db", "de", "E", "my.E")]
+gg <- ggplot(data=exp1[!is.na(habitat_type)], aes(x=de, y=my.E, color=habitat_type)) +
+  geom_point() +
+  geom_smooth(data=exp1[my.E!=0 & !is.na(habitat_type)], aes(x=de, y=my.E, color=habitat_type), method="lm")
+gg
+# not conditioned on de
+wilcox.test(my.E ~ habitat_type, data=exp1[my.E != 0,] )
+kruskal.test(my.E ~ habitat_type, data=exp1[my.E != 0,])
+coef(summary(lm(my.E ~ habitat_type, data=exp1[my.E != 0,])))
+
+# conditioned on de
+coef(summary(lm(my.E ~ de + habitat_type, data=exp1[my.E != 0,])))
+
+```
+
+5. No diel shift in E. Here I plot my computation of E vs. time.
+
+```{r warning=FALSE}
+gg <- ggplot(data=exp1[!is.na(habitat_type)], aes(x=dtime, y=my.E, color=habitat_type)) +
+  geom_point()
+gg
+  
+```
+
+In addition to the comments that I made above, I note that most of the E scored zero are for LLP midday measures
+
+6. Ctmax differs between habitats. Ctmin doesn't.
+
+The misconception that the null is true if p > 0.05 has important interpretation issues. For example, compare the CIs of the effects of habitat on Ctmax and Ctmin
+
+```{r}
+# compare
+coef(lm(Ctmax ~ habitat, data=exp3))[2]
+coef(lm(Ctmin ~ habitat, data=exp3))[2]
+
+confint(lm(Ctmax ~ habitat, data=exp3))
+confint(lm(Ctmin ~ habitat, data=exp3))
+```
+
+The effect on Ctmin is bigger than that for Ctmax and much bigger effects are consistent with the data for Ctmin compared to Ctmax. The data simply do not support the conclusion that there isn't a large upward shift in Ctmin in SPS (and in fact the data support this, although the data are noisy enough that it also supports a trivially small shift).
+
+# Best practice recommendations
+
+1. Authors should clearly state the fit model in an ANOVA (all terms of the ANOVA table). Reviewers and editors should demand this.
