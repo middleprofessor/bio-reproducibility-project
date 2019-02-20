@@ -7,6 +7,7 @@ slug: data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-duri
 categories: []
 tags:
   - linear mixed model
+  - repeated measures anova
   - SPSS
 subtitle: ''
 output:
@@ -59,6 +60,9 @@ exp2 <- data.table(read_excel(file_path, range="F1:H45"))
 colnames(exp2) <- clean_label(colnames(exp2))
 exp2[, Treatment:=factor(Treatment)]
 
+exp3 <- data.table(read_excel(file_path, range="K1:U45"))
+colnames(exp3) <- clean_label(colnames(exp3))
+exp3[, Treatment:=factor(Treatment)]
 ```
 
 # Reproducibility
@@ -69,6 +73,7 @@ exp2[, Treatment:=factor(Treatment)]
 ```{r}
 # birth weight
 exp1[,.(birth=mean(birth),
+        SD=sd(birth),
         SE=sd(birth)/sqrt(.N)), by=Treatment]
 anova(lm(birth ~ Treatment, data=exp1))
 
@@ -76,20 +81,148 @@ anova(lm(birth ~ Treatment, data=exp1))
 anova(lm(Littersize ~ Treatment, data=exp2))
 
 ```
-Reproduces
+Reproduces, the error is sample SD and not SEM.
 
 and identifies LBE = novel male treatment, MC = familiar male treatment
 
 >To analyse the differences in offspring growth rate we used repeated measures ANOVA reporting within-subjects effects. Mauchly's Test of Sphericity indicated that the assumption of sphericity had been violated (χ2(2) = 34.210, p = <0.001), therefore degrees of freedom were corrected using Greenhouse-Geisser adjusted degrees of freedom. There was a difference in growth rate between the treatments but there was no effect of sex (treatment: F1.7,310=7.49, p= 0.001; interaction between treatment and time: F1.7,310=5668, p= <0.001; sex x treatment: F1.6,306=1.3, p= 0.270).
 
+A treatment effect on growth rate is indirectly indicated by treatment x time interaction.
+
 ```{r}
-exp1[, ID:=1:nrow(exp1)]
+exp1[, ID:=factor(1:nrow(exp1))]
+exp1[, Treatment:=factor(Treatment, c("MC", "LBE"))]
+exp1[, Sex:=factor(Sex)]
 exp1_long <- melt(exp1, id.vars = c("Treatment", "Sex", "ID"), variable.name="Time", value.name = "Weight")
 exp1_long[, ID:=factor(ID)]
-(fit.car <- aov_car(Weight ~ Treatment*Sex*Time + Error(ID/Time), data=exp1_long))
+#(fit.aov_car <- aov_car(Weight ~ Treatment*Sex*Time + Error(ID/Time), data=exp1_long))
 #(fit.ez <- aov_ez("ID", "Weight", exp1_long, between=c("Treatment", "Sex"), within="Time"))
-# (fit_nice <- aov_ez("id","value",obk.long,between=c("treatment"),within=c("phase")))
-#summary(fit.ez)
+(fit.aov_4 <- aov_4(Weight ~ Treatment*Sex*Time + (Time|ID), data=exp1_long))
 ```
 
+I think it generally reproduces but I think the authors have mixed up the terms in their reporting.
+
+1. The authors report the treatment x time interaction as F1.7,310=5668, p= <0.001, which 1) is a huge F given what the interaction effect looks like (Statistical red flag #1) and is nearly equivalent to my stats for the Time term (which makes sense given the huge time effect illustrated in Statistical red flag #1).
+2. The authors report sex x treatment: F1.6,306=1.3, p= 0.270 which is very close to my sex x time term.
+
+>This resulted in novel male treatment pups being significantly smaller (7.19±0.61g), at weaning (4 weeks old) (ANOVA: F1,182=27.11, p=<0.001) than the familiar male treatment pups (7.99±1.48g)
+
+```{r}
+m1 <- lm(weaning ~ Treatment, data=exp1)
+anova(m1)
+exp1[, .(weaning=mean(weaning),
+         SD=sd(weaning),
+         SE=sd(weaning)/sqrt(.N)),
+     by=.(Treatment)]
+```
+The means reproduce but not the sample SD.
+
+>there were no weight differences at adulthood (13 weeks old) (ANOVA: F1, 184=0.760, p=0.384)
+
+```{r}
+anova(lm(adulthood ~ Treatment, data=exp1))
+```
+
+reproduces
+
+>There were also no significant interactions of treatment and sex in weight at weaning (sex x treatment F1,180= 2.14, p=0.145) or at adulthood (sex x treatment F1, 180=0.044, p=0.868)).
+
+```{r}
+anova(lm(weaning ~ Sex*Treatment, data=exp1))
+anova(lm(adulthood ~ Sex*Treatment, data=exp1))
+```
+
+The weaning results reproduce. The adulthood results do not. The only way the means for adulthood could match but not the anova of Sex x Treatment is if we are using different assignments of Sex. Here is a plot of the interaction.
+
+```{r}
+(fit.emm <- data.table(summary(emmeans(lm(adulthood ~ Sex*Treatment, data=exp1),
+                   specs=c("Sex", "Treatment")))))
+setnames(fit.emm, old="emmean", new="adulthood")
+pd <- position_dodge(0.5)
+gg <- ggplot(data=exp1, aes(x=Treatment, y=adulthood, color=Sex, group=Sex)) +
+  #geom_point(position=pd) +
+  geom_point(data=fit.emm, aes(y=adulthood), position=pd)+
+  geom_errorbar(data=fit.emm, aes(ymin=lower.CL, ymax=upper.CL), position=pd, width=0.2) +
+  geom_line(data=fit.emm, position=pd) +
+  NULL
+gg
+
+```
+
+## Maternal behaviour
+
+>There was no significant difference in the amount of time the mothers spent in nest, grooming, licking pups, eating/ drinking, nest building, resting or active (Table 1). The only behaviour showing significant differences between treatments was nursing, with females exposed to familiar males spent almost twice the time nursing (Table 1).
+
+```{r}
+y_list <- c("In_Nest", "Nursing", "Licking_Pups", "Nest_Building", "Eating.Drinking", "Grooming", "Active", "Resting")
+my_table <- data.table(NULL)
+exp3[, one:=1] # used for getting N in each level
+for(y in y_list){
+  n.mc <- sum(exp3[Treatment=="MC" & !is.na(get(y)), one])
+  n.lbe <- sum(exp3[Treatment=="LBE" & !is.na(get(y)), one])
+  fixed_i <- formula(paste(y, "Treatment", sep=" ~ "))
+  my_table <- rbind(my_table, 
+                 data.table(Response=y, 
+                            anova(lme(fixed_i, random = ~ 1|Block,
+                                      method="ML", data=exp3))[2,],
+                            Mean.MC=mean(exp3[Treatment=="MC", get(y)]),
+                            SE.MC=sd(exp3[Treatment=="MC", get(y)])/sqrt(n.mc),
+                            Mean.LBE=mean(exp3[Treatment=="LBE", get(y)]),
+                            SE.LBE=sd(exp3[Treatment=="LBE", get(y)])/sqrt(n.lbe)
+                 ))
+}
+# table is printed below the reported table
+```
+
+```{r table1, echo=FALSE}
+fn <- "table1.png"
+if(knitr_path==TRUE){
+  image_path <- paste("../images", folder, fn, sep="/")
+}else{
+  image_path <- paste("/images", folder, fn, sep="/")
+}
+knitr::include_graphics(image_path)
+```
+
+```{r mytable, echo=FALSE}
+knitr::kable(my_table, digits=c(NA,0,0,2,3,2,2,2,2))
+```
+
+Replicates -- with very small differences probably due to implementation of ANOVA/LMM in different statistical software.
+
 # Statistical Red Flags
+
+# Explorations
+## Weight gain
+```{r}
+# linear mixed model "version" of repeated measures ANOVA 
+fit.lme <- lme(Weight ~ Treatment*Sex*Time, random = ~ Time|ID, data=exp1_long, method = "ML")
+coef(summary(fit.lme))
+contrasts(exp1_long$Treatment) <- contr.sum
+contrasts(exp1_long$Sex) <- contr.sum
+fit.lme <- lme(Weight ~ Treatment*Sex*Time, random = ~ Time|ID, data=exp1_long, method = "ML")
+anova(fit.lme, type="marginal")
+#fit.lmer <- lmer(Weight ~ Treatment*Sex*Time + (1|ID) + (1|ID:Time), data=exp1_long, REML = FALSE)
+#anova(fit.lmer, type="marginal")
+contrasts(exp1_long$Treatment) <- contr.treatment
+contrasts(exp1_long$Sex) <- contr.treatment
+
+# simpler, better way of measuring growth rate differences
+fit1 <- lm(weaning ~ birth + Treatment*Sex, data=exp1)
+coef(summary(fit1))
+fit2 <- lm(adulthood ~ birth + Treatment*Sex, data=exp1)
+coef(summary(fit2))
+
+# plot
+fit.emm <- data.table(summary(emmeans(fit.lme, specs=c("Treatment", "Sex", "Time"))))
+setnames(fit.emm, old="emmean", new="Weight")
+pd <- position_dodge(0.5)
+gg <- ggplot(data=exp1_long, aes(x=Treatment, y=Weight, color=Time)) +
+  #geom_point(position=pd) +
+  geom_point(data=fit.emm, aes(x=Treatment, y=Weight), position=pd)+
+  geom_errorbar(data=fit.emm, aes(x=Treatment, ymin=lower.CL, ymax=upper.CL), position=pd, width=0.2) +
+  facet_grid(.~Sex) +
+  NULL
+gg
+```
+

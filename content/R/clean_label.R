@@ -24,6 +24,9 @@ clean_label <- function(x){
   x <- gsub("-", "_", x)
 
   # replace forward slash
+  x <- gsub("/_", ".", x)
+
+  # replace forward slash
   x <- gsub("/", ".", x)
   
   return(x)

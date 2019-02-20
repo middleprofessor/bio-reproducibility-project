@@ -6,11 +6,11 @@
   <title>Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from: Perceived threats of infanticide reduce maternal allocation …" />
-  <meta name="description" content="Sources Summary Setup Import Reproducibility Offspring weight  Statistical Red Flags   Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. https://doi.org/10.1111/1365-2435.13146
-Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Dryad Digital Repository.">
-  <meta property="og:description" content="Sources Summary Setup Import Reproducibility Offspring weight  Statistical Red Flags   Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. https://doi.org/10.1111/1365-2435.13146
-Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Dryad Digital Repository.">
-  <meta name="twitter:description" content="Sources Summary Setup Import Reproducibility Offspring weight  Statistical Red Flags   Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during …">
+  <meta name="description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour  Statistical Red Flags Explorations Weight gain    Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. https://doi.org/10.1111/1365-2435.13146
+Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring.">
+  <meta property="og:description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour  Statistical Red Flags Explorations Weight gain    Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. https://doi.org/10.1111/1365-2435.13146
+Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring.">
+  <meta name="twitter:description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour  Statistical Red Flags Explorations Weight gain    Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring/" />
@@ -53,6 +53,12 @@ Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide 
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
+          <a href="/tags/repeated-measures-anova/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            repeated measures anova
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
           <a href="/tags/spss/">
             <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
             SPSS
@@ -71,8 +77,12 @@ Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide 
 <li><a href="#import">Import</a></li>
 <li><a href="#reproducibility">Reproducibility</a><ul>
 <li><a href="#offspring-weight">Offspring weight</a></li>
+<li><a href="#maternal-behaviour">Maternal behaviour</a></li>
 </ul></li>
 <li><a href="#statistical-red-flags">Statistical Red Flags</a></li>
+<li><a href="#explorations">Explorations</a><ul>
+<li><a href="#weight-gain">Weight gain</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -115,7 +125,11 @@ exp1[, Treatment:=factor(Treatment)]
 
 exp2 &lt;- data.table(read_excel(file_path, range=&quot;F1:H45&quot;))
 colnames(exp2) &lt;- clean_label(colnames(exp2))
-exp2[, Treatment:=factor(Treatment)]</code></pre>
+exp2[, Treatment:=factor(Treatment)]
+
+exp3 &lt;- data.table(read_excel(file_path, range=&quot;K1:U45&quot;))
+colnames(exp3) &lt;- clean_label(colnames(exp3))
+exp3[, Treatment:=factor(Treatment)]</code></pre>
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
@@ -126,10 +140,11 @@ exp2[, Treatment:=factor(Treatment)]</code></pre>
 </blockquote>
 <pre class="r"><code># birth weight
 exp1[,.(birth=mean(birth),
+        SD=sd(birth),
         SE=sd(birth)/sqrt(.N)), by=Treatment]</code></pre>
-<pre><code>##    Treatment    birth         SE
-## 1:       LBE 1.619080 0.04633439
-## 2:        MC 1.628012 0.04398077</code></pre>
+<pre><code>##    Treatment    birth        SD         SE
+## 1:       LBE 1.619080 0.4321785 0.04633439
+## 2:        MC 1.628012 0.4331604 0.04398077</code></pre>
 <pre class="r"><code>anova(lm(birth ~ Treatment, data=exp1))</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
@@ -145,16 +160,20 @@ anova(lm(Littersize ~ Treatment, data=exp2))</code></pre>
 ##           Df Sum Sq Mean Sq F value Pr(&gt;F)
 ## Treatment  1  0.061 0.06098  0.0702 0.7923
 ## Residuals 42 36.484 0.86868</code></pre>
-<p>Reproduces</p>
+<p>Reproduces, the error is sample SD and not SEM.</p>
 <p>and identifies LBE = novel male treatment, MC = familiar male treatment</p>
 <blockquote>
 <p>To analyse the differences in offspring growth rate we used repeated measures ANOVA reporting within-subjects effects. Mauchly’s Test of Sphericity indicated that the assumption of sphericity had been violated (χ2(2) = 34.210, p = &lt;0.001), therefore degrees of freedom were corrected using Greenhouse-Geisser adjusted degrees of freedom. There was a difference in growth rate between the treatments but there was no effect of sex (treatment: F1.7,310=7.49, p= 0.001; interaction between treatment and time: F1.7,310=5668, p= &lt;0.001; sex x treatment: F1.6,306=1.3, p= 0.270).</p>
 </blockquote>
-<pre class="r"><code>exp1[, ID:=1:nrow(exp1)]
+<p>A treatment effect on growth rate is indirectly indicated by treatment x time interaction.</p>
+<pre class="r"><code>exp1[, ID:=factor(1:nrow(exp1))]
+exp1[, Treatment:=factor(Treatment, c(&quot;MC&quot;, &quot;LBE&quot;))]
+exp1[, Sex:=factor(Sex)]
 exp1_long &lt;- melt(exp1, id.vars = c(&quot;Treatment&quot;, &quot;Sex&quot;, &quot;ID&quot;), variable.name=&quot;Time&quot;, value.name = &quot;Weight&quot;)
 exp1_long[, ID:=factor(ID)]
-(fit.car &lt;- aov_car(Weight ~ Treatment*Sex*Time + Error(ID/Time), data=exp1_long))</code></pre>
-<pre><code>## Converting to factor: Sex</code></pre>
+#(fit.aov_car &lt;- aov_car(Weight ~ Treatment*Sex*Time + Error(ID/Time), data=exp1_long))
+#(fit.ez &lt;- aov_ez(&quot;ID&quot;, &quot;Weight&quot;, exp1_long, between=c(&quot;Treatment&quot;, &quot;Sex&quot;), within=&quot;Time&quot;))
+(fit.aov_4 &lt;- aov_4(Weight ~ Treatment*Sex*Time + (Time|ID), data=exp1_long))</code></pre>
 <pre><code>## Contrasts set to contr.sum for the following variables: Treatment, Sex</code></pre>
 <pre><code>## Anova Table (Type 3 tests)
 ## 
@@ -171,13 +190,303 @@ exp1_long[, ID:=factor(ID)]
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1
 ## 
 ## Sphericity correction method: GG</code></pre>
-<pre class="r"><code>#(fit.ez &lt;- aov_ez(&quot;ID&quot;, &quot;Weight&quot;, exp1_long, between=c(&quot;Treatment&quot;, &quot;Sex&quot;), within=&quot;Time&quot;))
-# (fit_nice &lt;- aov_ez(&quot;id&quot;,&quot;value&quot;,obk.long,between=c(&quot;treatment&quot;),within=c(&quot;phase&quot;)))
-#summary(fit.ez)</code></pre>
+<p>I think it generally reproduces but I think the authors have mixed up the terms in their reporting.</p>
+<ol style="list-style-type: decimal">
+<li>The authors report the treatment x time interaction as F1.7,310=5668, p= &lt;0.001, which 1) is a huge F given what the interaction effect looks like (Statistical red flag #1) and is nearly equivalent to my stats for the Time term (which makes sense given the huge time effect illustrated in Statistical red flag #1).</li>
+<li>The authors report sex x treatment: F1.6,306=1.3, p= 0.270 which is very close to my sex x time term.</li>
+</ol>
+<blockquote>
+<p>This resulted in novel male treatment pups being significantly smaller (7.19±0.61g), at weaning (4 weeks old) (ANOVA: F1,182=27.11, p=&lt;0.001) than the familiar male treatment pups (7.99±1.48g)</p>
+</blockquote>
+<pre class="r"><code>m1 &lt;- lm(weaning ~ Treatment, data=exp1)
+anova(m1)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: weaning
+##            Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Treatment   1  29.327 29.3271  27.107 5.168e-07 ***
+## Residuals 182 196.908  1.0819                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>exp1[, .(weaning=mean(weaning),
+         SD=sd(weaning),
+         SE=sd(weaning)/sqrt(.N)),
+     by=.(Treatment)]</code></pre>
+<pre><code>##    Treatment  weaning        SD         SE
+## 1:       LBE 7.199425 0.7886084 0.08454769
+## 2:        MC 7.999072 1.2222930 0.12410505</code></pre>
+<p>The means reproduce but not the sample SD.</p>
+<blockquote>
+<p>there were no weight differences at adulthood (13 weeks old) (ANOVA: F1, 184=0.760, p=0.384)</p>
+</blockquote>
+<pre class="r"><code>anova(lm(adulthood ~ Treatment, data=exp1))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: adulthood
+##            Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Treatment   1   2.04  2.0411  0.7604 0.3843
+## Residuals 182 488.53  2.6842</code></pre>
+<p>reproduces</p>
+<blockquote>
+<p>There were also no significant interactions of treatment and sex in weight at weaning (sex x treatment F1,180= 2.14, p=0.145) or at adulthood (sex x treatment F1, 180=0.044, p=0.868)).</p>
+</blockquote>
+<pre class="r"><code>anova(lm(weaning ~ Sex*Treatment, data=exp1))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: weaning
+##                Df  Sum Sq Mean Sq F value   Pr(&gt;F)    
+## Sex             1   0.620  0.6205  0.5762   0.4488    
+## Treatment       1  29.468 29.4683 27.3644 4.65e-07 ***
+## Sex:Treatment   1   2.307  2.3067  2.1421   0.1451    
+## Residuals     180 193.839  1.0769                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(lm(adulthood ~ Sex*Treatment, data=exp1))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: adulthood
+##                Df Sum Sq Mean Sq F value  Pr(&gt;F)  
+## Sex             1   0.31  0.3146  0.1190 0.73051  
+## Treatment       1   2.02  2.0166  0.7629 0.38360  
+## Sex:Treatment   1  12.43 12.4283  4.7017 0.03145 *
+## Residuals     180 475.81  2.6434                  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The weaning results reproduce. The adulthood results do not. The only way the means for adulthood could match but not the anova of Sex x Treatment is if we are using different assignments of Sex. Here is a plot of the interaction.</p>
+<pre class="r"><code>(fit.emm &lt;- data.table(summary(emmeans(lm(adulthood ~ Sex*Treatment, data=exp1),
+                   specs=c(&quot;Sex&quot;, &quot;Treatment&quot;)))))</code></pre>
+<pre><code>##    Sex Treatment   emmean        SE  df lower.CL upper.CL
+## 1:   F        MC 13.21312 0.2254647 180 12.76822 13.65801
+## 2:   M        MC 12.80000 0.2423672 180 12.32175 13.27825
+## 3:   F       LBE 12.52708 0.2346711 180 12.06402 12.99014
+## 4:   M       LBE 13.15933 0.2603442 180 12.64561 13.67305</code></pre>
+<pre class="r"><code>setnames(fit.emm, old=&quot;emmean&quot;, new=&quot;adulthood&quot;)
+pd &lt;- position_dodge(0.5)
+gg &lt;- ggplot(data=exp1, aes(x=Treatment, y=adulthood, color=Sex, group=Sex)) +
+  #geom_point(position=pd) +
+  geom_point(data=fit.emm, aes(y=adulthood), position=pd)+
+  geom_errorbar(data=fit.emm, aes(ymin=lower.CL, ymax=upper.CL), position=pd, width=0.2) +
+  geom_line(data=fit.emm, position=pd) +
+  NULL
+gg</code></pre>
+<p><img src="/post/2019-02-18-data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="maternal-behaviour" class="section level2">
+<h2>Maternal behaviour</h2>
+<blockquote>
+<p>There was no significant difference in the amount of time the mothers spent in nest, grooming, licking pups, eating/ drinking, nest building, resting or active (Table 1). The only behaviour showing significant differences between treatments was nursing, with females exposed to familiar males spent almost twice the time nursing (Table 1).</p>
+</blockquote>
+<pre class="r"><code>y_list &lt;- c(&quot;In_Nest&quot;, &quot;Nursing&quot;, &quot;Licking_Pups&quot;, &quot;Nest_Building&quot;, &quot;Eating.Drinking&quot;, &quot;Grooming&quot;, &quot;Active&quot;, &quot;Resting&quot;)
+my_table &lt;- data.table(NULL)
+exp3[, one:=1] # used for getting N in each level
+for(y in y_list){
+  n.mc &lt;- sum(exp3[Treatment==&quot;MC&quot; &amp; !is.na(get(y)), one])
+  n.lbe &lt;- sum(exp3[Treatment==&quot;LBE&quot; &amp; !is.na(get(y)), one])
+  fixed_i &lt;- formula(paste(y, &quot;Treatment&quot;, sep=&quot; ~ &quot;))
+  my_table &lt;- rbind(my_table, 
+                 data.table(Response=y, 
+                            anova(lme(fixed_i, random = ~ 1|Block,
+                                      method=&quot;ML&quot;, data=exp3))[2,],
+                            Mean.MC=mean(exp3[Treatment==&quot;MC&quot;, get(y)]),
+                            SE.MC=sd(exp3[Treatment==&quot;MC&quot;, get(y)])/sqrt(n.mc),
+                            Mean.LBE=mean(exp3[Treatment==&quot;LBE&quot;, get(y)]),
+                            SE.LBE=sd(exp3[Treatment==&quot;LBE&quot;, get(y)])/sqrt(n.lbe)
+                 ))
+}
+# table is printed below the reported table</code></pre>
+<p><img src="/images/Data%20from%20Perceived%20threats%20of%20infanticide%20reduce%20maternal%20allocation%20during%20lactation%20and%20lead%20to%20elevated%20oxidative%20damage%20in%20offspring/table1.png" /><!-- --></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Response</th>
+<th align="right">numDF</th>
+<th align="right">denDF</th>
+<th align="right">F-value</th>
+<th align="right">p-value</th>
+<th align="right">Mean.MC</th>
+<th align="right">SE.MC</th>
+<th align="right">Mean.LBE</th>
+<th align="right">SE.LBE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">In_Nest</td>
+<td align="right">1</td>
+<td align="right">41</td>
+<td align="right">3.89</td>
+<td align="right">0.055</td>
+<td align="right">114.35</td>
+<td align="right">4.16</td>
+<td align="right">103.48</td>
+<td align="right">3.54</td>
+</tr>
+<tr class="even">
+<td align="left">Nursing</td>
+<td align="right">1</td>
+<td align="right">41</td>
+<td align="right">11.94</td>
+<td align="right">0.001</td>
+<td align="right">15.52</td>
+<td align="right">1.35</td>
+<td align="right">8.48</td>
+<td align="right">1.54</td>
+</tr>
+<tr class="odd">
+<td align="left">Licking_Pups</td>
+<td align="right">1</td>
+<td align="right">41</td>
+<td align="right">1.87</td>
+<td align="right">0.179</td>
+<td align="right">1.83</td>
+<td align="right">0.64</td>
+<td align="right">0.81</td>
+<td align="right">0.34</td>
+</tr>
+<tr class="even">
+<td align="left">Nest_Building</td>
+<td align="right">1</td>
+<td align="right">41</td>
+<td align="right">0.15</td>
+<td align="right">0.705</td>
+<td align="right">0.65</td>
+<td align="right">0.27</td>
+<td align="right">0.81</td>
+<td align="right">0.31</td>
+</tr>
+<tr class="odd">
+<td align="left">Eating.Drinking</td>
+<td align="right">1</td>
+<td align="right">41</td>
+<td align="right">0.13</td>
+<td align="right">0.716</td>
+<td align="right">5.83</td>
+<td align="right">0.63</td>
+<td align="right">5.52</td>
+<td align="right">0.52</td>
+</tr>
+<tr class="even">
+<td align="left">Grooming</td>
+<td align="right">1</td>
+<td align="right">41</td>
+<td align="right">0.14</td>
+<td align="right">0.707</td>
+<td align="right">9.74</td>
+<td align="right">0.68</td>
+<td align="right">10.14</td>
+<td align="right">0.83</td>
+</tr>
+<tr class="odd">
+<td align="left">Active</td>
+<td align="right">1</td>
+<td align="right">41</td>
+<td align="right">0.76</td>
+<td align="right">0.388</td>
+<td align="right">131.35</td>
+<td align="right">6.22</td>
+<td align="right">139.76</td>
+<td align="right">7.45</td>
+</tr>
+<tr class="even">
+<td align="left">Resting</td>
+<td align="right">1</td>
+<td align="right">41</td>
+<td align="right">1.24</td>
+<td align="right">0.273</td>
+<td align="right">168.74</td>
+<td align="right">5.00</td>
+<td align="right">179.00</td>
+<td align="right">7.96</td>
+</tr>
+</tbody>
+</table>
+<p>Replicates – with very small differences probably due to implementation of ANOVA/LMM in different statistical software.</p>
 </div>
 </div>
 <div id="statistical-red-flags" class="section level1">
 <h1>Statistical Red Flags</h1>
+</div>
+<div id="explorations" class="section level1">
+<h1>Explorations</h1>
+<div id="weight-gain" class="section level2">
+<h2>Weight gain</h2>
+<pre class="r"><code># linear mixed model &quot;version&quot; of repeated measures ANOVA 
+fit.lme &lt;- lme(Weight ~ Treatment*Sex*Time, random = ~ Time|ID, data=exp1_long, method = &quot;ML&quot;)
+coef(summary(fit.lme))</code></pre>
+<pre><code>##                                       Value  Std.Error  DF    t-value
+## (Intercept)                      1.56461538 0.05825548 360 26.8578212
+## TreatmentLBE                    -0.07732372 0.08408455 180 -0.9195948
+## SexM                             0.13665573 0.08552960 180  1.5977595
+## Timeweaning                      6.59288462 0.16213903 360 40.6619215
+## Timeadulthood                   11.64850000 0.23356384 360 49.8728748
+## TreatmentLBE:SexM                0.15733466 0.12456628 180  1.2630598
+## TreatmentLBE:Timeweaning        -0.92955128 0.23402754 360 -3.9719740
+## TreatmentLBE:Timeadulthood      -0.60870833 0.33712036 360 -1.8056113
+## SexM:Timeweaning                -0.47815573 0.23804945 360 -2.0086403
+## SexM:Timeadulthood              -0.54977111 0.34291400 360 -1.6032332
+## TreatmentLBE:SexM:Timeweaning    0.29302752 0.34669793 360  0.8451955
+## TreatmentLBE:SexM:Timeadulthood  0.88803073 0.49942384 360  1.7781104
+##                                       p-value
+## (Intercept)                      5.393345e-88
+## TreatmentLBE                     3.590152e-01
+## SexM                             1.118505e-01
+## Timeweaning                     1.239816e-136
+## Timeadulthood                   9.750687e-164
+## TreatmentLBE:SexM                2.082013e-01
+## TreatmentLBE:Timeweaning         8.610403e-05
+## TreatmentLBE:Timeadulthood       7.181430e-02
+## SexM:Timeweaning                 4.532162e-02
+## SexM:Timeadulthood               1.097601e-01
+## TreatmentLBE:SexM:Timeweaning    3.985631e-01
+## TreatmentLBE:SexM:Timeadulthood  7.622969e-02</code></pre>
+<pre class="r"><code>contrasts(exp1_long$Treatment) &lt;- contr.sum
+contrasts(exp1_long$Sex) &lt;- contr.sum
+fit.lme &lt;- lme(Weight ~ Treatment*Sex*Time, random = ~ Time|ID, data=exp1_long, method = &quot;ML&quot;)
+anova(fit.lme, type=&quot;marginal&quot;)</code></pre>
+<pre><code>##                    numDF denDF  F-value p-value
+## (Intercept)            1   360 2751.816  &lt;.0001
+## Treatment              1   180    0.000  0.9828
+## Sex                    1   180   11.952  0.0007
+## Time                   2   360 4300.186  &lt;.0001
+## Treatment:Sex          1   180    1.595  0.2082
+## Treatment:Time         2   360   13.003  &lt;.0001
+## Sex:Time               2   360    2.171  0.1155
+## Treatment:Sex:Time     2   360    1.604  0.2025</code></pre>
+<pre class="r"><code>#fit.lmer &lt;- lmer(Weight ~ Treatment*Sex*Time + (1|ID) + (1|ID:Time), data=exp1_long, REML = FALSE)
+#anova(fit.lmer, type=&quot;marginal&quot;)
+contrasts(exp1_long$Treatment) &lt;- contr.treatment
+contrasts(exp1_long$Sex) &lt;- contr.treatment
+
+# simpler, better way of measuring growth rate differences
+fit1 &lt;- lm(weaning ~ birth + Treatment*Sex, data=exp1)
+coef(summary(fit1))</code></pre>
+<pre><code>##                     Estimate Std. Error   t value     Pr(&gt;|t|)
+## (Intercept)        8.6614310  0.3201687 27.052714 3.816934e-65
+## birth             -0.3220798  0.1830616 -1.759407 8.021681e-02
+## TreatmentLBE      -1.0317794  0.2069983 -4.984482 1.459044e-06
+## SexM              -0.2974859  0.2115472 -1.406239 1.613868e-01
+## TreatmentLBE:SexM  0.5010365  0.3072907  1.630497 1.047548e-01</code></pre>
+<pre class="r"><code>fit2 &lt;- lm(adulthood ~ birth + Treatment*Sex, data=exp1)
+coef(summary(fit2))</code></pre>
+<pre><code>##                      Estimate Std. Error    t value     Pr(&gt;|t|)
+## (Intercept)       13.28783034  0.5058996 26.2657449 2.614596e-63
+## birth             -0.04775292  0.2892562 -0.1650886 8.690605e-01
+## TreatmentLBE      -0.68972448  0.3270788 -2.1087412 3.635818e-02
+## SexM              -0.40658967  0.3342665 -1.2163638 2.254479e-01
+## TreatmentLBE:SexM  1.05287857  0.4855511  2.1684197 3.144635e-02</code></pre>
+<pre class="r"><code># plot
+fit.emm &lt;- data.table(summary(emmeans(fit.lme, specs=c(&quot;Treatment&quot;, &quot;Sex&quot;, &quot;Time&quot;))))
+setnames(fit.emm, old=&quot;emmean&quot;, new=&quot;Weight&quot;)
+pd &lt;- position_dodge(0.5)
+gg &lt;- ggplot(data=exp1_long, aes(x=Treatment, y=Weight, color=Time)) +
+  #geom_point(position=pd) +
+  geom_point(data=fit.emm, aes(x=Treatment, y=Weight), position=pd)+
+  geom_errorbar(data=fit.emm, aes(x=Treatment, ymin=lower.CL, ymax=upper.CL), position=pd, width=0.2) +
+  facet_grid(.~Sex) +
+  NULL
+gg</code></pre>
+<p><img src="/post/2019-02-18-data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
 </div>
 
     </article>
