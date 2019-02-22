@@ -23,7 +23,7 @@ Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide 
 
 # Summary
 
-1. The available data are clean. All data sets are in a single Excel sheet and not identified as to which experiment.
+1. The available data are clean. All data sets are in a single Excel sheet. An issue for reproducibility is that the data set for each experiment is not identified.
 2. In general, most results (that I was able to run) reproduce
 3. One error is in the reporting of the ANOVA statistics for growth rate. Two of the terms are reported with the F and P values for other terms in the table.
 4. The ANOVA for the interaction effects of Sex x Treatment on weight at adulthood do not reproduce.
