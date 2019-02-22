@@ -6,11 +6,11 @@
   <title>Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from: Perceived threats of infanticide reduce maternal allocation …" />
-  <meta name="description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour  Statistical Red Flags Explorations Weight gain    Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. https://doi.org/10.1111/1365-2435.13146
+  <meta name="description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour Glucocorticoid metabolites in mothers Fig. 3 Oxidative stress in offspring  Statistical Red Flags Explorations Weight gain    Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. https://doi.org/10.1111/1365-2435.13146
 Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring.">
-  <meta property="og:description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour  Statistical Red Flags Explorations Weight gain    Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. https://doi.org/10.1111/1365-2435.13146
+  <meta property="og:description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour Glucocorticoid metabolites in mothers Fig. 3 Oxidative stress in offspring  Statistical Red Flags Explorations Weight gain    Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. https://doi.org/10.1111/1365-2435.13146
 Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring.">
-  <meta name="twitter:description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour  Statistical Red Flags Explorations Weight gain    Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of …">
+  <meta name="twitter:description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour Glucocorticoid metabolites in mothers Fig. 3 Oxidative stress in offspring  Statistical Red Flags Explorations Weight …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring/" />
@@ -78,6 +78,9 @@ Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide 
 <li><a href="#reproducibility">Reproducibility</a><ul>
 <li><a href="#offspring-weight">Offspring weight</a></li>
 <li><a href="#maternal-behaviour">Maternal behaviour</a></li>
+<li><a href="#glucocorticoid-metabolites-in-mothers">Glucocorticoid metabolites in mothers</a></li>
+<li><a href="#fig.-3">Fig. 3</a></li>
+<li><a href="#oxidative-stress-in-offspring">Oxidative stress in offspring</a></li>
 </ul></li>
 <li><a href="#statistical-red-flags">Statistical Red Flags</a></li>
 <li><a href="#explorations">Explorations</a><ul>
@@ -93,6 +96,13 @@ Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide 
 </div>
 <div id="summary" class="section level1">
 <h1>Summary</h1>
+<ol style="list-style-type: decimal">
+<li>The available data are clean. All data sets are in a single Excel sheet and not identified as to which experiment.</li>
+<li>In general, most results (that I was able to run) reproduce</li>
+<li>One error is in the reporting of the ANOVA statistics for growth rate. Two of the terms are reported with the F and P values for other terms in the table.</li>
+<li>The ANOVA for the interaction effects of Sex x Treatment on weight at adulthood do not reproduce.</li>
+<li>Oxidative stress cannot be reproduced because the data are incomplete (Two columns, Sex and Plate, were not given)</li>
+</ol>
 </div>
 <div id="setup" class="section level1">
 <h1>Setup</h1>
@@ -118,7 +128,7 @@ source(&quot;../R/clean_label.R&quot;) # bookdown</code></pre>
 <pre class="r"><code>fn &lt;- &quot;LBE paper data.xlsx&quot;
 file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
 
-# exp1
+# offspring weight
 exp1 &lt;- data.table(read_excel(file_path, range=&quot;A1:E185&quot;))
 colnames(exp1) &lt;- clean_label(colnames(exp1))
 exp1[, Treatment:=factor(Treatment)]
@@ -127,9 +137,20 @@ exp2 &lt;- data.table(read_excel(file_path, range=&quot;F1:H45&quot;))
 colnames(exp2) &lt;- clean_label(colnames(exp2))
 exp2[, Treatment:=factor(Treatment)]
 
+# maternal behavior
 exp3 &lt;- data.table(read_excel(file_path, range=&quot;K1:U45&quot;))
 colnames(exp3) &lt;- clean_label(colnames(exp3))
-exp3[, Treatment:=factor(Treatment)]</code></pre>
+exp3[, Treatment:=factor(Treatment)]
+
+# GCMs
+exp4 &lt;- data.table(read_excel(file_path, range=&quot;V1:Z60&quot;))
+colnames(exp4) &lt;- clean_label(colnames(exp4))
+exp4[, Treatment:=factor(Treatment)]
+
+#oxidative stress
+exp5 &lt;- data.table(read_excel(file_path, range=&quot;AA1:AJ86&quot;))
+colnames(exp5) &lt;- clean_label(colnames(exp5))
+exp5[, Treatment:=factor(Treatment)]</code></pre>
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
@@ -252,7 +273,7 @@ anova(m1)</code></pre>
 ## Residuals     180 475.81  2.6434                  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>The weaning results reproduce. The adulthood results do not. The only way the means for adulthood could match but not the anova of Sex x Treatment is if we are using different assignments of Sex. Here is a plot of the interaction.</p>
+<p>The weaning results reproduce. The adulthood results do not. Here is a plot of the interaction.</p>
 <pre class="r"><code>(fit.emm &lt;- data.table(summary(emmeans(lm(adulthood ~ Sex*Treatment, data=exp1),
                    specs=c(&quot;Sex&quot;, &quot;Treatment&quot;)))))</code></pre>
 <pre><code>##    Sex Treatment   emmean        SE  df lower.CL upper.CL
@@ -279,6 +300,7 @@ gg</code></pre>
 <pre class="r"><code>y_list &lt;- c(&quot;In_Nest&quot;, &quot;Nursing&quot;, &quot;Licking_Pups&quot;, &quot;Nest_Building&quot;, &quot;Eating.Drinking&quot;, &quot;Grooming&quot;, &quot;Active&quot;, &quot;Resting&quot;)
 my_table &lt;- data.table(NULL)
 exp3[, one:=1] # used for getting N in each level
+exp3[, myID:=factor(1:.N)] # ID 164 is present twice
 for(y in y_list){
   n.mc &lt;- sum(exp3[Treatment==&quot;MC&quot; &amp; !is.na(get(y)), one])
   n.lbe &lt;- sum(exp3[Treatment==&quot;LBE&quot; &amp; !is.na(get(y)), one])
@@ -400,7 +422,98 @@ for(y in y_list){
 </tr>
 </tbody>
 </table>
-<p>Replicates – with very small differences probably due to implementation of ANOVA/LMM in different statistical software.</p>
+<p>Table 1 reproduces with very small differences probably due to implementation of ANOVA/LMM in different statistical software.</p>
+</div>
+<div id="glucocorticoid-metabolites-in-mothers" class="section level2">
+<h2>Glucocorticoid metabolites in mothers</h2>
+<blockquote>
+<p>sample sizes for the glucocorticoid metabolites are novel male n=20, familiar male n= 21 and unmated control n= 18. Using a repeated measures ANOVA we found that FGM’s did change significantly over time (effect of time: F2, 112 = 131, p= &lt;0.001; interaction between time and housing companion: F4,112= 29.5, p&lt;0.001).</p>
+</blockquote>
+<pre class="r"><code># melt wide to long
+exp4_long &lt;- melt(exp4, id.vars=c(&quot;ID&quot;, &quot;Treatment&quot;), variable.name=&quot;Time&quot;, value.name=&quot;GCM&quot;)
+(fit.aov_4 &lt;- aov_4(GCM ~ Treatment*Time + (Time|ID), data=exp4_long, anova_table = list(correction = &quot;none&quot;)))</code></pre>
+<pre><code>## Contrasts set to contr.sum for the following variables: Treatment</code></pre>
+<pre><code>## Anova Table (Type 3 tests)
+## 
+## Response: GCM
+##           Effect     df         MSE          F ges p.value
+## 1      Treatment  2, 56 10320601.60     3.98 * .08     .02
+## 2           Time 2, 112  3329615.78 131.53 *** .48  &lt;.0001
+## 3 Treatment:Time 4, 112  3329615.78  29.54 *** .29  &lt;.0001
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>reproduces</p>
+<blockquote>
+<p>The was no difference in the FGMs in the females before the experiment began (ANOVA: F2,56=0.094, p= 0.911), but there was following exposure to their partners (ANOVA: F2,56=43.72, p=&lt;0.001) and at the end of the experiment which coincided with mid lactation for the reproducing treatments (F2,56=4.6, p=0.014)(See Figure 3).</p>
+</blockquote>
+<pre class="r"><code>anova(lm(Collection_1 ~ Treatment, data=exp4))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Collection_1
+##           Df    Sum Sq Mean Sq F value Pr(&gt;F)
+## Treatment  2   1745142  872571  0.0937 0.9107
+## Residuals 56 521265047 9308304</code></pre>
+<pre class="r"><code>anova(lm(Collection_2 ~ Treatment, data=exp4))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Collection_2
+##           Df    Sum Sq   Mean Sq F value    Pr(&gt;F)    
+## Treatment  2 450542880 225271440  43.722 3.649e-12 ***
+## Residuals 56 288531030   5152340                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(lm(Collection_3 ~ Treatment, data=exp4))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Collection_3
+##           Df    Sum Sq  Mean Sq F value  Pr(&gt;F)  
+## Treatment  2  23346970 11673485  4.6338 0.01373 *
+## Residuals 56 141074581  2519189                  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Reproduces</p>
+<blockquote>
+<p>After removing the unmated control from the analysis we found that the effect of time was still significant (F2, 78= 143, p=&lt;0.001) but the interaction between time and housing companion was not (F1,78=1.89, p=0.158).</p>
+</blockquote>
+<pre class="r"><code>aov_4(GCM ~ Treatment*Time + (Time|ID), data=exp4_long[Treatment!=&quot;UC&quot;,], anova_table = list(correction = &quot;none&quot;))</code></pre>
+<pre><code>## Contrasts set to contr.sum for the following variables: Treatment</code></pre>
+<pre><code>## Anova Table (Type 3 tests)
+## 
+## Response: GCM
+##           Effect    df        MSE          F ges p.value
+## 1      Treatment 1, 39 5499166.40       1.22 .01     .28
+## 2           Time 2, 78 4612053.02 143.76 *** .70  &lt;.0001
+## 3 Treatment:Time 2, 78 4612053.02       1.89 .03     .16
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Reproduces</p>
+</div>
+<div id="fig.-3" class="section level2">
+<h2>Fig. 3</h2>
+<pre class="r"><code>raw &lt;- exp4_long[!is.na(GCM), .(GCM=mean(GCM),
+                     SE=sd(GCM)/sqrt(.N)), by=.(Treatment, Time)]
+modeled &lt;- summary(emmeans(fit.aov_4, specs=c(&quot;Treatment&quot;, &quot;Time&quot;)))
+
+pd &lt;- position_dodge(0.5)
+gg1 &lt;- ggplot(data=raw, aes(x=Treatment, y=GCM, color=Time, group=Time)) +
+  geom_point(position=pd) +
+  geom_errorbar(aes(ymin=GCM-SE, ymax=GCM+SE), width=0.2, position=pd) +
+  coord_cartesian(ylim=c(0,15000)) + # this is way too much white space
+  NULL
+gg1</code></pre>
+<p><img src="/post/2019-02-18-data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre class="r"><code>gg1 &lt;- ggplot(data=modeled, aes(x=Treatment, y=emmean, color=Time, group=Time)) +
+  geom_point(position=pd) +
+  geom_errorbar(aes(ymin=emmean-SE, ymax=emmean+SE), width=0.2, position=pd) +
+  coord_cartesian(ylim=c(0,15000)) + # this is way too much white space
+  NULL
+gg1</code></pre>
+<p><img src="/post/2019-02-18-data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
+<p>The plot with unconditional SE (raw) reproduces</p>
+</div>
+<div id="oxidative-stress-in-offspring" class="section level2">
+<h2>Oxidative stress in offspring</h2>
+<p>Table 2 cannot be reproduced because two of the necessary columns (Sex and Plate) are not available (that I can see) in the Excel file (the analysis is a linear mixed model with Block and Plate as random factors and Treatment and Sex as fixed factors).</p>
 </div>
 </div>
 <div id="statistical-red-flags" class="section level1">
@@ -485,7 +598,7 @@ gg &lt;- ggplot(data=exp1_long, aes(x=Treatment, y=Weight, color=Time)) +
   facet_grid(.~Sex) +
   NULL
 gg</code></pre>
-<p><img src="/post/2019-02-18-data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="/post/2019-02-18-data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 </div>
 </div>
 

@@ -23,6 +23,12 @@ Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide 
 
 # Summary
 
+1. The available data are clean. All data sets are in a single Excel sheet and not identified as to which experiment.
+2. In general, most results (that I was able to run) reproduce
+3. One error is in the reporting of the ANOVA statistics for growth rate. Two of the terms are reported with the F and P values for other terms in the table.
+4. The ANOVA for the interaction effects of Sex x Treatment on weight at adulthood do not reproduce.
+5. Oxidative stress cannot be reproduced because the data are incomplete (Two columns, Sex and Plate, were not given)
+
 # Setup
 ```{r libraries, message=FALSE}
 library(ggplot2)
@@ -51,7 +57,7 @@ The single sheet contains all experiments in blocks glued wide
 fn <- "LBE paper data.xlsx"
 file_path <- paste(data_folder, folder, fn, sep="/")
 
-# exp1
+# offspring weight
 exp1 <- data.table(read_excel(file_path, range="A1:E185"))
 colnames(exp1) <- clean_label(colnames(exp1))
 exp1[, Treatment:=factor(Treatment)]
@@ -60,9 +66,21 @@ exp2 <- data.table(read_excel(file_path, range="F1:H45"))
 colnames(exp2) <- clean_label(colnames(exp2))
 exp2[, Treatment:=factor(Treatment)]
 
+# maternal behavior
 exp3 <- data.table(read_excel(file_path, range="K1:U45"))
 colnames(exp3) <- clean_label(colnames(exp3))
 exp3[, Treatment:=factor(Treatment)]
+
+# GCMs
+exp4 <- data.table(read_excel(file_path, range="V1:Z60"))
+colnames(exp4) <- clean_label(colnames(exp4))
+exp4[, Treatment:=factor(Treatment)]
+
+#oxidative stress
+exp5 <- data.table(read_excel(file_path, range="AA1:AJ86"))
+colnames(exp5) <- clean_label(colnames(exp5))
+exp5[, Treatment:=factor(Treatment)]
+
 ```
 
 # Reproducibility
@@ -132,7 +150,7 @@ anova(lm(weaning ~ Sex*Treatment, data=exp1))
 anova(lm(adulthood ~ Sex*Treatment, data=exp1))
 ```
 
-The weaning results reproduce. The adulthood results do not. The only way the means for adulthood could match but not the anova of Sex x Treatment is if we are using different assignments of Sex. Here is a plot of the interaction.
+The weaning results reproduce. The adulthood results do not. Here is a plot of the interaction.
 
 ```{r}
 (fit.emm <- data.table(summary(emmeans(lm(adulthood ~ Sex*Treatment, data=exp1),
@@ -157,6 +175,7 @@ gg
 y_list <- c("In_Nest", "Nursing", "Licking_Pups", "Nest_Building", "Eating.Drinking", "Grooming", "Active", "Resting")
 my_table <- data.table(NULL)
 exp3[, one:=1] # used for getting N in each level
+exp3[, myID:=factor(1:.N)] # ID 164 is present twice
 for(y in y_list){
   n.mc <- sum(exp3[Treatment=="MC" & !is.na(get(y)), one])
   n.lbe <- sum(exp3[Treatment=="LBE" & !is.na(get(y)), one])
@@ -188,7 +207,83 @@ knitr::include_graphics(image_path)
 knitr::kable(my_table, digits=c(NA,0,0,2,3,2,2,2,2))
 ```
 
-Replicates -- with very small differences probably due to implementation of ANOVA/LMM in different statistical software.
+Table 1 reproduces with very small differences probably due to implementation of ANOVA/LMM in different statistical software.
+
+## Glucocorticoid metabolites in mothers
+> sample sizes for the glucocorticoid metabolites are novel male n=20, familiar male n= 21 and unmated control n= 18. Using a repeated measures ANOVA we found that FGM’s did change significantly over time (effect of time: F2, 112 = 131, p= <0.001; interaction between time and housing companion: F4,112= 29.5, p<0.001).
+
+```{r}
+# melt wide to long
+exp4_long <- melt(exp4, id.vars=c("ID", "Treatment"), variable.name="Time", value.name="GCM")
+(fit.aov_4 <- aov_4(GCM ~ Treatment*Time + (Time|ID), data=exp4_long, anova_table = list(correction = "none")))
+```
+
+reproduces
+
+>The was no difference in the FGMs in the females before the experiment began (ANOVA: F2,56=0.094, p= 0.911), but there was following exposure to their partners (ANOVA: F2,56=43.72, p=<0.001) and at the end of the experiment which coincided with mid lactation for the reproducing treatments (F2,56=4.6, p=0.014)(See Figure 3).
+
+```{r}
+anova(lm(Collection_1 ~ Treatment, data=exp4))
+anova(lm(Collection_2 ~ Treatment, data=exp4))
+anova(lm(Collection_3 ~ Treatment, data=exp4))
+
+```
+
+Reproduces
+
+> After removing the unmated control from the analysis we found that the effect of time was still significant (F2, 78= 143, p=<0.001) but the interaction between time and housing companion was not (F1,78=1.89, p=0.158). 
+
+```{r}
+aov_4(GCM ~ Treatment*Time + (Time|ID), data=exp4_long[Treatment!="UC",], anova_table = list(correction = "none"))
+
+```
+
+Reproduces
+
+## Fig. 3
+
+```{r}
+raw <- exp4_long[!is.na(GCM), .(GCM=mean(GCM),
+                     SE=sd(GCM)/sqrt(.N)), by=.(Treatment, Time)]
+modeled <- summary(emmeans(fit.aov_4, specs=c("Treatment", "Time")))
+
+pd <- position_dodge(0.5)
+gg1 <- ggplot(data=raw, aes(x=Treatment, y=GCM, color=Time, group=Time)) +
+  geom_point(position=pd) +
+  geom_errorbar(aes(ymin=GCM-SE, ymax=GCM+SE), width=0.2, position=pd) +
+  coord_cartesian(ylim=c(0,15000)) + # this is way too much white space
+  NULL
+gg1
+
+gg1 <- ggplot(data=modeled, aes(x=Treatment, y=emmean, color=Time, group=Time)) +
+  geom_point(position=pd) +
+  geom_errorbar(aes(ymin=emmean-SE, ymax=emmean+SE), width=0.2, position=pd) +
+  coord_cartesian(ylim=c(0,15000)) + # this is way too much white space
+  NULL
+gg1
+```
+
+The plot with unconditional SE (raw) reproduces
+
+## Oxidative stress in offspring
+
+Table 2 cannot be reproduced because two of the necessary columns (Sex and Plate) are not available (that I can see) in the Excel file (the analysis is a linear mixed model with Block and Plate as random factors and Treatment and Sex as fixed factors).
+
+```{r echo=FALSE, eval=FALSE}
+m1 <- lme(Liver_Thiols ~ Treatment*Sex, random = ~ 1|Block, method="ML", data=exp5)
+anova(m1)
+```
+
+```{r, echo=FALSE, eval=FALSE}
+fn <- "table2.png"
+if(knitr_path==TRUE){
+  image_path <- paste("../images", folder, fn, sep="/")
+}else{
+  image_path <- paste("/images", folder, fn, sep="/")
+}
+knitr::include_graphics(image_path)
+
+```
 
 # Statistical Red Flags
 
