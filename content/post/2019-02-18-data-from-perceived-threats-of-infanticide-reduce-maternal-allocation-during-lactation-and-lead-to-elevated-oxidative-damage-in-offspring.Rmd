@@ -39,6 +39,7 @@ library(nlme)
 library(lme4)
 library(lmerTest)
 library(afex)
+library(car)
 ```
 
 ```{r}
@@ -120,8 +121,10 @@ exp1_long[, ID:=factor(ID)]
 
 I think it generally reproduces but I think the authors have mixed up the terms in their reporting.
 
-1. The authors report the treatment x time interaction as F1.7,310=5668, p= <0.001, which 1) is a huge F given what the interaction effect looks like (Statistical red flag #1) and is nearly equivalent to my stats for the Time term (which makes sense given the huge time effect illustrated in Statistical red flag #1).
+1. The authors report the treatment x time interaction as F1.7,310=5668, p= <0.001, which 1) is a huge F given what the interaction effect looks like and is nearly equivalent to my stats for the Time term.
 2. The authors report sex x treatment: F1.6,306=1.3, p= 0.270 which is very close to my sex x time term.
+
+The unbalanced design raises statistical red flag #1
 
 >This resulted in novel male treatment pups being significantly smaller (7.19±0.61g), at weaning (4 weeks old) (ANOVA: F1,182=27.11, p=<0.001) than the familiar male treatment pups (7.99±1.48g)
 
@@ -287,28 +290,38 @@ knitr::include_graphics(image_path)
 
 # Statistical Red Flags
 
-# Explorations
-## Weight gain
+1. The afex package replicates the SPSS output for the growth rate analysis but the design is very unbalanced. It's unclear to me how afex handles this; is it like AOV (which doesn't handle unbalanced data well) or more like anova(lme/lmer), which does handle unbalanced data well (with caveats on Type III interpretation). So I compare the SPSS-like repeated measures anova with lme/lmer and also with simple fixed effects analysis (lm and aov)
 ```{r}
+# how balanced is design?
+exp1_long[!is.na(Weight), .(N=.N), by=.(Treatment, Sex, Time)]
+
 # linear mixed model "version" of repeated measures ANOVA 
 fit.lme <- lme(Weight ~ Treatment*Sex*Time, random = ~ Time|ID, data=exp1_long, method = "ML")
 coef(summary(fit.lme))
+
+# model III anova of lme/lmer fis
 contrasts(exp1_long$Treatment) <- contr.sum
 contrasts(exp1_long$Sex) <- contr.sum
-fit.lme <- lme(Weight ~ Treatment*Sex*Time, random = ~ Time|ID, data=exp1_long, method = "ML")
-anova(fit.lme, type="marginal")
-#fit.lmer <- lmer(Weight ~ Treatment*Sex*Time + (1|ID) + (1|ID:Time), data=exp1_long, REML = FALSE)
-#anova(fit.lmer, type="marginal")
+m1 <- lme(Weight ~ Treatment*Sex*Time, random = ~ 1|ID, data=exp1_long, method = "ML")
+anova(m1, type="marginal")
+m2 <- lmer(Weight ~ Treatment*Sex*Time + (1|ID), data=exp1_long, REML = FALSE)
+anova(m2, type="marginal")
+
+# fixed effects only
+# using linear model
+Anova(lm(Weight ~ Treatment*Sex*Time, data=exp1_long), type="3")
+# classical ANOVA
+summary(aov(Weight ~ Treatment*Sex*Time, data=exp1_long))
 contrasts(exp1_long$Treatment) <- contr.treatment
 contrasts(exp1_long$Sex) <- contr.treatment
 
-# simpler, better way of measuring growth rate differences
-fit1 <- lm(weaning ~ birth + Treatment*Sex, data=exp1)
-coef(summary(fit1))
-fit2 <- lm(adulthood ~ birth + Treatment*Sex, data=exp1)
-coef(summary(fit2))
 
-# plot
+```
+
+If we're focussing on p-values, then 1) the big difference is the p-value for Treatment and 2) another difference is that for Treatment x Sex. That said, it doesn't make much sense to interpret the Treatment p-value as evidence for "an effect" given the interactions.
+
+Plot it to visualize the effects
+```{r}
 fit.emm <- data.table(summary(emmeans(fit.lme, specs=c("Treatment", "Sex", "Time"))))
 setnames(fit.emm, old="emmean", new="Weight")
 pd <- position_dodge(0.5)
