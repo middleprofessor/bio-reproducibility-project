@@ -12,6 +12,8 @@ tags:
   - three-way factorial
   - no-pooling SE for clustered data in plots
   - simulate this
+  - R
+  - nlme
 subtitle: ''
 output:
   blogdown::html_page:

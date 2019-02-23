@@ -10,6 +10,10 @@ tags:
   - one-way anova
   - tukey posthoc
   - ancova slopes posthoc
+  - repeated measures anova
+  - aov
+  - R
+  - non paramtric tests
 subtitle: ''
 output:
   blogdown::html_page:
@@ -35,6 +39,9 @@ Subalusky AL, Dutton CL, Njoroge L, Rosi EJ, Post DM (2018) Data from: Organic m
 5. Ecosystem function: Experimental streams: The response log(GPP) (as specified in methods) does not reproduce but untransformed GPP does reproduce. The response Sqrt(chl) (as specified in methods) does not reproduce but log(chl) does reproduce. The rates of increase reproduce. River biofilms: All analyses reproduce at least qualitatively (I cannot check quantiative results where none were given). Treatment column had to be re-coded in order to reproduce.
 
 6. A few minor to moderate statistical red flags are noted.
+
+# Caveats
+Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.
 
 # Set up
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Non Parametric Tests on The Biology Reproducibility Project</title>
+    <link>/tags/non-parametric-tests/</link>
+    <description>Recent content in Non Parametric Tests on The Biology Reproducibility Project</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
+    <lastBuildDate>Sat, 02 Feb 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/non-parametric-tests/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism</title>
+      <link>/post/data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance-of-a-predator-colour-polymorphism/</link>
+      <pubDate>Sat, 02 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance-of-a-predator-colour-polymorphism/</guid>
+      <description>Sources Summary Caveats Setup Import Reproducibility Experiment 1 Statistical methods cleaning and recoding Table 1 reported table 1 Effect of spider treatments Figure 1  Experiment 2 Statistical Methods Offer 1 – nonparametric 2-way ANOVA Figure 2 Offer 2   Statistical Red Flags   Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism.</description>
+    </item>
+    
+  </channel>
+</rss>

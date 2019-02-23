@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nlme on The Biology Reproducibility Project</title>
+    <link>/tags/nlme/</link>
+    <description>Recent content in Nlme on The Biology Reproducibility Project</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
+    <lastBuildDate>Wed, 16 Jan 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/nlme/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Data from: Density-dependent positive feedbacks buffer aquatic plants from interactive effects of eutrophication and predator loss</title>
+      <link>/post/data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss/</guid>
+      <description>Sources Summary Caveats Set up Import data cleaning  Reproducibility Appendix S5 Table S1 reproducing epiphytic algae biomass columns  in-text Appendix S5 Table S2 Figure 2  Statistical Red-flags Figure red-flags  Simulate this   Sources Source: Donadi S, Austin ÅN, Svartgren E, Eriksson BK, Hansen JP, Eklöf JS (2018) Density-dependent positive feedbacks buffer aquatic plants from interactive effects of eutrophication and predator loss. Ecology 99(11): 2515-2524. https://doi.</description>
+    </item>
+    
+  </channel>
+</rss>

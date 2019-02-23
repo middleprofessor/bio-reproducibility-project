@@ -9,6 +9,7 @@ tags:
   - excel
   - linear mixed model
   - repeated measures anova
+  - spss
 subtitle: ''
 output:
   blogdown::html_page:

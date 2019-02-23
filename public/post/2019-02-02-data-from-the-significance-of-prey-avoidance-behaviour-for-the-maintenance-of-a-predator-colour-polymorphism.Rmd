@@ -8,6 +8,8 @@ categories: []
 tags:
   - generalized linear mixed model
   - binomial response
+  - R
+  - non-parametric tests
 subtitle: ''
 output:
   blogdown::html_page:
@@ -41,6 +43,9 @@ Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T 
 9. The ambiguity in construction of the response columns for the binomial model supports the idea that results are more reproducible if the data includes the response columns that are input to the models. This runs the risk of a reviewer blindly accepting that these response columns were constructed correctly but it does make it easier to see how the authors constructed the binary values from the multiple values in the column of raw responses.
 
 10. Coding of "Day" in experiment 2 is inconsistent. In the non-parametric ANOVA, "Day" is coded as categorical factor (note the 3 df for this effect) but in the GLM it is coded as a continuous covariate (only 1 df).
+
+# Caveats
+Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.
 
 # Setup
 ```{r setup, warning=FALSE, message=FALSE}

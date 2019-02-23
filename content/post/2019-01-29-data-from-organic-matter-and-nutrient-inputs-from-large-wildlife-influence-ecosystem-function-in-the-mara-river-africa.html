@@ -10,6 +10,10 @@ tags:
   - one-way anova
   - tukey posthoc
   - ancova slopes posthoc
+  - repeated measures anova
+  - aov
+  - R
+  - non paramtric tests
 subtitle: ''
 output:
   blogdown::html_page:
@@ -21,6 +25,7 @@ output:
 <ul>
 <li><a href="#sources">Sources</a></li>
 <li><a href="#summary">Summary</a></li>
+<li><a href="#caveats">Caveats</a></li>
 <li><a href="#set-up">Set up</a></li>
 <li><a href="#import">Import</a></li>
 <li><a href="#reproducibility">Reproducibility</a><ul>
@@ -63,6 +68,10 @@ output:
 <li><p>Ecosystem function: Experimental streams: The response log(GPP) (as specified in methods) does not reproduce but untransformed GPP does reproduce. The response Sqrt(chl) (as specified in methods) does not reproduce but log(chl) does reproduce. The rates of increase reproduce. River biofilms: All analyses reproduce at least qualitatively (I cannot check quantiative results where none were given). Treatment column had to be re-coded in order to reproduce.</p></li>
 <li><p>A few minor to moderate statistical red flags are noted.</p></li>
 </ol>
+</div>
+<div id="caveats" class="section level1">
+<h1>Caveats</h1>
+<p>Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author’s methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.</p>
 </div>
 <div id="set-up" class="section level1">
 <h1>Set up</h1>

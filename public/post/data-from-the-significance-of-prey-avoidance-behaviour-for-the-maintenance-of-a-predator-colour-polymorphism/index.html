@@ -6,9 +6,9 @@
   <title>Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from: The significance of prey avoidance behaviour for the …" />
-  <meta name="description" content="Sources Summary Setup Import Reproducibility Experiment 1 Statistical methods cleaning and recoding Table 1 reported table 1 Effect of spider treatments Figure 1  Experiment 2 Statistical Methods Offer 1 – nonparametric 2-way ANOVA Figure 2 Offer 2   Statistical Red Flags   Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism.">
-  <meta property="og:description" content="Sources Summary Setup Import Reproducibility Experiment 1 Statistical methods cleaning and recoding Table 1 reported table 1 Effect of spider treatments Figure 1  Experiment 2 Statistical Methods Offer 1 – nonparametric 2-way ANOVA Figure 2 Offer 2   Statistical Red Flags   Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism.">
-  <meta name="twitter:description" content="Sources Summary Setup Import Reproducibility Experiment 1 Statistical methods cleaning and recoding Table 1 reported table 1 Effect of spider treatments Figure 1  Experiment 2 Statistical Methods …">
+  <meta name="description" content="Sources Summary Caveats Setup Import Reproducibility Experiment 1 Statistical methods cleaning and recoding Table 1 reported table 1 Effect of spider treatments Figure 1  Experiment 2 Statistical Methods Offer 1 – nonparametric 2-way ANOVA Figure 2 Offer 2   Statistical Red Flags   Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism.">
+  <meta property="og:description" content="Sources Summary Caveats Setup Import Reproducibility Experiment 1 Statistical methods cleaning and recoding Table 1 reported table 1 Effect of spider treatments Figure 1  Experiment 2 Statistical Methods Offer 1 – nonparametric 2-way ANOVA Figure 2 Offer 2   Statistical Red Flags   Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism.">
+  <meta name="twitter:description" content="Sources Summary Caveats Setup Import Reproducibility Experiment 1 Statistical methods cleaning and recoding Table 1 reported table 1 Effect of spider treatments Figure 1  Experiment 2 Statistical …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance-of-a-predator-colour-polymorphism/" />
@@ -56,6 +56,18 @@
             binomial response
           </a>&nbsp;
         </li>
+        <li class="article-meta-tags">
+          <a href="/tags/r/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            R
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/non-parametric-tests/">
+            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            non-parametric tests
+          </a>&nbsp;
+        </li>
       </ul>
       
 <aside class="toc">
@@ -65,6 +77,7 @@
 <ul>
 <li><a href="#sources">Sources</a></li>
 <li><a href="#summary">Summary</a></li>
+<li><a href="#caveats">Caveats</a></li>
 <li><a href="#setup">Setup</a></li>
 <li><a href="#import">Import</a></li>
 <li><a href="#reproducibility">Reproducibility</a><ul>
@@ -106,6 +119,10 @@
 <li><p>The ambiguity in construction of the response columns for the binomial model supports the idea that results are more reproducible if the data includes the response columns that are input to the models. This runs the risk of a reviewer blindly accepting that these response columns were constructed correctly but it does make it easier to see how the authors constructed the binary values from the multiple values in the column of raw responses.</p></li>
 <li><p>Coding of “Day” in experiment 2 is inconsistent. In the non-parametric ANOVA, “Day” is coded as categorical factor (note the 3 df for this effect) but in the GLM it is coded as a continuous covariate (only 1 df).</p></li>
 </ol>
+</div>
+<div id="caveats" class="section level1">
+<h1>Caveats</h1>
+<p>Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author’s methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.</p>
 </div>
 <div id="setup" class="section level1">
 <h1>Setup</h1>
@@ -410,9 +427,9 @@ raov(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
 ##     data = exp2)
 ## 
 ##                     p.value
-## Day_fac              0.5392
-## Treatment_1          0.1920
-## Day_fac:Treatment_1  0.0701</code></pre>
+## Day_fac              0.4140
+## Treatment_1          0.1569
+## Day_fac:Treatment_1  0.0518</code></pre>
 <pre class="r"><code>scheirerRayHare(Rejects_in_offer_1 ~ Day_fac*Treatment_1, data=exp2)</code></pre>
 <pre><code>## 
 ## DV:  Rejects_in_offer_1 

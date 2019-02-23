@@ -29,6 +29,9 @@ Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide 
 4. The ANOVA for the interaction effects of Sex x Treatment on weight at adulthood do not reproduce.
 5. Oxidative stress cannot be reproduced because the data are incomplete (Two columns, Sex and Plate, were not given)
 
+# Caveats
+Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.
+
 # Setup
 ```{r libraries, message=FALSE}
 library(ggplot2)

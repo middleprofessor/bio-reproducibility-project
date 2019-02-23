@@ -49,6 +49,15 @@
     </item>
     
     <item>
+      <title>Aov</title>
+      <link>/tags/aov/</link>
+      <pubDate>Tue, 29 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/aov/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Best Practice Recommendations</title>
       <link>/tags/best-practice-recommendations/</link>
       <pubDate>Fri, 15 Feb 2019 00:00:00 +0000</pubDate>
@@ -193,11 +202,38 @@
     </item>
     
     <item>
+      <title>Nlme</title>
+      <link>/tags/nlme/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/nlme/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>No Pooling Se for Clustered Data in Plots</title>
       <link>/tags/no-pooling-se-for-clustered-data-in-plots/</link>
       <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/no-pooling-se-for-clustered-data-in-plots/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Non Parametric Tests</title>
+      <link>/tags/non-parametric-tests/</link>
+      <pubDate>Sat, 02 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/non-parametric-tests/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Non Paramtric Tests</title>
+      <link>/tags/non-paramtric-tests/</link>
+      <pubDate>Tue, 29 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/non-paramtric-tests/</guid>
       <description></description>
     </item>
     
@@ -216,6 +252,15 @@
       <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/physiology/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>/tags/r/</link>
+      <pubDate>Sat, 02 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/r/</guid>
       <description></description>
     </item>
     

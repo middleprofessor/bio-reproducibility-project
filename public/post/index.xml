@@ -18,7 +18,7 @@
       <pubDate>Mon, 18 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring/</guid>
-      <description>Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour Glucocorticoid metabolites in mothers Fig. 3 Oxidative stress in offspring  Statistical Red Flags 1. Computation of ANOVA table using Afex package How balanced is the design ANOVA using Afex (computation above)  3 ANOVA table using lme/lmer Compare LMM to ANOVA table using lm() and AOV (ignoring clustering due to repeated measures) Plot it to visualize the effects     Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring.</description>
+      <description>Sources Summary Caveats Setup Import Reproducibility Offspring weight Maternal behaviour Glucocorticoid metabolites in mothers Fig. 3 Oxidative stress in offspring  Statistical Red Flags 1. Computation of ANOVA table using Afex package How balanced is the design ANOVA using Afex (computation above)  3 ANOVA table using lme/lmer Compare LMM to ANOVA table using lm() and AOV (ignoring clustering due to repeated measures) Plot it to visualize the effects     Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring.</description>
     </item>
     
     <item>
@@ -27,7 +27,7 @@
       <pubDate>Fri, 15 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/data-from-habitat-management-alters-thermal-opportunity/</guid>
-      <description>Sources Summary Setup Import Cleaning Reproducibility Selected temperatures and thermal quality of habitat Thermal preference (Tset) Thermal quality of habitat (de) Table 1 Encounter rates Fig 2  Lizard body temperatures and extent of thermoregulation Thermal performance curves and critical thermal limits  Statistical Red Flags Best practice recommendations   Sources Neel LK, McBrayer LD (2018) Habitat management alters thermal opportunity. Functional Ecology 32(8): 2029-2039. https://doi.org/10.1111/1365-2435.13123
+      <description>Sources Summary Caveats Setup Import Cleaning Reproducibility Selected temperatures and thermal quality of habitat Thermal preference (Tset) Thermal quality of habitat (de) Table 1 Encounter rates Fig 2  Lizard body temperatures and extent of thermoregulation Thermal performance curves and critical thermal limits  Statistical Red Flags Best practice recommendations   Sources Neel LK, McBrayer LD (2018) Habitat management alters thermal opportunity. Functional Ecology 32(8): 2029-2039. https://doi.org/10.1111/1365-2435.13123
 Neel LK, McBrayer LD (2018) Data from: Habitat management alters thermal opportunity.</description>
     </item>
     
@@ -37,7 +37,7 @@ Neel LK, McBrayer LD (2018) Data from: Habitat management alters thermal opportu
       <pubDate>Sat, 02 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/data-from-the-significance-of-prey-avoidance-behaviour-for-the-maintenance-of-a-predator-colour-polymorphism/</guid>
-      <description>Sources Summary Setup Import Reproducibility Experiment 1 Statistical methods cleaning and recoding Table 1 reported table 1 Effect of spider treatments Figure 1  Experiment 2 Statistical Methods Offer 1 – nonparametric 2-way ANOVA Figure 2 Offer 2   Statistical Red Flags   Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism.</description>
+      <description>Sources Summary Caveats Setup Import Reproducibility Experiment 1 Statistical methods cleaning and recoding Table 1 reported table 1 Effect of spider treatments Figure 1  Experiment 2 Statistical Methods Offer 1 – nonparametric 2-way ANOVA Figure 2 Offer 2   Statistical Red Flags   Sources Ajuria Ibarra H, Kinahan M, Marcetteau J, Mehigan AJR, Ziegelmeier RO, Reader T (2018) The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism.</description>
     </item>
     
     <item>
@@ -46,7 +46,7 @@ Neel LK, McBrayer LD (2018) Data from: Habitat management alters thermal opportu
       <pubDate>Tue, 29 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/data-from-organic-matter-and-nutrient-inputs-from-large-wildlife-influence-ecosystem-function-in-the-mara-river-africa/</guid>
-      <description>Sources Summary Set up Import Reproducibility Nutrient dissolution rates Statistical methods ANOVA results Posthoc pairwise comparisons  Decomposition rates Statistical methods ANOVA results  Nutrient limitation Statistical method Respiration Results Chlorophyll a results  Ecosystem Function Experimental Streams River Biofilms    Statistical red-flags   Sources Subalusky AL, Dutton CL, Njoroge L, Rosi EJ, Post DM (2018) Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa.</description>
+      <description>Sources Summary Caveats Set up Import Reproducibility Nutrient dissolution rates Statistical methods ANOVA results Posthoc pairwise comparisons  Decomposition rates Statistical methods ANOVA results  Nutrient limitation Statistical method Respiration Results Chlorophyll a results  Ecosystem Function Experimental Streams River Biofilms    Statistical red-flags   Sources Subalusky AL, Dutton CL, Njoroge L, Rosi EJ, Post DM (2018) Organic matter and nutrient inputs from large wildlife influence ecosystem function in the Mara River, Africa.</description>
     </item>
     
     <item>
