@@ -10,6 +10,7 @@ tags:
   - linear mixed model
   - AIC model selection
   - factorial
+  - R
 subtitle: ''
 output:
   blogdown::html_page:

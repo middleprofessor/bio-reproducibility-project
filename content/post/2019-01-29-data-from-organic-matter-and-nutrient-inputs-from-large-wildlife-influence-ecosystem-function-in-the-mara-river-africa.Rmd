@@ -13,7 +13,7 @@ tags:
   - repeated measures anova
   - aov
   - R
-  - non paramtric tests
+  - non-parametric tests
 subtitle: ''
 output:
   blogdown::html_page:
