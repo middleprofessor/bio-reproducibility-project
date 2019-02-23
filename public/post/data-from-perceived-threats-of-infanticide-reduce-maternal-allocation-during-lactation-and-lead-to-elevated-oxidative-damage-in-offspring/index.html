@@ -6,11 +6,9 @@
   <title>Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from: Perceived threats of infanticide reduce maternal allocation …" />
-  <meta name="description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour Glucocorticoid metabolites in mothers Fig. 3 Oxidative stress in offspring  Statistical Red Flags   Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. https://doi.org/10.1111/1365-2435.13146
-Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring.">
-  <meta property="og:description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour Glucocorticoid metabolites in mothers Fig. 3 Oxidative stress in offspring  Statistical Red Flags   Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring. Functional Ecology 32(9): 2158-2169. https://doi.org/10.1111/1365-2435.13146
-Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring.">
-  <meta name="twitter:description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour Glucocorticoid metabolites in mothers Fig. 3 Oxidative stress in offspring  Statistical Red Flags   Sources Gale T, …">
+  <meta name="description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour Glucocorticoid metabolites in mothers Fig. 3 Oxidative stress in offspring  Statistical Red Flags 1. Computation of ANOVA table using Afex package How balanced is the design ANOVA using Afex (computation above)  3 ANOVA table using lme/lmer Compare LMM to ANOVA table using lm() and AOV (ignoring clustering due to repeated measures) Plot it to visualize the effects     Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring.">
+  <meta property="og:description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour Glucocorticoid metabolites in mothers Fig. 3 Oxidative stress in offspring  Statistical Red Flags 1. Computation of ANOVA table using Afex package How balanced is the design ANOVA using Afex (computation above)  3 ANOVA table using lme/lmer Compare LMM to ANOVA table using lm() and AOV (ignoring clustering due to repeated measures) Plot it to visualize the effects     Sources Gale T, Garratt M, Brooks RC (2018) Perceived threats of infanticide reduce maternal allocation during lactation and lead to elevated oxidative damage in offspring.">
+  <meta name="twitter:description" content="Sources Summary Setup Import Reproducibility Offspring weight Maternal behaviour Glucocorticoid metabolites in mothers Fig. 3 Oxidative stress in offspring  Statistical Red Flags 1. Computation of …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring/" />
@@ -82,7 +80,16 @@ Gale T, Garratt M, Brooks RC (2018) Data from: Perceived threats of infanticide 
 <li><a href="#fig.-3">Fig. 3</a></li>
 <li><a href="#oxidative-stress-in-offspring">Oxidative stress in offspring</a></li>
 </ul></li>
-<li><a href="#statistical-red-flags">Statistical Red Flags</a></li>
+<li><a href="#statistical-red-flags">Statistical Red Flags</a><ul>
+<li><a href="#computation-of-anova-table-using-afex-package">1. Computation of ANOVA table using Afex package</a><ul>
+<li><a href="#how-balanced-is-the-design">How balanced is the design</a></li>
+<li><a href="#anova-using-afex-computation-above">ANOVA using Afex (computation above)</a></li>
+</ul></li>
+<li><a href="#anova-table-using-lmelmer">3 ANOVA table using lme/lmer</a><ul>
+<li><a href="#compare-lmm-to-anova-table-using-lm-and-aov-ignoring-clustering-due-to-repeated-measures">Compare LMM to ANOVA table using lm() and AOV (ignoring clustering due to repeated measures)</a></li>
+<li><a href="#plot-it-to-visualize-the-effects">Plot it to visualize the effects</a></li>
+</ul></li>
+</ul></li>
 </ul>
 </div>
 
@@ -517,9 +524,11 @@ gg1</code></pre>
 </div>
 <div id="statistical-red-flags" class="section level1">
 <h1>Statistical Red Flags</h1>
-<ol style="list-style-type: decimal">
-<li>The afex package replicates the SPSS output for the growth rate analysis but the design is very unbalanced. It’s unclear to me how afex handles this; is it like AOV (which doesn’t handle unbalanced data well) or more like anova(lme/lmer), which does handle unbalanced data well (with caveats on Type III interpretation). So I compare the SPSS-like repeated measures anova with lme/lmer and also with simple fixed effects analysis (lm and aov)</li>
-</ol>
+<div id="computation-of-anova-table-using-afex-package" class="section level2">
+<h2>1. Computation of ANOVA table using Afex package</h2>
+<p>The afex package replicates the SPSS output for the growth rate analysis but the design is very unbalanced. It’s unclear to me how afex handles this; is it like AOV (which doesn’t handle unbalanced data well) or more like anova(lme/lmer), which does handle unbalanced data well (with caveats on Type III interpretation). So I compare the SPSS-like repeated measures anova with lme/lmer and also with simple fixed effects analysis (lm and aov)</p>
+<div id="how-balanced-is-the-design" class="section level3">
+<h3>How balanced is the design</h3>
 <pre class="r"><code># how balanced is design?
 exp1_long[!is.na(Weight), .(N=.N), by=.(Treatment, Sex, Time)]</code></pre>
 <pre><code>##     Treatment Sex      Time  N
@@ -535,35 +544,23 @@ exp1_long[!is.na(Weight), .(N=.N), by=.(Treatment, Sex, Time)]</code></pre>
 ## 10:       LBE   M adulthood 39
 ## 11:        MC   F adulthood 52
 ## 12:        MC   M adulthood 45</code></pre>
-<pre class="r"><code># linear mixed model &quot;version&quot; of repeated measures ANOVA 
-fit.lme &lt;- lme(Weight ~ Treatment*Sex*Time, random = ~ Time|ID, data=exp1_long, method = &quot;ML&quot;)
-coef(summary(fit.lme))</code></pre>
-<pre><code>##                                       Value  Std.Error  DF    t-value
-## (Intercept)                      1.56461538 0.05825548 360 26.8578212
-## TreatmentLBE                    -0.07732372 0.08408455 180 -0.9195948
-## SexM                             0.13665573 0.08552960 180  1.5977595
-## Timeweaning                      6.59288462 0.16213903 360 40.6619215
-## Timeadulthood                   11.64850000 0.23356384 360 49.8728748
-## TreatmentLBE:SexM                0.15733466 0.12456628 180  1.2630598
-## TreatmentLBE:Timeweaning        -0.92955128 0.23402754 360 -3.9719740
-## TreatmentLBE:Timeadulthood      -0.60870833 0.33712036 360 -1.8056113
-## SexM:Timeweaning                -0.47815573 0.23804945 360 -2.0086403
-## SexM:Timeadulthood              -0.54977111 0.34291400 360 -1.6032332
-## TreatmentLBE:SexM:Timeweaning    0.29302752 0.34669793 360  0.8451955
-## TreatmentLBE:SexM:Timeadulthood  0.88803073 0.49942384 360  1.7781104
-##                                       p-value
-## (Intercept)                      5.393345e-88
-## TreatmentLBE                     3.590152e-01
-## SexM                             1.118505e-01
-## Timeweaning                     1.239816e-136
-## Timeadulthood                   9.750687e-164
-## TreatmentLBE:SexM                2.082013e-01
-## TreatmentLBE:Timeweaning         8.610403e-05
-## TreatmentLBE:Timeadulthood       7.181430e-02
-## SexM:Timeweaning                 4.532162e-02
-## SexM:Timeadulthood               1.097601e-01
-## TreatmentLBE:SexM:Timeweaning    3.985631e-01
-## TreatmentLBE:SexM:Timeadulthood  7.622969e-02</code></pre>
+</div>
+<div id="anova-using-afex-computation-above" class="section level3">
+<h3>ANOVA using Afex (computation above)</h3>
+<pre class="r"><code>fit.aov_4</code></pre>
+<pre><code>## Anova Table (Type 3 tests)
+## 
+## Response: GCM
+##           Effect     df         MSE          F ges p.value
+## 1      Treatment  2, 56 10320601.60     3.98 * .08     .02
+## 2           Time 2, 112  3329615.78 131.53 *** .48  &lt;.0001
+## 3 Treatment:Time 4, 112  3329615.78  29.54 *** .29  &lt;.0001
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+<div id="anova-table-using-lmelmer" class="section level2">
+<h2>3 ANOVA table using lme/lmer</h2>
 <pre class="r"><code># model III anova of lme/lmer fis
 contrasts(exp1_long$Treatment) &lt;- contr.sum
 contrasts(exp1_long$Sex) &lt;- contr.sum
@@ -591,7 +588,14 @@ anova(m2, type=&quot;marginal&quot;)</code></pre>
 ## Treatment:Sex:Time     4.7     2.3     2 368.0    2.3247 0.0992518 .  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>contrasts(exp1_long$Treatment) &lt;- contr.treatment
+contrasts(exp1_long$Sex) &lt;- contr.treatment</code></pre>
+<p>If we’re focussing on p-values, then 1) the big difference using lme/lmer compared to Afex (SPSS/SAS like repeated measures anova) is the p-value for Treatment but also 2) another difference is that for Treatment x Sex. That said, it doesn’t make much sense to interpret the Treatment p-value as evidence for “an effect” given the interactions.</p>
+<div id="compare-lmm-to-anova-table-using-lm-and-aov-ignoring-clustering-due-to-repeated-measures" class="section level3">
+<h3>Compare LMM to ANOVA table using lm() and AOV (ignoring clustering due to repeated measures)</h3>
 <pre class="r"><code># fixed effects only
+contrasts(exp1_long$Treatment) &lt;- contr.sum
+contrasts(exp1_long$Sex) &lt;- contr.sum
 # using linear model
 Anova(lm(Weight ~ Treatment*Sex*Time, data=exp1_long), type=&quot;3&quot;)</code></pre>
 <pre><code>## Anova Table (Type III tests)
@@ -624,8 +628,38 @@ summary(aov(Weight ~ Treatment*Sex*Time, data=exp1_long))</code></pre>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code>contrasts(exp1_long$Treatment) &lt;- contr.treatment
 contrasts(exp1_long$Sex) &lt;- contr.treatment</code></pre>
-<p>If we’re focussing on p-values, then 1) the big difference is the p-value for Treatment and 2) another difference is that for Treatment x Sex. That said, it doesn’t make much sense to interpret the Treatment p-value as evidence for “an effect” given the interactions.</p>
-<p>Plot it to visualize the effects</p>
+</div>
+<div id="plot-it-to-visualize-the-effects" class="section level3">
+<h3>Plot it to visualize the effects</h3>
+<pre class="r"><code># linear mixed model &quot;version&quot; of repeated measures ANOVA 
+fit.lme &lt;- lme(Weight ~ Treatment*Sex*Time, random = ~ Time|ID, data=exp1_long, method = &quot;ML&quot;)
+coef(summary(fit.lme))</code></pre>
+<pre><code>##                                     Value  Std.Error  DF    t-value
+## (Intercept)                    1.56461538 0.05825548 360 26.8578212
+## Treatment2                    -0.07732372 0.08408455 180 -0.9195948
+## Sex2                           0.13665573 0.08552960 180  1.5977595
+## Timeweaning                    6.59288462 0.16213903 360 40.6619215
+## Timeadulthood                 11.64850000 0.23356384 360 49.8728748
+## Treatment2:Sex2                0.15733466 0.12456628 180  1.2630598
+## Treatment2:Timeweaning        -0.92955128 0.23402754 360 -3.9719740
+## Treatment2:Timeadulthood      -0.60870833 0.33712036 360 -1.8056113
+## Sex2:Timeweaning              -0.47815573 0.23804945 360 -2.0086403
+## Sex2:Timeadulthood            -0.54977111 0.34291400 360 -1.6032332
+## Treatment2:Sex2:Timeweaning    0.29302752 0.34669793 360  0.8451955
+## Treatment2:Sex2:Timeadulthood  0.88803073 0.49942384 360  1.7781104
+##                                     p-value
+## (Intercept)                    5.393345e-88
+## Treatment2                     3.590152e-01
+## Sex2                           1.118505e-01
+## Timeweaning                   1.239816e-136
+## Timeadulthood                 9.750687e-164
+## Treatment2:Sex2                2.082013e-01
+## Treatment2:Timeweaning         8.610403e-05
+## Treatment2:Timeadulthood       7.181430e-02
+## Sex2:Timeweaning               4.532162e-02
+## Sex2:Timeadulthood             1.097601e-01
+## Treatment2:Sex2:Timeweaning    3.985631e-01
+## Treatment2:Sex2:Timeadulthood  7.622969e-02</code></pre>
 <pre class="r"><code>fit.emm &lt;- data.table(summary(emmeans(fit.lme, specs=c(&quot;Treatment&quot;, &quot;Sex&quot;, &quot;Time&quot;))))
 setnames(fit.emm, old=&quot;emmean&quot;, new=&quot;Weight&quot;)
 pd &lt;- position_dodge(0.5)
@@ -636,7 +670,9 @@ gg &lt;- ggplot(data=exp1_long, aes(x=Treatment, y=Weight, color=Time)) +
   facet_grid(.~Sex) +
   NULL
 gg</code></pre>
-<p><img src="/post/2019-02-18-data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="/post/2019-02-18-data-from-perceived-threats-of-infanticide-reduce-maternal-allocation-during-lactation-and-lead-to-elevated-oxidative-damage-in-offspring_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+</div>
+</div>
 </div>
 
     </article>

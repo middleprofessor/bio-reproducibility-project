@@ -290,15 +290,23 @@ knitr::include_graphics(image_path)
 
 # Statistical Red Flags
 
-1. The afex package replicates the SPSS output for the growth rate analysis but the design is very unbalanced. It's unclear to me how afex handles this; is it like AOV (which doesn't handle unbalanced data well) or more like anova(lme/lmer), which does handle unbalanced data well (with caveats on Type III interpretation). So I compare the SPSS-like repeated measures anova with lme/lmer and also with simple fixed effects analysis (lm and aov)
+## 1. Computation of ANOVA table using Afex package
+The afex package replicates the SPSS output for the growth rate analysis but the design is very unbalanced. It's unclear to me how afex handles this; is it like AOV (which doesn't handle unbalanced data well) or more like anova(lme/lmer), which does handle unbalanced data well (with caveats on Type III interpretation). So I compare the SPSS-like repeated measures anova with lme/lmer and also with simple fixed effects analysis (lm and aov)
+
+### How balanced is the design
 ```{r}
 # how balanced is design?
 exp1_long[!is.na(Weight), .(N=.N), by=.(Treatment, Sex, Time)]
+```
 
-# linear mixed model "version" of repeated measures ANOVA 
-fit.lme <- lme(Weight ~ Treatment*Sex*Time, random = ~ Time|ID, data=exp1_long, method = "ML")
-coef(summary(fit.lme))
+### ANOVA using Afex (computation above)
 
+```{r}
+fit.aov_4
+```
+
+##3 ANOVA table using lme/lmer
+```{r}
 # model III anova of lme/lmer fis
 contrasts(exp1_long$Treatment) <- contr.sum
 contrasts(exp1_long$Sex) <- contr.sum
@@ -306,22 +314,31 @@ m1 <- lme(Weight ~ Treatment*Sex*Time, random = ~ 1|ID, data=exp1_long, method =
 anova(m1, type="marginal")
 m2 <- lmer(Weight ~ Treatment*Sex*Time + (1|ID), data=exp1_long, REML = FALSE)
 anova(m2, type="marginal")
+contrasts(exp1_long$Treatment) <- contr.treatment
+contrasts(exp1_long$Sex) <- contr.treatment
+```
 
+If we're focussing on p-values, then 1) the big difference using lme/lmer compared to Afex (SPSS/SAS like repeated measures anova) is the p-value for Treatment but also 2) another difference is that for Treatment x Sex. That said, it doesn't make much sense to interpret the Treatment p-value as evidence for "an effect" given the interactions.
+
+### Compare LMM to ANOVA table using lm() and AOV (ignoring clustering due to repeated measures)
+```{r}
 # fixed effects only
+contrasts(exp1_long$Treatment) <- contr.sum
+contrasts(exp1_long$Sex) <- contr.sum
 # using linear model
 Anova(lm(Weight ~ Treatment*Sex*Time, data=exp1_long), type="3")
 # classical ANOVA
 summary(aov(Weight ~ Treatment*Sex*Time, data=exp1_long))
 contrasts(exp1_long$Treatment) <- contr.treatment
 contrasts(exp1_long$Sex) <- contr.treatment
-
-
 ```
 
-If we're focussing on p-values, then 1) the big difference is the p-value for Treatment and 2) another difference is that for Treatment x Sex. That said, it doesn't make much sense to interpret the Treatment p-value as evidence for "an effect" given the interactions.
-
-Plot it to visualize the effects
+### Plot it to visualize the effects
 ```{r}
+# linear mixed model "version" of repeated measures ANOVA 
+fit.lme <- lme(Weight ~ Treatment*Sex*Time, random = ~ Time|ID, data=exp1_long, method = "ML")
+coef(summary(fit.lme))
+
 fit.emm <- data.table(summary(emmeans(fit.lme, specs=c("Treatment", "Sex", "Time"))))
 setnames(fit.emm, old="emmean", new="Weight")
 pd <- position_dodge(0.5)
