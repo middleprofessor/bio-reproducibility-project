@@ -105,7 +105,22 @@ for(y in y_cols){
 }
 
 dAICc <- data.table(Terms = res[,terms], round(t(t(res[, .SD, .SDcols=y_cols]) - apply(res[, .SD, .SDcols=y_cols], 2, min)), 1))
-dAICc
+dAICc # reported below the published table
+```
+
+```{r tableS3, echo=FALSE}
+fn <- "tableS3.png"
+if(knitr_path==TRUE){
+  image_path <- paste("../images", folder, fn, sep="/")
+}else{
+  image_path <- paste("/images", folder, fn, sep="/")
+}
+knitr::include_graphics(image_path)
+
+```
+
+```{r}
+knitr::kable(dAICc)
 ```
 
 LRR.C does not reproduce quantitatively, the other three columns do.

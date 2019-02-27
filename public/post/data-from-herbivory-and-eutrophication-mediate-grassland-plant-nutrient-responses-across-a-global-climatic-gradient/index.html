@@ -194,7 +194,7 @@ for(y in y_cols){
 }
 
 dAICc &lt;- data.table(Terms = res[,terms], round(t(t(res[, .SD, .SDcols=y_cols]) - apply(res[, .SD, .SDcols=y_cols], 2, min)), 1))
-dAICc</code></pre>
+dAICc # reported below the published table</code></pre>
 <pre><code>##                                       Terms LRR.C LRR.N LRR.P LRR.K
 ##  1:                                     ~ 1   6.4   7.3   3.5   5.9
 ##  2:                                 ~ FENCE   5.3   7.0   3.6   7.3
@@ -210,6 +210,119 @@ dAICc</code></pre>
 ## 12:                             ~ SOLAR.INS   7.8   9.2   4.9   7.3
 ## 13:                     ~ SOLAR.INS + FENCE   6.9   9.1   5.1   8.9
 ## 14:   ~ SOLAR.INS + FENCE + SOLAR.INS:FENCE   8.5  11.4   6.8  11.4</code></pre>
+<p><img src="/images/data%20from%20Herbivory%20and%20eutrophication%20mediate%20grassland%20plant%20nutrient%20responses%20across%20a%20global%20climatic%20gradient/tableS3.png" /><!-- --></p>
+<pre class="r"><code>knitr::kable(dAICc)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Terms</th>
+<th align="right">LRR.C</th>
+<th align="right">LRR.N</th>
+<th align="right">LRR.P</th>
+<th align="right">LRR.K</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">~ 1</td>
+<td align="right">6.4</td>
+<td align="right">7.3</td>
+<td align="right">3.5</td>
+<td align="right">5.9</td>
+</tr>
+<tr class="even">
+<td align="left">~ FENCE</td>
+<td align="right">5.3</td>
+<td align="right">7.0</td>
+<td align="right">3.6</td>
+<td align="right">7.3</td>
+</tr>
+<tr class="odd">
+<td align="left">~ MAP</td>
+<td align="right">7.6</td>
+<td align="right">6.8</td>
+<td align="right">4.9</td>
+<td align="right">7.8</td>
+</tr>
+<tr class="even">
+<td align="left">~ MAP + FENCE</td>
+<td align="right">6.5</td>
+<td align="right">6.4</td>
+<td align="right">5.1</td>
+<td align="right">9.3</td>
+</tr>
+<tr class="odd">
+<td align="left">~ MAP + FENCE + MAP:FENCE</td>
+<td align="right">0.0</td>
+<td align="right">0.0</td>
+<td align="right">0.0</td>
+<td align="right">0.0</td>
+</tr>
+<tr class="even">
+<td align="left">~ MAT</td>
+<td align="right">6.5</td>
+<td align="right">8.7</td>
+<td align="right">3.7</td>
+<td align="right">6.6</td>
+</tr>
+<tr class="odd">
+<td align="left">~ MAT + FENCE</td>
+<td align="right">5.7</td>
+<td align="right">8.7</td>
+<td align="right">4.0</td>
+<td align="right">8.3</td>
+</tr>
+<tr class="even">
+<td align="left">~ MAT + FENCE + MAT:FENCE</td>
+<td align="right">8.4</td>
+<td align="right">11.3</td>
+<td align="right">6.5</td>
+<td align="right">10.7</td>
+</tr>
+<tr class="odd">
+<td align="left">~ SOIL.PCT.N</td>
+<td align="right">8.8</td>
+<td align="right">9.4</td>
+<td align="right">5.9</td>
+<td align="right">8.1</td>
+</tr>
+<tr class="even">
+<td align="left">~ SOIL.PCT.N + FENCE</td>
+<td align="right">7.8</td>
+<td align="right">9.2</td>
+<td align="right">6.0</td>
+<td align="right">9.6</td>
+</tr>
+<tr class="odd">
+<td align="left">~ SOIL.PCT.N + FENCE + SOIL.PCT.N:FENCE</td>
+<td align="right">6.4</td>
+<td align="right">7.8</td>
+<td align="right">4.1</td>
+<td align="right">6.1</td>
+</tr>
+<tr class="even">
+<td align="left">~ SOLAR.INS</td>
+<td align="right">7.8</td>
+<td align="right">9.2</td>
+<td align="right">4.9</td>
+<td align="right">7.3</td>
+</tr>
+<tr class="odd">
+<td align="left">~ SOLAR.INS + FENCE</td>
+<td align="right">6.9</td>
+<td align="right">9.1</td>
+<td align="right">5.1</td>
+<td align="right">8.9</td>
+</tr>
+<tr class="even">
+<td align="left">~ SOLAR.INS + FENCE + SOLAR.INS:FENCE</td>
+<td align="right">8.5</td>
+<td align="right">11.4</td>
+<td align="right">6.8</td>
+<td align="right">11.4</td>
+</tr>
+</tbody>
+</table>
 <p>LRR.C does not reproduce quantitatively, the other three columns do.</p>
 <p>Double check</p>
 <pre class="r"><code>m1 &lt;- lm(LRR.C ~ MAP*TREATMENT, data=exp1)
