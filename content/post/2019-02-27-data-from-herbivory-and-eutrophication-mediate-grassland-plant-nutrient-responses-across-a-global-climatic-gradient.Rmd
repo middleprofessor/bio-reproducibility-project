@@ -26,6 +26,7 @@ Anderson TM, Griffith DM, Grace JB, Lind EM, Adler PB, Biederman LA, Blumenthal 
 2. The authors supply a script at Dryad, which is very helpful for checking ambiguities or lack of reproducibility. My script was written prior to seeing any of the author's script (and is quite different from the author's).
 3. The description of the method for the model selection was ambiguous; I assumed the wrong method before seeing what the authors did in the reported Table S3 of model results.
 4. The first column of Table S3 does not reproduce (these are Delta AICc values). The other three columns do reproduce. I used the author's script on the Dryad data and reproduced my results but not the author's.
+5. I have not attempted to reproduce the structural model.
 
 # Caveats
 Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.
@@ -123,7 +124,7 @@ knitr::include_graphics(image_path)
 knitr::kable(dAICc)
 ```
 
-LRR.C does not reproduce quantitatively, the other three columns do.
+LRR.C does not reproduce, the other three columns do.
 
 Double check
 ```{r}
