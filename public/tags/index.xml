@@ -24,7 +24,7 @@
     <item>
       <title>Ancova</title>
       <link>/tags/ancova/</link>
-      <pubDate>Tue, 29 Jan 2019 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 27 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/ancova/</guid>
       <description></description>
@@ -81,6 +81,15 @@
       <pubDate>Sun, 13 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/clean-data/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Code</title>
+      <link>/tags/code/</link>
+      <pubDate>Wed, 27 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/code/</guid>
       <description></description>
     </item>
     
@@ -193,6 +202,15 @@
     </item>
     
     <item>
+      <title>Model Selection</title>
+      <link>/tags/model-selection/</link>
+      <pubDate>Wed, 27 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/model-selection/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Nested</title>
       <link>/tags/nested/</link>
       <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
@@ -279,6 +297,15 @@
       <pubDate>Mon, 30 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/reproducible/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sem</title>
+      <link>/tags/sem/</link>
+      <pubDate>Wed, 27 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/sem/</guid>
       <description></description>
     </item>
     

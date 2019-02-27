@@ -1,0 +1,128 @@
+---
+title: 'Data from: Herbivory and eutrophication mediate grassland plant nutrient responses
+  across a global climatic gradient'
+author: Jeff Walker
+date: '2019-02-27'
+slug: data-from-herbivory-and-eutrophication-mediate-grassland-plant-nutrient-responses-across-a-global-climatic-gradient
+categories: []
+tags:
+  - model selection
+  - ancova
+  - SEM
+  - code
+subtitle: ''
+output:
+  blogdown::html_page:
+    toc: true
+---
+# Sources
+
+Anderson TM, Griffith DM, Grace JB, Lind EM, Adler PB, Biederman LA, Blumenthal DM, Daleo P, Firn J, Hagenah N, Harpole WS, MacDougall AS, McCulley RL, Prober SM, Risch AC, Sankaran M, Schütz M, Seabloom EW, Stevens CJ, Sullivan LL, Wragg PD, Borer ET (2018) Herbivory and eutrophication mediate grassland plant nutrient responses across a global climatic gradient. Ecology 99(4): 822-831. https://doi.org/10.1002/ecy.2175
+
+Anderson TM, Griffith DM, Grace JB, Lind EM, Adler PB, Biederman LA, Blumenthal DM, Daleo P, Firn J, Hagenah N, Harpole WS, MacDougall AS, McCulley RL, Prober SM, Risch AC, Sankaran M, Schütz M, Seabloom EW, Stevens CJ, Sullivan LL, Wragg PD, Borer ET (2018) Data from: Herbivory and eutrophication mediate grassland plant nutrient responses across a global climatic gradient. Dryad Digital Repository. https://doi.org/10.5061/dryad.mq56q
+
+# Summary
+1. The description of the files at the Dryad source is very helpful
+2. The authors supply a script at Dryad, which is very helpful for checking ambiguities or lack of reproducibility. My script was written prior to seeing any of the author's script (and is quite different from the author's).
+3. The description of the method for the model selection was ambiguous; I assumed the wrong method before seeing what the authors did in the reported Table S3 of model results.
+4. The first column of Table S3 does not reproduce (these are Delta AICc values). The other three columns do reproduce. I used the author's script on the Dryad data and reproduced my results but not the author's.
+
+# Caveats
+Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.
+
+# Setup
+```{r libraries, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(nlme)
+library(lme4)
+library(lmerTest)
+library(emmeans)
+library(MuMIn)
+library(data.table)
+```
+
+```{r import path}
+data_folder <- "../data"
+folder <- "data from Herbivory and eutrophication mediate grassland plant nutrient responses across a global climatic gradient"
+
+# images need to be moved to /static/images/data from.../image.png
+knitr_path <- FALSE # run = TRUE to debug
+```
+
+```{r clean labels}
+source("../R/clean_label.R") # bookdown
+```
+
+
+# Import
+
+```{r}
+fn <- "Model1.LRR.data.csv"
+file_path <- paste(data_folder, folder, fn, sep="/")
+exp1 <- fread(file_path)
+exp1[, TREATMENT:=factor(TREATMENT, c("UNFENCED", "FENCED"))]
+```
+
+# Reproducibility
+
+>Candidate models included all main effects plus environment by treatment interactions. 
+
+I interpreted this as a model including all covariates but from Table S3 it seems that the authors compared only models with one covariate at a time.
+
+Script for my initial interpretation
+```{r}
+# My initial interpretation 
+exp1.c <- exp1[!is.na(LRR.C),] # dredge can't seem to do this.
+fit.c <- lm(LRR.C ~ MAP + MAT + SOLAR.INS + SOIL.PCT.N + TREATMENT + MAP:TREATMENT + MAT:TREATMENT + SOLAR.INS:TREATMENT + SOIL.PCT.N:TREATMENT, data=exp1.c, na.action = "na.fail")
+all.c <- dredge(fit.c)
+subset(all.c, delta <= 1.0)
+summary(get.models(all.c, subset= delta <= 1.0)[[2]])
+
+```
+
+New script to reproduce Table S3
+```{r, message=FALSE}
+y_cols <- c("LRR.C", "LRR.N", "LRR.P", "LRR.K" )
+covx_cols <- c("MAP", "MAT", "SOLAR.INS", "SOIL.PCT.N")
+for(y in y_cols){
+  res_part <- data.table(NULL)
+  subdata <- exp1[!is.na(get(y)),] # dredge can't seem to do this.
+  for(covx in covx_cols){
+    fit <- lm(get(y) ~ get(covx)*TREATMENT, data=subdata, na.action="na.fail")
+    fit.all <- dredge(fit)
+    fit.order <- fit.all[ order(as.numeric(row.names(fit.all))),]
+    terms_i <- c("~ 1", 
+                 paste("~ ", covx, sep=""),
+                 paste("~ ", "FENCE", sep=""),
+                 paste("~ ", covx," + ", "FENCE", sep=""),
+                 paste("~ ", covx," + ", "FENCE"," + ", covx, ":FENCE", sep="")
+                 )
+    res_part <- rbind(res_part, data.table(terms=terms_i, AICc=fit.order[,"AICc"]))
+  }
+  res_part <- res_part[, .(AICc=mean(AICc)), by=terms]
+  setnames(res_part, "AICc", y)
+  ifelse(y==y_cols[1], res <- res_part, res <- merge(res, res_part, by="terms"))
+}
+
+dAICc <- data.table(Terms = res[,terms], round(t(t(res[, .SD, .SDcols=y_cols]) - apply(res[, .SD, .SDcols=y_cols], 2, min)), 1))
+dAICc
+```
+
+LRR.C does not reproduce quantitatively, the other three columns do.
+
+Double check
+```{r}
+m1 <- lm(LRR.C ~ MAP*TREATMENT, data=exp1)
+m2 <- lm(LRR.C ~ 1, data=exp1)
+AICc(m1)
+AICc(m2)
+AICc(m2)-AICc(m1)
+```
+
+This reproduces my result but not the published result in Table S3.
+
+The authors supplied a script. Running their script with the data in Dryad reproduces my resuls for column 1 of Table S3 but not the author's.
+
+# Statistical red flags
+
+1. Choosing a best model from mulitple fits can result in inflated coefficients and optimistic SEs and p-values due to capitalizing on noise.
