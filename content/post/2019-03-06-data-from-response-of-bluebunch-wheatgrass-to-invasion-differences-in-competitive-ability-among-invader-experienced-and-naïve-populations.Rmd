@@ -7,8 +7,11 @@ slug: data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-comp
 categories: []
 tags:
   - R
+<<<<<<< HEAD
   - fixed effect nested ANOVA
   - test
+=======
+>>>>>>> a140fab3780995165f5c295adff0bfb7a06c6db6
 subtitle: ''
 output:
   blogdown::html_page:
@@ -39,8 +42,11 @@ library(emmeans)
 library(nlme)
 library(lmerTest)
 library(car)
+<<<<<<< HEAD
 library(doBy)
 
+=======
+>>>>>>> a140fab3780995165f5c295adff0bfb7a06c6db6
 ```
 
 ```{r}
@@ -140,10 +146,13 @@ subdata[, Experience:=factor(Experience)]
 subdata[, Population:=factor(Population)]
 dim(subdata)
 
+<<<<<<< HEAD
 con3 <- list(Treatment=contr.sum, Experience=contr.sum, Population=contr.sum) # change the contrasts coding for the model matrix
 fit.aov <- aov(n_Leaves ~ Experience/Population + Treatment*Experience, contrasts=con3, data=subdata)
 anova(fit.aov) # the interaction matches jmp
 Anova(fit.aov,type="3") # fails
+=======
+>>>>>>> a140fab3780995165f5c295adff0bfb7a06c6db6
 
 # compare with JMP
 con3 <- list(Treatment=contr.sum, Experience=contr.sum) # change the contrasts coding for the model matrix
