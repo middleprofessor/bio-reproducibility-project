@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
-    <lastBuildDate>Sat, 02 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 06 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Data from: Response of bluebunch wheatgrass to invasion differences in competitive ability among invader-experienced and naïve populations</title>
+      <link>/post/data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations/</link>
+      <pubDate>Wed, 06 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations/</guid>
+      <description>Sources Summary Caveats Setup Import Reproducibility 3.1.1 Seedling  Statistical red flags   Sources Gibson A, Nelson CR, Atwater DZ (2018) Response of bluebunch wheatgrass to invasion: Differences in competitive ability among invader-experienced and invader-naïve populations. Functional Ecology 32(7): 1857-1866. https://doi.org/10.1111/1365-2435.13090
+Gibson AL, Nelson CR, Atwater DZ (2018) Data from: Response of bluebunch wheatgrass to invasion: differences in competitive ability among invader-experienced and naïve populations. Dryad Digital Repository.</description>
+    </item>
     
     <item>
       <title>Data from: The significance of prey avoidance behaviour for the maintenance of a predator colour polymorphism</title>
@@ -36,7 +46,7 @@
       <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/data-from-density-dependent-positive-feedbacks-buffer-aquatic-plants-from-interactive-effects-of-eutrophication-and-predator-loss/</guid>
-      <description>Sources Summary Caveats Set up Import data cleaning  Reproducibility Appendix S5 Table S1 reproducing epiphytic algae biomass columns  in-text Appendix S5 Table S2 Figure 2  Statistical Red-flags Figure red-flags  Simulate this   Sources Source: Donadi S, Austin ÅN, Svartgren E, Eriksson BK, Hansen JP, Eklöf JS (2018) Density-dependent positive feedbacks buffer aquatic plants from interactive effects of eutrophication and predator loss. Ecology 99(11): 2515-2524. https://doi.</description>
+      <description>Sources Summary Caveats Set up Import data cleaning  Reproducibility Appendix S5 Table S1 reproducing epiphytic algae biomass columns  in-text Appendix S5 Table S2 Figure 2  Statistical Red-flags Figure red-flags  Simulate this   Sources Source: Donadi S, Austin ÅN, Svartgren E, Eriksson BK, Hansen JP, Eklöf JS (2018) Density-dependent positive feedbacks buffer aquatic plants from interactive effects of eutrophication and predator loss. Ecology 99(11): 2515-2524.</description>
     </item>
     
     <item>
