@@ -1,0 +1,153 @@
+---
+title: 'Data from: Response of bluebunch wheatgrass to invasion differences in competitive
+  ability among invader-experienced and naïve populations'
+author: Jeff Walker
+date: '2019-03-06'
+slug: data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-naïve-populations
+categories: []
+tags:
+  - R
+  - fixed effect nested ANOVA
+  - test
+subtitle: ''
+output:
+  blogdown::html_page:
+    toc: true
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#sources">Sources</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#caveats">Caveats</a></li>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#import">Import</a></li>
+<li><a href="#reproducibility">Reproducibility</a><ul>
+<li><a href="#seedling">3.1.1 Seedling</a></li>
+</ul></li>
+<li><a href="#statistical-red-flags">Statistical red flags</a></li>
+</ul>
+</div>
+
+<div id="sources" class="section level1">
+<h1>Sources</h1>
+<p>Gibson A, Nelson CR, Atwater DZ (2018) Response of bluebunch wheatgrass to invasion: Differences in competitive ability among invader-experienced and invader-naïve populations. Functional Ecology 32(7): 1857-1866. <a href="https://doi.org/10.1111/1365-2435.13090" class="uri">https://doi.org/10.1111/1365-2435.13090</a></p>
+<p>Gibson AL, Nelson CR, Atwater DZ (2018) Data from: Response of bluebunch wheatgrass to invasion: differences in competitive ability among invader-experienced and naïve populations. Dryad Digital Repository. <a href="https://doi.org/10.5061/dryad.j75g369" class="uri">https://doi.org/10.5061/dryad.j75g369</a></p>
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<ol style="list-style-type: decimal">
+<li></li>
+<li></li>
+<li></li>
+</ol>
+</div>
+<div id="caveats" class="section level1">
+<h1>Caveats</h1>
+<p>Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author’s methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.</p>
+</div>
+<div id="setup" class="section level1">
+<h1>Setup</h1>
+<pre class="r"><code>library(ggplot2)
+library(readxl)
+library(data.table)
+library(emmeans)
+library(nlme)
+library(lmerTest)
+library(car)
+library(doBy)</code></pre>
+<pre class="r"><code>data_folder &lt;- &quot;../data&quot;
+folder &lt;- &quot;Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations&quot;
+
+# images need to be moved to /static/images/data from.../image.png
+knitr_path &lt;- FALSE # run = TRUE to debug
+
+source(&quot;../R/clean_label.R&quot;) # bookdown</code></pre>
+</div>
+<div id="import" class="section level1">
+<h1>Import</h1>
+<pre class="r"><code>fn &lt;- &quot;Gibson_invasion_response_data.xlsx&quot;
+file_path &lt;- paste(data_folder, folder, fn, sep=&quot;/&quot;)
+
+sheet_i &lt;- &quot;Germination&quot;
+exp1 &lt;- data.table(read_excel(file_path, sheet=sheet_i))
+colnames(exp1) &lt;- clean_label(colnames(exp1))
+setnames(exp1, &quot;Type&quot;, &quot;Experience&quot;)
+
+sheet_i &lt;- &quot;Traits&quot;
+exp2 &lt;- data.table(read_excel(file_path, sheet=sheet_i, na=&quot;x&quot;))
+colnames(exp2) &lt;- clean_label(colnames(exp2))
+exp2[, Treatment:=factor(Treatment)]
+exp2[, Experience:=factor(Population_Type)]
+exp2[, Stage:=ifelse(as.character(Date)==&quot;2012-04-30&quot;,&quot;Seedling&quot;, &quot;Juvenile&quot;)]
+exp2[, Exp_Pop:=factor(paste(Experience,Population,sep=&quot;.&quot;))]</code></pre>
+</div>
+<div id="reproducibility" class="section level1">
+<h1>Reproducibility</h1>
+<div id="seedling" class="section level2">
+<h2>3.1.1 Seedling</h2>
+<blockquote>
+<p>There was, however, a significant effect of experience type on week-1 rates of germination (F(2, 26) = 9.18, p &lt; .001)</p>
+</blockquote>
+<pre class="r"><code>con3 &lt;- list(Treatment=contr.sum, Experience=contr.sum) # change the contrasts coding for the model matrix
+
+# fit.full &lt;- lm(Week_1 ~ Treatment*Experience, data=exp1, contrasts=con3)
+# Anova(fit.full, type=&quot;3&quot;)
+
+# 26 residual df suggests either this was one-way anova with something removed or an additive model
+fit.add &lt;- lm(Week_1 ~ Treatment + Experience, data=exp1, contrasts=con3)
+Anova(fit.add, type=&quot;3&quot;) # replicates</code></pre>
+<pre><code>## Anova Table (Type III tests)
+## 
+## Response: Week_1
+##             Sum Sq Df F value    Pr(&gt;F)    
+## (Intercept) 5212.5  1 63.6986 1.849e-08 ***
+## Treatment      0.0  1  0.0000 1.0000000    
+## Experience  1502.3  2  9.1791 0.0009638 ***
+## Residuals   2127.6 26                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># fit.one &lt;- lm(Week_1 ~ Experience, data=exp1[Population!=&quot;Ana&quot;])
+# anova(fit.one) # obviously cannot be it given Ana is in the posthoc</code></pre>
+<p>Replicates using additive model (not specified in methods)</p>
+<blockquote>
+<p>Post hoc tests showed that differences in germination existed be- tween Anatone and the wild populations, but not between IE and IN populations (p = .95). Anatone had 98% fewer week-1 germinants than either IE (difference = 27.8 germinants, p = &lt;.001) or IN populations (difference = 28.7 germinants, p &lt; .001).</p>
+</blockquote>
+<pre class="r"><code>fit.emm &lt;- emmeans(fit.add, specs=c(&quot;Experience&quot;))
+# Tukey HSD
+contrast(fit.emm, method=&quot;revpairwise&quot;)</code></pre>
+<pre><code>##  contrast estimate   SE df t.ratio p.value
+##  E - C      27.833 6.91 26 4.029   0.0012 
+##  N - C      28.688 6.78 26 4.228   0.0007 
+##  N - E       0.854 3.45 26 0.247   0.9669 
+## 
+## Results are averaged over the levels of: Treatment 
+## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<pre class="r"><code># no adjustment
+# contrast(fit.emm, method=&quot;revpairwise&quot;, adjust=&quot;none&quot;)</code></pre>
+<p>Given the anova above replicates, the Tukey post-hoc should be there are slight differences</p>
+<blockquote>
+<p>There was no significant effect of competition treatment on week-1 germination (F(1, 26) = 0.002, p = .96).</p>
+</blockquote>
+<p>Very slight differences (See ANOVA table above) not sure why.</p>
+<blockquote>
+<p>Next, we assessed trait variation among populations of the same experience type, between invader experience groups (IE and IN) and between treatments using general linear contrasts with population as a fixed factor nested in experience type and with separate models for each response variable (length of longest leaf, number of leaves, total biomass, shoot biomass, root biomass and root:shoot ratio) at each growth phase (seedling and juvenile); models allowed for unequal variance by population type (Pinheiro, Bates, DebRoy, Sarkar, &amp; Team, 2012). Population was nested in experience type because each population was either IE or IN. Anatone was excluded from this analysis. We excluded four native populations from seedling trait analysis and three from juvenile trait analysis because there were not enough plants available from treatment pots.</p>
+</blockquote>
+<pre class="r"><code>counts &lt;- exp2[!is.na(n_Leaves) &amp; Population!=&quot;Ana&quot;, .(N=.N), by=.(Treatment, Experience, Population, Stage, Exp_Pop)]
+# counts[, .(N=.N), by=.(Stage, Population)]
+exp2.b &lt;- merge(exp2, counts, by=c(&quot;Treatment&quot;, &quot;Experience&quot;, &quot;Population&quot;, &quot;Stage&quot;, &quot;Exp_Pop&quot;))
+# which(counts[, N] &lt; 3)</code></pre>
+<pre class="r"><code>#subdata[, ]</code></pre>
+<pre class="r"><code>xcols &lt;- c(&quot;Treatment&quot;, &quot;Experience&quot;, &quot;Stage&quot;, &quot;Population&quot;, &quot;Exp_Pop&quot;)
+ycols &lt;- c(&quot;Longest_leaf&quot;, &quot;n_Leaves&quot;, &quot;Biomass&quot;, &quot;Shoot_biomass&quot;, &quot;Root_biomass&quot;, &quot;Root.shoot_ratio&quot;)
+for(y in ycols){
+  form_i &lt;- formula(paste(y, &quot; ~ Treatment*Experience + Population&quot;))
+
+}</code></pre>
+<pre class="r"><code>ycols &lt;- c(&quot;Longest_leaf&quot;, &quot;n_Leaves&quot;, &quot;Biomass&quot;, &quot;Shoot_biomass&quot;, &quot;Root_biomass&quot;, &quot;Root.shoot_ratio&quot;)</code></pre>
+</div>
+</div>
+<div id="statistical-red-flags" class="section level1">
+<h1>Statistical red flags</h1>
+</div>

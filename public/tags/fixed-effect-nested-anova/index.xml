@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fixed Effect Nested Anova on The Biology Reproducibility Project</title>
+    <link>/tags/fixed-effect-nested-anova/</link>
+    <description>Recent content in Fixed Effect Nested Anova on The Biology Reproducibility Project</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
+    <lastBuildDate>Wed, 06 Mar 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/fixed-effect-nested-anova/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Data from: Response of bluebunch wheatgrass to invasion differences in competitive ability among invader-experienced and naïve populations</title>
+      <link>/post/data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations/</link>
+      <pubDate>Wed, 06 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations/</guid>
+      <description>Sources Summary Caveats Setup Import Reproducibility 3.1.1 Seedling  Statistical red flags   Sources Gibson A, Nelson CR, Atwater DZ (2018) Response of bluebunch wheatgrass to invasion: Differences in competitive ability among invader-experienced and invader-naïve populations. Functional Ecology 32(7): 1857-1866. https://doi.org/10.1111/1365-2435.13090
+Gibson AL, Nelson CR, Atwater DZ (2018) Data from: Response of bluebunch wheatgrass to invasion: differences in competitive ability among invader-experienced and naïve populations. Dryad Digital Repository.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,269 @@
+---
+title: 'Data from: Response of bluebunch wheatgrass to invasion differences in competitive
+  ability among invader-experienced and naïve populations'
+author: Jeff Walker
+date: '2019-03-06'
+slug: data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-naïve-populations
+categories: []
+tags:
+  - R
+  - fixed effect nested ANOVA
+  - test
+subtitle: ''
+output:
+  blogdown::html_page:
+    toc: true
+---
+
+# Sources
+
+Gibson A, Nelson CR, Atwater DZ (2018) Response of bluebunch wheatgrass to invasion: Differences in competitive ability among invader-experienced and invader-naïve populations. Functional Ecology 32(7): 1857-1866. https://doi.org/10.1111/1365-2435.13090
+
+Gibson AL, Nelson CR, Atwater DZ (2018) Data from: Response of bluebunch wheatgrass to invasion: differences in competitive ability among invader-experienced and naïve populations. Dryad Digital Repository. https://doi.org/10.5061/dryad.j75g369
+
+# Summary
+
+1.
+2.
+3. 
+
+# Caveats
+Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.
+
+# Setup
+```{r libraries, message=FALSE}
+library(ggplot2)
+library(readxl)
+library(data.table)
+library(emmeans)
+library(nlme)
+library(lmerTest)
+library(car)
+library(doBy)
+
+```
+
+```{r}
+data_folder <- "../data"
+folder <- "Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations"
+
+# images need to be moved to /static/images/data from.../image.png
+knitr_path <- FALSE # run = TRUE to debug
+
+source("../R/clean_label.R") # bookdown
+```
+
+# Import
+
+```{r import}
+fn <- "Gibson_invasion_response_data.xlsx"
+file_path <- paste(data_folder, folder, fn, sep="/")
+
+sheet_i <- "Germination"
+exp1 <- data.table(read_excel(file_path, sheet=sheet_i))
+colnames(exp1) <- clean_label(colnames(exp1))
+setnames(exp1, "Type", "Experience")
+
+sheet_i <- "Traits"
+exp2 <- data.table(read_excel(file_path, sheet=sheet_i, na="x"))
+colnames(exp2) <- clean_label(colnames(exp2))
+exp2[, Treatment:=factor(Treatment)]
+exp2[, Experience:=factor(Population_Type)]
+exp2[, Stage:=ifelse(as.character(Date)=="2012-04-30","Seedling", "Juvenile")]
+exp2[, Exp_Pop:=factor(paste(Experience,Population,sep="."))]
+```
+
+# Reproducibility
+
+## 3.1.1 Seedling
+>There was, however, a significant effect of experience type on week-1 rates of germination (F(2, 26) = 9.18, p < .001)
+
+```{r}
+con3 <- list(Treatment=contr.sum, Experience=contr.sum) # change the contrasts coding for the model matrix
+
+# fit.full <- lm(Week_1 ~ Treatment*Experience, data=exp1, contrasts=con3)
+# Anova(fit.full, type="3")
+
+# 26 residual df suggests either this was one-way anova with something removed or an additive model
+fit.add <- lm(Week_1 ~ Treatment + Experience, data=exp1, contrasts=con3)
+Anova(fit.add, type="3") # replicates
+
+# fit.one <- lm(Week_1 ~ Experience, data=exp1[Population!="Ana"])
+# anova(fit.one) # obviously cannot be it given Ana is in the posthoc
+
+```
+
+Replicates using additive model (not specified in methods)
+
+> Post hoc tests showed that differences in germination existed be- tween Anatone and the wild populations, but not between IE and IN populations (p = .95). Anatone had 98% fewer week-1 germinants than either IE (difference = 27.8 germinants, p = <.001) or IN populations (difference = 28.7 germinants, p < .001). 
+
+```{r}
+fit.emm <- emmeans(fit.add, specs=c("Experience"))
+# Tukey HSD
+contrast(fit.emm, method="revpairwise")
+# no adjustment
+# contrast(fit.emm, method="revpairwise", adjust="none")
+
+```
+
+Given the anova above replicates, the Tukey post-hoc should be there are slight differences
+
+>There was no significant effect of competition treatment on week-1 germination (F(1, 26) = 0.002, p = .96).
+
+Very slight differences (See ANOVA table above) not sure why.
+
+> Next, we assessed trait variation among populations of the same experience type, between invader experience groups (IE and IN) and between treatments using general linear contrasts with population as a fixed factor nested in experience type and with separate models for each response variable (length of longest leaf, number of leaves, total biomass, shoot biomass, root biomass and root:shoot ratio) at each growth phase (seedling and juvenile); models allowed for unequal variance by population type (Pinheiro, Bates, DebRoy, Sarkar, & Team, 2012). Population was nested in experience type because each population was either IE or IN. Anatone was excluded from this analysis. We excluded four native populations from seedling trait analysis and three from juvenile trait analysis because there were not enough plants available from treatment pots.
+
+```{r counts}
+counts <- exp2[!is.na(n_Leaves) & Population!="Ana", .(N=.N), by=.(Treatment, Experience, Population, Stage, Exp_Pop)]
+# counts[, .(N=.N), by=.(Stage, Population)]
+exp2.b <- merge(exp2, counts, by=c("Treatment", "Experience", "Population", "Stage", "Exp_Pop"))
+# which(counts[, N] < 3)
+
+```
+
+```{r exploration, echo=FALSE, eval=FALSE}
+xcols <- c("Treatment", "Experience", "Stage", "Population", "Exp_Pop")
+ycols <- c("Longest_leaf", "n_Leaves", "Biomass", "Shoot_biomass", "Root_biomass", "Root.shoot_ratio")
+subdata <- na.omit(exp2.b[Population!="Ana" &
+                        Stage=="Seedling" &
+                        N > 1, .SD, .SDcols=c(xcols, ycols[2])])
+
+# check for populations that are missing from Treatment cell and exclude
+dt <- subdata[, .(N=.N), by=.(Treatment, Experience, Population)]
+orderBy(~Experience + Population + Treatment, data=dt)
+dt <- dt[, .(N=.N), by=Population]
+inc <- dt[which(dt[, N]>1), Population]
+subdata <- subdata[Population %in% inc, ]
+
+subdata[, Experience:=factor(Experience)]
+subdata[, Population:=factor(Population)]
+dim(subdata)
+
+con3 <- list(Treatment=contr.sum, Experience=contr.sum, Population=contr.sum) # change the contrasts coding for the model matrix
+fit.aov <- aov(n_Leaves ~ Experience/Population + Treatment*Experience, contrasts=con3, data=subdata)
+anova(fit.aov) # the interaction matches jmp
+Anova(fit.aov,type="3") # fails
+
+# compare with JMP
+con3 <- list(Treatment=contr.sum, Experience=contr.sum) # change the contrasts coding for the model matrix
+fit.treat <- lm(n_Leaves ~ Treatment*Experience, data=subdata)
+fit.sum <- lm(n_Leaves ~ Treatment*Experience, contrasts=con3, data=subdata)
+fit.aov <- aov(n_Leaves ~ Treatment*Experience, contrasts=con3, data=subdata)
+Anova(fit.aov,type="3") # this matches JMP
+coef(summary(fit.treat))
+coef(summary(fit.sum))
+
+con3 <- list(Treatment=contr.sum, Experience=contr.sum, Population=contr.sum) # change the contrasts coding for the model matrix
+fit.aov <- aov(n_Leaves ~ Experience/Population + Treatment*Experience, contrasts=con3, data=subdata)
+anova(fit.aov) # the interaction matches jmp
+Anova(fit.aov,type="3") # fails
+fit.sum <- lm(n_Leaves ~ Experience/Population + Treatment*Experience, contrasts=con3, data=subdata)
+fit.sum2 <- lm(n_Leaves ~  Experience:Population + Treatment*Experience, contrasts=con3, data=subdata)
+fit.sum3 <- lm(n_Leaves ~  Population/Experience + Treatment*Experience, contrasts=con3, data=subdata)
+fit.sum4 <- lm(n_Leaves ~  Experience + Population/Experience + Treatment*Experience, contrasts=con3, data=subdata)
+fit.treat <- lm(n_Leaves ~ Experience/Population + Treatment*Experience, data=subdata)
+coef(summary(fit.sum)) # does not match JMP
+coef(summary(fit.sum2)) # does not match JMP
+coef(summary(fit.sum3)) # intercept is close to JMP but there is no Experience effect and there are 13 Population effects
+coef(summary(fit.sum4))
+coef(summary(fit.treat)) # does not match JMP
+Anova(fit.sum4, type="3")
+
+#EMSaov
+anova.result<-EMSanova(n_Leaves ~ Treatment*Experience + Population,data=subdata,
+                       type=c("F","F","F"),
+                       nested=c(NA,NA,"Experience"),
+                       level=c(1,1,1))
+
+# Because Population is coded as nested then we cannot treat Population as a fixed effect in a linear model because X^tX is singular. The only way to do this as a nested fixed effect is as ANOVA. Note that car cannot handle this because the linear model has a singular X^tX
+
+con3 <- list(Treatment=contr.sum, Experience=contr.sum, Population=contr.sum) # change the contrasts coding for the model matrix
+fit.aov <- aov(n_Leaves ~ Treatment*Experience + Experience/Population, data=subdata)
+anova(fit.aov) # seq ss 
+
+fit.aov <- aov(n_Leaves ~ Treatment*Experience + Experience/Population, contrast=con3, data=subdata)
+anova(fit.aov) # seq ss 
+Anova(fit.aov, type="3")
+
+fit.aov <- aov(n_Leaves ~ Treatment*Experience + Population:Experience, data=subdata)  
+anova(fit.aov) # seq ss 
+
+# re-arrange so that Treatment:Experience is last
+fit.aov <- aov(n_Leaves ~ Population:Experience + Treatment*Experience, data=subdata)
+anova(fit.aov) # seq ss 
+
+
+# Using lmer and Population as a random effect
+## Given that Population is coded as nested, this is the same as (1|Population) + (1|Population:Experience) if it were not coded as nested
+fit <- lmer(n_Leaves ~ Treatment*Experience + (1|Population), data=subdata, REML = FALSE)
+anova(fit, type="3")
+
+# But I think authors are using nlme
+fit <- lm(n_Leaves ~ Treatment*Experience + Experience/Population, contrast=con3, data=subdata)
+anova(fit)
+Anova(fit, type="3")
+
+anova(fit, type="marginal")
+
+fit <- lme(n_Leaves ~ Treatment*Experience, random= ~ 1|Population, data=subdata)
+anova(fit, type="marginal")
+
+fit <- lme(n_Leaves ~ Treatment*Experience, random= ~ 1|Population/Experience, data=subdata)
+anova(fit, type="marginal")
+
+fit <- lme(n_Leaves ~ Treatment*Experience, random=list(Population = pdDiag(~ Experience)), data = subdata) # gotta think about this
+anova(fit, type="marginal")
+
+## using GLS - this 
+fit1 <- gls(n_Leaves ~ Treatment*Experience, 
+           weights = varIdent(form = ~1|Population),
+           data=subdata)
+anova(fit1, type="marginal")
+
+
+```
+
+```{r simulation, echo=FALSE, eval=FALSE}
+A <- c("A", "a")
+B <- c("B", "b")
+pop <- c(paste("B",1:10, sep=""), paste("b",1:10, sep=""))
+pop2 <- as.character(rep(1:10, 2))
+combos <- expand.grid(A=A, B=B, pop=pop, pop2=pop2)
+X <- rbind(combos, combos, combos, combos, combos)
+y <- rnorm(nrow(X))
+fd <- data.table(y=y, X)
+con3 <- list(A=contr.sum, B=contr.sum, pop=contr.sum) # change the contrasts coding for the model matrix
+
+fit <- aov(y ~ A*B + B/pop, contrasts=con3, data=fd)
+anova(fit) # the interaction matches jmp
+Anova(fit, type="3")
+
+# drop two pops from B
+fd2 <- fd[pop!="B1" & pop!="B2"]
+fit <- aov(y ~ A*B + B/pop, contrasts=con3, data=fd2)
+anova(fit) # the interaction matches jmp
+Anova(fit, type="3")
+
+```
+
+```{r what is wrong with the real data}
+#subdata[, ]
+```
+
+```{r table 1}
+xcols <- c("Treatment", "Experience", "Stage", "Population", "Exp_Pop")
+ycols <- c("Longest_leaf", "n_Leaves", "Biomass", "Shoot_biomass", "Root_biomass", "Root.shoot_ratio")
+for(y in ycols){
+  form_i <- formula(paste(y, " ~ Treatment*Experience + Population"))
+
+}
+
+```
+
+```{r figure1-make}
+ycols <- c("Longest_leaf", "n_Leaves", "Biomass", "Shoot_biomass", "Root_biomass", "Root.shoot_ratio")
+
+```
+
+# Statistical red flags
