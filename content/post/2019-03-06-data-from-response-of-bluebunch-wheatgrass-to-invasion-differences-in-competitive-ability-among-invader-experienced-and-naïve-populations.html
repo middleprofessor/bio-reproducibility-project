@@ -29,6 +29,7 @@ output:
 <li><a href="#reproducibility">Reproducibility</a><ul>
 <li><a href="#seedling">3.1.1 Seedling</a><ul>
 <li><a href="#table-1">Table 1</a></li>
+<li><a href="#figure-1">Figure 1</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#statistical-red-flags">Statistical red flags</a></li>
@@ -279,6 +280,11 @@ knitr::include_graphics(image_path)</code></pre>
 <pre><code>##       Stage   N
 ## 1: Seedling 118
 ## 2: Juvenile 111</code></pre>
+</div>
+</div>
+<div id="figure-1" class="section level3">
+<h3>Figure 1</h3>
+<p>The SEs in the figure could be 1) modeled SE (my preference), the raw SE pooling over replicates within Population (complete pool), the raw SE using the Population means.</p>
 <pre class="r"><code>xcols &lt;- c(&quot;Treatment&quot;, &quot;Experience&quot;, &quot;Stage&quot;, &quot;Population&quot;, &quot;Exp_Pop&quot;)
 ycols &lt;- c(&quot;Shoot_biomass&quot;, &quot;n_Leaves&quot;, &quot;Root.shoot_ratio&quot;)
 
@@ -336,7 +342,6 @@ for(y in ycols){
 ##     Population.cross %in% Experience
 ## NOTE: A nesting structure was detected in the fitted model:
 ##     Population.cross %in% Experience</code></pre>
-</div>
 </div>
 </div>
 </div>

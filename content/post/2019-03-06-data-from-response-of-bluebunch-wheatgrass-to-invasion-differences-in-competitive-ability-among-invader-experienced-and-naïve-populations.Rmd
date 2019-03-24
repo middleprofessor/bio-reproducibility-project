@@ -297,6 +297,10 @@ Note that my sample size is bigger than the reported sample size. It's not clear
 counts[, .(N=sum(N)), by=Stage]
 ```
 
+### Figure 1
+
+The SEs in the figure could be 1) modeled SE (my preference), the raw SE pooling over replicates within Population (complete pool), the raw SE using the Population means.
+
 ```{r figure1-make}
 xcols <- c("Treatment", "Experience", "Stage", "Population", "Exp_Pop")
 ycols <- c("Shoot_biomass", "n_Leaves", "Root.shoot_ratio")
