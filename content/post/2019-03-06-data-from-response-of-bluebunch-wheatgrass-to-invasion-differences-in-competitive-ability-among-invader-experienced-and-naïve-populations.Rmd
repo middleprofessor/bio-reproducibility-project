@@ -640,7 +640,7 @@ knitr::include_graphics(image_path)
 
 ### Fig 2 repro
 
-```{r fig2-repro, echo=FALSE, out.width="200px"}
+```{r fig2-repro, echo=FALSE, out.width="400px"}
 plot_grid(gg_2b, gg_2d, nrow=2)
 ```
 
@@ -648,4 +648,4 @@ plot_grid(gg_2b, gg_2d, nrow=2)
 
 # Statistical red flags
 
-1. It is not clear why the authors treat the populations as a fixed effect.
+1. It is not clear why the authors treat Population as a fixed effect.
