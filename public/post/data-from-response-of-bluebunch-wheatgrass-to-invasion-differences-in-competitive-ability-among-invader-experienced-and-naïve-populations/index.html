@@ -6,9 +6,9 @@
   <title>Data from: Response of bluebunch wheatgrass to invasion differences in competitive ability among invader-experienced and naïve populations - The Biology Reproducibility Project</title>
   <meta property="og:title" content="Data from: Response of bluebunch wheatgrass to invasion differences in competitive ability among invader-experienced and naïve populations - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="Data from: Response of bluebunch wheatgrass to invasion differences in …" />
-  <meta name="description" content="Sources Summary Caveats Setup Import Reproducibility 3.1.1 Seedling Table 1 Methods Check on balance The model is unclear Table 1–published Table 1 - repro  Figure 1 Fig 1 – published Fig 1 – repro   Statistical red flags   Sources Gibson A, Nelson CR, Atwater DZ (2018) Response of bluebunch wheatgrass to invasion: Differences in competitive ability among invader-experienced and invader-naïve populations. Functional Ecology 32(7): 1857-1866.">
-  <meta property="og:description" content="Sources Summary Caveats Setup Import Reproducibility 3.1.1 Seedling Table 1 Methods Check on balance The model is unclear Table 1–published Table 1 - repro  Figure 1 Fig 1 – published Fig 1 – repro   Statistical red flags   Sources Gibson A, Nelson CR, Atwater DZ (2018) Response of bluebunch wheatgrass to invasion: Differences in competitive ability among invader-experienced and invader-naïve populations. Functional Ecology 32(7): 1857-1866.">
-  <meta name="twitter:description" content="Sources Summary Caveats Setup Import Reproducibility 3.1.1 Seedling Table 1 Methods Check on balance The model is unclear Table 1–published Table 1 - repro  Figure 1 Fig 1 – published Fig 1 – repro …">
+  <meta name="description" content="Sources Summary Caveats Setup Import Reproducibility Table 1 Methods Check on balance The model is unclear Table 1–published Table 1 - repro  Figure 1 Fig 1 – published Fig 1 – repro  3.1.1 Seedling 3.1.2 Juvenile 3.2 Relative Interaction Index Supression  Fig 2 Fig 2 – published Fig 2 repro   Statistical red flags   Sources Gibson A, Nelson CR, Atwater DZ (2018) Response of bluebunch wheatgrass to invasion: Differences in competitive ability among invader-experienced and invader-naïve populations.">
+  <meta property="og:description" content="Sources Summary Caveats Setup Import Reproducibility Table 1 Methods Check on balance The model is unclear Table 1–published Table 1 - repro  Figure 1 Fig 1 – published Fig 1 – repro  3.1.1 Seedling 3.1.2 Juvenile 3.2 Relative Interaction Index Supression  Fig 2 Fig 2 – published Fig 2 repro   Statistical red flags   Sources Gibson A, Nelson CR, Atwater DZ (2018) Response of bluebunch wheatgrass to invasion: Differences in competitive ability among invader-experienced and invader-naïve populations.">
+  <meta name="twitter:description" content="Sources Summary Caveats Setup Import Reproducibility Table 1 Methods Check on balance The model is unclear Table 1–published Table 1 - repro  Figure 1 Fig 1 – published Fig 1 – repro  3.1.1 Seedling …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations/" />
@@ -95,7 +95,6 @@
 <li><a href="#setup">Setup</a></li>
 <li><a href="#import">Import</a></li>
 <li><a href="#reproducibility">Reproducibility</a><ul>
-<li><a href="#seedling">3.1.1 Seedling</a></li>
 <li><a href="#table-1">Table 1</a><ul>
 <li><a href="#methods">Methods</a></li>
 <li><a href="#check-on-balance">Check on balance</a></li>
@@ -106,6 +105,15 @@
 <li><a href="#figure-1">Figure 1</a><ul>
 <li><a href="#fig-1-published">Fig 1 – published</a></li>
 <li><a href="#fig-1-repro">Fig 1 – repro</a></li>
+</ul></li>
+<li><a href="#seedling-1">3.1.1 Seedling</a></li>
+<li><a href="#juvenile-1">3.1.2 Juvenile</a></li>
+<li><a href="#relative-interaction-index">3.2 Relative Interaction Index</a><ul>
+<li><a href="#supression">Supression</a></li>
+</ul></li>
+<li><a href="#fig-2">Fig 2</a><ul>
+<li><a href="#fig-2-published">Fig 2 – published</a></li>
+<li><a href="#fig-2-repro">Fig 2 repro</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#statistical-red-flags">Statistical red flags</a></li>
@@ -120,9 +128,11 @@
 <div id="summary" class="section level1">
 <h1>Summary</h1>
 <ol style="list-style-type: decimal">
-<li>test</li>
-<li></li>
-<li></li>
+<li>There are inconsistencies in the coding of treatment levels between the data and the publication that can be confusing trying to reproduce. For example, the levels of Experience in the data are “E” and “N” but in the pub are “IE” and “IN”. All the populations in the data end with “P” or “K” but not in the publication. LHP#1 in the data is LHP#2 in the supplement and LH#2 in the publication (fig 2)</li>
+<li>No ANOVA in table 1 reproduces. This is at a minimum because of differences in the subset of the data analyzed but for the trait analysis I could not figure out the data that went into the analysis. Our sample sizes differ because the authors were excluding some data based on unreported criteria.</li>
+<li>Lack of reproducability in Table 1 could also be because the model fit by the authors is unclear. I used a fixed effects nested anova to generate the ANOVA tables in Table 1. I could reproduce the Treatment, Population(Experience) and Treatment:Experience terms of the ANOVA in JMP, but not the Experience term. I don’t know which is “correct”, if either. Regardless, I couldn’t reproduce any term in the published tables.See also this for difficulty of nested fixed effects: VanLeeuwen, D.M., You, Z. and Leinauer, B., 2013. Analyzing partially nested designs with irregular nesting: a cautionary case study. Agronomy Journal, 105(5), pp.1298-1306.</li>
+<li>I could not reproduce the simple ANOVA tables associated with Fig. 2. I could reproduce (at least visually) Fig 2b and 2d. My interpretation of the criteria for exclusion does not match that used given the populations analyzed in Fig. 2C, which includes means estimated from cells with n=1. Even when I used the populations in 2C I could not reproduce the ANOVA (but the fig 2d looks the same).</li>
+<li>Statistical red flag – It is unclear why the authors chose to analyze Population as a fixed effect.</li>
 </ol>
 </div>
 <div id="caveats" class="section level1">
@@ -166,56 +176,70 @@ exp2[, Treatment:=factor(Treatment)]
 exp2[, Experience:=factor(Population_Type)]
 exp2[, Stage:=ifelse(as.character(Date)==&quot;2012-04-30&quot;,&quot;Seedling&quot;, &quot;Juvenile&quot;)]
 exp2[, Exp_Pop:=factor(paste(Experience,Population,sep=&quot;.&quot;))]</code></pre>
+<p>check consistancy of populations, for example the data have both LHP and LHP#1, are these the same? different?</p>
+<pre class="r"><code>n_seed &lt;- exp2[!is.na(Longest_leaf) &amp; Stage==&quot;Seedling&quot;, .(N=.N), by=.(Treatment, Experience, Population)]
+n_seed_wide &lt;- dcast(n_seed, Experience + Population ~ Treatment, value.var=&quot;N&quot;)
+orderBy(~ Population + Experience, data=n_seed_wide)</code></pre>
+<pre><code>##     Experience Population C  T
+##  1:          E        BLK 5 NA
+##  2:          N        BLP 5 NA
+##  3:          N         HP 5  5
+##  4:          E        LHK 5 NA
+##  5:          N        LHP 5  5
+##  6:          N      LHP#1 5  3
+##  7:          E       LNFK 5  5
+##  8:          E       MCLK 5  5
+##  9:          N       MCLP 5  3
+## 10:          N        MJP 5  5
+## 11:          E        MMK 5  5
+## 12:          N        MMP 5  5
+## 13:          E        PTK 5  3
+## 14:          N        PTP 5  5</code></pre>
+<pre class="r"><code>n_juv &lt;- exp2[!is.na(Longest_leaf) &amp; Stage==&quot;Juvenile&quot;, .(N=.N), by=.(Treatment, Experience, Population)]
+n_juv_wide &lt;- dcast(n_juv, Experience + Population ~ Treatment, value.var=&quot;N&quot;)
+orderBy(~ Population + Experience, data=n_juv_wide)</code></pre>
+<pre><code>##     Experience Population C  T
+##  1:          N        Ana 5  3
+##  2:          E        BLK 5  3
+##  3:          N        BLP 5  1
+##  4:          N         HP 5  5
+##  5:          E        LHK 5  2
+##  6:          N        LHP 5  5
+##  7:          N      LHP#1 5  1
+##  8:          E       LNFK 5  5
+##  9:          E       MCLK 5  3
+## 10:          N       MCLP 5 NA
+## 11:          N        MJP 5  2
+## 12:          E        MMK 5  5
+## 13:          N        MMP 5  5
+## 14:          E        PTK 5  3
+## 15:          N        PTP 5  1</code></pre>
+<p>Inconsistencies</p>
+<ol style="list-style-type: decimal">
+<li>Given the Source Population tab in the excel file, there is no obvious interpretation of LHP v LHP#1. The tab has this as LHP1 and it doesn’t look like LHP is something else. Note that in Fig. 2a there is “LH” and “LH#2” - these are probably “LHP” and “LHP#1” (note that the K and P are dropped from the labels in Fig 2). But this raises the question why there are two “Populations” from the same place? One answer is in Supplement 2, which confirms there are two LHP pops but it calls these “LH” and “LH#2”. Given sample size, LHP#1 (from data) = LHP#2 from supplement and in Fig 2.</li>
+<li>Ana is coded Experience=“C” in some rows and “N” in other rows. In the Source Populations tab it is coded “C”</li>
+</ol>
+<pre class="r"><code>subdata &lt;- function(dt, stage_j, xcols, y){
+  # this is a function used several times so making a function out of it
+  # stage_j is the stage
+  # xcols is the vector of labels of the columns of factors for the model
+  # y is the response column label
+  
+    # reduce to only relevant columns, stage, and delete Ana
+    subdata_i &lt;- na.omit(dt[Stage==stage_j &amp; Population!=&quot;Ana&quot;, .SD, .SDcols=c(xcols, y)])
+    # recode Populations to 1:n_pop; this is only way to analyze as fixed using aov
+    # subdata[, Population2:=Population]
+    popsE &lt;- unique(subdata_i[Experience==&quot;E&quot;, Population])
+    subdata_i[Population %in% popsE, Population.cross:= mapvalues(Population, from = popsE, to = as.character(1:length(popsE)))]
+    popsN &lt;- unique(subdata_i[Experience==&quot;N&quot;, Population])
+    subdata_i[Population %in% popsN, Population.cross:= mapvalues(Population, from = popsN, to = as.character(1:length(popsN)))]
+    subdata_i[, Population.cross:=factor(Population.cross)]
+    
+    return(subdata_i)
+}</code></pre>
 </div>
 <div id="reproducibility" class="section level1">
 <h1>Reproducibility</h1>
-<div id="seedling" class="section level2">
-<h2>3.1.1 Seedling</h2>
-<blockquote>
-<p>There was, however, a significant effect of experience type on week-1 rates of germination (F(2, 26) = 9.18, p &lt; .001)</p>
-</blockquote>
-<pre class="r"><code>con3 &lt;- list(Treatment=contr.sum, Experience=contr.sum) # change the contrasts coding for the model matrix
-
-# fit.full &lt;- lm(Week_1 ~ Treatment*Experience, data=exp1, contrasts=con3)
-# Anova(fit.full, type=&quot;3&quot;)
-
-# 26 residual df suggests either this was one-way anova with something removed or an additive model
-fit.add &lt;- lm(Week_1 ~ Treatment + Experience, data=exp1, contrasts=con3)
-Anova(fit.add, type=&quot;3&quot;) # replicates</code></pre>
-<pre><code>## Anova Table (Type III tests)
-## 
-## Response: Week_1
-##             Sum Sq Df F value    Pr(&gt;F)    
-## (Intercept) 5212.5  1 63.6986 1.849e-08 ***
-## Treatment      0.0  1  0.0000 1.0000000    
-## Experience  1502.3  2  9.1791 0.0009638 ***
-## Residuals   2127.6 26                      
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre class="r"><code># fit.one &lt;- lm(Week_1 ~ Experience, data=exp1[Population!=&quot;Ana&quot;])
-# anova(fit.one) # obviously cannot be it given Ana is in the posthoc</code></pre>
-<p><span style="color:red">Reproduces using additive model (not specified in methods)</span></p>
-<blockquote>
-<p>Post hoc tests showed that differences in germination existed between Anatone and the wild populations, but not between IE and IN populations (p = .95). Anatone had 98% fewer week-1 germinants than either IE (difference = 27.8 germinants, p = &lt;.001) or IN populations (difference = 28.7 germinants, p &lt; .001).</p>
-</blockquote>
-<pre class="r"><code>fit.emm &lt;- emmeans(fit.add, specs=c(&quot;Experience&quot;))
-# Tukey HSD
-contrast(fit.emm, method=&quot;revpairwise&quot;)</code></pre>
-<pre><code>##  contrast estimate   SE df t.ratio p.value
-##  E - C      27.833 6.91 26 4.029   0.0012 
-##  N - C      28.688 6.78 26 4.228   0.0007 
-##  N - E       0.854 3.45 26 0.247   0.9669 
-## 
-## Results are averaged over the levels of: Treatment 
-## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
-<pre class="r"><code># no adjustment
-# contrast(fit.emm, method=&quot;revpairwise&quot;, adjust=&quot;none&quot;)</code></pre>
-<p><span style="color:red">There are slight differences in Tukey post-hoc.</span></p>
-<blockquote>
-<p>There was no significant effect of competition treatment on week-1 germination (F(1, 26) = 0.002, p = .96).</p>
-</blockquote>
-<p><span style="color:red">Very slight differences (See ANOVA table above) not sure why..</span></p>
-</div>
 <div id="table-1" class="section level2">
 <h2>Table 1</h2>
 <div id="methods" class="section level3">
@@ -227,7 +251,7 @@ contrast(fit.emm, method=&quot;revpairwise&quot;)</code></pre>
 </div>
 <div id="check-on-balance" class="section level3">
 <h3>Check on balance</h3>
-<pre class="r"><code>exp2.b &lt;- exp2[!is.na(n_Leaves) &amp; Population!=&quot;Ana&quot;,]
+<pre class="r"><code>exp2.b &lt;- exp2[!is.na(Longest_leaf) &amp; Population!=&quot;Ana&quot;,]
 counts &lt;- exp2.b[, .(N=.N), by=.(Treatment, Experience, Population, Stage, Exp_Pop)]
 exp2.b &lt;- merge(exp2.b, counts, by=c(&quot;Treatment&quot;, &quot;Experience&quot;, &quot;Population&quot;, &quot;Stage&quot;, &quot;Exp_Pop&quot;))</code></pre>
 <p>The data are unbalanced at two levels: 1) Different cell sizes in the Treatment x Experience table. There are 8 “N” popuilations but only 6 “E” populations. 2) Some populations, which is the nested factor but also determine E, are missing in the “T” level of Treatment.</p>
@@ -257,42 +281,49 @@ counts[, .(N=sum(N)), by=Stage]</code></pre>
 </div>
 <div id="the-model-is-unclear" class="section level3">
 <h3>The model is unclear</h3>
-<p>The authors cite the nlme package but do not specify any random effect and the ANOVA table suggests only fixed effects (because what other factor do they have that could be random?). Perhaps they used gls() to model unequal variances with Population as both a fixed effect and as the weights for heterogenous variances?. An issue with the data even for a complete fixed effects model <code>y ~ Treatment*Experience + Experience:Population</code>, which is a fixed Population nested within Experience, has a singular XtX^-1 covariance matrix, which creates problems: 1) car type III SS doesn’t run, 2) drop1 generates a table with the df=0 for Experience.</p>
-<p>Here I simulated data to see what works. Some notes 1. def: crossed coding is the same set of labels for the levels of the nested factor across levels of the higher factor even though these labels do not have the same meaning across the levels of the higher level factor. E.g. B is nested within A and the levels of B are pop1, pop2, pop3, pop4, pop5 in all levels of A. 2. def: nested coding uses different labels for the levels of the nested factor across levels of the higher factor. E.g. B is nested within A and the levels of B are pop1-pop5 in the CN level of A and pop6-pop10 in the TR level of A. 3. <strong>If the nested factor is fixed, it has to be coded using crossed coding to work in <code>car::Anova</code></strong>. Nested coding partly works using <code>drop1</code>. it gives zero df for the outermost factor. Note the nested coding works in JMP. 4. If the data are unbalanced because the levels of factor A have different numbers of groups (levels) then type III ANOVA using car fails. Type II works using “model comparison”. drop1 works except it assigns 0 df to the outer factor.</p>
+<blockquote>
+<p>Next, we assessed trait variation among populations of the same experience type, between invader experience groups (IE and IN) and between treatments using general linear contrasts with population as a fixed factor nested in experience type</p>
+</blockquote>
+<p>The authors cite the nlme package but do not specify any random effect and the ANOVA table suggests only fixed effects (because what other factor do they have that could be random?). Perhaps they used gls() to model unequal variances with Population as both a fixed effect and as the weights for heterogenous variances?. An issue with the data even for a complete fixed effects model <code>y ~ Treatment*Experience + Experience:Population</code>, which is a fixed Population nested within Experience, has a singular XtX^-1 covariance matrix, which creates problems.</p>
+<p>Here I simulated data to see what works. Some notes 1. def: crossed coding is the same set of labels for the levels of the nested factor across levels of the higher factor even though these labels do not have the same meaning across the levels of the higher level factor. E.g. B is nested within A and the levels of B are pop1, pop2, pop3, pop4, pop5 in all levels of A. 2. def: nested coding uses different labels for the levels of the nested factor across levels of the higher factor. E.g. B is nested within A and the levels of B are pop1-pop5 in the CN level of A and pop6-pop10 in the TR level of A. 3. <strong>If the nested factor is fixed, it has to be coded using crossed coding to work in <code>car::Anova</code></strong>. 4. If the data are unbalanced because the levels of factor A have different numbers of groups (levels) then type III ANOVA using car fails. Type II works using “model comparison”. drop1 works except the outer factor doesn’t reproduce in JMP (the other terms in the ANOVA term do).</p>
 <pre class="r"><code>xcols &lt;- c(&quot;Treatment&quot;, &quot;Experience&quot;, &quot;Stage&quot;, &quot;Population&quot;, &quot;Exp_Pop&quot;)
 ycols &lt;- c(&quot;Longest_leaf&quot;, &quot;n_Leaves&quot;, &quot;Biomass&quot;, &quot;Shoot_biomass&quot;, &quot;Root_biomass&quot;, &quot;Root.shoot_ratio&quot;)
 
 con3 &lt;- list(Treatment=contr.sum, Experience=contr.sum) # change the contrasts coding for the model matrix
 
 f_table &lt;- list()
+p_table &lt;- list()
+df_table &lt;- list()
 for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
   for(y in ycols){
-    subdata &lt;- exp2.b[Stage==stage_j &amp; N &gt; 1, .SD, .SDcols=c(xcols, y)]
-    # recode Populations to 1:n_pop; this is only way to analyze as fixed using aov
-    # subdata[, Population2:=Population]
-    popsE &lt;- unique(subdata[Experience==&quot;E&quot;, Population])
-    subdata[Population %in% popsE, Population.cross:= mapvalues(Population, from = popsE, to = as.character(1:length(popsE)))]
-    popsN &lt;- unique(subdata[Experience==&quot;N&quot;, Population])
-    subdata[Population %in% popsN, Population.cross:= mapvalues(Population, from = popsN, to = as.character(1:length(popsN)))]
-    subdata[, Population.cross:=factor(Population.cross)]
+    subdata_i &lt;- subdata(exp2, stage_j, xcols, y)
     
     # the best I can do. I explicitly ordered the terms this way to match table 1
     
-    fit3 &lt;- lm(get(y) ~  Treatment + Experience + Population.cross%in%Experience + Treatment:Experience, contrasts=con3, data=subdata)
+    fit3 &lt;- lm(get(y) ~  Treatment + Experience + Population.cross%in%Experience + Treatment:Experience, contrasts=con3, data=subdata_i)
+ 
     table_i &lt;- drop1(fit3, .~., test=&quot;F&quot;) # matches JMP except Experience row
     
     # these do not run because of singular xtxi matrix
     # Anova(fit3, type=&quot;3&quot;)
     # form_i &lt;- formula(paste(y, &quot;~ Treatment*Experience + Population.cross%in%Experience&quot;))
-    # fit &lt;- gls(form_i, weights=varIdent(form=~1|Population), data=subdata) # singular
+    # fit &lt;- gls(form_i, weights=varIdent(form=~1|Population), data=subdata_i) # singular
     
     if(y==ycols[1]){
       f_table[[stage_j]] &lt;- data.table(terms=row.names(table_i)[2:5],
                             table_i[2:5, &quot;F value&quot;])
+      p_table[[stage_j]] &lt;- data.table(terms=row.names(table_i)[2:5],
+                            table_i[2:5, &quot;Pr(&gt;F)&quot;])
+      df_table[[stage_j]] &lt;- data.table(terms=row.names(table_i)[2:5],
+                            table_i[2:5, &quot;Df&quot;])
     }else{
       f_table[[stage_j]] &lt;- cbind(f_table[[stage_j]], table_i[2:5, &quot;F value&quot;])
+      p_table[[stage_j]] &lt;- cbind(p_table[[stage_j]], table_i[2:5, &quot;Pr(&gt;F)&quot;])
+      df_table[[stage_j]] &lt;- cbind(df_table[[stage_j]], table_i[2:5, &quot;Df&quot;])
     }
     setnames(f_table[[stage_j]], old=&quot;V2&quot;, new=y)
+    setnames(p_table[[stage_j]], old=&quot;V2&quot;, new=y)
+    setnames(df_table[[stage_j]], old=&quot;V2&quot;, new=y)
   }
 }</code></pre>
 </div>
@@ -302,8 +333,10 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 </div>
 <div id="table-1---repro" class="section level3">
 <h3>Table 1 - repro</h3>
+<div id="seedling" class="section level4">
+<h4>Seedling</h4>
 <table>
-<caption><span id="tab:mytable1-seedling">Table 1: </span>Seedling</caption>
+<caption><span id="tab:mytable1-seedling">Table 1: </span>df</caption>
 <thead>
 <tr class="header">
 <th align="left">terms</th>
@@ -318,44 +351,96 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <tbody>
 <tr class="odd">
 <td align="left">Treatment</td>
-<td align="right">1.26</td>
-<td align="right">15.84</td>
-<td align="right">0.38</td>
-<td align="right">1.29</td>
-<td align="right">0.13</td>
-<td align="right">0.54</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">Experience</td>
-<td align="right">0.08</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Experience:Population.cross</td>
+<td align="right">12</td>
+<td align="right">12</td>
+<td align="right">12</td>
+<td align="right">12</td>
+<td align="right">12</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="left">Treatment:Experience</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:mytable1-seedling">Table 1: </span>F-value</caption>
+<thead>
+<tr class="header">
+<th align="left">terms</th>
+<th align="right">Longest_leaf</th>
+<th align="right">n_Leaves</th>
+<th align="right">Biomass</th>
+<th align="right">Shoot_biomass</th>
+<th align="right">Root_biomass</th>
+<th align="right">Root.shoot_ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Treatment</td>
+<td align="right">1.23</td>
+<td align="right">15.84</td>
+<td align="right">0.41</td>
+<td align="right">1.34</td>
+<td align="right">0.15</td>
+<td align="right">0.52</td>
+</tr>
+<tr class="even">
+<td align="left">Experience</td>
+<td align="right">0.17</td>
+<td align="right">7.86</td>
+<td align="right">3.13</td>
 <td align="right">0.07</td>
-<td align="right">0.26</td>
-<td align="right">0.92</td>
-<td align="right">0.08</td>
-<td align="right">0.00</td>
+<td align="right">4.31</td>
+<td align="right">4.36</td>
 </tr>
 <tr class="odd">
 <td align="left">Experience:Population.cross</td>
 <td align="right">0.77</td>
 <td align="right">1.56</td>
-<td align="right">1.44</td>
-<td align="right">2.10</td>
-<td align="right">2.16</td>
-<td align="right">4.29</td>
+<td align="right">1.46</td>
+<td align="right">2.13</td>
+<td align="right">2.18</td>
+<td align="right">4.33</td>
 </tr>
 <tr class="even">
 <td align="left">Treatment:Experience</td>
-<td align="right">0.70</td>
+<td align="right">0.68</td>
 <td align="right">0.75</td>
-<td align="right">0.25</td>
-<td align="right">0.01</td>
-<td align="right">0.43</td>
-<td align="right">0.06</td>
+<td align="right">0.24</td>
+<td align="right">0.02</td>
+<td align="right">0.41</td>
+<td align="right">0.05</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption><span id="tab:mytable1-juvenile">Table 2: </span>Juvenile</caption>
+<caption><span id="tab:mytable1-seedling">Table 1: </span>P-value</caption>
 <thead>
 <tr class="header">
 <th align="left">terms</th>
@@ -370,48 +455,209 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <tbody>
 <tr class="odd">
 <td align="left">Treatment</td>
-<td align="right">0.13</td>
-<td align="right">9.62</td>
-<td align="right">0.89</td>
-<td align="right">1.27</td>
-<td align="right">0.31</td>
+<td align="right">0.270</td>
+<td align="right">0.000</td>
+<td align="right">0.522</td>
+<td align="right">0.250</td>
+<td align="right">0.700</td>
+<td align="right">0.471</td>
+</tr>
+<tr class="even">
+<td align="left">Experience</td>
+<td align="right">0.679</td>
+<td align="right">0.006</td>
+<td align="right">0.080</td>
+<td align="right">0.786</td>
+<td align="right">0.040</td>
+<td align="right">0.039</td>
+</tr>
+<tr class="odd">
+<td align="left">Experience:Population.cross</td>
+<td align="right">0.676</td>
+<td align="right">0.114</td>
+<td align="right">0.151</td>
+<td align="right">0.021</td>
+<td align="right">0.018</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">Treatment:Experience</td>
+<td align="right">0.413</td>
+<td align="right">0.389</td>
+<td align="right">0.629</td>
+<td align="right">0.898</td>
+<td align="right">0.524</td>
+<td align="right">0.818</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="juvenile" class="section level4">
+<h4>Juvenile</h4>
+<table>
+<caption><span id="tab:mytable1-juvenile">Table 2: </span>df</caption>
+<thead>
+<tr class="header">
+<th align="left">terms</th>
+<th align="right">Longest_leaf</th>
+<th align="right">n_Leaves</th>
+<th align="right">Biomass</th>
+<th align="right">Shoot_biomass</th>
+<th align="right">Root_biomass</th>
+<th align="right">Root.shoot_ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Treatment</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Experience</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Experience:Population.cross</td>
+<td align="right">12</td>
+<td align="right">12</td>
+<td align="right">12</td>
+<td align="right">12</td>
+<td align="right">12</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="left">Treatment:Experience</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:mytable1-juvenile">Table 2: </span>F-value</caption>
+<thead>
+<tr class="header">
+<th align="left">terms</th>
+<th align="right">Longest_leaf</th>
+<th align="right">n_Leaves</th>
+<th align="right">Biomass</th>
+<th align="right">Shoot_biomass</th>
+<th align="right">Root_biomass</th>
+<th align="right">Root.shoot_ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Treatment</td>
+<td align="right">0.57</td>
+<td align="right">10.31</td>
+<td align="right">0.90</td>
+<td align="right">1.50</td>
+<td align="right">0.26</td>
 <td align="right">0.16</td>
 </tr>
 <tr class="even">
 <td align="left">Experience</td>
-<td align="right">0.05</td>
-<td align="right">1.45</td>
-<td align="right">5.06</td>
-<td align="right">0.27</td>
-<td align="right">7.73</td>
-<td align="right">1.00</td>
+<td align="right">3.17</td>
+<td align="right">5.51</td>
+<td align="right">0.02</td>
+<td align="right">0.29</td>
+<td align="right">0.02</td>
+<td align="right">0.10</td>
 </tr>
 <tr class="odd">
 <td align="left">Experience:Population.cross</td>
-<td align="right">1.00</td>
-<td align="right">3.72</td>
-<td align="right">2.34</td>
-<td align="right">0.81</td>
-<td align="right">3.08</td>
-<td align="right">1.37</td>
+<td align="right">0.97</td>
+<td align="right">4.32</td>
+<td align="right">2.52</td>
+<td align="right">0.89</td>
+<td align="right">3.26</td>
+<td align="right">1.40</td>
 </tr>
 <tr class="even">
 <td align="left">Treatment:Experience</td>
-<td align="right">1.24</td>
-<td align="right">1.54</td>
-<td align="right">2.21</td>
-<td align="right">1.21</td>
-<td align="right">1.77</td>
+<td align="right">0.64</td>
+<td align="right">1.42</td>
+<td align="right">2.37</td>
+<td align="right">1.43</td>
+<td align="right">1.80</td>
 <td align="right">0.01</td>
 </tr>
 </tbody>
 </table>
-<p><span style="color:red">None reproduce. Note that my sample size is bigger than the reported sample size. It’s not clear which cases are excluded from the analyses.</span></p>
+<table>
+<caption><span id="tab:mytable1-juvenile">Table 2: </span>P-value</caption>
+<thead>
+<tr class="header">
+<th align="left">terms</th>
+<th align="right">Longest_leaf</th>
+<th align="right">n_Leaves</th>
+<th align="right">Biomass</th>
+<th align="right">Shoot_biomass</th>
+<th align="right">Root_biomass</th>
+<th align="right">Root.shoot_ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Treatment</td>
+<td align="right">0.453</td>
+<td align="right">0.002</td>
+<td align="right">0.344</td>
+<td align="right">0.224</td>
+<td align="right">0.613</td>
+<td align="right">0.686</td>
+</tr>
+<tr class="even">
+<td align="left">Experience</td>
+<td align="right">0.078</td>
+<td align="right">0.021</td>
+<td align="right">0.886</td>
+<td align="right">0.593</td>
+<td align="right">0.875</td>
+<td align="right">0.750</td>
+</tr>
+<tr class="odd">
+<td align="left">Experience:Population.cross</td>
+<td align="right">0.482</td>
+<td align="right">0.000</td>
+<td align="right">0.006</td>
+<td align="right">0.561</td>
+<td align="right">0.001</td>
+<td align="right">0.179</td>
+</tr>
+<tr class="even">
+<td align="left">Treatment:Experience</td>
+<td align="right">0.425</td>
+<td align="right">0.236</td>
+<td align="right">0.127</td>
+<td align="right">0.235</td>
+<td align="right">0.183</td>
+<td align="right">0.922</td>
+</tr>
+</tbody>
+</table>
+<p>Note: the F-value for all terms but Experience reproduce using JMP. Experience doesn’t due to unbalanced data (see the simulation). I don’t know how to reproduce JMP results.</p>
+<p><strong>No F-values reproduce. The DF reproduce for Seedling but my ANOVA has only 12 df (the published df is 13) for the Population term of Juvenile. Also my sample size is bigger than the reported sample size. It’s not clear which cases are excluded from the analyses.</strong></p>
+</div>
 <div id="sample-size" class="section level4">
 <h4>sample size</h4>
 <pre class="r"><code>counts[, .(N=sum(N)), by=Stage]</code></pre>
 <pre><code>##       Stage   N
-## 1: Seedling 118
+## 1: Seedling 119
 ## 2: Juvenile 111</code></pre>
 </div>
 </div>
@@ -432,28 +678,20 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
     ycols &lt;- ycols_seed}else{
       ycols &lt;- ycols_juv}
   for(y in ycols){
-    subdata &lt;- na.omit(exp2.b[Stage==stage_j &amp;
-                                N &gt; 1, .SD, .SDcols=c(xcols, y)])
-    # recode Populations to 1:n_pop; this is only way to analyze as fixed using aov
-    # subdata[, Population2:=Population]
-    popsE &lt;- unique(subdata[Experience==&quot;E&quot;, Population])
-    subdata[Population %in% popsE, Population.cross:= mapvalues(Population, from = popsE, to = as.character(1:length(popsE)))]
-    popsN &lt;- unique(subdata[Experience==&quot;N&quot;, Population])
-    subdata[Population %in% popsN, Population.cross:= mapvalues(Population, from = popsN, to = as.character(1:length(popsN)))]
-    subdata[, Population.cross:=factor(Population.cross)]
+    subdata_i &lt;- subdata(exp2.b, stage_j, xcols, y)
     
     # modeled SE
-    fit3 &lt;- lm(get(y) ~  Treatment + Experience + Population.cross%in%Experience + Treatment:Experience, contrasts=con3, data=subdata)
+    fit3 &lt;- lm(get(y) ~  Treatment + Experience + Population.cross%in%Experience + Treatment:Experience, contrasts=con3, data=subdata_i)
     fit3.emm &lt;- data.table(summary(emmeans(fit3, specs=c(&quot;Treatment&quot;, &quot;Experience&quot;))))
     
     # raw SE (how to deal with nested?)
     # pooled SE (ignore nested structure)
-    subdata.pool.SE &lt;- subdata[, .(ybar=mean(get(y)),
+    subdata.pool.SE &lt;- subdata_i[, .(ybar=mean(get(y)),
                                    SE=sd(get(y))/sqrt(.N)
     ), by=.(Treatment, Experience)]
     # SE of pop means
     # no pool (average replicates within pop)
-    subdata.nopool &lt;- subdata[, .(ybar=mean(get(y))
+    subdata.nopool &lt;- subdata_i[, .(ybar=mean(get(y))
     ), by=.(Treatment, Experience, Population)]
     subdata.nopool.SE &lt;- subdata.nopool[, .(ybar=mean(ybar),
                                             SE=sd(ybar)/sqrt(.N)
@@ -488,12 +726,275 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <div id="fig-1-repro" class="section level3">
 <h3>Fig 1 – repro</h3>
 <p><img src="/post/2019-03-06-data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations_files/figure-html/my-fig1-seedling-1.png" width="600px" /></p>
-<p><span style="color:red">While the patterns are similar, none reproduce, but this isn’t surprising given that my sample size is bigger than that in Table 1 (so the authors have excluded data, but I’m not sure which).</span></p>
+<p><strong>While the patterns are similar, none reproduce, but this isn’t surprising given that my sample size is bigger than that in Table 1 (so the authors have excluded data, but I’m not sure which).</strong></p>
+</div>
+</div>
+<div id="seedling-1" class="section level2">
+<h2>3.1.1 Seedling</h2>
+<blockquote>
+<p>There was, however, a significant effect of experience type on week-1 rates of germination (F(2, 26) = 9.18, p &lt; .001)</p>
+</blockquote>
+<pre class="r"><code>con3 &lt;- list(Treatment=contr.sum, Experience=contr.sum) # change the contrasts coding for the model matrix
+
+# fit.full &lt;- lm(Week_1 ~ Treatment*Experience, data=exp1, contrasts=con3)
+# Anova(fit.full, type=&quot;3&quot;)
+
+# 26 residual df suggests either this was one-way anova with something removed or an additive model
+fit.add &lt;- lm(Week_1 ~ Treatment + Experience, data=exp1, contrasts=con3)
+Anova(fit.add, type=&quot;3&quot;) # replicates</code></pre>
+<pre><code>## Anova Table (Type III tests)
+## 
+## Response: Week_1
+##             Sum Sq Df F value    Pr(&gt;F)    
+## (Intercept) 5212.5  1 63.6986 1.849e-08 ***
+## Treatment      0.0  1  0.0000 1.0000000    
+## Experience  1502.3  2  9.1791 0.0009638 ***
+## Residuals   2127.6 26                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># fit.one &lt;- lm(Week_1 ~ Experience, data=exp1[Population!=&quot;Ana&quot;])
+# anova(fit.one) # obviously cannot be it given Ana is in the posthoc</code></pre>
+<p><strong>Reproduces using additive model (not specified in methods)</strong></p>
+<blockquote>
+<p>Post hoc tests showed that differences in germination existed between Anatone and the wild populations, but not between IE and IN populations (p = .95). Anatone had 98% fewer week-1 germinants than either IE (difference = 27.8 germinants, p = &lt;.001) or IN populations (difference = 28.7 germinants, p &lt; .001).</p>
+</blockquote>
+<pre class="r"><code>fit.emm &lt;- emmeans(fit.add, specs=c(&quot;Experience&quot;))
+# Tukey HSD
+contrast(fit.emm, method=&quot;revpairwise&quot;)</code></pre>
+<pre><code>##  contrast estimate   SE df t.ratio p.value
+##  E - C      27.833 6.91 26 4.029   0.0012 
+##  N - C      28.688 6.78 26 4.228   0.0007 
+##  N - E       0.854 3.45 26 0.247   0.9669 
+## 
+## Results are averaged over the levels of: Treatment 
+## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<pre class="r"><code># no adjustment
+# contrast(fit.emm, method=&quot;revpairwise&quot;, adjust=&quot;none&quot;)</code></pre>
+<p><strong>There are slight differences in Tukey post-hoc</strong></p>
+<blockquote>
+<p>There was no significant effect of competition treatment on week-1 germination (F(1, 26) = 0.002, p = .96).</p>
+</blockquote>
+<p><strong>Very slight differences (See ANOVA table above) not sure why.</strong></p>
+<blockquote>
+<p>Experience type was significant for only one trait (Table 1): average shoot biomass was higher for IE populations (M = 0.17 g, SD = 0.12) than for IN populations (M = 0.15 g, SD = 0.08; Figure 1a).</p>
+</blockquote>
+<pre class="r"><code>    xcols &lt;- c(&quot;Treatment&quot;, &quot;Experience&quot;, &quot;Population&quot;)
+    y &lt;- &quot;Shoot_biomass&quot;
+    subdata_i &lt;- subdata(exp2.b, &quot;Seedling&quot;, xcols, y)
+    
+    # data.table(term=&quot;Experience&quot;, 
+    #            response=y,
+    #            df=df_table[[&quot;Seedling&quot;]][terms==&quot;Experience&quot;, get(y)],
+    #            F=round(f_table[[&quot;Seedling&quot;]][terms==&quot;Experience&quot;, get(y)], 2),
+    #            p=round(p_table[[&quot;Seedling&quot;]][terms==&quot;Experience&quot;, get(y)],3))
+
+    fit &lt;- lm(get(y) ~  Treatment + Experience + Population.cross%in%Experience + Treatment:Experience, data=subdata_i)
+    (fit.emm &lt;- emmeans(fit, specs=c(&quot;Experience&quot;)))
+    (fit.contrast &lt;- contrast(fit.emm, method=&quot;revpairwise&quot;))
+    
+    subdata_i[, .(mean=mean(get(y)), sd=sd(get(y))), by=Experience]</code></pre>
+<p>**The ANOVA result doesn’t reproduce (Table 1 above). Neither the modeled means (from the fit model) nor the simple means (complete pooling) reproduce but again the authors seem to be using a reduced data set.</p>
+<p>The repro table has three significant p-values for the experience term (none are shoot_biomass) but again, the experience terms differ from that in JMP (I don’t know which if either are correct)**</p>
+<blockquote>
+<p>Competition treatment significantly impacted three traits (Table 1): plants grown in pots with C. stoebe had fewer leaves (Figure 1b), shorter leaves (M = 17.9 cm, SD = 4.5 vs. M = 19.5 cm, SD = 5.28) and a higher root:shoot ratio (more allocation to root biomass; Figure 1c) than did plants growing in control pots.</p>
+</blockquote>
+<pre class="r"><code>    xcols &lt;- c(&quot;Treatment&quot;, &quot;Experience&quot;, &quot;Population&quot;)
+    y &lt;- &quot;Longest_leaf&quot;
+    subdata_i &lt;- subdata(exp2.b, &quot;Seedling&quot;, xcols, y)
+
+    fit &lt;- lm(get(y) ~  Treatment + Experience + Population.cross%in%Experience + Treatment:Experience, data=subdata_i)
+    (fit.emm &lt;- emmeans(fit, specs=c(&quot;Treatment&quot;)))</code></pre>
+<pre><code>## NOTE: A nesting structure was detected in the fitted model:
+##     Population.cross %in% Experience</code></pre>
+<pre><code>## NOTE: Results may be misleading due to involvement in interactions</code></pre>
+<pre><code>##  Treatment emmean   SE  df lower.CL upper.CL
+##  C           22.9 2.51 103     17.9     27.8
+##  T           18.1 3.44 103     11.3     25.0
+## 
+## Results are averaged over the levels of: Population.cross, Experience 
+## Results are given on the get (not the response) scale. 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code>    (fit.contrast &lt;- contrast(fit.emm, method=&quot;revpairwise&quot;))</code></pre>
+<pre><code>##  contrast estimate   SE  df t.ratio p.value
+##  T - C       -4.72 4.26 103 -1.108  0.2702 
+## 
+## Results are averaged over the levels of: Population.cross, Experience</code></pre>
+<pre class="r"><code>    subdata_i[, .(mean=mean(get(y)), sd=sd(get(y))), by=Treatment]</code></pre>
+<pre><code>##    Treatment     mean        sd
+## 1:         C 23.25714 26.382051
+## 2:         T 18.02041  4.497637</code></pre>
+<p>**ANOVA results do not reproduce (Table 1 above). The means are close for the treated but not really close for the control level. Again, given table 1, the authors are using a smaller dataset.</p>
+<p>The repro table has only one significant p-value (n_leaves)**</p>
+<blockquote>
+<p>There were significant interactions of treatment and experience type for number of leaves and root:shoot ratio (Table 1)</p>
+</blockquote>
+<p><strong>This ANOVA result does not reproduce (Table 1). The repro table has no signficant p-values.</strong></p>
+</div>
+<div id="juvenile-1" class="section level2">
+<h2>3.1.2 Juvenile</h2>
+<blockquote>
+<p>Experience type was marginally significant for number of leaves (Table 1): compared to IN plants, IE plants had more leaves (M = 52.3, SD = 22.4; vs. M = 51.3; SD = 28.7).</p>
+</blockquote>
+<p>**The authors do not define “marginal” nor give the p-value or some symbol indicating “marginal” in Table 1. The ANOVA results do not reproduce. Again, the authors’ df for Experience is 13 while mine is 12. It’s not clear where they are getting the extra df given the supplied data.</p>
+<p>n_leaves has a signficant p-value in the repro table, but again, I cannot get R and JMP to give same result for the Experience term**</p>
+<blockquote>
+<p>Competition treatment was significant for one of six measured traits and marginally significant for two traits (Table 1): plants growing with C. stoebe had fewer leaves (Figure 1d), and lower total and root biomass (Figure 1e,f) than those growing without competition.</p>
+</blockquote>
+<p><strong>The repro table does not reproduce but n_leaves does have significant p-value</strong>.</p>
+<blockquote>
+<p>Population within experience type was significant for five of six variables (Table 1): length of longest leaf, number of leaves, total biomass, root biomass and shoot biomass.</p>
+</blockquote>
+<p><strong>The published table 1 shows the Population effect signficant in only three (not five) variables. In the repro table, this term has signficant p-values for n_leaves, total biomass, and root biomass.</strong></p>
+<blockquote>
+<p>There was a significant interaction between treatment and experience type for biomass and root biomass (Table 1)</p>
+</blockquote>
+<p><strong>The repro table does not reproduce – there are no variables with a significant p-value for the interaction effect</strong></p>
+</div>
+<div id="relative-interaction-index" class="section level2">
+<h2>3.2 Relative Interaction Index</h2>
+<blockquote>
+<p>We used ANOVA to determine whether P. spicata tolerance differed between invasion experience types, with separate models for seedling (RII-Seedling) and juvenile (RII-Juvenile) response variables. We excluded four populations from seedling RII analyses and six from juvenile RII analyses because there were fewer than three plants per population. We also tested for differences in the competitive effect of P. spicata invader experience types on C. stoebe using ANOVA models with C. stoebe suppression (RII-Knapweed) as the response variable. Anatone was not included in the analysis, but we compared the RII values of Anatone to the wild populations.</p>
+</blockquote>
+<blockquote>
+<p>Seedlings from IE and IN populations did not differ significantly in their tolerance of C. stoebe (RII-Seedling; F(1, 9) = 0.118, p = .739; Figure 2a,b).</p>
+</blockquote>
+<pre class="r"><code># rii = (b_w - b_a)/(b_w + b_a) # _w=T _a=C
+xcols &lt;- c(&quot;Treatment&quot;, &quot;Experience&quot;, &quot;Stage&quot;, &quot;Population&quot;, &quot;Exp_Pop&quot;)
+ycols &lt;- c(&quot;Longest_leaf&quot;, &quot;n_Leaves&quot;, &quot;Biomass&quot;, &quot;Shoot_biomass&quot;, &quot;Root_biomass&quot;, &quot;Root.shoot_ratio&quot;)
+
+subdata_i &lt;- (exp2[Stage==&quot;Seedling&quot;, .SD, .SDcols=c(xcols, &quot;Biomass&quot;)])
+
+rii.long &lt;- subdata_i[!is.na(Biomass), .(biomass=mean(Biomass), n=.N), by=.(Treatment, Experience, Population)]
+rii.1 &lt;- rii.long[Treatment==&quot;C&quot;,]
+rii.2 &lt;- rii.long[Treatment==&quot;T&quot;,]
+rii.wide &lt;- merge(rii.1, rii.2, by=c(&quot;Population&quot;, &quot;Experience&quot;))
+rii.wide[, rii:=(biomass.y - biomass.x)/(biomass.y + biomass.x)]
+fit &lt;- lm(rii ~ Experience, data=rii.wide)
+anova(fit)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: rii
+##            Df  Sum Sq  Mean Sq F value Pr(&gt;F)
+## Experience  1 0.00077 0.000772  0.0108 0.9196
+## Residuals   9 0.64548 0.071720</code></pre>
+<pre class="r"><code># fig 2
+rii.raw &lt;- rii.wide[, .(rii=mean(rii), SE=sd(rii)/sqrt(.N)), by=Experience]
+gg_2b &lt;- ggplot(rii.raw, aes(x=Experience, y=rii)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=rii-SE, ymax=rii+SE), width=0.2)</code></pre>
+<p><strong>F does not reproduce (df does).</strong></p>
+<blockquote>
+<p>There was also no difference between juvenile invader experience types in their tolerance (RII-Juvenile; F(1, 9) = 1.61, p = .23; Figure 2c,d)</p>
+</blockquote>
+<pre class="r"><code># rii = (b_w - b_a)/(b_w + b_a) # _w=T _a=C
+xcols &lt;- c(&quot;Treatment&quot;, &quot;Experience&quot;, &quot;Stage&quot;, &quot;Population&quot;, &quot;Exp_Pop&quot;)
+ycols &lt;- c(&quot;Longest_leaf&quot;, &quot;n_Leaves&quot;, &quot;Biomass&quot;, &quot;Shoot_biomass&quot;, &quot;Root_biomass&quot;, &quot;Root.shoot_ratio&quot;)
+
+subdata_i &lt;- (exp2[Stage==&quot;Juvenile&quot;, .SD, .SDcols=c(xcols, &quot;Biomass&quot;)])
+
+rii.long &lt;- subdata_i[!is.na(Biomass), .(biomass=mean(Biomass), n=.N), by=.(Treatment, Experience, Population)]
+rii.long &lt;- rii.long[n &gt;=3, ]
+rii.1 &lt;- rii.long[Treatment==&quot;C&quot;,]
+rii.2 &lt;- rii.long[Treatment==&quot;T&quot;,]
+rii.wide &lt;- merge(rii.1, rii.2, by=c(&quot;Population&quot;, &quot;Experience&quot;))
+rii.wide[, rii:=(biomass.y - biomass.x)/(biomass.y + biomass.x)]
+fit &lt;- lm(rii ~ Experience, data=rii.wide)
+anova(fit)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: rii
+##            Df  Sum Sq  Mean Sq F value Pr(&gt;F)  
+## Experience  1 0.12960 0.129605  6.7126 0.0359 *
+## Residuals   7 0.13515 0.019308                 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># fig 2
+rii.raw &lt;- rii.wide[, .(rii=mean(rii), SE=sd(rii)/sqrt(.N)), by=Experience]
+gg_2d &lt;- ggplot(rii.raw, aes(x=Experience, y=rii)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=rii-SE, ymax=rii+SE), width=0.2)</code></pre>
+<p><strong>F does not reproduce. “Significant” effect reproduces. The repro has 7 residual df, while 9 df is reported. Tbe published Fig 2d has 11 points so 9 df, which is consistant with published text.</strong></p>
+<p>Note the published methods state “We excluded … six [populations] from juvenile RII analyses because there were fewer than three plants per population”. My analysis excluded the populations in which one cell (T or C) had <span class="math inline">\(n &lt; 3\)</span>.</p>
+<pre class="r"><code># must have the subdata_i using &quot;Juvenile&quot;
+rii.long &lt;- subdata_i[!is.na(Biomass), .(biomass=mean(Biomass), n=.N), by=.(Treatment, Experience, Population)]
+rii.1 &lt;- rii.long[Treatment==&quot;C&quot;,]
+rii.2 &lt;- rii.long[Treatment==&quot;T&quot;,]
+rii.wide &lt;- merge(rii.1, rii.2, by=c(&quot;Population&quot;, &quot;Experience&quot;))
+rii.wide[, rii:=(biomass.y - biomass.x)/(biomass.y + biomass.x)]
+rii.wide</code></pre>
+<pre><code>##     Population Experience Treatment.x biomass.x n.x Treatment.y biomass.y
+##  1:        Ana          N           C    2.6220   5           T  0.979000
+##  2:        BLK          E           C    3.9882   5           T  3.124333
+##  3:        BLP          N           C    2.2258   5           T  2.176000
+##  4:         HP          N           C    3.9416   5           T  2.966000
+##  5:        LHK          E           C    4.2334   5           T  4.378500
+##  6:        LHP          N           C    4.4514   5           T  3.468800
+##  7:      LHP#1          N           C    3.9976   5           T  3.646000
+##  8:       LNFK          E           C    3.2608   5           T  3.644400
+##  9:       MCLK          E           C    4.0794   5           T  3.828000
+## 10:        MJP          N           C    3.7724   5           T  5.128000
+## 11:        MMK          E           C    3.3690   5           T  2.954600
+## 12:        MMP          N           C    4.0788   5           T  2.654400
+## 13:        PTK          E           C    4.0778   5           T  6.172333
+## 14:        PTP          N           C    5.8370   5           T  4.597000
+##     n.y         rii
+##  1:   3 -0.45626215
+##  2:   3 -0.12145696
+##  3:   1 -0.01131355
+##  4:   5 -0.14123574
+##  5:   2  0.01684878
+##  6:   5 -0.12406252
+##  7:   1 -0.04599927
+##  8:   5  0.05555234
+##  9:   3 -0.03179300
+## 10:   2  0.15230776
+## 11:   5 -0.06553229
+## 12:   5 -0.21154874
+## 13:   3  0.20434206
+## 14:   1 -0.11884225</code></pre>
+<p>The published figure (and presumably ANOVA) (see Fig 2c below) excluded LHK, which has n=5 (Control) and n=2 (Treated) (so is also excluded in the repro) but did not exclude, for example, BLP or PTP, both have n=5 (Control) and n=1 (Treated) (both excluded in my repro). That is, it is not clear what criteria the authors used to exclude populations, but is not my interpretation of what the authors report they did.</p>
+<p>Here are the repro results using the populations indicated in Fig 2c.</p>
+<pre class="r"><code># starting with rii.wide of juvenile keeping all pops
+
+excl &lt;- c(&quot;LHK&quot;, &quot;LHP#1&quot;, &quot;MCLP&quot;, &quot;MJP&quot;)
+all_pops &lt;- unique(exp2$Population)
+incl &lt;- setdiff(all_pops, excl)
+rii.wide.pub &lt;- rii.wide[Population %in% incl]
+
+fit &lt;- lm(rii ~ Experience, data=rii.wide.pub)
+anova(fit)
+fit &lt;- lm(rii ~ Experience, data=rii.wide.pub[Population != &quot;Ana&quot;])
+anova(fit)
+
+# fig 2 - based on published fig 2d, Ana is excluded
+rii.raw &lt;- rii.wide.pub[Population != &quot;Ana&quot;, .(rii=mean(rii), SE=sd(rii)/sqrt(.N)), by=Experience]
+gg_2d &lt;- ggplot(rii.raw, aes(x=Experience, y=rii)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=rii-SE, ymax=rii+SE), width=0.2)</code></pre>
+<p><strong>Neither ANOVA (with Ana included or excluded) reproduces. The ANOVA with Ana included reproduces the residual DF but it doesn’t make sense to include Ana, as its a cultivar. Also, Fig 2d reproduces only when Ana is excluded.</strong></p>
+<div id="supression" class="section level3">
+<h3>Supression</h3>
+<p><strong>I don’t see the data for C. stoebe biomass so cannot compute index of supression.</strong></p>
+</div>
+</div>
+<div id="fig-2" class="section level2">
+<h2>Fig 2</h2>
+<div id="fig-2-published" class="section level3">
+<h3>Fig 2 – published</h3>
+<p><img src="/images/Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations/fig2.png" width="400px" /></p>
+</div>
+<div id="fig-2-repro" class="section level3">
+<h3>Fig 2 repro</h3>
+<p><img src="/post/2019-03-06-data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations_files/figure-html/fig2-repro-1.png" width="200px" /></p>
+<p><strong>2B and D effectively reproduce. 2D reproduces only using the populations identified in 2C, which includes some samples with n=1 and so the figure doesn’t reflect my interpretation of the author’s methods on which populations were excluded.</strong></p>
 </div>
 </div>
 </div>
 <div id="statistical-red-flags" class="section level1">
 <h1>Statistical red flags</h1>
+<ol style="list-style-type: decimal">
+<li>It is not clear why the authors treat the populations as a fixed effect.</li>
+</ol>
 </div>
 
     </article>

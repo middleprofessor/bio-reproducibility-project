@@ -26,9 +26,11 @@ Gibson AL, Nelson CR, Atwater DZ (2018) Data from: Response of bluebunch wheatgr
 
 # Summary
 
-1. test
-2.
-3. 
+1. There are inconsistencies in the coding of treatment levels between the data and the publication that can be confusing trying to reproduce. For example, the levels of Experience in the data are "E" and "N" but in the pub are "IE" and "IN". All the populations in the data end with "P" or "K" but not in the publication. LHP#1 in the data is LHP#2 in the supplement and LH#2 in the publication (fig 2)
+2. No ANOVA in table 1 reproduces. This is at a minimum because of differences in the subset of the data analyzed but for the trait analysis I could not figure out the data that went into the analysis. Our sample sizes differ because the authors were excluding some data based on unreported criteria.
+3. Lack of reproducability in Table 1 could also be because the model fit by the authors is unclear. I used a fixed effects nested anova to generate the ANOVA tables in Table 1. I could reproduce the Treatment, Population(Experience) and Treatment:Experience terms of the ANOVA in JMP, but not the Experience term. I don't know which is "correct", if either. Regardless, I couldn't reproduce any term in the published tables.See also this for difficulty of nested fixed effects: VanLeeuwen, D.M., You, Z. and Leinauer, B., 2013. Analyzing partially nested designs with irregular nesting: a cautionary case study. Agronomy Journal, 105(5), pp.1298-1306.
+4. I could not reproduce the simple ANOVA tables associated with Fig. 2. I could reproduce (at least visually) Fig 2b and 2d. My interpretation of the criteria for exclusion does not match that used given the populations analyzed in Fig. 2C, which includes means estimated from cells with n=1. Even when I used the populations in 2C I could not reproduce the ANOVA (but the fig 2d looks the same).
+5. Statistical red flag -- It is unclear why the authors chose to analyze Population as a fixed effect.
 
 # Caveats
 Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.
@@ -77,44 +79,45 @@ exp2[, Stage:=ifelse(as.character(Date)=="2012-04-30","Seedling", "Juvenile")]
 exp2[, Exp_Pop:=factor(paste(Experience,Population,sep="."))]
 ```
 
+check consistancy of populations, for example the data have both LHP and LHP#1, are these the same? different?
+
+```{r}
+n_seed <- exp2[!is.na(Longest_leaf) & Stage=="Seedling", .(N=.N), by=.(Treatment, Experience, Population)]
+n_seed_wide <- dcast(n_seed, Experience + Population ~ Treatment, value.var="N")
+orderBy(~ Population + Experience, data=n_seed_wide)
+
+n_juv <- exp2[!is.na(Longest_leaf) & Stage=="Juvenile", .(N=.N), by=.(Treatment, Experience, Population)]
+n_juv_wide <- dcast(n_juv, Experience + Population ~ Treatment, value.var="N")
+orderBy(~ Population + Experience, data=n_juv_wide)
+```
+
+Inconsistencies
+
+1. Given the Source Population tab in the excel file, there is no obvious interpretation of LHP v LHP#1. The tab has this as LHP1 and it doesn't look like LHP is something else. Note that in Fig. 2a there is "LH" and "LH#2" - these are probably "LHP" and "LHP#1" (note that the K and P are dropped from the labels in Fig 2). But this raises the question why there are two "Populations" from the same place? One answer is in Supplement 2, which confirms there are two LHP pops but it calls these "LH" and "LH#2". Given sample size, LHP#1 (from data) = LHP#2 from supplement and in Fig 2.
+2. Ana is coded Experience="C" in some rows and "N" in other rows. In the Source Populations tab it is coded "C"
+
+```{r some functions}
+subdata <- function(dt, stage_j, xcols, y){
+  # this is a function used several times so making a function out of it
+  # stage_j is the stage
+  # xcols is the vector of labels of the columns of factors for the model
+  # y is the response column label
+  
+    # reduce to only relevant columns, stage, and delete Ana
+    subdata_i <- na.omit(dt[Stage==stage_j & Population!="Ana", .SD, .SDcols=c(xcols, y)])
+    # recode Populations to 1:n_pop; this is only way to analyze as fixed using aov
+    # subdata[, Population2:=Population]
+    popsE <- unique(subdata_i[Experience=="E", Population])
+    subdata_i[Population %in% popsE, Population.cross:= mapvalues(Population, from = popsE, to = as.character(1:length(popsE)))]
+    popsN <- unique(subdata_i[Experience=="N", Population])
+    subdata_i[Population %in% popsN, Population.cross:= mapvalues(Population, from = popsN, to = as.character(1:length(popsN)))]
+    subdata_i[, Population.cross:=factor(Population.cross)]
+    
+    return(subdata_i)
+}
+```
+
 # Reproducibility
-
-## 3.1.1 Seedling
->There was, however, a significant effect of experience type on week-1 rates of germination (F(2, 26) = 9.18, p < .001)
-
-```{r}
-con3 <- list(Treatment=contr.sum, Experience=contr.sum) # change the contrasts coding for the model matrix
-
-# fit.full <- lm(Week_1 ~ Treatment*Experience, data=exp1, contrasts=con3)
-# Anova(fit.full, type="3")
-
-# 26 residual df suggests either this was one-way anova with something removed or an additive model
-fit.add <- lm(Week_1 ~ Treatment + Experience, data=exp1, contrasts=con3)
-Anova(fit.add, type="3") # replicates
-
-# fit.one <- lm(Week_1 ~ Experience, data=exp1[Population!="Ana"])
-# anova(fit.one) # obviously cannot be it given Ana is in the posthoc
-
-```
-
-<span style="color:red">Reproduces using additive model (not specified in methods)</span>
-
-> Post hoc tests showed that differences in germination existed between Anatone and the wild populations, but not between IE and IN populations (p = .95). Anatone had 98% fewer week-1 germinants than either IE (difference = 27.8 germinants, p = <.001) or IN populations (difference = 28.7 germinants, p < .001). 
-
-```{r}
-fit.emm <- emmeans(fit.add, specs=c("Experience"))
-# Tukey HSD
-contrast(fit.emm, method="revpairwise")
-# no adjustment
-# contrast(fit.emm, method="revpairwise", adjust="none")
-
-```
-
-<span style="color:red">There are slight differences in Tukey post-hoc.</span>
-
->There was no significant effect of competition treatment on week-1 germination (F(1, 26) = 0.002, p = .96).
-
-<span style="color:red">Very slight differences (See ANOVA table above) not sure why..</span>
 
 ## Table 1
 ### Methods
@@ -125,7 +128,7 @@ Two issues for reproducibility: 1) the model is not clear (see below) and 2) The
 ### Check on balance
 
 ```{r counts}
-exp2.b <- exp2[!is.na(n_Leaves) & Population!="Ana",]
+exp2.b <- exp2[!is.na(Longest_leaf) & Population!="Ana",]
 counts <- exp2.b[, .(N=.N), by=.(Treatment, Experience, Population, Stage, Exp_Pop)]
 exp2.b <- merge(exp2.b, counts, by=c("Treatment", "Experience", "Population", "Stage", "Exp_Pop"))
 
@@ -150,13 +153,15 @@ counts[, .(N=sum(N)), by=Stage]
 ```
 
 ### The model is unclear
-The authors cite the nlme package but do not specify any random effect and the ANOVA table suggests only fixed effects (because what other factor do they have that could be random?). Perhaps they used gls() to model unequal variances with Population as both a fixed effect and as the weights for heterogenous variances?. An issue with the data even for a complete fixed effects model `y ~ Treatment*Experience + Experience:Population`, which is a fixed Population nested within Experience, has a singular XtX^-1 covariance matrix, which creates problems: 1) car type III SS doesn't run, 2) drop1 generates a table with the df=0 for Experience.
+> Next, we assessed trait variation among populations of the same experience type, between invader experience groups (IE and IN) and between treatments using general linear contrasts with population as a fixed factor nested in experience type
+
+The authors cite the nlme package but do not specify any random effect and the ANOVA table suggests only fixed effects (because what other factor do they have that could be random?). Perhaps they used gls() to model unequal variances with Population as both a fixed effect and as the weights for heterogenous variances?. An issue with the data even for a complete fixed effects model `y ~ Treatment*Experience + Experience:Population`, which is a fixed Population nested within Experience, has a singular XtX^-1 covariance matrix, which creates problems.
 
 Here I simulated data to see what works. Some notes
 1. def: crossed coding is the same set of labels for the levels of the nested factor across levels of the higher factor even though these labels do not have the same meaning across the levels of the higher level factor. E.g. B is nested within A and the levels of B are pop1, pop2, pop3, pop4, pop5 in all levels of A.
 2. def: nested coding uses different labels for the levels of the nested factor across levels of the higher factor. E.g. B is nested within A and the levels of B are pop1-pop5 in the CN level of A and pop6-pop10 in the TR level of A.
-3. **If the nested factor is fixed, it has to be coded using crossed coding to work in `car::Anova`**. Nested coding partly works using `drop1`. it gives zero df for the outermost factor. Note the nested coding works in JMP.
-4. If the data are unbalanced because the levels of factor A have different numbers of groups (levels) then type III ANOVA using car fails. Type II works using "model comparison". drop1 works except it assigns 0 df to the outer factor.
+3. **If the nested factor is fixed, it has to be coded using crossed coding to work in `car::Anova`**.
+4. If the data are unbalanced because the levels of factor A have different numbers of groups (levels) then type III ANOVA using car fails. Type II works using "model comparison". drop1 works except the outer factor doesn't reproduce in JMP (the other terms in the ANOVA term do).
 
 
 ```{r simulation, echo=FALSE, eval=FALSE}
@@ -167,12 +172,12 @@ A <- c("A", "a")
 B <- c("B", "b")
 A_vec <- rep(A, each=2*n_pop*n)
 B_vec <- rep(rep(B, each=n_pop*n), 2)
-pop_vec <- rep(rep(paste("pop", 1:(n_pop), sep=""), each=n), 2*2) # cross coding -- pop given same name across levels of B
+pop.cross_vec <- rep(rep(paste("pop", 1:(n_pop), sep=""), each=n), 2*2) # cross coding -- pop given same name across levels of B
 pop.b_vec <- rep(rep(paste("pop", 1:(n_pop*2), sep=""), each=n), 2) # nested coding -- pop given different name across levels of B
 fd <- data.table(A=factor(A_vec), 
                  B=factor(B_vec), 
-                 pop=factor(pop_vec),
-                 pop.b=factor(pop.b_vec),
+                 pop.cross=factor(pop.cross_vec),
+                 pop.nest=factor(pop.b_vec),
                  y=rnorm(length(A_vec)))
 fd[, y:=ifelse(B=="b", y+1, y)]
 write.table(fd, paste(data_folder, folder, "fake_data.csv", sep="/"), row.names=FALSE, quote=FALSE, sep=",")
@@ -180,51 +185,51 @@ write.table(fd, paste(data_folder, folder, "fake_data.csv", sep="/"), row.names=
 # preliminary. Nested factor *has* to be coded using crossed coding to work in car::Anova. Nested coding
 # partly works using drop1...it gives zero df for the outermost factor. Note the nested coding works in JMP.
 con3 <- list(B=contr.sum) # change the contrasts coding for the model matrix
-Anova(aov(y ~ B/pop, contrasts=con3, data=fd))
-Anova(aov(y ~ B/pop, contrasts=con3, data=fd), type="3")
-#Anova(aov(y ~ B/pop.b, contrasts=con3, data=fd)) # fails
-#Anova(aov(y ~ B/pop.b, contrasts=con3, data=fd), type="3")
-fit <- lm(y ~ B + pop%in%B, contrasts=con3, data=fd)
+Anova(aov(y ~ B/pop.cross, contrasts=con3, data=fd))
+Anova(aov(y ~ B/pop.cross, contrasts=con3, data=fd), type="3")
+#Anova(aov(y ~ B/pop.nest, contrasts=con3, data=fd)) # fails
+#Anova(aov(y ~ B/pop.nest, contrasts=con3, data=fd), type="3")
+fit <- lm(y ~ B + pop.cross%in%B, contrasts=con3, data=fd)
 Anova(fit, type="3")
 coef(summary(fit))
-fit <- lm(y ~ B + pop.b, contrasts=con3, data=fd)
+fit <- lm(y ~ B + pop.nest, contrasts=con3, data=fd)
 # Anova(fit, type="3")
 drop1(fit, .~., test="F") # df B = 0
 coef(summary(fit))
 # compare treatment coefs
-fit.nest <- lm(y ~ B + pop%in%B, data=fd)
-fit.cross <- lm(y ~ B + pop.b, data=fd)
+fit.cross <- lm(y ~ B + pop.cross%in%B, data=fd)
+fit.nest <- lm(y ~ B + pop.nest, data=fd)
 anova(fit.nest)
 coef(summary(fit.nest))
 coef(summary(fit.cross))
 
 # variations on specifying nested factor
 # These all reproduce JMP
-con3 <- list(A=contr.sum, B=contr.sum, pop=contr.sum) # change the contrasts coding for the model matrix
-Anova(aov(y ~ A*B + pop%in%B, contrasts=con3, data=fd), type="3")
-Anova(aov(y ~ A*B + B/pop, contrasts=con3, data=fd), type="3")
-Anova(aov(y ~ A*B + B:pop, contrasts=con3, data=fd), type="3")
+con3 <- list(A=contr.sum, B=contr.sum, pop.cross=contr.sum) # change the contrasts coding for the model matrix
+Anova(aov(y ~ A*B + pop.cross%in%B, contrasts=con3, data=fd), type="3")
+Anova(aov(y ~ A*B + B/pop.cross, contrasts=con3, data=fd), type="3")
+Anova(aov(y ~ A*B + B:pop.cross, contrasts=con3, data=fd), type="3")
 
-fit3 <- lm(y ~ A*B + pop%in%B, contrasts=con3, data=fd)
+fit3 <- lm(y ~ A*B + pop.cross%in%B, contrasts=con3, data=fd)
 Anova(fit3, type="3")
 drop1(fit3, .~., test="F") # df B = 0
 
-fit <- gls(y ~ A*B + pop%in%B, weights=varIdent(form=~1|pop.b), data=fd)
+fit <- gls(y ~ A*B + pop.cross%in%B, weights=varIdent(form=~1|pop.nest), data=fd)
 anova(fit, type="marginal")
 
 # delete 1 pop across both levels of A
 # Anova fails but drop1 reproduces all rows except B (which it assigns zero df)
-# Anova(aov(y ~ A*B + pop%in%B, contrasts=con3, data=fd[pop.b != "pop10"]), type="3") # fails
-fit3 <- lm(y ~ A*B + pop%in%B, contrasts=con3, data=fd[pop.b != "pop10"])
-drop1(fit3, .~., test="F") # df B = 0
+# Anova(aov(y ~ A*B + pop.cross%in%B, contrasts=con3, data=fd[pop.nest != "pop10"]), type="3") # fails
+fit3 <- lm(y ~ A*B + pop.cross%in%B, contrasts=con3, data=fd[pop.nest != "pop10"])
+drop1(fit3, .~., test="F")
 Anova(fit3)
-Anova(fit3, type="3")
+# Anova(fit3, type="3") # fails
 
-fit3 <- lm(y ~ A*B + pop:B, contrasts=con3, data=fd[pop.b != "pop10"])
+fit3 <- lm(y ~ A*B + pop.cross:B, contrasts=con3, data=fd[pop.nest != "pop10"])
 drop1(fit3, .~., test="F") # df B = 0
 
 # singular when data is unbalanced
-# fit <- gls(y ~ A*B + pop%in%B, weights=varIdent(form=~1|pop.b), data=fd[pop.b != "pop10"])
+# fit <- gls(y ~ A*B + pop.cross%in%B, weights=varIdent(form=~1|pop.nest), data=fd[pop.nest != "pop10"])
 # anova(fit, type="marginal")
 
 # delete 1 pop within one level of A
@@ -244,34 +249,38 @@ ycols <- c("Longest_leaf", "n_Leaves", "Biomass", "Shoot_biomass", "Root_biomass
 con3 <- list(Treatment=contr.sum, Experience=contr.sum) # change the contrasts coding for the model matrix
 
 f_table <- list()
+p_table <- list()
+df_table <- list()
 for(stage_j in c("Seedling", "Juvenile")){
   for(y in ycols){
-    subdata <- exp2.b[Stage==stage_j & N > 1, .SD, .SDcols=c(xcols, y)]
-    # recode Populations to 1:n_pop; this is only way to analyze as fixed using aov
-    # subdata[, Population2:=Population]
-    popsE <- unique(subdata[Experience=="E", Population])
-    subdata[Population %in% popsE, Population.cross:= mapvalues(Population, from = popsE, to = as.character(1:length(popsE)))]
-    popsN <- unique(subdata[Experience=="N", Population])
-    subdata[Population %in% popsN, Population.cross:= mapvalues(Population, from = popsN, to = as.character(1:length(popsN)))]
-    subdata[, Population.cross:=factor(Population.cross)]
+    subdata_i <- subdata(exp2, stage_j, xcols, y)
     
     # the best I can do. I explicitly ordered the terms this way to match table 1
     
-    fit3 <- lm(get(y) ~  Treatment + Experience + Population.cross%in%Experience + Treatment:Experience, contrasts=con3, data=subdata)
+    fit3 <- lm(get(y) ~  Treatment + Experience + Population.cross%in%Experience + Treatment:Experience, contrasts=con3, data=subdata_i)
+ 
     table_i <- drop1(fit3, .~., test="F") # matches JMP except Experience row
     
     # these do not run because of singular xtxi matrix
     # Anova(fit3, type="3")
     # form_i <- formula(paste(y, "~ Treatment*Experience + Population.cross%in%Experience"))
-    # fit <- gls(form_i, weights=varIdent(form=~1|Population), data=subdata) # singular
+    # fit <- gls(form_i, weights=varIdent(form=~1|Population), data=subdata_i) # singular
     
     if(y==ycols[1]){
       f_table[[stage_j]] <- data.table(terms=row.names(table_i)[2:5],
                             table_i[2:5, "F value"])
+      p_table[[stage_j]] <- data.table(terms=row.names(table_i)[2:5],
+                            table_i[2:5, "Pr(>F)"])
+      df_table[[stage_j]] <- data.table(terms=row.names(table_i)[2:5],
+                            table_i[2:5, "Df"])
     }else{
       f_table[[stage_j]] <- cbind(f_table[[stage_j]], table_i[2:5, "F value"])
+      p_table[[stage_j]] <- cbind(p_table[[stage_j]], table_i[2:5, "Pr(>F)"])
+      df_table[[stage_j]] <- cbind(df_table[[stage_j]], table_i[2:5, "Df"])
     }
     setnames(f_table[[stage_j]], old="V2", new=y)
+    setnames(p_table[[stage_j]], old="V2", new=y)
+    setnames(df_table[[stage_j]], old="V2", new=y)
   }
 }
 
@@ -292,17 +301,26 @@ knitr::include_graphics(image_path)
 ```
 
 ### Table 1 - repro
-
+#### Seedling
 ```{r mytable1-seedling, echo=FALSE}
-knitr::kable(f_table[["Seedling"]], digits=c(NA, 2, 2, 2, 2, 2, 2), caption="Seedling")
+knitr::kable(df_table[["Seedling"]], digits=0, caption="df")
+knitr::kable(f_table[["Seedling"]], digits=c(NA, 2, 2, 2, 2, 2, 2), caption="F-value")
+knitr::kable(p_table[["Seedling"]], digits=c(NA, 3, 3, 3, 3, 3, 3), caption="P-value")
+
 ```
 
+#### Juvenile
 
 ```{r mytable1-juvenile, echo=FALSE}
-knitr::kable(f_table[["Juvenile"]], digits=c(NA, 2, 2, 2, 2, 2, 2), caption="Juvenile")
+knitr::kable(df_table[["Juvenile"]], digits=0, caption="df")
+knitr::kable(f_table[["Juvenile"]], digits=c(NA, 2, 2, 2, 2, 2, 2), caption="F-value")
+knitr::kable(p_table[["Juvenile"]], digits=c(NA, 3, 3, 3, 3, 3, 3), caption="P-value")
+
 ```
 
-<span style="color:red">None reproduce. Note that my sample size is bigger than the reported sample size. It's not clear which cases are excluded from the analyses.</span>
+Note: the F-value for all terms but Experience reproduce using JMP. Experience doesn't due to unbalanced data (see the simulation). I don't know how to reproduce JMP results.
+
+**No F-values reproduce. The DF reproduce for Seedling but my ANOVA has only 12 df (the published df is 13) for the Population term of Juvenile. Also my sample size is bigger than the reported sample size. It's not clear which cases are excluded from the analyses.**
 
 #### sample size
 
@@ -328,28 +346,20 @@ for(stage_j in c("Seedling", "Juvenile")){
     ycols <- ycols_seed}else{
       ycols <- ycols_juv}
   for(y in ycols){
-    subdata <- na.omit(exp2.b[Stage==stage_j &
-                                N > 1, .SD, .SDcols=c(xcols, y)])
-    # recode Populations to 1:n_pop; this is only way to analyze as fixed using aov
-    # subdata[, Population2:=Population]
-    popsE <- unique(subdata[Experience=="E", Population])
-    subdata[Population %in% popsE, Population.cross:= mapvalues(Population, from = popsE, to = as.character(1:length(popsE)))]
-    popsN <- unique(subdata[Experience=="N", Population])
-    subdata[Population %in% popsN, Population.cross:= mapvalues(Population, from = popsN, to = as.character(1:length(popsN)))]
-    subdata[, Population.cross:=factor(Population.cross)]
+    subdata_i <- subdata(exp2.b, stage_j, xcols, y)
     
     # modeled SE
-    fit3 <- lm(get(y) ~  Treatment + Experience + Population.cross%in%Experience + Treatment:Experience, contrasts=con3, data=subdata)
+    fit3 <- lm(get(y) ~  Treatment + Experience + Population.cross%in%Experience + Treatment:Experience, contrasts=con3, data=subdata_i)
     fit3.emm <- data.table(summary(emmeans(fit3, specs=c("Treatment", "Experience"))))
     
     # raw SE (how to deal with nested?)
     # pooled SE (ignore nested structure)
-    subdata.pool.SE <- subdata[, .(ybar=mean(get(y)),
+    subdata.pool.SE <- subdata_i[, .(ybar=mean(get(y)),
                                    SE=sd(get(y))/sqrt(.N)
     ), by=.(Treatment, Experience)]
     # SE of pop means
     # no pool (average replicates within pop)
-    subdata.nopool <- subdata[, .(ybar=mean(get(y))
+    subdata.nopool <- subdata_i[, .(ybar=mean(get(y))
     ), by=.(Treatment, Experience, Population)]
     subdata.nopool.SE <- subdata.nopool[, .(ybar=mean(ybar),
                                             SE=sd(ybar)/sqrt(.N)
@@ -407,7 +417,235 @@ plot_grid(gg_list$Shoot_biomass.Seedling,
 
 ```
 
+**While the patterns are similar, none reproduce, but this isn't surprising given that my sample size is bigger than that in Table 1 (so the authors have excluded data, but I'm not sure which).**
 
-<span style="color:red">While the patterns are similar, none reproduce, but this isn't surprising given that my sample size is bigger than that in Table 1 (so the authors have excluded data, but I'm not sure which).</span>
+## 3.1.1 Seedling
+>There was, however, a significant effect of experience type on week-1 rates of germination (F(2, 26) = 9.18, p < .001)
+
+```{r}
+con3 <- list(Treatment=contr.sum, Experience=contr.sum) # change the contrasts coding for the model matrix
+
+# fit.full <- lm(Week_1 ~ Treatment*Experience, data=exp1, contrasts=con3)
+# Anova(fit.full, type="3")
+
+# 26 residual df suggests either this was one-way anova with something removed or an additive model
+fit.add <- lm(Week_1 ~ Treatment + Experience, data=exp1, contrasts=con3)
+Anova(fit.add, type="3") # replicates
+
+# fit.one <- lm(Week_1 ~ Experience, data=exp1[Population!="Ana"])
+# anova(fit.one) # obviously cannot be it given Ana is in the posthoc
+
+```
+
+**Reproduces using additive model (not specified in methods)**
+
+> Post hoc tests showed that differences in germination existed between Anatone and the wild populations, but not between IE and IN populations (p = .95). Anatone had 98% fewer week-1 germinants than either IE (difference = 27.8 germinants, p = <.001) or IN populations (difference = 28.7 germinants, p < .001). 
+
+```{r}
+fit.emm <- emmeans(fit.add, specs=c("Experience"))
+# Tukey HSD
+contrast(fit.emm, method="revpairwise")
+# no adjustment
+# contrast(fit.emm, method="revpairwise", adjust="none")
+
+```
+
+**There are slight differences in Tukey post-hoc**
+
+>There was no significant effect of competition treatment on week-1 germination (F(1, 26) = 0.002, p = .96).
+
+**Very slight differences (See ANOVA table above) not sure why.**
+
+>Experience type was significant for only one trait (Table 1): average shoot biomass was higher for IE populations (M = 0.17 g, SD = 0.12) than for IN populations (M = 0.15 g, SD = 0.08; Figure 1a).
+
+```{r, eval=FALSE}
+    xcols <- c("Treatment", "Experience", "Population")
+    y <- "Shoot_biomass"
+    subdata_i <- subdata(exp2.b, "Seedling", xcols, y)
+    
+    # data.table(term="Experience", 
+    #            response=y,
+    #            df=df_table[["Seedling"]][terms=="Experience", get(y)],
+    #            F=round(f_table[["Seedling"]][terms=="Experience", get(y)], 2),
+    #            p=round(p_table[["Seedling"]][terms=="Experience", get(y)],3))
+
+    fit <- lm(get(y) ~  Treatment + Experience + Population.cross%in%Experience + Treatment:Experience, data=subdata_i)
+    (fit.emm <- emmeans(fit, specs=c("Experience")))
+    (fit.contrast <- contrast(fit.emm, method="revpairwise"))
+    
+    subdata_i[, .(mean=mean(get(y)), sd=sd(get(y))), by=Experience]
+
+```
+
+**The ANOVA result doesn't reproduce (Table 1 above). Neither the modeled means (from the fit model) nor the simple means (complete pooling) reproduce but again the authors seem to be using a reduced data set.
+
+The repro table has three significant p-values for the experience term (none are shoot_biomass) but again, the experience terms differ from that in JMP (I don't know which if either are correct)**
+
+> Competition treatment significantly impacted three traits (Table 1): plants grown in pots with C. stoebe had fewer leaves (Figure 1b), shorter leaves (M = 17.9 cm, SD = 4.5 vs. M = 19.5 cm, SD = 5.28) and a higher root:shoot ratio (more allocation to root biomass; Figure 1c) than did plants growing in control pots.
+
+```{r}
+    xcols <- c("Treatment", "Experience", "Population")
+    y <- "Longest_leaf"
+    subdata_i <- subdata(exp2.b, "Seedling", xcols, y)
+
+    fit <- lm(get(y) ~  Treatment + Experience + Population.cross%in%Experience + Treatment:Experience, data=subdata_i)
+    (fit.emm <- emmeans(fit, specs=c("Treatment")))
+    (fit.contrast <- contrast(fit.emm, method="revpairwise"))
+    
+    subdata_i[, .(mean=mean(get(y)), sd=sd(get(y))), by=Treatment]
+
+```
+
+**ANOVA results do not reproduce (Table 1 above). The means are close for the treated but not really close for the control level. Again, given table 1, the authors are using a smaller dataset.
+
+The repro table has only one significant p-value (n_leaves)**
+
+> There were significant interactions of treatment and experience type for number of leaves and root:shoot ratio (Table 1)
+
+**This ANOVA result does not reproduce (Table 1). The repro table has no signficant p-values.**
+
+## 3.1.2 Juvenile
+
+> Experience type was marginally significant for number of leaves (Table 1): compared to IN plants, IE plants had more leaves (M = 52.3, SD = 22.4; vs. M = 51.3; SD = 28.7). 
+
+**The authors do not define "marginal" nor give the p-value or some symbol indicating "marginal" in Table 1. The ANOVA results do not reproduce. Again, the authors' df for Experience is 13 while mine is 12. It's not clear where they are getting the extra df given the supplied data.
+
+n_leaves has a signficant p-value in the repro table, but again, I cannot get R and JMP to give same result for the Experience term**
+
+> Competition treatment was significant for one of six measured traits and marginally significant for two traits (Table 1): plants growing with C. stoebe had fewer leaves (Figure 1d), and lower total and root biomass (Figure 1e,f) than those growing without competition. 
+
+**The repro table does not reproduce but n_leaves does have significant p-value**.
+
+>Population within experience type was significant for five of six variables (Table 1): length of longest leaf, number of leaves, total biomass, root biomass and shoot biomass.
+
+**The published table 1 shows the Population effect signficant in only three (not five) variables. In the repro table, this term has signficant p-values for n_leaves, total biomass, and root biomass.**
+
+>There was a significant interaction between treatment and experience type for biomass and root biomass (Table 1)
+
+**The repro table does not reproduce -- there are no variables with a significant p-value for the interaction effect**
+
+## 3.2 Relative Interaction Index
+
+> We used ANOVA to determine whether P. spicata tolerance differed between invasion experience types, with separate models for seedling (RII-Seedling) and juvenile (RII-Juvenile) response variables. We excluded four populations from seedling RII analyses and six from juvenile RII analyses because there were fewer than three plants per population.
+We also tested for differences in the competitive effect of P. spicata invader experience types on C. stoebe using ANOVA models with C. stoebe suppression (RII-Knapweed) as the response variable. Anatone was not included in the analysis, but we compared the RII values of Anatone to the wild populations.
+
+>Seedlings from IE and IN populations did not differ significantly in their tolerance of C. stoebe (RII-Seedling; F(1, 9) = 0.118, p = .739; Figure 2a,b). 
+
+```{r}
+# rii = (b_w - b_a)/(b_w + b_a) # _w=T _a=C
+xcols <- c("Treatment", "Experience", "Stage", "Population", "Exp_Pop")
+ycols <- c("Longest_leaf", "n_Leaves", "Biomass", "Shoot_biomass", "Root_biomass", "Root.shoot_ratio")
+
+subdata_i <- (exp2[Stage=="Seedling", .SD, .SDcols=c(xcols, "Biomass")])
+
+rii.long <- subdata_i[!is.na(Biomass), .(biomass=mean(Biomass), n=.N), by=.(Treatment, Experience, Population)]
+rii.1 <- rii.long[Treatment=="C",]
+rii.2 <- rii.long[Treatment=="T",]
+rii.wide <- merge(rii.1, rii.2, by=c("Population", "Experience"))
+rii.wide[, rii:=(biomass.y - biomass.x)/(biomass.y + biomass.x)]
+fit <- lm(rii ~ Experience, data=rii.wide)
+anova(fit)
+
+# fig 2
+rii.raw <- rii.wide[, .(rii=mean(rii), SE=sd(rii)/sqrt(.N)), by=Experience]
+gg_2b <- ggplot(rii.raw, aes(x=Experience, y=rii)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=rii-SE, ymax=rii+SE), width=0.2)
+```
+
+**F does not reproduce (df does).**
+
+>There was also no difference between juvenile invader experience types in their tolerance (RII-Juvenile; F(1, 9) = 1.61, p = .23; Figure 2c,d) 
+
+```{r}
+# rii = (b_w - b_a)/(b_w + b_a) # _w=T _a=C
+xcols <- c("Treatment", "Experience", "Stage", "Population", "Exp_Pop")
+ycols <- c("Longest_leaf", "n_Leaves", "Biomass", "Shoot_biomass", "Root_biomass", "Root.shoot_ratio")
+
+subdata_i <- (exp2[Stage=="Juvenile", .SD, .SDcols=c(xcols, "Biomass")])
+
+rii.long <- subdata_i[!is.na(Biomass), .(biomass=mean(Biomass), n=.N), by=.(Treatment, Experience, Population)]
+rii.long <- rii.long[n >=3, ]
+rii.1 <- rii.long[Treatment=="C",]
+rii.2 <- rii.long[Treatment=="T",]
+rii.wide <- merge(rii.1, rii.2, by=c("Population", "Experience"))
+rii.wide[, rii:=(biomass.y - biomass.x)/(biomass.y + biomass.x)]
+fit <- lm(rii ~ Experience, data=rii.wide)
+anova(fit)
+
+# fig 2
+rii.raw <- rii.wide[, .(rii=mean(rii), SE=sd(rii)/sqrt(.N)), by=Experience]
+gg_2d <- ggplot(rii.raw, aes(x=Experience, y=rii)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=rii-SE, ymax=rii+SE), width=0.2)
+```
+
+**F does not reproduce. "Significant" effect reproduces. The repro has 7 residual df, while 9 df is reported. Tbe published Fig 2d has 11 points so 9 df, which is consistant with published text.**
+
+Note the published methods state "We excluded ... six [populations] from juvenile RII analyses because there were fewer than three plants per population". My analysis excluded the populations in which one cell (T or C) had $n < 3$. 
+
+```{r}
+# must have the subdata_i using "Juvenile"
+rii.long <- subdata_i[!is.na(Biomass), .(biomass=mean(Biomass), n=.N), by=.(Treatment, Experience, Population)]
+rii.1 <- rii.long[Treatment=="C",]
+rii.2 <- rii.long[Treatment=="T",]
+rii.wide <- merge(rii.1, rii.2, by=c("Population", "Experience"))
+rii.wide[, rii:=(biomass.y - biomass.x)/(biomass.y + biomass.x)]
+rii.wide
+```
+
+The published figure (and presumably ANOVA) (see Fig 2c below) excluded LHK, which has n=5 (Control) and n=2 (Treated) (so is also excluded in the repro) but did not exclude, for example, BLP or PTP, both have n=5 (Control) and n=1 (Treated) (both excluded in my repro). That is, it is not clear what criteria the authors used to exclude populations, but is not my interpretation of what the authors report they did.
+
+Here are the repro results using the populations indicated in Fig 2c.
+
+```{r, eval=FALSE}
+# starting with rii.wide of juvenile keeping all pops
+
+excl <- c("LHK", "LHP#1", "MCLP", "MJP")
+all_pops <- unique(exp2$Population)
+incl <- setdiff(all_pops, excl)
+rii.wide.pub <- rii.wide[Population %in% incl]
+
+fit <- lm(rii ~ Experience, data=rii.wide.pub)
+anova(fit)
+fit <- lm(rii ~ Experience, data=rii.wide.pub[Population != "Ana"])
+anova(fit)
+
+# fig 2 - based on published fig 2d, Ana is excluded
+rii.raw <- rii.wide.pub[Population != "Ana", .(rii=mean(rii), SE=sd(rii)/sqrt(.N)), by=Experience]
+gg_2d <- ggplot(rii.raw, aes(x=Experience, y=rii)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=rii-SE, ymax=rii+SE), width=0.2)
+
+```
+
+**Neither ANOVA (with Ana included or excluded) reproduces. The ANOVA with Ana included reproduces the residual DF but it doesn't make sense to include Ana, as its a cultivar. Also, Fig 2d reproduces only when Ana is excluded.**
+
+### Supression
+
+**I don't see the data for C. stoebe biomass so cannot compute index of supression.**
+
+## Fig 2
+### Fig 2 -- published 
+```{r fig2, out.width = "400px", echo=FALSE}
+fn <- "fig2.png"
+if(knitr_path==TRUE){
+  image_path <- paste("../images", folder, fn, sep="/")
+}else{
+  image_path <- paste("/images", folder, fn, sep="/")
+}
+knitr::include_graphics(image_path)
+
+```
+
+### Fig 2 repro
+
+```{r fig2-repro, echo=FALSE, out.width="200px"}
+plot_grid(gg_2b, gg_2d, nrow=2)
+```
+
+**2B and D effectively reproduce. 2D reproduces only using the populations identified in 2C, which includes some samples with n=1 and so the figure doesn't reflect my interpretation of the author's methods on which populations were excluded.**
 
 # Statistical red flags
+
+1. It is not clear why the authors treat the populations as a fixed effect.
