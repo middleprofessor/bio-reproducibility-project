@@ -7,9 +7,10 @@ slug: data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-comp
 categories: []
 tags:
   - R
+  - Excel
   - fixed effect nested ANOVA
   - unbalanced ANOVA
-  - Anova
+  - Type III SS
   - drop1
   - fake data
 subtitle: ''
@@ -90,6 +91,7 @@ orderBy(~ Population + Experience, data=n_seed_wide)
 n_juv <- exp2[!is.na(Longest_leaf) & Stage=="Juvenile", .(N=.N), by=.(Treatment, Experience, Population)]
 n_juv_wide <- dcast(n_juv, Experience + Population ~ Treatment, value.var="N")
 orderBy(~ Population + Experience, data=n_juv_wide)
+# orderBy(~ Experience + Population, data=n_juv_wide[Population!="Ana"])
 ```
 
 Inconsistencies
@@ -98,23 +100,31 @@ Inconsistencies
 2. Ana is coded Experience="C" in some rows and "N" in other rows. In the Source Populations tab it is coded "C"
 
 ```{r some functions}
-subdata <- function(dt, stage_j, xcols, y){
+subdata <- function(dt, stage_j, xcols, y, min_n=2){
   # this is a function used several times so making a function out of it
   # stage_j is the stage
   # xcols is the vector of labels of the columns of factors for the model
   # y is the response column label
+  # min_n is the minimum n to include in the subdata
   
-    # reduce to only relevant columns, stage, and delete Ana
-    subdata_i <- na.omit(dt[Stage==stage_j & Population!="Ana", .SD, .SDcols=c(xcols, y)])
-    # recode Populations to 1:n_pop; this is only way to analyze as fixed using aov
-    # subdata[, Population2:=Population]
-    popsE <- unique(subdata_i[Experience=="E", Population])
-    subdata_i[Population %in% popsE, Population.cross:= mapvalues(Population, from = popsE, to = as.character(1:length(popsE)))]
-    popsN <- unique(subdata_i[Experience=="N", Population])
-    subdata_i[Population %in% popsN, Population.cross:= mapvalues(Population, from = popsN, to = as.character(1:length(popsN)))]
-    subdata_i[, Population.cross:=factor(Population.cross)]
-    
-    return(subdata_i)
+  #first get populations with n>1 in Treatment="T"
+  n_pops <- dt[Stage==stage_j & 
+                 !is.na(get(y)) & 
+                 Population != "Ana", .(n=.N), by=.(Population)]
+  inc <- n_pops[n >= (5+min_n), Population] # all Treatment="C" have n=5
+  
+  # reduce to only relevant columns, stage, and delete Ana
+  subdata_i <- na.omit(dt[Stage==stage_j & Population %in% inc, .SD, .SDcols=c(xcols, y)])
+  
+  # recode Populations to 1:n_pop; this is only way to analyze as fixed using aov
+  # subdata[, Population2:=Population]
+  popsE <- unique(subdata_i[Experience=="E", Population])
+  subdata_i[Population %in% popsE, Population.cross:= mapvalues(Population, from = popsE, to = as.character(1:length(popsE)))]
+  popsN <- unique(subdata_i[Experience=="N", Population])
+  subdata_i[Population %in% popsN, Population.cross:= mapvalues(Population, from = popsN, to = as.character(1:length(popsN)))]
+  subdata_i[, Population.cross:=factor(Population.cross)]
+  
+  return(subdata_i)
 }
 ```
 
@@ -139,10 +149,14 @@ The data are unbalanced at two levels: 1) Different cell sizes in the Treatment 
 
 ```{r imbalance-1}
 counts[, .(N=.N), by=.(Stage, Treatment, Experience)]
-counts2 <- counts[, .(N=.N), by=.(Stage, Population, Treatment)]
+counts2 <- counts[N>1, .(N=.N), by=.(Stage, Population, Treatment)]
 counts2[, .(N=.N), by=.(Stage, Treatment)]
+# orderBy(~ Experience + Population, data=n_juv_wide[Population!="Ana"])
+# orderBy(~ Experience + Population, data=n_juv_wide[Population!="Ana"])
 
 ```
+
+Does this identify the 4 missing in Juvenile and 3 missing in Seedling?
 
 ```{r imbalance-2, eval=FALSE}
 # change eval to TRUE to see these views
@@ -156,7 +170,7 @@ counts[, .(N=sum(N)), by=Stage]
 ### The model is unclear
 > Next, we assessed trait variation among populations of the same experience type, between invader experience groups (IE and IN) and between treatments using general linear contrasts with population as a fixed factor nested in experience type
 
-The authors cite the nlme package but do not specify any random effect and the ANOVA table suggests only fixed effects (because what other factor do they have that could be random?). Perhaps they used gls() to model unequal variances with Population as both a fixed effect and as the weights for heterogenous variances?. An issue with the data even for a complete fixed effects model `y ~ Treatment*Experience + Experience:Population`, which is a fixed Population nested within Experience, has a singular XtX^-1 covariance matrix, which creates problems.
+The authors use "general linear contrasts" a fixed nested ANOVA and cite the nlme package but do not specify any random effect and the ANOVA table suggests only fixed effects (because what other factor do they have that could be random?). Perhaps they used gls() to model unequal variances with Population as both a fixed effect and as the weights for heterogenous variances?. An issue with the data even for a complete fixed effects model `y ~ Treatment*Experience + Experience:Population`, which is a fixed Population nested within Experience, has a singular XtX^-1 covariance matrix, which creates problems.
 
 Here I simulated data to see what works. Some notes
 1. def: crossed coding is the same set of labels for the levels of the nested factor across levels of the higher factor even though these labels do not have the same meaning across the levels of the higher level factor. E.g. B is nested within A and the levels of B are pop1, pop2, pop3, pop4, pop5 in all levels of A.
@@ -245,16 +259,17 @@ drop1(fit3, .~., test="F") # df B = 0
 
 ```{r compute table 1}
 xcols <- c("Treatment", "Experience", "Stage", "Population", "Exp_Pop")
-ycols <- c("Longest_leaf", "n_Leaves", "Biomass", "Shoot_biomass", "Root_biomass", "Root.shoot_ratio")
+ycols <- c("Longest_leaf", "n_Leaves", "Biomass", "Root_biomass", "Shoot_biomass", "Root.shoot_ratio")
 
 con3 <- list(Treatment=contr.sum, Experience=contr.sum) # change the contrasts coding for the model matrix
 
 f_table <- list()
 p_table <- list()
 df_table <- list()
+n_table <- list()
 for(stage_j in c("Seedling", "Juvenile")){
   for(y in ycols){
-    subdata_i <- subdata(exp2, stage_j, xcols, y)
+    subdata_i <- subdata(exp2, stage_j, xcols, y, min_n=0)
     
     # the best I can do. I explicitly ordered the terms this way to match table 1
     
@@ -272,12 +287,12 @@ for(stage_j in c("Seedling", "Juvenile")){
                             table_i[2:5, "F value"])
       p_table[[stage_j]] <- data.table(terms=row.names(table_i)[2:5],
                             table_i[2:5, "Pr(>F)"])
-      df_table[[stage_j]] <- data.table(terms=row.names(table_i)[2:5],
-                            table_i[2:5, "Df"])
+      df_table[[stage_j]] <- data.table(terms=c(row.names(table_i)[2:5], "n"),
+                            c(table_i[2:5, "Df"], nrow(subdata_i)))
     }else{
       f_table[[stage_j]] <- cbind(f_table[[stage_j]], table_i[2:5, "F value"])
       p_table[[stage_j]] <- cbind(p_table[[stage_j]], table_i[2:5, "Pr(>F)"])
-      df_table[[stage_j]] <- cbind(df_table[[stage_j]], table_i[2:5, "Df"])
+      df_table[[stage_j]] <- cbind(df_table[[stage_j]], c(table_i[2:5, "Df"], nrow(subdata_i)))
     }
     setnames(f_table[[stage_j]], old="V2", new=y)
     setnames(p_table[[stage_j]], old="V2", new=y)
@@ -319,15 +334,10 @@ knitr::kable(p_table[["Juvenile"]], digits=c(NA, 3, 3, 3, 3, 3, 3), caption="P-v
 
 ```
 
+**No F-values reproduce. The DF does not reproduce if I exclude 3 pops in the Seedling and 4 in the Juvenile anlaysis due to $n \le 1$. Excluding to populations with n > 1, the total N for Seedling and Juvenile is 104 and 88 (not 102, 97) The DF reproduces for Seedling only if I include all populations but DF does not reproduce for Juvenile (repro=12, published -=13) even if I include all populations. When I include all pops, the total N is 119 and 111. It's not clear which cases are excluded from the analyses.**
+
 Note: the F-value for all terms but Experience reproduce using JMP. Experience doesn't due to unbalanced data (see the simulation). I don't know how to reproduce JMP results.
 
-**No F-values reproduce. The DF reproduce for Seedling but my ANOVA has only 12 df (the published df is 13) for the Population term of Juvenile. Also my sample size is bigger than the reported sample size. It's not clear which cases are excluded from the analyses.**
-
-#### sample size
-
-```{r table 1 sample size}
-counts[, .(N=sum(N)), by=Stage]
-```
 
 ## Figure 1
 
@@ -650,3 +660,4 @@ plot_grid(gg_2b, gg_2d, nrow=2)
 # Statistical red flags
 
 1. It is not clear why the authors treat Population as a fixed effect.
+2. The reported F for the Treatment effect on root:shoot response for Seedling is 100.97. Two red-flags about this value. 1) The effect relative to the SE in Fig 1 does not look big enough to gemerate this F. That said, it can be very hard to mentally compute F especially given the nested structure of the design. 2) The F for both root biomass and shoot biomass is very small and root:shoot is just the ratio of these. If there is a large effect with root:shoot there must be some noticeable effect with either root or shoot or both.

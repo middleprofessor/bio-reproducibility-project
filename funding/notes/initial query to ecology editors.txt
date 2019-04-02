@@ -1,0 +1,20 @@
+Nicholas.Gotelli@uvm.edu # Ecology
+cfox@uky.edu # Charles Fox, Functional Ecology
+leigh.simmons@uwa.edu.au # Behavioral Ecology
+r.freckleton@sheffield.ac.uk # Methods in Ecology and Evolution
+aellison@fas.harvard.edu # Methods in Ecology and Evolution
+daniel.bolnick@uconn.edu # Am Nat
+
+Nicholas.Gotelli@uvm.edu, cfox@uky.edu, leigh.simmons@uwa.edu.au, r.freckleton@sheffield.ac.uk, aellison@fas.harvard.edu
+
+I am writing to you and a few other editors of ecology journals. Over the last 4 years, I've been teaching an advanced undergrad/grad level biostatistics course that uses data from the Dryad digital repository for all examples. This fall (2018), I started a very rough draft of a textbook for this course.
+
+This teaching has led to a project and why I'm contacting you. Effectively, I'm writing to you hoping to start a dialog on reproducibility of results in Ecology journals using the published methods and data from Dryad digital repository. I started a "Biological Reproducibility Project" as an outgrowth of teaching biostatistics using data archived from Dryad for all my examples. I found frequent errors in the reported results and after a couple of years of this decided to archive this and then this winter break decided to do this more systematically. Very initial results are here:
+
+https://bio-reproducibility-project.netlify.com
+
+which is not linked anywhere so I don't think anyone would find it without the link.
+
+The summary is: every paper that I've examined has results that I cannot reproduce. Often the differences are small or trivial, sometimes not. Part of the lack of reproducibility might be my own ignorance of R but I can sometimes reconstruct what the authors did wrong, or at lest, not what they thought (or at least state) they did. I also find a reasonable frequency of sloppiness in both analysis (failing to state which cases are excluded) and reporting (mixing up the F-value for different terms in an ANOVA table for example). Conclusions are often *not* effected by these errors because conclusions tend to be based on P < 0.05 or P > 0.05 so it doesn't matter if p-0.08 or 0.18, given the way the authors are interpreting the results (which raises its own questions about the rigor of scientific models).
+
+I'm writing this as a joint e-mail because 1) I wanted to raises these issues but mostly 2) I'm seeking advice on where to go with this - before sinking a huge amount of time into this I'm looking for better ways to document my results so they are useful for others.  I have a bunch of questions but no one to bounce off ideas. I'd like to turn this into some sort of scholarship, perhaps even get some funding, and compile results into some meaningful summaries. With the data, editors could make decisions on the value of requiring archived data or code or having statistical reviewing specifically. And certainly a good manual of best practices (and perhaps journal requirements) could be constructed. Also, reproducibility projects are a good way for students to learn statistics and these could be integrated into courses as assignments. 

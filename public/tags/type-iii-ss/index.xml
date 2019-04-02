@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Type Iii Ss on The Biology Reproducibility Project</title>
+    <link>/tags/type-iii-ss/</link>
+    <description>Recent content in Type Iii Ss on The Biology Reproducibility Project</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Jeffrey A. Walker</copyright>
+    <lastBuildDate>Wed, 06 Mar 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/type-iii-ss/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Data from: Response of bluebunch wheatgrass to invasion differences in competitive ability among invader-experienced and naïve populations</title>
+      <link>/post/data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations/</link>
+      <pubDate>Wed, 06 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations/</guid>
+      <description>Sources Summary Caveats Setup Import Reproducibility Table 1 Methods Check on balance The model is unclear Table 1–published Table 1 - repro  Figure 1 Fig 1 – published Fig 1 – repro  3.1.1 Seedling 3.1.2 Juvenile 3.2 Relative Interaction Index Supression  Fig 2 Fig 2 – published Fig 2 repro   Statistical red flags   Sources Gibson A, Nelson CR, Atwater DZ (2018) Response of bluebunch wheatgrass to invasion: Differences in competitive ability among invader-experienced and invader-naïve populations.</description>
+    </item>
+    
+  </channel>
+</rss>

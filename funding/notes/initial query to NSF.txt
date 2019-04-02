@@ -1,0 +1,38 @@
+DEB Director: Stephanie Hampton shampton@nsf.gov
+dlevey@nsf.gov
+cnufio@nsf.gov
+mvonholl@nsf.gov
+dgruner@nsf.gov
+kcotting@nsf.gov
+aporrasa@nsf.gov
+mkane@nsf.gov
+Kmclauch@nsf.gov
+jschade@nsf.gov
+eblood@nsf.gov
+lchriste@nsf.gov
+ggilchri@nsf.gov
+cstmary@nsf.gov
+sscheine@nsf.gov
+sremold@nsf.gov
+kdittmar@nsf.gov
+aweeks@nsf.gov
+cjschnei@nsf.gov
+dcannate@nsf.gov
+
+I am writing to all program directors within DEB because I have a budding project that I am hoping to move forward, perhaps with NSF support, and the project doesn't obviously fit into any DEB, BIO, or even NSF category.
+
+Over the last 4 years, I've been teaching an advanced undergrad/grad level biostatistics course that uses data from the Dryad digital repository for all examples. This fall (2018), I started a very rough draft of a textbook for this course.
+
+https://www.middleprofessor.com/files/applied-biostatistics_bookdown/_book/index.html
+
+This teaching has led to a project and why I'm contacting you. I started a "Biological Reproducibility Project" as an outgrowth of teaching biostatistics using data archived from Dryad for all my examples. I found frequent errors in the reported results and after a couple of years of this decided to archive this and then this winter break decided to do this more systematically. Very initial results are here:
+
+https://bio-reproducibility-project.netlify.com
+
+which is not linked anywhere so I don't think anyone would find it without the link.
+
+The summary is: every paper that I've examined has results that I cannot reproduce. Often the differences are small or trivial, sometimes not. Part of the lack of reproducibility might be my own ignorance of R but I can sometimes reconstruct what the authors did wrong, or not what they thought (or at least state) they did. I also find a reasonable frequency of sloppiness in both analysis (failing to state which cases are excluded) and reporting (mixing up the F-value for different terms in an ANOVA table for example). Conclusions are often *not* effected by these errors because conclusions tend to be based on P < 0.05 or P > 0.05 so it doesn't matter if p-0.08 or 0.18, given the way the authors are interpreting the results (which raises its own questions about the meaningfulness of the science).
+
+I was hoping to speak with someone about pursuing funding to turn this project into something more systematic. Clearly this isn't primary research and its not even necessarily ecology -- one reason that I have focussed on Ecology is because ecology (and not cell biology or physiology) journals encourage data archiving. This could be a working group that meets on occasion or an individual PI project. One issue is that most researchers wouldn't want to do this work because it wouldn't be seen as the kind of work that would earn grants, tenure, etc. It could be work incorporated as assignments in undergraduate and especially graduate statistics course, although this would require a large team of researchers who teach statistics.
+
+If any of these inchoate ideas sounds intriguing, I'd very much appreciate a call or we can make an appointment for me to call you. Thanks for your time,

@@ -7,9 +7,10 @@ slug: data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-comp
 categories: []
 tags:
   - R
+  - Excel
   - fixed effect nested ANOVA
   - unbalanced ANOVA
-  - Anova
+  - Type III SS
   - drop1
   - fake data
 subtitle: ''
@@ -147,28 +148,37 @@ orderBy(~ Population + Experience, data=n_juv_wide)</code></pre>
 ## 13:          N        MMP 5  5
 ## 14:          E        PTK 5  3
 ## 15:          N        PTP 5  1</code></pre>
+<pre class="r"><code># orderBy(~ Experience + Population, data=n_juv_wide[Population!=&quot;Ana&quot;])</code></pre>
 <p>Inconsistencies</p>
 <ol style="list-style-type: decimal">
 <li>Given the Source Population tab in the excel file, there is no obvious interpretation of LHP v LHP#1. The tab has this as LHP1 and it doesn’t look like LHP is something else. Note that in Fig. 2a there is “LH” and “LH#2” - these are probably “LHP” and “LHP#1” (note that the K and P are dropped from the labels in Fig 2). But this raises the question why there are two “Populations” from the same place? One answer is in Supplement 2, which confirms there are two LHP pops but it calls these “LH” and “LH#2”. Given sample size, LHP#1 (from data) = LHP#2 from supplement and in Fig 2.</li>
 <li>Ana is coded Experience=“C” in some rows and “N” in other rows. In the Source Populations tab it is coded “C”</li>
 </ol>
-<pre class="r"><code>subdata &lt;- function(dt, stage_j, xcols, y){
+<pre class="r"><code>subdata &lt;- function(dt, stage_j, xcols, y, min_n=2){
   # this is a function used several times so making a function out of it
   # stage_j is the stage
   # xcols is the vector of labels of the columns of factors for the model
   # y is the response column label
+  # min_n is the minimum n to include in the subdata
   
-    # reduce to only relevant columns, stage, and delete Ana
-    subdata_i &lt;- na.omit(dt[Stage==stage_j &amp; Population!=&quot;Ana&quot;, .SD, .SDcols=c(xcols, y)])
-    # recode Populations to 1:n_pop; this is only way to analyze as fixed using aov
-    # subdata[, Population2:=Population]
-    popsE &lt;- unique(subdata_i[Experience==&quot;E&quot;, Population])
-    subdata_i[Population %in% popsE, Population.cross:= mapvalues(Population, from = popsE, to = as.character(1:length(popsE)))]
-    popsN &lt;- unique(subdata_i[Experience==&quot;N&quot;, Population])
-    subdata_i[Population %in% popsN, Population.cross:= mapvalues(Population, from = popsN, to = as.character(1:length(popsN)))]
-    subdata_i[, Population.cross:=factor(Population.cross)]
-    
-    return(subdata_i)
+  #first get populations with n&gt;1 in Treatment=&quot;T&quot;
+  n_pops &lt;- dt[Stage==stage_j &amp; 
+                 !is.na(get(y)) &amp; 
+                 Population != &quot;Ana&quot;, .(n=.N), by=.(Population)]
+  inc &lt;- n_pops[n &gt;= (5+min_n), Population] # all Treatment=&quot;C&quot; have n=5
+  
+  # reduce to only relevant columns, stage, and delete Ana
+  subdata_i &lt;- na.omit(dt[Stage==stage_j &amp; Population %in% inc, .SD, .SDcols=c(xcols, y)])
+  
+  # recode Populations to 1:n_pop; this is only way to analyze as fixed using aov
+  # subdata[, Population2:=Population]
+  popsE &lt;- unique(subdata_i[Experience==&quot;E&quot;, Population])
+  subdata_i[Population %in% popsE, Population.cross:= mapvalues(Population, from = popsE, to = as.character(1:length(popsE)))]
+  popsN &lt;- unique(subdata_i[Experience==&quot;N&quot;, Population])
+  subdata_i[Population %in% popsN, Population.cross:= mapvalues(Population, from = popsN, to = as.character(1:length(popsN)))]
+  subdata_i[, Population.cross:=factor(Population.cross)]
+  
+  return(subdata_i)
 }</code></pre>
 </div>
 <div id="reproducibility" class="section level1">
@@ -198,13 +208,16 @@ exp2.b &lt;- merge(exp2.b, counts, by=c(&quot;Treatment&quot;, &quot;Experience&
 ## 6: Juvenile         C          N 8
 ## 7: Juvenile         T          E 6
 ## 8: Juvenile         T          N 7</code></pre>
-<pre class="r"><code>counts2 &lt;- counts[, .(N=.N), by=.(Stage, Population, Treatment)]
+<pre class="r"><code>counts2 &lt;- counts[N&gt;1, .(N=.N), by=.(Stage, Population, Treatment)]
 counts2[, .(N=.N), by=.(Stage, Treatment)]</code></pre>
 <pre><code>##       Stage Treatment  N
 ## 1: Seedling         C 14
 ## 2: Seedling         T 11
 ## 3: Juvenile         C 14
-## 4: Juvenile         T 13</code></pre>
+## 4: Juvenile         T 10</code></pre>
+<pre class="r"><code># orderBy(~ Experience + Population, data=n_juv_wide[Population!=&quot;Ana&quot;])
+# orderBy(~ Experience + Population, data=n_juv_wide[Population!=&quot;Ana&quot;])</code></pre>
+<p>Does this identify the 4 missing in Juvenile and 3 missing in Seedling?</p>
 <pre class="r"><code># change eval to TRUE to see these views
 counts2[, .(N=.N), by=.(Stage, Population)]
 unique(counts2[Treatment==&quot;C&quot; &amp; Stage==&quot;Seedling&quot;, Population])
@@ -217,19 +230,20 @@ counts[, .(N=sum(N)), by=Stage]</code></pre>
 <blockquote>
 <p>Next, we assessed trait variation among populations of the same experience type, between invader experience groups (IE and IN) and between treatments using general linear contrasts with population as a fixed factor nested in experience type</p>
 </blockquote>
-<p>The authors cite the nlme package but do not specify any random effect and the ANOVA table suggests only fixed effects (because what other factor do they have that could be random?). Perhaps they used gls() to model unequal variances with Population as both a fixed effect and as the weights for heterogenous variances?. An issue with the data even for a complete fixed effects model <code>y ~ Treatment*Experience + Experience:Population</code>, which is a fixed Population nested within Experience, has a singular XtX^-1 covariance matrix, which creates problems.</p>
+<p>The authors use “general linear contrasts” a fixed nested ANOVA and cite the nlme package but do not specify any random effect and the ANOVA table suggests only fixed effects (because what other factor do they have that could be random?). Perhaps they used gls() to model unequal variances with Population as both a fixed effect and as the weights for heterogenous variances?. An issue with the data even for a complete fixed effects model <code>y ~ Treatment*Experience + Experience:Population</code>, which is a fixed Population nested within Experience, has a singular XtX^-1 covariance matrix, which creates problems.</p>
 <p>Here I simulated data to see what works. Some notes 1. def: crossed coding is the same set of labels for the levels of the nested factor across levels of the higher factor even though these labels do not have the same meaning across the levels of the higher level factor. E.g. B is nested within A and the levels of B are pop1, pop2, pop3, pop4, pop5 in all levels of A. 2. def: nested coding uses different labels for the levels of the nested factor across levels of the higher factor. E.g. B is nested within A and the levels of B are pop1-pop5 in the CN level of A and pop6-pop10 in the TR level of A. 3. <strong>If the nested factor is fixed, it has to be coded using crossed coding to work in <code>car::Anova</code></strong>. 4. If the data are unbalanced because the levels of factor A have different numbers of groups (levels) then type III ANOVA using car fails. Type II works using “model comparison”. drop1 works except the outer factor doesn’t reproduce in JMP (the other terms in the ANOVA term do).</p>
 <pre class="r"><code>xcols &lt;- c(&quot;Treatment&quot;, &quot;Experience&quot;, &quot;Stage&quot;, &quot;Population&quot;, &quot;Exp_Pop&quot;)
-ycols &lt;- c(&quot;Longest_leaf&quot;, &quot;n_Leaves&quot;, &quot;Biomass&quot;, &quot;Shoot_biomass&quot;, &quot;Root_biomass&quot;, &quot;Root.shoot_ratio&quot;)
+ycols &lt;- c(&quot;Longest_leaf&quot;, &quot;n_Leaves&quot;, &quot;Biomass&quot;, &quot;Root_biomass&quot;, &quot;Shoot_biomass&quot;, &quot;Root.shoot_ratio&quot;)
 
 con3 &lt;- list(Treatment=contr.sum, Experience=contr.sum) # change the contrasts coding for the model matrix
 
 f_table &lt;- list()
 p_table &lt;- list()
 df_table &lt;- list()
+n_table &lt;- list()
 for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
   for(y in ycols){
-    subdata_i &lt;- subdata(exp2, stage_j, xcols, y)
+    subdata_i &lt;- subdata(exp2, stage_j, xcols, y, min_n=0)
     
     # the best I can do. I explicitly ordered the terms this way to match table 1
     
@@ -247,12 +261,12 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
                             table_i[2:5, &quot;F value&quot;])
       p_table[[stage_j]] &lt;- data.table(terms=row.names(table_i)[2:5],
                             table_i[2:5, &quot;Pr(&gt;F)&quot;])
-      df_table[[stage_j]] &lt;- data.table(terms=row.names(table_i)[2:5],
-                            table_i[2:5, &quot;Df&quot;])
+      df_table[[stage_j]] &lt;- data.table(terms=c(row.names(table_i)[2:5], &quot;n&quot;),
+                            c(table_i[2:5, &quot;Df&quot;], nrow(subdata_i)))
     }else{
       f_table[[stage_j]] &lt;- cbind(f_table[[stage_j]], table_i[2:5, &quot;F value&quot;])
       p_table[[stage_j]] &lt;- cbind(p_table[[stage_j]], table_i[2:5, &quot;Pr(&gt;F)&quot;])
-      df_table[[stage_j]] &lt;- cbind(df_table[[stage_j]], table_i[2:5, &quot;Df&quot;])
+      df_table[[stage_j]] &lt;- cbind(df_table[[stage_j]], c(table_i[2:5, &quot;Df&quot;], nrow(subdata_i)))
     }
     setnames(f_table[[stage_j]], old=&quot;V2&quot;, new=y)
     setnames(p_table[[stage_j]], old=&quot;V2&quot;, new=y)
@@ -276,8 +290,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <th align="right">Longest_leaf</th>
 <th align="right">n_Leaves</th>
 <th align="right">Biomass</th>
-<th align="right">Shoot_biomass</th>
 <th align="right">Root_biomass</th>
+<th align="right">Shoot_biomass</th>
 <th align="right">Root.shoot_ratio</th>
 </tr>
 </thead>
@@ -317,6 +331,15 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">n</td>
+<td align="right">119</td>
+<td align="right">118</td>
+<td align="right">119</td>
+<td align="right">119</td>
+<td align="right">119</td>
+<td align="right">119</td>
 </tr>
 </tbody>
 </table>
@@ -328,8 +351,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <th align="right">Longest_leaf</th>
 <th align="right">n_Leaves</th>
 <th align="right">Biomass</th>
-<th align="right">Shoot_biomass</th>
 <th align="right">Root_biomass</th>
+<th align="right">Shoot_biomass</th>
 <th align="right">Root.shoot_ratio</th>
 </tr>
 </thead>
@@ -339,8 +362,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">1.23</td>
 <td align="right">15.84</td>
 <td align="right">0.41</td>
-<td align="right">1.34</td>
 <td align="right">0.15</td>
+<td align="right">1.34</td>
 <td align="right">0.52</td>
 </tr>
 <tr class="even">
@@ -348,8 +371,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.17</td>
 <td align="right">7.86</td>
 <td align="right">3.13</td>
-<td align="right">0.07</td>
 <td align="right">4.31</td>
+<td align="right">0.07</td>
 <td align="right">4.36</td>
 </tr>
 <tr class="odd">
@@ -357,8 +380,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.77</td>
 <td align="right">1.56</td>
 <td align="right">1.46</td>
-<td align="right">2.13</td>
 <td align="right">2.18</td>
+<td align="right">2.13</td>
 <td align="right">4.33</td>
 </tr>
 <tr class="even">
@@ -366,8 +389,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.68</td>
 <td align="right">0.75</td>
 <td align="right">0.24</td>
-<td align="right">0.02</td>
 <td align="right">0.41</td>
+<td align="right">0.02</td>
 <td align="right">0.05</td>
 </tr>
 </tbody>
@@ -380,8 +403,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <th align="right">Longest_leaf</th>
 <th align="right">n_Leaves</th>
 <th align="right">Biomass</th>
-<th align="right">Shoot_biomass</th>
 <th align="right">Root_biomass</th>
+<th align="right">Shoot_biomass</th>
 <th align="right">Root.shoot_ratio</th>
 </tr>
 </thead>
@@ -391,8 +414,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.270</td>
 <td align="right">0.000</td>
 <td align="right">0.522</td>
-<td align="right">0.250</td>
 <td align="right">0.700</td>
+<td align="right">0.250</td>
 <td align="right">0.471</td>
 </tr>
 <tr class="even">
@@ -400,8 +423,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.679</td>
 <td align="right">0.006</td>
 <td align="right">0.080</td>
-<td align="right">0.786</td>
 <td align="right">0.040</td>
+<td align="right">0.786</td>
 <td align="right">0.039</td>
 </tr>
 <tr class="odd">
@@ -409,8 +432,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.676</td>
 <td align="right">0.114</td>
 <td align="right">0.151</td>
-<td align="right">0.021</td>
 <td align="right">0.018</td>
+<td align="right">0.021</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
@@ -418,8 +441,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.413</td>
 <td align="right">0.389</td>
 <td align="right">0.629</td>
-<td align="right">0.898</td>
 <td align="right">0.524</td>
+<td align="right">0.898</td>
 <td align="right">0.818</td>
 </tr>
 </tbody>
@@ -435,8 +458,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <th align="right">Longest_leaf</th>
 <th align="right">n_Leaves</th>
 <th align="right">Biomass</th>
-<th align="right">Shoot_biomass</th>
 <th align="right">Root_biomass</th>
+<th align="right">Shoot_biomass</th>
 <th align="right">Root.shoot_ratio</th>
 </tr>
 </thead>
@@ -476,6 +499,15 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">n</td>
+<td align="right">111</td>
+<td align="right">111</td>
+<td align="right">111</td>
+<td align="right">111</td>
+<td align="right">111</td>
+<td align="right">111</td>
 </tr>
 </tbody>
 </table>
@@ -487,8 +519,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <th align="right">Longest_leaf</th>
 <th align="right">n_Leaves</th>
 <th align="right">Biomass</th>
-<th align="right">Shoot_biomass</th>
 <th align="right">Root_biomass</th>
+<th align="right">Shoot_biomass</th>
 <th align="right">Root.shoot_ratio</th>
 </tr>
 </thead>
@@ -498,8 +530,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.57</td>
 <td align="right">10.31</td>
 <td align="right">0.90</td>
-<td align="right">1.50</td>
 <td align="right">0.26</td>
+<td align="right">1.50</td>
 <td align="right">0.16</td>
 </tr>
 <tr class="even">
@@ -507,8 +539,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">3.17</td>
 <td align="right">5.51</td>
 <td align="right">0.02</td>
-<td align="right">0.29</td>
 <td align="right">0.02</td>
+<td align="right">0.29</td>
 <td align="right">0.10</td>
 </tr>
 <tr class="odd">
@@ -516,8 +548,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.97</td>
 <td align="right">4.32</td>
 <td align="right">2.52</td>
-<td align="right">0.89</td>
 <td align="right">3.26</td>
+<td align="right">0.89</td>
 <td align="right">1.40</td>
 </tr>
 <tr class="even">
@@ -525,8 +557,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.64</td>
 <td align="right">1.42</td>
 <td align="right">2.37</td>
-<td align="right">1.43</td>
 <td align="right">1.80</td>
+<td align="right">1.43</td>
 <td align="right">0.01</td>
 </tr>
 </tbody>
@@ -539,8 +571,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <th align="right">Longest_leaf</th>
 <th align="right">n_Leaves</th>
 <th align="right">Biomass</th>
-<th align="right">Shoot_biomass</th>
 <th align="right">Root_biomass</th>
+<th align="right">Shoot_biomass</th>
 <th align="right">Root.shoot_ratio</th>
 </tr>
 </thead>
@@ -550,8 +582,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.453</td>
 <td align="right">0.002</td>
 <td align="right">0.344</td>
-<td align="right">0.224</td>
 <td align="right">0.613</td>
+<td align="right">0.224</td>
 <td align="right">0.686</td>
 </tr>
 <tr class="even">
@@ -559,8 +591,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.078</td>
 <td align="right">0.021</td>
 <td align="right">0.886</td>
-<td align="right">0.593</td>
 <td align="right">0.875</td>
+<td align="right">0.593</td>
 <td align="right">0.750</td>
 </tr>
 <tr class="odd">
@@ -568,8 +600,8 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.482</td>
 <td align="right">0.000</td>
 <td align="right">0.006</td>
-<td align="right">0.561</td>
 <td align="right">0.001</td>
+<td align="right">0.561</td>
 <td align="right">0.179</td>
 </tr>
 <tr class="even">
@@ -577,21 +609,14 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 <td align="right">0.425</td>
 <td align="right">0.236</td>
 <td align="right">0.127</td>
-<td align="right">0.235</td>
 <td align="right">0.183</td>
+<td align="right">0.235</td>
 <td align="right">0.922</td>
 </tr>
 </tbody>
 </table>
+<p><strong>No F-values reproduce. The DF does not reproduce if I exclude 3 pops in the Seedling and 4 in the Juvenile anlaysis due to <span class="math inline">\(n \le 1\)</span>. Excluding to populations with n &gt; 1, the total N for Seedling and Juvenile is 104 and 88 (not 102, 97) The DF reproduces for Seedling only if I include all populations but DF does not reproduce for Juvenile (repro=12, published -=13) even if I include all populations. When I include all pops, the total N is 119 and 111. It’s not clear which cases are excluded from the analyses.</strong></p>
 <p>Note: the F-value for all terms but Experience reproduce using JMP. Experience doesn’t due to unbalanced data (see the simulation). I don’t know how to reproduce JMP results.</p>
-<p><strong>No F-values reproduce. The DF reproduce for Seedling but my ANOVA has only 12 df (the published df is 13) for the Population term of Juvenile. Also my sample size is bigger than the reported sample size. It’s not clear which cases are excluded from the analyses.</strong></p>
-</div>
-<div id="sample-size" class="section level4">
-<h4>sample size</h4>
-<pre class="r"><code>counts[, .(N=sum(N)), by=Stage]</code></pre>
-<pre><code>##       Stage   N
-## 1: Seedling 119
-## 2: Juvenile 111</code></pre>
 </div>
 </div>
 </div>
@@ -740,21 +765,21 @@ contrast(fit.emm, method=&quot;revpairwise&quot;)</code></pre>
 <pre><code>## NOTE: A nesting structure was detected in the fitted model:
 ##     Population.cross %in% Experience</code></pre>
 <pre><code>## NOTE: Results may be misleading due to involvement in interactions</code></pre>
-<pre><code>##  Treatment emmean   SE  df lower.CL upper.CL
-##  C           22.9 2.51 103     17.9     27.8
-##  T           18.1 3.44 103     11.3     25.0
+<pre><code>##  Treatment emmean   SE df lower.CL upper.CL
+##  C           22.5 3.08 91     16.4     28.6
+##  T           17.8 3.29 91     11.3     24.3
 ## 
 ## Results are averaged over the levels of: Population.cross, Experience 
 ## Results are given on the get (not the response) scale. 
 ## Confidence level used: 0.95</code></pre>
 <pre class="r"><code>    (fit.contrast &lt;- contrast(fit.emm, method=&quot;revpairwise&quot;))</code></pre>
-<pre><code>##  contrast estimate   SE  df t.ratio p.value
-##  T - C       -4.72 4.26 103 -1.108  0.2702 
+<pre><code>##  contrast estimate  SE df t.ratio p.value
+##  T - C       -4.72 4.5 91 -1.048  0.2972 
 ## 
 ## Results are averaged over the levels of: Population.cross, Experience</code></pre>
 <pre class="r"><code>    subdata_i[, .(mean=mean(get(y)), sd=sd(get(y))), by=Treatment]</code></pre>
 <pre><code>##    Treatment     mean        sd
-## 1:         C 23.25714 26.382051
+## 1:         C 23.37273 29.604057
 ## 2:         T 18.02041  4.497637</code></pre>
 <p>**ANOVA results do not reproduce (Table 1 above). The means are close for the treated but not really close for the control level. Again, given table 1, the authors are using a smaller dataset.</p>
 <p>The repro table has only one significant p-value (n_leaves)**</p>
@@ -927,5 +952,6 @@ gg_2d &lt;- ggplot(rii.raw, aes(x=Experience, y=rii)) +
 <h1>Statistical red flags</h1>
 <ol style="list-style-type: decimal">
 <li>It is not clear why the authors treat Population as a fixed effect.</li>
+<li>The reported F for the Treatment effect on root:shoot response for Seedling is 100.97. Two red-flags about this value. 1) The effect relative to the SE in Fig 1 does not look big enough to gemerate this F. That said, it can be very hard to mentally compute F especially given the nested structure of the design. 2) The F for both root biomass and shoot biomass is very small and root:shoot is just the ratio of these. If there is a large effect with root:shoot there must be some noticeable effect with either root or shoot or both.</li>
 </ol>
 </div>
