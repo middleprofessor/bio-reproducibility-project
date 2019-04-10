@@ -15,6 +15,10 @@ tags:
   - fake data
 subtitle: ''
 output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
   blogdown::html_page:
     toc: true
 ---
@@ -56,7 +60,7 @@ data_folder <- "../data"
 folder <- "Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations"
 
 # images need to be moved to /static/images/data from.../image.png
-knitr_path <- FALSE # run = TRUE to debug
+knitr_path <- TRUE # run = TRUE to debug
 
 source("../R/clean_label.R") # bookdown
 ```
@@ -488,9 +492,9 @@ contrast(fit.emm, method="revpairwise")
 
 ```
 
-**The ANOVA result doesn't reproduce (Table 1 above). Neither the modeled means (from the fit model) nor the simple means (complete pooling) reproduce but again the authors seem to be using a reduced data set.
+**The ANOVA result doesn't reproduce (Table 1 above). Neither the modeled means (from the fit model) nor the simple means (complete pooling) reproduce but again the authors seem to be using a reduced data set.**
 
-The repro table has three significant p-values for the experience term (none are shoot_biomass) but again, the experience terms differ from that in JMP (I don't know which if either are correct)**
+**The repro table has three significant p-values for the experience term (none are shoot_biomass) but again, the experience terms differ from that in JMP (I don't know which if either are correct)**
 
 > Competition treatment significantly impacted three traits (Table 1): plants grown in pots with C. stoebe had fewer leaves (Figure 1b), shorter leaves (M = 17.9 cm, SD = 4.5 vs. M = 19.5 cm, SD = 5.28) and a higher root:shoot ratio (more allocation to root biomass; Figure 1c) than did plants growing in control pots.
 
@@ -507,9 +511,9 @@ The repro table has three significant p-values for the experience term (none are
 
 ```
 
-**ANOVA results do not reproduce (Table 1 above). The means are close for the treated but not really close for the control level. Again, given table 1, the authors are using a smaller dataset.
+**ANOVA results do not reproduce (Table 1 above). The means are close for the treated but not really close for the control level. Again, given table 1, the authors are using a smaller dataset.**
 
-The repro table has only one significant p-value (n_leaves)**
+**The repro table has only one significant p-value (n_leaves)**
 
 > There were significant interactions of treatment and experience type for number of leaves and root:shoot ratio (Table 1)
 

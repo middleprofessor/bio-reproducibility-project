@@ -1,6 +1,8 @@
 # function to remove spaces and units from column labels
 # Jeff Walker
 # November 12, 2018
+# to use, add "source("clean_label.R")"
+
 
 clean_label <- function(x){
   # clean units in parentheses and units with space in front of parenthesis

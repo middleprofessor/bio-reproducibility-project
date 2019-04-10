@@ -162,7 +162,7 @@ library(cowplot)</code></pre>
 folder &lt;- &quot;Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations&quot;
 
 # images need to be moved to /static/images/data from.../image.png
-knitr_path &lt;- FALSE # run = TRUE to debug
+knitr_path &lt;- TRUE # run = TRUE to debug
 
 source(&quot;../R/clean_label.R&quot;) # bookdown</code></pre>
 </div>
@@ -349,7 +349,7 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 </div>
 <div id="table-1published" class="section level3">
 <h3>Table 1–published</h3>
-<p><img src="/images/Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations/table1.png" width="400px" /></p>
+<p><img src="../images/Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations/table1.png" width="400px" /></p>
 </div>
 <div id="table-1---repro" class="section level3">
 <h3>Table 1 - repro</h3>
@@ -752,7 +752,7 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 }</code></pre>
 <div id="fig-1-published" class="section level3">
 <h3>Fig 1 – published</h3>
-<p><img src="/images/Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations/fig1.png" width="400px" /></p>
+<p><img src="../images/Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations/fig1.png" width="400px" /></p>
 </div>
 <div id="fig-1-repro" class="section level3">
 <h3>Fig 1 – repro</h3>
@@ -824,8 +824,8 @@ contrast(fit.emm, method=&quot;revpairwise&quot;)</code></pre>
     (fit.contrast &lt;- contrast(fit.emm, method=&quot;revpairwise&quot;))
     
     subdata_i[, .(mean=mean(get(y)), sd=sd(get(y))), by=Experience]</code></pre>
-<p>**The ANOVA result doesn’t reproduce (Table 1 above). Neither the modeled means (from the fit model) nor the simple means (complete pooling) reproduce but again the authors seem to be using a reduced data set.</p>
-<p>The repro table has three significant p-values for the experience term (none are shoot_biomass) but again, the experience terms differ from that in JMP (I don’t know which if either are correct)**</p>
+<p><strong>The ANOVA result doesn’t reproduce (Table 1 above). Neither the modeled means (from the fit model) nor the simple means (complete pooling) reproduce but again the authors seem to be using a reduced data set.</strong></p>
+<p><strong>The repro table has three significant p-values for the experience term (none are shoot_biomass) but again, the experience terms differ from that in JMP (I don’t know which if either are correct)</strong></p>
 <blockquote>
 <p>Competition treatment significantly impacted three traits (Table 1): plants grown in pots with C. stoebe had fewer leaves (Figure 1b), shorter leaves (M = 17.9 cm, SD = 4.5 vs. M = 19.5 cm, SD = 5.28) and a higher root:shoot ratio (more allocation to root biomass; Figure 1c) than did plants growing in control pots.</p>
 </blockquote>
@@ -854,8 +854,8 @@ contrast(fit.emm, method=&quot;revpairwise&quot;)</code></pre>
 <pre><code>##    Treatment     mean        sd
 ## 1:         C 23.37273 29.604057
 ## 2:         T 18.02041  4.497637</code></pre>
-<p>**ANOVA results do not reproduce (Table 1 above). The means are close for the treated but not really close for the control level. Again, given table 1, the authors are using a smaller dataset.</p>
-<p>The repro table has only one significant p-value (n_leaves)**</p>
+<p><strong>ANOVA results do not reproduce (Table 1 above). The means are close for the treated but not really close for the control level. Again, given table 1, the authors are using a smaller dataset.</strong></p>
+<p><strong>The repro table has only one significant p-value (n_leaves)</strong></p>
 <blockquote>
 <p>There were significant interactions of treatment and experience type for number of leaves and root:shoot ratio (Table 1)</p>
 </blockquote>
@@ -1012,7 +1012,7 @@ gg_2d &lt;- ggplot(rii.raw, aes(x=Experience, y=rii)) +
 <h2>Fig 2</h2>
 <div id="fig-2-published" class="section level3">
 <h3>Fig 2 – published</h3>
-<p><img src="/images/Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations/fig2.png" width="400px" /></p>
+<p><img src="../images/Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations/fig2.png" width="400px" /></p>
 </div>
 <div id="fig-2-repro" class="section level3">
 <h3>Fig 2 repro</h3>
