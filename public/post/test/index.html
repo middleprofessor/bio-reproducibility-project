@@ -6,23 +6,46 @@
   <title>test - The Biology Reproducibility Project</title>
   <meta property="og:title" content="test - The Biology Reproducibility Project" />
   <meta name="twitter:title" content="test - The Biology Reproducibility Project" />
-  <meta name="description" content="blah blah blah
-blah blah blah blah blah blah">
-  <meta property="og:description" content="blah blah blah
-blah blah blah blah blah blah">
-  <meta name="twitter:description" content="blah blah blah
-blah blah blah blah blah blah">
+  <meta name="description" content="\(\alpha = 42\)
+\[\begin{equation} \beta = boingo \end{equation}\] blah blah blah blah blah blah blah
+blah blah blah blah blah blah blah blah
+fake_data &lt;- matrix(rnorm(10*100), nrow=10) blah blah blah blah
+blah blah blah
+blah blah
+more blah">
+  <meta property="og:description" content="\(\alpha = 42\)
+\[\begin{equation} \beta = boingo \end{equation}\] blah blah blah blah blah blah blah
+blah blah blah blah blah blah blah blah
+fake_data &lt;- matrix(rnorm(10*100), nrow=10) blah blah blah blah
+blah blah blah
+blah blah
+more blah">
+  <meta name="twitter:description" content="\(\alpha = 42\)
+\[\begin{equation} \beta = boingo \end{equation}\] blah blah blah blah blah blah blah
+blah blah blah blah blah blah blah blah
+fake_data &lt;- matrix(rnorm(10*100), nrow=10) blah blah …">
   <meta name="author" content=""/>
   <meta property="og:site_name" content="The Biology Reproducibility Project" />
   <meta property="og:url" content="/post/test/" />
   <meta property="og:type" content="article" />
   <meta name="twitter:card" content="summary" />
-  <meta name="generator" content="Hugo 0.37" />
+  <meta name="generator" content="Hugo 0.54.0" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="/js/collapse.js"></script>
+  <script src="/js/dropdown.js"></script>
+  <script src="/js/transition.js"></script>
+
+
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
   <link rel="stylesheet" href="/css/custom.css" media="all" />
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+  <script src="/js/script.js"></script>
+  <script src="/js/custom.js"></script>
+  <script defer src="/js/fontawesome.js"></script>
 </head>
+
 <body>
 
 <header class="site-header">
@@ -38,6 +61,12 @@ blah blah blah blah blah blah">
 </header>
 <hr class="site-header-bottom">
 
+  <script src="/js/collapse.js"></script>
+  <script src="/js/dropdown.js"></script>
+  <script src="/js/transition.js"></script>
+
+
+
   <div class="main" role="main">
     <article class="article">
       
@@ -46,15 +75,39 @@ blah blah blah blah blah blah">
       
       <hr class="article-title-bottom">
       <ul class="article-meta">
-        <li class="article-meta-date"><time>May 4, 2018</time></li>
+        <li class="article-meta-date"><time>April 21, 2019</time></li>
       </ul>
       
-      <p>blah blah blah</p>
+      
+<div id="code-folding-buttons" class="btn-group pull-right">
+  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-_extension-text-contrast="">
+    <span>Show/hide code</span> 
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" style="min-width: 50px;">
+  <li><a id="rmd-show-all-code" href="#">Show all</a>
+  </li><li><a id="rmd-hide-all-code" href="#">Hide all</a></li>
+  </ul>
+</div>
 
-<p>blah blah blah blah blah blah</p>
+      
+
+
+<p><span class="math inline">\(\alpha = 42\)</span></p>
+<span class="math display">\[\begin{equation}
+\beta = boingo
+\end{equation}\]</span>
+<p>blah blah blah blah blah blah blah</p>
+<p>blah blah blah blah blah blah blah blah</p>
+<pre class="r"><code>fake_data &lt;- matrix(rnorm(10*100), nrow=10)</code></pre>
+<p>blah blah blah blah</p>
+<p>blah blah blah</p>
+<p>blah blah</p>
+<p>more blah</p>
 
     </article>
 
+	
     
 <ul class="article-share">
   <li>
@@ -72,10 +125,6 @@ blah blah blah blah blah blah">
     }(document, 'script', 'facebook-jssdk'));</script>
   </li>
   <li>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <g:plus action="share"></g:plus>
-  </li>
-  <li>
     <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label-counter" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   </li>
   <li>
@@ -84,10 +133,11 @@ blah blah blah blah blah blah">
   </li>
 </ul>
 
+
     <ul class="pager article-pager">
       <li class="pager-newer pager-noitem">&lt; Newer</li>
       <li class="pager-older">
-        <a href="/post/test-2/" data-toggle="tooltip" data-placement="top" title="test 2">Older &gt;</a>
+        <a href="/post/data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations/" data-toggle="tooltip" data-placement="top" title="Data from: Response of bluebunch wheatgrass to invasion differences in competitive ability among invader-experienced and naïve populations">Older &gt;</a>
       </li>
     </ul>
   </div>
@@ -99,15 +149,29 @@ blah blah blah blah blah blah">
     <li class="site-footer-item-about"><a href="/about/" title="About">About</a></li>
   </ul>
   <div class="powerdby">
-    Powered by <a href="https://gohugo.io/">Hugo</a>
+    Powered by <a href="https://gohugo.io/">Hugo</a> and <a href="https://github.com/taikii/whiteplain">Whiteplain</a>
   </div>
 </div>
-    <script src="//yihui.name/js/math-code.js"></script>
+
+
+ 
+  <script>
+  $(document).ready(function () {
+    window.initializeCodeFolding("show" === "hide");
+  });
+  </script>
+  <script src="/js/codefolding.js"></script>
+
+
+
+<script src="//yihui.name/js/math-code.js"></script>
 <script async
 src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
-<script src="/js/script.js"></script>
-<script src="/js/custom.js"></script>
+
+
+
+
 
 
 </body>

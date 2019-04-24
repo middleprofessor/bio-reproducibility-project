@@ -15,12 +15,9 @@ tags:
   - fake data
 subtitle: ''
 output:
-  html_document:
-    toc: true
-    toc_float: true
-    code_folding: hide
   blogdown::html_page:
     toc: true
+    codefolding_show: hide
 ---
 
 # Sources
@@ -42,6 +39,7 @@ Gibson AL, Nelson CR, Atwater DZ (2018) Data from: Response of bluebunch wheatgr
 Failure to reproduce or partial reproducibility might be an error in my coding, or my misunderstanding of the author's methods, or my lack of knowledge of statistics generally or the R functions that I use more specifically.
 
 # Setup
+
 ```{r libraries, message=FALSE}
 library(ggplot2)
 library(readxl)
@@ -55,14 +53,17 @@ library(plyr)
 library(cowplot)
 ```
 
+
 ```{r}
+
 data_folder <- "../data"
 folder <- "Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations"
 
 # images need to be moved to /static/images/data from.../image.png
-knitr_path <- TRUE # run = TRUE to debug
+knitr_path <- FALSE # run = TRUE to debug, or HTML_document
 
 source("../R/clean_label.R") # bookdown
+
 ```
 
 # Import
@@ -664,4 +665,4 @@ plot_grid(gg_2b, gg_2d, nrow=2)
 # Statistical red flags
 
 1. It is not clear why the authors treat Population as a fixed effect.
-2. The reported F for the Treatment effect on root:shoot response for Seedling is 100.97. Two red-flags about this value. 1) The effect relative to the SE in Fig 1 does not look big enough to gemerate this F. That said, it can be very hard to mentally compute F especially given the nested structure of the design. 2) The F for both root biomass and shoot biomass is very small and root:shoot is just the ratio of these. If there is a large effect with root:shoot there must be some noticeable effect with either root or shoot or both.
+2. The reported F-value for the Treatment effect on root:shoot response for Seedling is 100.97. Two red-flags about this value. 1) The effect relative to the SE in Fig 1 does not look big enough to gemerate this F. That said, it can be very hard to mentally compute F especially given the nested structure of the design. 2) The F for both root biomass and shoot biomass is very small and root:shoot is just the ratio of these. If there is a large effect with root:shoot there must be some noticeable effect with either root or shoot or both.

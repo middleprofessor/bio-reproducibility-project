@@ -15,11 +15,22 @@
   <meta property="og:type" content="article" />
   <meta name="twitter:card" content="summary" />
   <meta name="generator" content="Hugo 0.54.0" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="/js/collapse.js"></script>
+  <script src="/js/dropdown.js"></script>
+  <script src="/js/transition.js"></script>
+
+
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
   <link rel="stylesheet" href="/css/custom.css" media="all" />
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+  <script src="/js/script.js"></script>
+  <script src="/js/custom.js"></script>
+  <script defer src="/js/fontawesome.js"></script>
 </head>
+
 <body>
 
 <header class="site-header">
@@ -35,6 +46,12 @@
 </header>
 <hr class="site-header-bottom">
 
+  <script src="/js/collapse.js"></script>
+  <script src="/js/dropdown.js"></script>
+  <script src="/js/transition.js"></script>
+
+
+
   <div class="main" role="main">
     <article class="article">
       
@@ -46,49 +63,49 @@
         <li class="article-meta-date"><time>January 16, 2019</time></li>
         <li class="article-meta-tags">
           <a href="/tags/excel/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             excel
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
           <a href="/tags/linear-mixed-model/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             linear mixed model
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
           <a href="/tags/transformed-response/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             transformed response
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
           <a href="/tags/three-way-factorial/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             three-way factorial
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
           <a href="/tags/no-pooling-se-for-clustered-data-in-plots/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             no-pooling SE for clustered data in plots
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
           <a href="/tags/simulate-this/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             simulate this
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
           <a href="/tags/r/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             R
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
           <a href="/tags/nlme/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             nlme
           </a>&nbsp;
         </li>
@@ -97,6 +114,18 @@
 <aside class="toc">
   
 </aside>
+      
+<div id="code-folding-buttons" class="btn-group pull-right">
+  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-_extension-text-contrast="">
+    <span>Show/hide code</span> 
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" style="min-width: 50px;">
+  <li><a id="rmd-show-all-code" href="#">Show all</a>
+  </li><li><a id="rmd-hide-all-code" href="#">Hide all</a></li>
+  </ul>
+</div>
+
       
 
 <div id="TOC">
@@ -961,6 +990,7 @@ gg1c</code></pre>
 
     </article>
 
+	
     
 <ul class="article-share">
   <li>
@@ -978,10 +1008,6 @@ gg1c</code></pre>
     }(document, 'script', 'facebook-jssdk'));</script>
   </li>
   <li>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <g:plus action="share"></g:plus>
-  </li>
-  <li>
     <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label-counter" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   </li>
   <li>
@@ -989,6 +1015,7 @@ gg1c</code></pre>
     <script>!function(d,i){if(!d.getElementById(i)){var j=d.createElement("script");j.id=i;j.src="https://widgets.getpocket.com/v1/j/btn.js?v=1";var w=d.getElementById(i);d.body.appendChild(j);}}(document,"pocket-btn-js");</script>
   </li>
 </ul>
+
 
     <ul class="pager article-pager">
       <li class="pager-newer">
@@ -1007,19 +1034,28 @@ gg1c</code></pre>
     <li class="site-footer-item-about"><a href="/about/" title="About">About</a></li>
   </ul>
   <div class="powerdby">
-    Powered by <a href="https://gohugo.io/">Hugo</a>
+    Powered by <a href="https://gohugo.io/">Hugo</a> and <a href="https://github.com/taikii/whiteplain">Whiteplain</a>
   </div>
 </div>
-    <script src="//yihui.name/js/math-code.js"></script>
+
+
+ 
+  <script>
+  $(document).ready(function () {
+    window.initializeCodeFolding("show" === "hide");
+  });
+  </script>
+  <script src="/js/codefolding.js"></script>
+
+
+
+<script src="//yihui.name/js/math-code.js"></script>
 <script async
 src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
-<script src="/js/script.js"></script>
-<script src="/js/custom.js"></script>
 
-  <script src="/js/collapse.js"></script>
-  <script src="/js/dropdown.js"></script>
-  <script src="/js/transition.js"></script>
+
+
 
 
 

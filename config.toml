@@ -1,6 +1,6 @@
 baseurl = "/"
 title = "The Biology Reproducibility Project"
-theme = "whiteplain"
+theme = "whiteplain-master"
 languageCode = "en"
 # Disqus shortname
 #disqusShortname = ""
@@ -9,12 +9,21 @@ languageCode = "en"
 pygmentsCodefences = true
 pygmentsUseClasses = true
 pygmentsOptions = "linenos=table"
-# Set to true to disable code folding
-    disable_codefolding = false
-# Set to "hide" or "show" all codes by default
-    codefolding_show = "hide"
+
 # Copyright notice. This is displayer in the footer.
 copyright = "&copy; Copyright 2018 Jeffrey A. Walker"
+
+# Set to true to disable code folding
+disable_codefolding = false
+# Set to "hide" or "show" all codes by default
+codefolding_show = "show"
+# Set to true to exclude the "Show/hide all" button
+codefolding_nobutton = false
+
+# Link custom CSS and JS assets
+#   (relative to /static/css and /static/js respectively)
+custom_css = ["codefolding.css"]
+custom_js  = []
 
 [params]
   # Date format

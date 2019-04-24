@@ -15,11 +15,22 @@
   <meta property="og:type" content="article" />
   <meta name="twitter:card" content="summary" />
   <meta name="generator" content="Hugo 0.54.0" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="/js/collapse.js"></script>
+  <script src="/js/dropdown.js"></script>
+  <script src="/js/transition.js"></script>
+
+
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
   <link rel="stylesheet" href="/css/custom.css" media="all" />
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+  <script src="/js/script.js"></script>
+  <script src="/js/custom.js"></script>
+  <script defer src="/js/fontawesome.js"></script>
 </head>
+
 <body>
 
 <header class="site-header">
@@ -35,6 +46,12 @@
 </header>
 <hr class="site-header-bottom">
 
+  <script src="/js/collapse.js"></script>
+  <script src="/js/dropdown.js"></script>
+  <script src="/js/transition.js"></script>
+
+
+
   <div class="main" role="main">
     <article class="article">
       
@@ -46,43 +63,43 @@
         <li class="article-meta-date"><time>March 6, 2019</time></li>
         <li class="article-meta-tags">
           <a href="/tags/r/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             R
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
           <a href="/tags/excel/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             Excel
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
           <a href="/tags/fixed-effect-nested-anova/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             fixed effect nested ANOVA
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
           <a href="/tags/unbalanced-anova/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             unbalanced ANOVA
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
           <a href="/tags/type-iii-ss/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             Type III SS
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
           <a href="/tags/drop1/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             drop1
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
           <a href="/tags/fake-data/">
-            <svg class="icon"><use xlink:href="/images/fa-solid.svg#tag"></use></svg>
+            <i class="fas fa-tag"></i>
             fake data
           </a>&nbsp;
         </li>
@@ -91,6 +108,18 @@
 <aside class="toc">
   
 </aside>
+      
+<div id="code-folding-buttons" class="btn-group pull-right">
+  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-_extension-text-contrast="">
+    <span>Show/hide code</span> 
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" style="min-width: 50px;">
+  <li><a id="rmd-show-all-code" href="#">Show all</a>
+  </li><li><a id="rmd-hide-all-code" href="#">Hide all</a></li>
+  </ul>
+</div>
+
       
 
 <div id="TOC">
@@ -162,7 +191,7 @@ library(cowplot)</code></pre>
 folder &lt;- &quot;Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations&quot;
 
 # images need to be moved to /static/images/data from.../image.png
-knitr_path &lt;- TRUE # run = TRUE to debug
+knitr_path &lt;- FALSE # run = TRUE to debug, or HTML_document
 
 source(&quot;../R/clean_label.R&quot;) # bookdown</code></pre>
 </div>
@@ -349,7 +378,7 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 </div>
 <div id="table-1published" class="section level3">
 <h3>Table 1–published</h3>
-<p><img src="../images/Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations/table1.png" width="400px" /></p>
+<p><img src="/images/Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations/table1.png" width="400px" /></p>
 </div>
 <div id="table-1---repro" class="section level3">
 <h3>Table 1 - repro</h3>
@@ -752,11 +781,11 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 }</code></pre>
 <div id="fig-1-published" class="section level3">
 <h3>Fig 1 – published</h3>
-<p><img src="../images/Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations/fig1.png" width="400px" /></p>
+<p><img src="/images/Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations/fig1.png" width="400px" /></p>
 </div>
 <div id="fig-1-repro" class="section level3">
 <h3>Fig 1 – repro</h3>
-<p><img src="/post/2019-03-06-data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations_files/figure-html/my-fig1-seedling-1.png" width="600px" /></p>
+<p><img src="2019-03-06-data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations_files/figure-html/my-fig1-seedling-1.png" width="600px" /></p>
 <p><strong>While the patterns are similar, none reproduce, but this isn’t surprising given that my sample size is bigger than that in Table 1 (so the authors have excluded data, but I’m not sure which).</strong></p>
 </div>
 </div>
@@ -1012,11 +1041,11 @@ gg_2d &lt;- ggplot(rii.raw, aes(x=Experience, y=rii)) +
 <h2>Fig 2</h2>
 <div id="fig-2-published" class="section level3">
 <h3>Fig 2 – published</h3>
-<p><img src="../images/Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations/fig2.png" width="400px" /></p>
+<p><img src="/images/Data from Response of bluebunch wheatgrass to invasion- differences in competitive ability among invader-experienced and naïve populations/fig2.png" width="400px" /></p>
 </div>
 <div id="fig-2-repro" class="section level3">
 <h3>Fig 2 repro</h3>
-<p><img src="/post/2019-03-06-data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations_files/figure-html/fig2-repro-1.png" width="400px" /></p>
+<p><img src="2019-03-06-data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations_files/figure-html/fig2-repro-1.png" width="400px" /></p>
 <p><strong>2B and D effectively reproduce. 2D reproduces only using the populations identified in 2C, which includes some samples with n=1 and so the figure doesn’t reflect my interpretation of the author’s methods on which populations were excluded.</strong></p>
 </div>
 </div>
@@ -1025,12 +1054,13 @@ gg_2d &lt;- ggplot(rii.raw, aes(x=Experience, y=rii)) +
 <h1>Statistical red flags</h1>
 <ol style="list-style-type: decimal">
 <li>It is not clear why the authors treat Population as a fixed effect.</li>
-<li>The reported F for the Treatment effect on root:shoot response for Seedling is 100.97. Two red-flags about this value. 1) The effect relative to the SE in Fig 1 does not look big enough to gemerate this F. That said, it can be very hard to mentally compute F especially given the nested structure of the design. 2) The F for both root biomass and shoot biomass is very small and root:shoot is just the ratio of these. If there is a large effect with root:shoot there must be some noticeable effect with either root or shoot or both.</li>
+<li>The reported F-value for the Treatment effect on root:shoot response for Seedling is 100.97. Two red-flags about this value. 1) The effect relative to the SE in Fig 1 does not look big enough to gemerate this F. That said, it can be very hard to mentally compute F especially given the nested structure of the design. 2) The F for both root biomass and shoot biomass is very small and root:shoot is just the ratio of these. If there is a large effect with root:shoot there must be some noticeable effect with either root or shoot or both.</li>
 </ol>
 </div>
 
     </article>
 
+	
     
 <ul class="article-share">
   <li>
@@ -1048,10 +1078,6 @@ gg_2d &lt;- ggplot(rii.raw, aes(x=Experience, y=rii)) +
     }(document, 'script', 'facebook-jssdk'));</script>
   </li>
   <li>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <g:plus action="share"></g:plus>
-  </li>
-  <li>
     <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label-counter" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   </li>
   <li>
@@ -1060,8 +1086,11 @@ gg_2d &lt;- ggplot(rii.raw, aes(x=Experience, y=rii)) +
   </li>
 </ul>
 
+
     <ul class="pager article-pager">
-      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-newer">
+          <a href="/post/test/" data-toggle="tooltip" data-placement="top" title="test">&lt; Newer</a>
+      </li>
       <li class="pager-older">
         <a href="/post/data-from-herbivory-and-eutrophication-mediate-grassland-plant-nutrient-responses-across-a-global-climatic-gradient/" data-toggle="tooltip" data-placement="top" title="Data from: Herbivory and eutrophication mediate grassland plant nutrient responses across a global climatic gradient">Older &gt;</a>
       </li>
@@ -1075,19 +1104,28 @@ gg_2d &lt;- ggplot(rii.raw, aes(x=Experience, y=rii)) +
     <li class="site-footer-item-about"><a href="/about/" title="About">About</a></li>
   </ul>
   <div class="powerdby">
-    Powered by <a href="https://gohugo.io/">Hugo</a>
+    Powered by <a href="https://gohugo.io/">Hugo</a> and <a href="https://github.com/taikii/whiteplain">Whiteplain</a>
   </div>
 </div>
-    <script src="//yihui.name/js/math-code.js"></script>
+
+
+ 
+  <script>
+  $(document).ready(function () {
+    window.initializeCodeFolding("show" === "hide");
+  });
+  </script>
+  <script src="/js/codefolding.js"></script>
+
+
+
+<script src="//yihui.name/js/math-code.js"></script>
 <script async
 src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
-<script src="/js/script.js"></script>
-<script src="/js/custom.js"></script>
 
-  <script src="/js/collapse.js"></script>
-  <script src="/js/dropdown.js"></script>
-  <script src="/js/transition.js"></script>
+
+
 
 
 
