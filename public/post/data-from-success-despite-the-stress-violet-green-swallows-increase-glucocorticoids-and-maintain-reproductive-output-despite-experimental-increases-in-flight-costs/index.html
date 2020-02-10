@@ -239,8 +239,9 @@ anova(lm(Mass ~ Treatment, data=bird[Nestling_Age==&#39;3&#39;])) # check</code>
 gg</code></pre>
 <pre><code>## Warning: Removed 8 rows containing non-finite values (stat_boxplot).</code></pre>
 <p><img src="/post/2018-05-07-data-from-success-despite-the-stress-violet-green-swallows-increase-glucocorticoids-and-maintain-reproductive-output-despite-experimental-increases-in-flight-costs_files/figure-html/Fig2a-1.png" width="672" /></p>
-<pre class="r"><code>fit2a &lt;- lmer(CORT_B ~ Treatment*Capture_Period + DOY_Initiation + day3mass + (1|BandNo), data=bird)
-kable(as.data.frame(anova(fit2a)), digits=3)</code></pre>
+<pre class="r"><code>fit2a &lt;- lmer(CORT_B ~ Treatment*Capture_Period + DOY_Initiation + day3mass + (1|BandNo), data=bird)</code></pre>
+<pre><code>## boundary (singular) fit: see ?isSingular</code></pre>
+<pre class="r"><code>kable(as.data.frame(anova(fit2a)), digits=3)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -249,7 +250,7 @@ kable(as.data.frame(anova(fit2a)), digits=3)</code></pre>
 <th align="right">Mean Sq</th>
 <th align="right">NumDF</th>
 <th align="right">DenDF</th>
-<th align="right">F.value</th>
+<th align="right">F value</th>
 <th align="right">Pr(&gt;F)</th>
 </tr>
 </thead>
@@ -308,16 +309,15 @@ kable(as.data.frame(anova(fit2a)), digits=3)</code></pre>
 </blockquote>
 <pre class="r"><code># kenward-rogers adjustment is default but I am specifying it regardless
 emm_options(lmer.df = &quot;kenward-roger&quot;)
-fit2a_lsmeans &lt;- emmeans(fit2a, spec=c(&#39;Treatment&#39;, &#39;Capture_Period&#39;))</code></pre>
-<pre><code>## Loading required namespace: pbkrtest</code></pre>
-<pre class="r"><code>fit2a_lsmeans</code></pre>
-<pre><code>##  Treatment Capture_Period    emmean        SE    df   lower.CL  upper.CL
-##  1_control 3               2.676601 0.5559913 24.82  1.5310829  3.822120
-##  2_4Fclip  3               2.689967 0.5121113 24.82  1.6348629  3.745070
-##  3_8Fclip  3               1.967819 1.0679731 24.34 -0.2347274  4.170366
-##  1_control 13              4.651025 0.5925682 24.79  3.4300885  5.871962
-##  2_4Fclip  13              7.544309 0.5463091 24.87  6.4188703  8.669749
-##  3_8Fclip  13             14.071839 0.8921614 24.30 12.2316954 15.911982
+fit2a_lsmeans &lt;- emmeans(fit2a, spec=c(&#39;Treatment&#39;, &#39;Capture_Period&#39;))
+fit2a_lsmeans</code></pre>
+<pre><code>##  Treatment Capture_Period emmean    SE   df lower.CL upper.CL
+##  1_control 3                2.68 0.556 24.8    1.531     3.82
+##  2_4Fclip  3                2.69 0.512 24.8    1.635     3.75
+##  3_8Fclip  3                1.97 1.068 24.3   -0.235     4.17
+##  1_control 13               4.65 0.593 24.8    3.430     5.87
+##  2_4Fclip  13               7.54 0.546 24.9    6.419     8.67
+##  3_8Fclip  13              14.07 0.892 24.3   12.232    15.91
 ## 
 ## Degrees-of-freedom method: kenward-roger 
 ## Confidence level used: 0.95</code></pre>
@@ -525,7 +525,7 @@ kable(as.data.frame(anova(fit2b)), digits=3)</code></pre>
 <th align="right">Mean Sq</th>
 <th align="right">NumDF</th>
 <th align="right">DenDF</th>
-<th align="right">F.value</th>
+<th align="right">F value</th>
 <th align="right">Pr(&gt;F)</th>
 </tr>
 </thead>
@@ -535,7 +535,7 @@ kable(as.data.frame(anova(fit2b)), digits=3)</code></pre>
 <td align="right">0.949</td>
 <td align="right">0.475</td>
 <td align="right">2</td>
-<td align="right">24.066</td>
+<td align="right">24.067</td>
 <td align="right">2.027</td>
 <td align="right">0.154</td>
 </tr>
@@ -553,7 +553,7 @@ kable(as.data.frame(anova(fit2b)), digits=3)</code></pre>
 <td align="right">1.180</td>
 <td align="right">0.590</td>
 <td align="right">2</td>
-<td align="right">15.229</td>
+<td align="right">15.243</td>
 <td align="right">2.520</td>
 <td align="right">0.113</td>
 </tr>
@@ -570,7 +570,7 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <th align="right">Mean Sq</th>
 <th align="right">NumDF</th>
 <th align="right">DenDF</th>
-<th align="right">F.value</th>
+<th align="right">F value</th>
 <th align="right">Pr(&gt;F)</th>
 </tr>
 </thead>
@@ -580,7 +580,7 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <td align="right">0.067</td>
 <td align="right">0.067</td>
 <td align="right">1</td>
-<td align="right">22.088</td>
+<td align="right">22.086</td>
 <td align="right">0.283</td>
 <td align="right">0.600</td>
 </tr>
@@ -589,7 +589,7 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <td align="right">1.461</td>
 <td align="right">0.731</td>
 <td align="right">2</td>
-<td align="right">22.460</td>
+<td align="right">22.458</td>
 <td align="right">3.112</td>
 <td align="right">0.064</td>
 </tr>
@@ -598,7 +598,7 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <td align="right">11.411</td>
 <td align="right">11.411</td>
 <td align="right">1</td>
-<td align="right">15.516</td>
+<td align="right">15.514</td>
 <td align="right">48.606</td>
 <td align="right">0.000</td>
 </tr>
@@ -607,7 +607,7 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <td align="right">1.192</td>
 <td align="right">0.596</td>
 <td align="right">2</td>
-<td align="right">15.029</td>
+<td align="right">15.027</td>
 <td align="right">2.539</td>
 <td align="right">0.112</td>
 </tr>
@@ -622,7 +622,7 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <th align="right">Mean Sq</th>
 <th align="right">NumDF</th>
 <th align="right">DenDF</th>
-<th align="right">F.value</th>
+<th align="right">F value</th>
 <th align="right">Pr(&gt;F)</th>
 </tr>
 </thead>
@@ -632,7 +632,7 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <td align="right">0.019</td>
 <td align="right">0.019</td>
 <td align="right">1</td>
-<td align="right">22.233</td>
+<td align="right">22.231</td>
 <td align="right">0.081</td>
 <td align="right">0.779</td>
 </tr>
@@ -641,7 +641,7 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <td align="right">0.922</td>
 <td align="right">0.461</td>
 <td align="right">2</td>
-<td align="right">22.626</td>
+<td align="right">22.624</td>
 <td align="right">1.963</td>
 <td align="right">0.164</td>
 </tr>
@@ -650,7 +650,7 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <td align="right">11.411</td>
 <td align="right">11.411</td>
 <td align="right">1</td>
-<td align="right">15.516</td>
+<td align="right">15.514</td>
 <td align="right">48.606</td>
 <td align="right">0.000</td>
 </tr>
@@ -659,7 +659,7 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <td align="right">1.192</td>
 <td align="right">0.596</td>
 <td align="right">2</td>
-<td align="right">15.029</td>
+<td align="right">15.032</td>
 <td align="right">2.539</td>
 <td align="right">0.112</td>
 </tr>
@@ -674,7 +674,7 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <th align="right">Mean Sq</th>
 <th align="right">NumDF</th>
 <th align="right">DenDF</th>
-<th align="right">F.value</th>
+<th align="right">F value</th>
 <th align="right">Pr(&gt;F)</th>
 </tr>
 </thead>
@@ -702,7 +702,7 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <td align="right">11.819</td>
 <td align="right">11.819</td>
 <td align="right">1</td>
-<td align="right">14.728</td>
+<td align="right">14.729</td>
 <td align="right">50.344</td>
 <td align="right">0.000</td>
 </tr>
@@ -711,7 +711,7 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <td align="right">1.192</td>
 <td align="right">0.596</td>
 <td align="right">2</td>
-<td align="right">15.018</td>
+<td align="right">15.032</td>
 <td align="right">2.539</td>
 <td align="right">0.112</td>
 </tr>
@@ -725,21 +725,21 @@ kable(as.data.frame(anova(fit2b, type=1)), digits=3)</code></pre>
 <p>The authors used Kenwood-Rogers approximate DF for the contrasts and Tukey-Kramer adjusted SE/p-values for all the contrasts (not just the three reported).</p>
 <pre class="r"><code>coefficients(summary(fit2b))</code></pre>
 <pre><code>##                                       Estimate Std. Error       df
-## (Intercept)                        13.09837461 6.41758669 22.35249
-## DOY_Initiation                      0.01172635 0.04119665 22.23298
-## Treatment2_4Fclip                   0.65126356 0.35803910 32.65636
-## Treatment3_8Fclip                   1.13967598 0.54885428 30.10932
-## Capture_Period13                   -0.94908601 0.24270225 16.04279
-## Treatment2_4Fclip:Capture_Period13 -0.12094911 0.34567116 15.67319
-## Treatment3_8Fclip:Capture_Period13 -1.17529737 0.52934113 14.62314
+## (Intercept)                        13.09837473 6.41758686 22.35080
+## DOY_Initiation                      0.01172635 0.04119666 22.23129
+## Treatment2_4Fclip                   0.65126355 0.35803911 32.65563
+## Treatment3_8Fclip                   1.13967597 0.54885429 30.10825
+## Capture_Period13                   -0.94908602 0.24270224 16.04105
+## Treatment2_4Fclip:Capture_Period13 -0.12094907 0.34567115 15.67147
+## Treatment3_8Fclip:Capture_Period13 -1.17529739 0.52934110 14.62146
 ##                                       t value    Pr(&gt;|t|)
-## (Intercept)                         2.0410125 0.053230770
-## DOY_Initiation                      0.2846433 0.778551891
-## Treatment2_4Fclip                   1.8189733 0.078096082
-## Treatment3_8Fclip                   2.0764637 0.046482967
-## Capture_Period13                   -3.9104953 0.001240312
-## Treatment2_4Fclip:Capture_Period13 -0.3498964 0.731073941
-## Treatment3_8Fclip:Capture_Period13 -2.2203024 0.042653397</code></pre>
+## (Intercept)                         2.0410125 0.053231698
+## DOY_Initiation                      0.2846433 0.778552110
+## Treatment2_4Fclip                   1.8189732 0.078096297
+## Treatment3_8Fclip                   2.0764636 0.046483286
+## Capture_Period13                   -3.9104955 0.001240538
+## Treatment2_4Fclip:Capture_Period13 -0.3498964 0.731074505
+## Treatment3_8Fclip:Capture_Period13 -2.2203025 0.042655357</code></pre>
 <pre class="r"><code>emm_options(lmer.df = &quot;kenward-roger&quot;)
 fit2b_lsmeans &lt;- emmeans(fit2b, spec=c(&#39;Treatment&#39;, &#39;Capture_Period&#39;))
 

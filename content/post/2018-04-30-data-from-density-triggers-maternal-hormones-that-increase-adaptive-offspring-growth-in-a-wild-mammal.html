@@ -95,20 +95,20 @@ coefficients(summary(fit1B))</code></pre>
 <pre class="r"><code>fit1B &lt;- lmer(Raw.Spring.Squirrel.Density ~ Previous.Year.Cones + (1|Study.Area), data=dt.fig_1B[Treatment==&#39;Control&#39;])
 coefficients(summary(fit1B))</code></pre>
 <pre><code>##                      Estimate Std. Error        df  t value     Pr(&gt;|t|)
-## (Intercept)         1.1461764  0.2297727  1.796553 4.988306 0.0469107986
-## Previous.Year.Cones 0.2387471  0.0581160 43.582879 4.108113 0.0001727167</code></pre>
+## (Intercept)         1.1461764  0.2297727  1.796554 4.988307 0.0469107905
+## Previous.Year.Cones 0.2387471  0.0581160 43.582876 4.108113 0.0001727167</code></pre>
 <pre class="r"><code>fit1B &lt;- lmer(Raw.Spring.Squirrel.Density ~ Treatment*Previous.Year.Cones + (1|Study.Area), data=dt.fig_1B)
 coefficients(summary(fit1B))</code></pre>
 <pre><code>##                                          Estimate Std. Error        df
-## (Intercept)                            1.14575993 0.22862269  1.762538
-## TreatmentFood-add                      0.82670186 0.45113416  2.954381
-## Previous.Year.Cones                    0.23895251 0.05697609 49.624755
-## TreatmentFood-add:Previous.Year.Cones -0.03112299 0.19330047 49.065590
-##                                          t value     Pr(&gt;|t|)
-## (Intercept)                            5.0115758 0.0482942695
-## TreatmentFood-add                      1.8324967 0.1656791801
-## Previous.Year.Cones                    4.1939086 0.0001128609
-## TreatmentFood-add:Previous.Year.Cones -0.1610083 0.8727479464</code></pre>
+## (Intercept)                            1.14576783 0.22855800  1.765020
+## TreatmentFood-add                      0.82669396 0.45103679  2.959274
+## Previous.Year.Cones                    0.23894862 0.05697636 49.624582
+## TreatmentFood-add:Previous.Year.Cones -0.03111909 0.19330192 49.065145
+##                                         t value     Pr(&gt;|t|)
+## (Intercept)                            5.013029 0.0481399455
+## TreatmentFood-add                      1.832875 0.1654632621
+## Previous.Year.Cones                    4.193821 0.0001128937
+## TreatmentFood-add:Previous.Year.Cones -0.160987 0.8727646877</code></pre>
 </div>
 <div id="effect-of-density-on-growth-rate-fig.-2table-s2" class="section level2">
 <h2>Effect of Density on growth rate (Fig. 2/Table S2)</h2>
@@ -119,15 +119,15 @@ dt.table_S2 &lt;- data.table(read.table(file_path, sep=&#39;,&#39;, header=TRUE)
 fit &lt;- lmer(Offspring.Growth.Rate ~ Scaled.Litter.Size*Treatment + (1|Mom.Squirrel.ID), data=dt.table_S2, na.action=&quot;na.exclude&quot;)
 coefficients(summary(fit))</code></pre>
 <pre><code>##                                       Estimate Std. Error       df
-## (Intercept)                         1.51298116 0.08831902 46.52659
+## (Intercept)                         1.51298116 0.08831902 46.52660
 ## Scaled.Litter.Size                 -0.36391553 0.07377151 48.37589
-## TreatmentFood                       0.20965110 0.13232061 46.35283
-## TreatmentRattle                    -0.04179809 0.12792471 46.28036
+## TreatmentFood                       0.20965110 0.13232061 46.35284
+## TreatmentRattle                    -0.04179809 0.12792471 46.28037
 ## Scaled.Litter.Size:TreatmentFood    0.27905264 0.10977653 49.61728
 ## Scaled.Litter.Size:TreatmentRattle  0.23963092 0.12097980 47.62852
 ##                                       t value     Pr(&gt;|t|)
-## (Intercept)                        17.1308649 0.000000e+00
-## Scaled.Litter.Size                 -4.9330091 9.972829e-06
+## (Intercept)                        17.1308647 1.005055e-21
+## Scaled.Litter.Size                 -4.9330091 9.972827e-06
 ## TreatmentFood                       1.5844176 1.198984e-01
 ## TreatmentRattle                    -0.3267398 7.453379e-01
 ## Scaled.Litter.Size:TreatmentFood    2.5420063 1.419241e-02
@@ -196,19 +196,19 @@ qplot(x=Treatment, y=log(FCM), data=fcmC_pre) + geom_boxplot() + geom_point()</c
 <p>The effects, SE, and t replicate but the my <span class="math inline">\(p\)</span>-values are twice those of the authors, who must be reporting 1-tailed (directional) tests (I think). I don’t see that they have reported that they are using 1-tailed tests. My opinion is that one-tail tests are p-hacking.</p>
 <pre class="r"><code>table_part1</code></pre>
 <pre><code>##               Estimate Std. Error         df   t value     Pr(&gt;|t|)
-## (Intercept)  6.4524936 0.28003048   7.541837 23.042112 2.891608e-08
-## Days_pc     -0.1824743 0.05137781 100.999797 -3.551618 5.834110e-04
-## Density      0.3498811 0.09603582  99.282751  3.643235 4.302768e-04</code></pre>
+## (Intercept)  6.4524941 0.28002939   7.542026 23.042204 2.890592e-08
+## Days_pc     -0.1824745 0.05137771 100.999833 -3.551627 5.833920e-04
+## Density      0.3498813 0.09603603  99.282303  3.643229 4.302866e-04</code></pre>
 <pre class="r"><code>table_part2</code></pre>
-<pre><code>##               Estimate Std. Error        df   t value     Pr(&gt;|t|)
-## (Intercept)  6.8382198 0.19668961   3.99408 34.766553 4.144391e-06
-## Days_pc     -0.1853858 0.05039281 109.58188 -3.678814 3.649856e-04
-## TreatmentY   0.5245187 0.13719083  88.31807  3.823278 2.448438e-04</code></pre>
+<pre><code>##               Estimate Std. Error         df   t value     Pr(&gt;|t|)
+## (Intercept)  6.8382198 0.19668958   3.994088 34.766558 4.144298e-06
+## Days_pc     -0.1853858 0.05039281 109.581887 -3.678814 3.649856e-04
+## TreatmentY   0.5245187 0.13719083  88.318075  3.823278 2.448437e-04</code></pre>
 <pre class="r"><code>table_part3</code></pre>
-<pre><code>##                   Estimate Std. Error       df   t value    Pr(&gt;|t|)
-## (Intercept)      6.9032211 0.13132470 25.83826 52.566054 0.000000000
-## Days_pc         -0.2569544 0.09055173 42.04317 -2.837653 0.006966651
-## TreatmentRattle  0.4148583 0.18485323 28.14263  2.244258 0.032861251</code></pre>
+<pre><code>##                   Estimate Std. Error       df   t value     Pr(&gt;|t|)
+## (Intercept)      6.9032211 0.13132469 25.83827 52.566055 8.441762e-28
+## Days_pc         -0.2569544 0.09055173 42.04317 -2.837653 6.966651e-03
+## TreatmentRattle  0.4148583 0.18485323 28.14264  2.244258 3.286125e-02</code></pre>
 <p><img src="../../images/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/tableS4.png" /><!-- --></p>
 </div>
 <div id="effect-of-fcm-on-offspring-growth-rate-table-s5" class="section level2">
@@ -220,19 +220,19 @@ dt.table_S5 &lt;- data.table(read.table(file_path, sep=&#39;,&#39;, header=TRUE)
 fit &lt;- lmer(Offspring.Growth.Rate ~ Previous.Year.Cones + Current.Year.Cones + scaled.parturition.date + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action=&quot;na.exclude&quot;)
 coefficients(summary(fit)) # what is &quot;corrected about FCM?&quot;</code></pre>
 <pre><code>##                            Estimate  Std. Error       df    t value
-## (Intercept)              1.77491252 0.053608563 74.94678  33.108750
-## Previous.Year.Cones     -0.01054262 0.006939105 29.38092  -1.519306
-## Current.Year.Cones      -0.13259087 0.005189815 28.81226 -25.548283
-## scaled.parturition.date -0.22654127 0.010555374 28.99473 -21.462174
-## scaled.litter.size      -0.35744641 0.010167806 29.28986 -35.154723
-## Corrected.FCM.ng.g.dry   0.01187675 0.006134902 28.28645   1.935931
-##                           Pr(&gt;|t|)
-## (Intercept)             0.00000000
-## Previous.Year.Cones     0.13937447
-## Current.Year.Cones      0.00000000
-## scaled.parturition.date 0.00000000
-## scaled.litter.size      0.00000000
-## Corrected.FCM.ng.g.dry  0.06292754</code></pre>
+## (Intercept)              1.77491252 0.053608564 74.92607  33.108750
+## Previous.Year.Cones     -0.01054262 0.006939105 29.35603  -1.519306
+## Current.Year.Cones      -0.13259087 0.005189815 28.78765 -25.548284
+## scaled.parturition.date -0.22654127 0.010555374 28.97003 -21.462175
+## scaled.litter.size      -0.35744641 0.010167806 29.26501 -35.154724
+## Corrected.FCM.ng.g.dry   0.01187675 0.006134902 28.26211   1.935931
+##                             Pr(&gt;|t|)
+## (Intercept)             1.768197e-46
+## Previous.Year.Cones     1.393835e-01
+## Current.Year.Cones      2.491383e-21
+## scaled.parturition.date 2.475196e-19
+## scaled.litter.size      1.714778e-25
+## Corrected.FCM.ng.g.dry  6.293626e-02</code></pre>
 <p><img src="../../images/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal/TableS5.png" /><!-- --></p>
 </div>
 <div id="effect-of-experiment-cortisol-on-growth-rate-table-s6" class="section level2">
@@ -248,9 +248,9 @@ dt.table_S6 &lt;- dt.table_S6[inc, ]
 fit &lt;- lmer(Offspring.Growth.Rate ~ Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action=&quot;na.exclude&quot;)
 coefficients(summary(fit)) # what is &quot;corrected about FCM?&quot;</code></pre>
 <pre><code>##                      Estimate Std. Error       df   t value     Pr(&gt;|t|)
-## (Intercept)         1.5268119  0.1207671 4.835748 12.642612 6.877296e-05
-## Scaled.Litter.Size -0.2887911  0.1722111 5.056877 -1.676960 1.537366e-01
-## TreatmentFed GCs    0.8623885  0.1730368 5.093243  4.983845 3.954676e-03</code></pre>
+## (Intercept)         1.5268119  0.1207671 4.835752 12.642611 6.877259e-05
+## Scaled.Litter.Size -0.2887911  0.1722111 5.056881 -1.676960 1.537366e-01
+## TreatmentFed GCs    0.8623885  0.1730368 5.093247  4.983845 3.954668e-03</code></pre>
 </div>
 </div>
 <div id="red-flags" class="section level1">
@@ -263,21 +263,21 @@ coefficients(summary(fit)) # what is &quot;corrected about FCM?&quot;</code></pr
 <pre class="r"><code>refit &lt;- lmer(Offspring.Growth.Rate ~ Offspring.Weight.1 + Scaled.Litter.Size*Treatment + (1|Mom.Squirrel.ID), data=dt.table_S2, na.action=&quot;na.exclude&quot;)
 coefficients(summary(refit))</code></pre>
 <pre><code>##                                        Estimate Std. Error       df
-## (Intercept)                         1.471438633 0.12787420 56.39655
-## Offspring.Weight.1                  0.002771434 0.00606961 71.94834
-## Scaled.Litter.Size                 -0.358120930 0.07606083 46.60430
-## TreatmentFood                       0.198316040 0.13666141 44.82602
-## TreatmentRattle                    -0.041872853 0.12996149 44.10200
-## Scaled.Litter.Size:TreatmentFood    0.289923700 0.11391142 48.14319
-## Scaled.Litter.Size:TreatmentRattle  0.235421757 0.12324987 45.50565
+## (Intercept)                         1.471438629 0.12787420 56.39640
+## Offspring.Weight.1                  0.002771434 0.00606961 71.94817
+## Scaled.Litter.Size                 -0.358120930 0.07606083 46.60418
+## TreatmentFood                       0.198316039 0.13666141 44.82589
+## TreatmentRattle                    -0.041872853 0.12996149 44.10187
+## Scaled.Litter.Size:TreatmentFood    0.289923702 0.11391142 48.14306
+## Scaled.Litter.Size:TreatmentRattle  0.235421757 0.12324987 45.50553
 ##                                       t value     Pr(&gt;|t|)
-## (Intercept)                        11.5069233 2.220446e-16
+## (Intercept)                        11.5069231 1.999550e-16
 ## Offspring.Weight.1                  0.4566082 6.493282e-01
-## Scaled.Litter.Size                 -4.7083488 2.271085e-05
+## Scaled.Litter.Size                 -4.7083487 2.271096e-05
 ## TreatmentFood                       1.4511488 1.537012e-01
 ## TreatmentRattle                    -0.3221943 7.488279e-01
-## Scaled.Litter.Size:TreatmentFood    2.5451680 1.418099e-02
-## Scaled.Litter.Size:TreatmentRattle  1.9101177 6.243247e-02</code></pre>
+## Scaled.Litter.Size:TreatmentFood    2.5451680 1.418100e-02
+## Scaled.Litter.Size:TreatmentRattle  1.9101176 6.243249e-02</code></pre>
 </div>
 <div id="figure-2-doesnt-make-sense" class="section level3">
 <h3>Figure 2 doesn’t make sense</h3>
@@ -337,44 +337,50 @@ modeled_GR # compare to plot</code></pre>
 <pre class="r"><code># part 1
 coefficients(summary(lmer(log(FCM) ~ Days_pc + Density + (1|Year) + (1|ID), data=fcmA)))</code></pre>
 <pre><code>##               Estimate Std. Error         df   t value     Pr(&gt;|t|)
-## (Intercept)  6.4524936 0.28003048   7.541837 23.042112 2.891608e-08
-## Days_pc     -0.1824743 0.05137781 100.999797 -3.551618 5.834110e-04
-## Density      0.3498811 0.09603582  99.282751  3.643235 4.302768e-04</code></pre>
+## (Intercept)  6.4524941 0.28002939   7.542026 23.042204 2.890592e-08
+## Days_pc     -0.1824745 0.05137771 100.999833 -3.551627 5.833920e-04
+## Density      0.3498813 0.09603603  99.282303  3.643229 4.302866e-04</code></pre>
 <pre class="r"><code>coefficients(summary(lmer(log(FCM) ~ Days_pc*Density + (1|Year) + (1|ID), data=fcmA)))</code></pre>
 <pre><code>##                   Estimate Std. Error         df   t value     Pr(&gt;|t|)
-## (Intercept)      6.4691926 0.28212829   7.430514 22.929968 3.623925e-08
-## Days_pc         -0.3660636 0.12851697 101.140322 -2.848368 5.323965e-03
-## Density          0.3387496 0.09568353  99.861116  3.540312 6.087484e-04
-## Days_pc:Density  0.1143800 0.07340514 106.782165  1.558201 1.221445e-01</code></pre>
+## (Intercept)      6.4691926 0.28212838   7.430512 22.929960 3.623945e-08
+## Days_pc         -0.3660636 0.12851697 101.140313 -2.848368 5.323964e-03
+## Density          0.3387496 0.09568353  99.861099  3.540312 6.087485e-04
+## Days_pc:Density  0.1143800 0.07340514 106.782157  1.558201 1.221445e-01</code></pre>
 <pre class="r"><code>coefficients(summary(lmer(log(FCM) ~ Days_pc + I(Days_pc^2) + Density + (1|Year) + (1|ID), data=fcmA)))</code></pre>
 <pre><code>##                Estimate Std. Error         df   t value     Pr(&gt;|t|)
-## (Intercept)   6.5806195 0.29691546   7.622587 22.163277 3.377392e-08
-## Days_pc      -0.1631244 0.05182675 101.913786 -3.147494 2.159939e-03
-## I(Days_pc^2) -0.1222859 0.05780903 103.176319 -2.115343 3.680824e-02
-## Density       0.3410313 0.09440687  99.669743  3.612357 4.773567e-04</code></pre>
+## (Intercept)   6.5806186 0.29692007   7.621942 22.162929 3.381406e-08
+## Days_pc      -0.1631244 0.05182673 101.913805 -3.147495 2.159932e-03
+## I(Days_pc^2) -0.1222862 0.05780901 103.176346 -2.115349 3.680775e-02
+## Density       0.3410315 0.09440683  99.669783  3.612360 4.773518e-04</code></pre>
 <pre class="r"><code># part 2
 coefficients(summary(lmer(log(FCM) ~ Days_pc + Treatment + (1|Year) + (1|ID), data=fcmA)))</code></pre>
-<pre><code>##               Estimate Std. Error        df   t value     Pr(&gt;|t|)
-## (Intercept)  6.8382198 0.19668961   3.99408 34.766553 4.144391e-06
-## Days_pc     -0.1853858 0.05039281 109.58188 -3.678814 3.649856e-04
-## TreatmentY   0.5245187 0.13719083  88.31807  3.823278 2.448438e-04</code></pre>
+<pre><code>##               Estimate Std. Error         df   t value     Pr(&gt;|t|)
+## (Intercept)  6.8382198 0.19668958   3.994088 34.766558 4.144298e-06
+## Days_pc     -0.1853858 0.05039281 109.581887 -3.678814 3.649856e-04
+## TreatmentY   0.5245187 0.13719083  88.318075  3.823278 2.448437e-04</code></pre>
 <pre class="r"><code>coefficients(summary(lmer(log(FCM) ~ Days_pc*Treatment + (1|Year) + (1|ID), data=fcmA)))</code></pre>
-<pre><code>##                       Estimate Std. Error         df    t value
-## (Intercept)         6.83811023 0.19863638   3.987249 34.4252662
-## Days_pc            -0.20062345 0.06245086  95.960287 -3.2125009
-## TreatmentY          0.52242493 0.13727552  88.087439  3.8056672
-## Days_pc:TreatmentY  0.04539172 0.10849683 125.410884  0.4183691
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl =
+## control$checkConv, : Model failed to converge with max|grad| = 0.00243083
+## (tol = 0.002, component 1)</code></pre>
+<pre><code>##                       Estimate Std. Error         df   t value
+## (Intercept)         6.83813030 0.19851803   3.993849 34.445891
+## Days_pc            -0.20061691 0.06245203  95.958768 -3.212336
+## TreatmentY          0.52245915 0.13727619  88.085352  3.805898
+## Days_pc:TreatmentY  0.04538141 0.10849865 125.409245  0.418267
 ##                        Pr(&gt;|t|)
-## (Intercept)        4.383510e-06
-## Days_pc            1.791723e-03
-## TreatmentY         2.606627e-04
-## Days_pc:TreatmentY 6.763928e-01</code></pre>
+## (Intercept)        4.302648e-06
+## Days_pc            1.792659e-03
+## TreatmentY         2.604578e-04
+## Days_pc:TreatmentY 6.764673e-01</code></pre>
 <pre class="r"><code>coefficients(summary(lmer(log(FCM) ~ Days_pc + I(Days_pc^2) + Treatment + (1|Year) + (1|ID), data=fcmA)))</code></pre>
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl =
+## control$checkConv, : Model failed to converge with max|grad| = 0.00278353
+## (tol = 0.002, component 1)</code></pre>
 <pre><code>##                Estimate Std. Error        df   t value     Pr(&gt;|t|)
-## (Intercept)   6.9486234 0.21740756   4.53972 31.961278 1.609836e-06
-## Days_pc      -0.1673698 0.05102679 110.07502 -3.280038 1.390277e-03
-## I(Days_pc^2) -0.1111788 0.05669271 113.46864 -1.961078 5.232004e-02
-## TreatmentY    0.5000358 0.13497025  88.12086  3.704786 3.686636e-04</code></pre>
+## (Intercept)   6.9486337 0.21740513   4.54056 31.961682 1.606622e-06
+## Days_pc      -0.1673617 0.05103055 110.07199 -3.279638 1.392082e-03
+## I(Days_pc^2) -0.1111941 0.05669668 113.46687 -1.961211 5.230438e-02
+## TreatmentY    0.5000180 0.13495708  88.13342  3.705015 3.683492e-04</code></pre>
 </div>
 <div id="confounding-density-and-treatment-in-fig-3abtable-s4" class="section level3">
 <h3>Confounding Density and Treatment in Fig 3A,B/Table S4</h3>
@@ -398,10 +404,10 @@ fcmA[, FCM_p1_residuals:=residuals(fit_A)]
 tableS4_part1 &lt;- coefficients(summary(fit2))
 tableS4_part1</code></pre>
 <pre><code>##               Estimate Std. Error         df   t value     Pr(&gt;|t|)
-## (Intercept)  6.5597014 0.26168375   8.800287 25.067286 1.724396e-09
-## Days_pc     -0.1805912 0.05107655 102.012602 -3.535697 6.132199e-04
-## Density      0.2110840 0.11846785 113.302492  1.781783 7.746363e-02
-## TreatmentY   0.3489617 0.17858010  96.717436  1.954091 5.357887e-02</code></pre>
+## (Intercept)  6.5597001 0.26168633   8.799791 25.067034 1.726002e-09
+## Days_pc     -0.1805913 0.05107651 102.012639 -3.535701 6.132112e-04
+## Density      0.2110846 0.11846792 113.302367  1.781787 7.746287e-02
+## TreatmentY   0.3489604 0.17858017  96.717375  1.954082 5.357986e-02</code></pre>
 <p><strong>Conclusion</strong> from the red-flag analysis.</p>
 <p><span class="math inline">\(Density\)</span> has effect of .21 log(fcm)/squirrel-per-ha, which is 40% smaller effect than in model confounded by Treatment. Can this effect account for growth rate variation? <span class="math inline">\(Treatment\)</span> has a 50% bigger effect than <span class="math inline">\(Density\)</span> but this includes aspects of <span class="math inline">\(Treatment\)</span> that are <em>independent</em> of <span class="math inline">\(Density\)</span>. The p-values for both are not strong evidence against a trivially small effect. This should be rigorously probed in follow-up experiments.</p>
 </div>
@@ -432,18 +438,18 @@ fcmC_post[ID==&#39;F3007&#39;]</code></pre>
 ## 5:    Rattle  1.4067452 F3007          F3008 594.1501</code></pre>
 <pre class="r"><code># original coefficient table that replicates
 coefficients(summary(lmer(log(FCM) ~ Days_pc + Treatment + (1|ID), data=fcmC_post)))</code></pre>
-<pre><code>##                   Estimate Std. Error       df   t value    Pr(&gt;|t|)
-## (Intercept)      6.9032211 0.13132470 25.83826 52.566054 0.000000000
-## Days_pc         -0.2569544 0.09055173 42.04317 -2.837653 0.006966651
-## TreatmentRattle  0.4148583 0.18485323 28.14263  2.244258 0.032861251</code></pre>
+<pre><code>##                   Estimate Std. Error       df   t value     Pr(&gt;|t|)
+## (Intercept)      6.9032211 0.13132469 25.83827 52.566055 8.441762e-28
+## Days_pc         -0.2569544 0.09055173 42.04317 -2.837653 6.966651e-03
+## TreatmentRattle  0.4148583 0.18485323 28.14264  2.244258 3.286125e-02</code></pre>
 <pre class="r"><code># recoded coefficient table with smaller effect
 fcmC_post[, Treatment_F3007:=Treatment]
 fcmC_post[ID==&#39;F3007&#39;, Treatment_F3007:=&#39;Rattle&#39;]
 coefficients(summary(lmer(log(FCM) ~ Days_pc + Treatment_F3007 + (1|ID), data=fcmC_post)))</code></pre>
-<pre><code>##                        Estimate Std. Error       df   t value   Pr(&gt;|t|)
-## (Intercept)            6.948365 0.14200319 24.89544 48.931046 0.00000000
-## Days_pc               -0.248192 0.09286464 41.16291 -2.672621 0.01073778
-## Treatment_F3007Rattle  0.301708 0.19236365 26.49397  1.568425 0.12864943</code></pre>
+<pre><code>##                        Estimate Std. Error       df   t value     Pr(&gt;|t|)
+## (Intercept)            6.948365 0.14200319 24.89544 48.931047 2.892276e-26
+## Days_pc               -0.248192 0.09286464 41.16290 -2.672621 1.073779e-02
+## Treatment_F3007Rattle  0.301708 0.19236365 26.49396  1.568425 1.286494e-01</code></pre>
 </div>
 <div id="red-flag-the-plot-and-table-show-that-the-effect-of-playback-on-fcm-seems-to-be-a-manipulation-factor-that-is-not-specific-to-rattle" class="section level4">
 <h4>Red Flag: The plot and table show that the effect of playback on <span class="math inline">\(FCM\)</span> seems to be a manipulation factor that is not specific to Rattle</h4>
@@ -452,14 +458,15 @@ qplot(x=Treatment_chick, y=logFCM_residuals, data=fcmC_post) + geom_point()</cod
 <p><img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/TableS4C_redflag2-1.png" width="672" /></p>
 <pre class="r"><code>qplot(x=Treatment_chick, y=logFCM_residuals, data=fcmC_post) + geom_point() + geom_point(data=fcmC_post[ID==&quot;F3007&quot;], color=&#39;red&#39;)</code></pre>
 <p><img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/TableS4C_redflag2-2.png" width="672" /></p>
-<pre class="r"><code>fit3 &lt;- lmer(log(FCM) ~ Days_pc + Treatment_chick + (1|ID), data=fcmC_post)
-tableS4_part3_rf &lt;- coefficients(summary(fit3))
+<pre class="r"><code>fit3 &lt;- lmer(log(FCM) ~ Days_pc + Treatment_chick + (1|ID), data=fcmC_post)</code></pre>
+<pre><code>## boundary (singular) fit: see ?isSingular</code></pre>
+<pre class="r"><code>tableS4_part3_rf &lt;- coefficients(summary(fit3))
 tableS4_part3_rf</code></pre>
-<pre><code>##                            Estimate Std. Error df   t value    Pr(&gt;|t|)
-## (Intercept)               6.3428114 0.26941426 45 23.542969 0.000000000
-## Days_pc                  -0.2395402 0.08845359 45 -2.708088 0.009534125
-## Treatment_chickChickadee  0.8079943 0.30632885 45  2.637670 0.011421211
-## Treatment_chickRattle     0.8974583 0.29419927 45  3.050512 0.003822111</code></pre>
+<pre><code>##                            Estimate Std. Error df   t value     Pr(&gt;|t|)
+## (Intercept)               6.3428114 0.26941426 45 23.542969 6.164202e-27
+## Days_pc                  -0.2395402 0.08845359 45 -2.708088 9.534125e-03
+## Treatment_chickChickadee  0.8079943 0.30632885 45  2.637670 1.142121e-02
+## Treatment_chickRattle     0.8974583 0.29419927 45  3.050512 3.822111e-03</code></pre>
 </div>
 </div>
 <div id="justification-for-using-chickadee-playback-as-control" class="section level3">
@@ -495,7 +502,7 @@ qplot(x=Corrected.FCM.ng.g.dry, y=Offspring.Growth.Rate, data=dt.table_S5) +
 <div class="figure">
 <img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/TableS5_Explore-1.png" alt="Effect of FCM on Growth Rate" width="672" />
 <p class="caption">
-(#fig:TableS5_Explore)Effect of FCM on Growth Rate
+(#fig:TableS5_Explore1)Effect of FCM on Growth Rate
 </p>
 </div>
 <pre class="r"><code># refit without FCM to replot with FCM as only affect
@@ -506,7 +513,7 @@ qplot(x=Corrected.FCM.ng.g.dry, y=GR_residual, data=dt.table_S5) +
 <div class="figure">
 <img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/TableS5_Explore-2.png" alt="Effect of FCM on Growth Rate" width="672" />
 <p class="caption">
-(#fig:TableS5_Explore)Effect of FCM on Growth Rate
+(#fig:TableS5_Explore2)Effect of FCM on Growth Rate
 </p>
 </div>
 <pre class="r"><code># plot shows lots of noise but also interesting distribution of residuals. I would think resampling would not generate a p near 0.05. Look at CI of FCM in Table S5 - this suggests nothing is going on and p-value is biased</code></pre>
@@ -542,22 +549,22 @@ final_weight[, percent_augmented:=added_Growth/weight*100]</code></pre>
 <p>Forking paths. Why all the covariates? This would be easier with an all subsets style alorithm but I’m just exploring.</p>
 <pre class="r"><code>coefficients(summary(lmer(Offspring.Growth.Rate ~ Previous.Year.Cones + Current.Year.Cones + scaled.parturition.date + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action=&quot;na.exclude&quot;)))[&quot;Corrected.FCM.ng.g.dry&quot;,]</code></pre>
 <pre><code>##     Estimate   Std. Error           df      t value     Pr(&gt;|t|) 
-##  0.011876747  0.006134902 28.286447515  1.935931078  0.062927545</code></pre>
+##  0.011876747  0.006134902 28.262109264  1.935931152  0.062936265</code></pre>
 <pre class="r"><code>coefficients(summary(lmer(Offspring.Growth.Rate ~  scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action=&quot;na.exclude&quot;)))[&quot;Corrected.FCM.ng.g.dry&quot;,]</code></pre>
 <pre><code>##    Estimate  Std. Error          df     t value    Pr(&gt;|t|) 
-## -0.02675299  0.02668387 45.66985090 -1.00259034  0.32134129</code></pre>
+## -0.02675299  0.02668387 45.66990484 -1.00259032  0.32134129</code></pre>
 <pre class="r"><code>coefficients(summary(lmer(Offspring.Growth.Rate ~ scaled.parturition.date + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action=&quot;na.exclude&quot;)))[&quot;Corrected.FCM.ng.g.dry&quot;,]</code></pre>
 <pre><code>##    Estimate  Std. Error          df     t value    Pr(&gt;|t|) 
-## -0.02841816  0.02585080 41.77155130 -1.09931455  0.27792654</code></pre>
+## -0.02841816  0.02585080 41.77158455 -1.09931472  0.27792646</code></pre>
 <pre class="r"><code>coefficients(summary(lmer(Offspring.Growth.Rate ~ Current.Year.Cones + scaled.parturition.date + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action=&quot;na.exclude&quot;)))[&quot;Corrected.FCM.ng.g.dry&quot;,]</code></pre>
 <pre><code>##     Estimate   Std. Error           df      t value     Pr(&gt;|t|) 
-##  0.013211507  0.006175595 29.044755847  2.139309067  0.040943854</code></pre>
+##  0.013211543  0.006175567 29.036284827  2.139324861  0.040945014</code></pre>
 <pre class="r"><code>coefficients(summary(lmer(Offspring.Growth.Rate ~ Current.Year.Cones + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action=&quot;na.exclude&quot;)))[&quot;Corrected.FCM.ng.g.dry&quot;,]</code></pre>
 <pre><code>##    Estimate  Std. Error          df     t value    Pr(&gt;|t|) 
-## -0.02230390  0.02139864 43.25704073 -1.04230433  0.30306109</code></pre>
+## -0.02230390  0.02139864 43.25719276 -1.04230442  0.30306103</code></pre>
 <pre class="r"><code>coefficients(summary(lmer(Offspring.Growth.Rate ~ Previous.Year.Cones + Current.Year.Cones + scaled.litter.size + Corrected.FCM.ng.g.dry + (1|Mom.Squirrel.ID), data=dt.table_S5, na.action=&quot;na.exclude&quot;)))[&quot;Corrected.FCM.ng.g.dry&quot;,]</code></pre>
 <pre><code>##    Estimate  Std. Error          df     t value    Pr(&gt;|t|) 
-## -0.02114604  0.02154577 44.09898692 -0.98144704  0.33172635</code></pre>
+## -0.02114604  0.02154577 44.09884383 -0.98144711  0.33172633</code></pre>
 <div id="summary-of-red-flags" class="section level3">
 <h3>Summary of Red flags</h3>
 <div id="small-effect-in-obersvational-design" class="section level4">
@@ -591,15 +598,15 @@ final_weight[, percent_augmented:=added_Growth/weight*100]</code></pre>
 refit &lt;- lmer(Offspring.Growth.Rate ~ Offspring.Weight.1 + Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action=&quot;na.exclude&quot;)
 coefficients(summary(refit)) # what is &quot;corrected about FCM?&quot;</code></pre>
 <pre><code>##                        Estimate Std. Error       df     t value
-## (Intercept)         1.508641951 0.23389947 3.021151  6.44995874
-## Offspring.Weight.1  0.001391683 0.01470195 4.219832  0.09465975
-## Scaled.Litter.Size -0.299844495 0.21798106 2.146713 -1.37555297
-## TreatmentFed GCs    0.866356533 0.19263682 1.817899  4.49735683
+## (Intercept)         1.508641661 0.23389957 3.021133  6.44995488
+## Offspring.Weight.1  0.001391705 0.01470196 4.219810  0.09466122
+## Scaled.Litter.Size -0.299844663 0.21798117 2.146699 -1.37555306
+## TreatmentFed GCs    0.866356584 0.19263693 1.817887  4.49735467
 ##                       Pr(&gt;|t|)
-## (Intercept)        0.007398486
-## Offspring.Weight.1 0.928911133
-## Scaled.Litter.Size 0.294889973
-## TreatmentFed GCs   0.054770087</code></pre>
+## (Intercept)        0.007398633
+## Offspring.Weight.1 0.928910052
+## Scaled.Litter.Size 0.294890657
+## TreatmentFed GCs   0.054770785</code></pre>
 <pre class="r"><code># use averaged values within litters in a linear model with no random effects
 dt &lt;- dt.table_S6[, .(Offspring.Growth.Rate=mean(Offspring.Growth.Rate), Offspring.Weight.1=mean(Offspring.Weight.1), Scaled.Litter.Size=mean(Scaled.Litter.Size)), by=.(Treatment, Litter.ID)]
 coefficients(summary(lm(Offspring.Growth.Rate ~ Scaled.Litter.Size + Offspring.Weight.1 + Treatment, data=dt)))</code></pre>
@@ -614,20 +621,20 @@ coefficients(summary(lm(Offspring.Growth.Rate ~ Scaled.Litter.Size + Offspring.W
 <p><img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/TableS6_baseline_plot-1.png" width="672" /></p>
 <pre class="r"><code>coefficients(summary(lmer(Offspring.Weight.1 ~ Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action=&quot;na.exclude&quot;)))</code></pre>
 <pre><code>##                     Estimate Std. Error       df    t value   Pr(&gt;|t|)
-## (Intercept)        13.071800   3.337156 4.995984  3.9170477 0.01123291
-## Scaled.Litter.Size  7.271697   4.709326 5.021742  1.5441055 0.18296632
-## TreatmentFed GCs   -1.935274   4.723992 5.025942 -0.4096692 0.69892505</code></pre>
+## (Intercept)        13.071800   3.337156 4.995890  3.9170476 0.01123333
+## Scaled.Litter.Size  7.271697   4.709326 5.021647  1.5441054 0.18296741
+## TreatmentFed GCs   -1.935274   4.723992 5.025848 -0.4096691 0.69892536</code></pre>
 <pre class="r"><code>qplot(x=Treatment, y=Offspring.Weight.2, color=Litter.ID, data=dt.table_S6) +
   geom_point()</code></pre>
 <p><img src="/post/2018-04-30-data-from-density-triggers-maternal-hormones-that-increase-adaptive-offspring-growth-in-a-wild-mammal_files/figure-html/TableS6_final_plot-1.png" width="672" /></p>
 <pre class="r"><code>coefficients(summary(lmer(Offspring.Weight.2 ~ Scaled.Litter.Size + Treatment + (1|Litter.ID), data=dt.table_S6, na.action=&quot;na.exclude&quot;)))</code></pre>
 <pre><code>##                       Estimate Std. Error       df     t value
-## (Intercept)        48.56823036   3.331112 4.813254 14.58018596
-## Scaled.Litter.Size -0.06693893   4.756060 5.056322 -0.01407445
-## TreatmentFed GCs   20.86875961   4.779815 5.096354  4.36601792
+## (Intercept)        48.56823036   3.331113 4.813254 14.58018272
+## Scaled.Litter.Size -0.06693904   4.756061 5.056322 -0.01407447
+## TreatmentFed GCs   20.86875974   4.779816 5.096354  4.36601701
 ##                        Pr(&gt;|t|)
-## (Intercept)        3.624371e-05
+## (Intercept)        3.624375e-05
 ## Scaled.Litter.Size 9.893091e-01
-## TreatmentFed GCs   6.936875e-03</code></pre>
+## TreatmentFed GCs   6.936882e-03</code></pre>
 </div>
 </div>

@@ -72,7 +72,7 @@ pre_process_data <- function(dt_in, wide=FALSE){
   setnames(dt, old=colnames(dt), new=col_labels)
   
   # add Nitrogen column by guessing
-  dt[, N:=rep(rep(c("N_lim", "N_rich"), each=4), 2)]
+  dt[, N:=rep(rep(c("N_lim", "N_rich"), each=4), 4)]
   
   # cull 99.5% rows
   dt <- dt[native!=99.5]

@@ -684,7 +684,7 @@ for(stage_j in c(&quot;Seedling&quot;, &quot;Juvenile&quot;)){
 </div>
 <div id="fig-1-repro" class="section level3">
 <h3>Fig 1 – repro</h3>
-<p><img src="2019-03-06-data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations_files/figure-html/my-fig1-seedling-1.png" width="600px" /></p>
+<p><img src="/post/2019-03-06-data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations_files/figure-html/my-fig1-seedling-1.png" width="600px" /></p>
 <p><strong>While the patterns are similar, none reproduce, but this isn’t surprising given that my sample size is bigger than that in Table 1 (so the authors have excluded data, but I’m not sure which).</strong></p>
 </div>
 </div>
@@ -774,10 +774,12 @@ contrast(fit.emm, method=&quot;revpairwise&quot;)</code></pre>
 ## Results are given on the get (not the response) scale. 
 ## Confidence level used: 0.95</code></pre>
 <pre class="r"><code>    (fit.contrast &lt;- contrast(fit.emm, method=&quot;revpairwise&quot;))</code></pre>
+<pre><code>## Note: Use &#39;contrast(regrid(object), ...)&#39; to obtain contrasts of back-transformed estimates</code></pre>
 <pre><code>##  contrast estimate  SE df t.ratio p.value
 ##  T - C       -4.72 4.5 91 -1.048  0.2972 
 ## 
-## Results are averaged over the levels of: Population.cross, Experience</code></pre>
+## Results are averaged over the levels of: Population.cross, Experience 
+## Note: contrasts are still on the get scale</code></pre>
 <pre class="r"><code>    subdata_i[, .(mean=mean(get(y)), sd=sd(get(y))), by=Treatment]</code></pre>
 <pre><code>##    Treatment     mean        sd
 ## 1:         C 23.37273 29.604057
@@ -944,7 +946,7 @@ gg_2d &lt;- ggplot(rii.raw, aes(x=Experience, y=rii)) +
 </div>
 <div id="fig-2-repro" class="section level3">
 <h3>Fig 2 repro</h3>
-<p><img src="2019-03-06-data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations_files/figure-html/fig2-repro-1.png" width="400px" /></p>
+<p><img src="/post/2019-03-06-data-from-response-of-bluebunch-wheatgrass-to-invasion-differences-in-competitive-ability-among-invader-experienced-and-na%C3%AFve-populations_files/figure-html/fig2-repro-1.png" width="400px" /></p>
 <p><strong>2B and D effectively reproduce. 2D reproduces only using the populations identified in 2C, which includes some samples with n=1 and so the figure doesn’t reflect my interpretation of the author’s methods on which populations were excluded.</strong></p>
 </div>
 </div>

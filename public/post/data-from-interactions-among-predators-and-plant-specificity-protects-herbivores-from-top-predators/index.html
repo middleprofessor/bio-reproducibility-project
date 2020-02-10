@@ -234,10 +234,10 @@ my.anova.table &lt;- data.table(response=&quot;total predator&quot;, pred.anova[
 <div id="my-results" class="section level3">
 <h3>my results</h3>
 <pre class="r"><code>(pred.emm &lt;- emmeans(fit.pred, specs=&quot;Treatment&quot;, lmer.df = &quot;satterthwaite&quot;))</code></pre>
-<pre><code>##  Treatment   emmean       SE   df  lower.CL upper.CL
-##  Cage      27.85417 4.703556 4.87 15.661731 40.04660
-##  Open      14.22917 4.703556 4.87  2.036731 26.42160
-##  Shade     16.41667 5.056510 6.48  4.263921 28.56941
+<pre><code>##  Treatment emmean   SE   df lower.CL upper.CL
+##  Cage        27.9 4.70 4.87    15.66     40.0
+##  Open        14.2 4.70 4.87     2.04     26.4
+##  Shade       16.4 5.06 6.48     4.26     28.6
 ## 
 ## Results are averaged over the levels of: Slope 
 ## Degrees-of-freedom method: satterthwaite 
@@ -250,27 +250,28 @@ my.anova.table &lt;- data.table(response=&quot;total predator&quot;, pred.anova[
 <pre class="r"><code># using coefficients
 coef(summary(lmer(pred_n ~ Treatment + (1|Site), data=exp_1)))</code></pre>
 <pre><code>##                 Estimate Std. Error         df   t value     Pr(&gt;|t|)
-## (Intercept)     27.85417   5.226362   5.850404  5.329552 1.925249e-03
-## TreatmentOpen  -13.62500   2.624825 112.000000 -5.190823 9.440487e-07
-## TreatmentShade -11.43750   3.214740 112.000000 -3.557830 5.495296e-04</code></pre>
+## (Intercept)     27.85417   5.226362   5.850401  5.329551 1.925254e-03
+## TreatmentOpen  -13.62500   2.624825 112.000001 -5.190823 9.440485e-07
+## TreatmentShade -11.43750   3.214740 112.000001 -3.557830 5.495295e-04</code></pre>
 <p>The reported standard errors of the mean for “open” and “shade” are the the SE of the <em>differences between means</em> of each from the exclosure (these are standard errors of differences).</p>
 <p>Checking the authors supplied code, they did fit the model without Slope as a fixed effect so I’ve refit here with the correct standard errors of the means for “Open” and “Shade”.</p>
 <pre class="r"><code>fit.pred &lt;- lmer(pred_n ~ Treatment + (1|Site), data=exp_1)
 (pred.emm &lt;- emmeans(fit.pred, specs=&quot;Treatment&quot;, lmer.df = &quot;satterthwaite&quot;))</code></pre>
-<pre><code>##  Treatment   emmean       SE   df  lower.CL upper.CL
-##  Cage      27.85417 5.226362 5.85 14.986034 40.72230
-##  Open      14.22917 5.226362 5.85  1.361034 27.09730
-##  Shade     16.41667 5.546144 7.41  3.446328 29.38701
+<pre><code>##  Treatment emmean   SE   df lower.CL upper.CL
+##  Cage        27.9 5.23 5.85    14.99     40.7
+##  Open        14.2 5.23 5.85     1.36     27.1
+##  Shade       16.4 5.55 7.41     3.45     29.4
 ## 
 ## Degrees-of-freedom method: satterthwaite 
 ## Confidence level used: 0.95</code></pre>
 <p>and the table of contrasts is, which contrasts are used to generate the asterisks for Fig 1.</p>
 <pre class="r"><code>(pred.contr &lt;- contrast(pred.emm, method=&quot;revpairwise&quot;))</code></pre>
-<pre><code>##  contrast     estimate       SE  df t.ratio p.value
-##  Open - Cage  -13.6250 2.624825 112  -5.191  &lt;.0001
-##  Shade - Cage -11.4375 3.214740 112  -3.558  0.0016
-##  Shade - Open   2.1875 3.214740 112   0.680  0.7753
+<pre><code>##  contrast     estimate   SE  df t.ratio p.value
+##  Open - Cage    -13.62 2.62 112 -5.191  &lt;.0001 
+##  Shade - Cage   -11.44 3.21 112 -3.558  0.0016 
+##  Shade - Open     2.19 3.21 112  0.680  0.7753 
 ## 
+## Degrees-of-freedom method: satterthwaite 
 ## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
 </div>
 </div>
@@ -283,10 +284,10 @@ my.anova.table &lt;- rbind(my.anova.table,
 <div id="my-results-1" class="section level3">
 <h3>my results</h3>
 <pre class="r"><code>(herb.emm &lt;- emmeans(fit, specs=&quot;Treatment&quot;, lmer.df = &quot;satterthwaite&quot;))</code></pre>
-<pre><code>##  Treatment   emmean       SE   df lower.CL upper.CL
-##  Cage      89.04167 20.52954 5.18 36.81285 141.2705
-##  Open      84.85417 20.52954 5.18 32.62535 137.0830
-##  Shade     85.62500 22.51193 7.46 33.04728 138.2027
+<pre><code>##  Treatment emmean   SE   df lower.CL upper.CL
+##  Cage        89.0 20.5 5.18     36.8      141
+##  Open        84.9 20.5 5.18     32.6      137
+##  Shade       85.6 22.5 7.46     33.0      138
 ## 
 ## Results are averaged over the levels of: Slope 
 ## Degrees-of-freedom method: satterthwaite 
@@ -297,27 +298,28 @@ my.anova.table &lt;- rbind(my.anova.table,
 <p>The authors report: “exclosure: 89 ± 19.1, open: 84.9 ± 13.1, shade: 85.6 ± 16”</p>
 <p>Again, the means are the same but the reported standard errors differ. The differences are due to the same two errors in the authors analysis: 1) Slope not included in model per methods and 2) SEDs of Open and Shade used instead of SEMs. Compare:</p>
 <pre class="r"><code>coef(summary(lmer(herb_n ~ Treatment + (1|Site), data=exp_1)))</code></pre>
-<pre><code>##                 Estimate Std. Error        df    t value    Pr(&gt;|t|)
-## (Intercept)    89.041667   19.08440   6.76119  4.6656793 0.002520101
-## TreatmentOpen  -4.187500   13.06329 112.00000 -0.3205548 0.749145118
-## TreatmentShade -3.416667   15.99920 112.00000 -0.2135524 0.831284396</code></pre>
+<pre><code>##                 Estimate Std. Error         df    t value    Pr(&gt;|t|)
+## (Intercept)    89.041667   19.08440   6.761184  4.6656783 0.002520109
+## TreatmentOpen  -4.187500   13.06329 112.000001 -0.3205548 0.749145115
+## TreatmentShade -3.416667   15.99920 112.000001 -0.2135524 0.831284395</code></pre>
 <p>Here is the table of corrected standard error of means for the model fit without Slope.</p>
 <pre class="r"><code>fit &lt;- lmer(herb_n ~ Treatment + (1|Site), data=exp_1)
 (herb.emm &lt;- emmeans(fit, specs=&quot;Treatment&quot;, lmer.df = &quot;satterthwaite&quot;))</code></pre>
-<pre><code>##  Treatment   emmean       SE    df lower.CL upper.CL
-##  Cage      89.04167 19.08440  6.76 43.58910 134.4942
-##  Open      84.85417 19.08440  6.76 39.40160 130.3067
-##  Shade     85.62500 21.20233 10.23 38.52417 132.7258
+<pre><code>##  Treatment emmean   SE    df lower.CL upper.CL
+##  Cage        89.0 19.1  6.76     43.6      134
+##  Open        84.9 19.1  6.76     39.4      130
+##  Shade       85.6 21.2 10.23     38.5      133
 ## 
 ## Degrees-of-freedom method: satterthwaite 
 ## Confidence level used: 0.95</code></pre>
 <p>And the table of contrasts, which is used to get the asterisks for Figure 1</p>
 <pre class="r"><code>(herb.contr &lt;- contrast(herb.emm, method=&quot;revpairwise&quot;))</code></pre>
-<pre><code>##  contrast       estimate       SE  df t.ratio p.value
-##  Open - Cage  -4.1875000 13.06329 112  -0.321  0.9450
-##  Shade - Cage -3.4166667 15.99920 112  -0.214  0.9752
-##  Shade - Open  0.7708333 15.99920 112   0.048  0.9987
+<pre><code>##  contrast     estimate   SE  df t.ratio p.value
+##  Open - Cage    -4.188 13.1 112 -0.321  0.9450 
+##  Shade - Cage   -3.417 16.0 112 -0.214  0.9752 
+##  Shade - Open    0.771 16.0 112  0.048  0.9987 
 ## 
+## Degrees-of-freedom method: satterthwaite 
 ## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
 </div>
 </div>
@@ -396,109 +398,109 @@ exp_1 &lt;- merge(exp_1, abundance[, .SD, .SDcols=y_cols], by=&quot;id&quot;)</c
 <h3>spiders</h3>
 <pre class="r"><code>fit &lt;- lmer(spider_n ~ Treatment + (1|Site), data=exp_1)
 emmeans(fit, specs=&quot;Treatment&quot;)</code></pre>
-<pre><code>##  Treatment   emmean       SE   df   lower.CL upper.CL
-##  Cage      22.89583 4.046980 6.18 13.0633494 32.72832
-##  Open       9.37500 4.046980 6.18 -0.4574840 19.20748
-##  Shade     10.41667 4.374035 8.41  0.4144201 20.41891
+<pre><code>##  Treatment emmean   SE   df lower.CL upper.CL
+##  Cage       22.90 4.05 6.18   13.063     32.7
+##  Open        9.38 4.05 6.18   -0.457     19.2
+##  Shade      10.42 4.37 8.41    0.414     20.4
 ## 
 ## Degrees-of-freedom method: kenward-roger 
 ## Confidence level used: 0.95</code></pre>
 <pre class="r"><code># compare SEMs from coef table
 coef(summary(fit))</code></pre>
 <pre><code>##                 Estimate Std. Error         df   t value     Pr(&gt;|t|)
-## (Intercept)     22.89583   4.046980   6.181674  5.657510 1.183271e-03
-## TreatmentOpen  -13.52083   2.346970 112.000000 -5.760975 7.460152e-08
-## TreatmentShade -12.47917   2.874439 112.000000 -4.341427 3.119473e-05</code></pre>
+## (Intercept)     22.89583   4.046983   6.181656  5.657506 1.183288e-03
+## TreatmentOpen  -13.52083   2.346970 112.000005 -5.760975 7.460144e-08
+## TreatmentShade -12.47917   2.874439 112.000005 -4.341427 3.119471e-05</code></pre>
 </div>
 <div id="predatory-insects" class="section level3">
 <h3>predatory insects</h3>
 <pre class="r"><code>fit &lt;- lmer(pred_insect_n ~ Treatment + (1|Site), data=exp_1)
 emmeans(fit, specs=&quot;Treatment&quot;)</code></pre>
-<pre><code>##  Treatment   emmean       SE   df lower.CL upper.CL
-##  Cage      4.395833 1.351147 5.99 1.088019 7.703647
-##  Open      4.541667 1.351147 5.99 1.233853 7.849481
-##  Shade     5.458333 1.445115 7.82 2.112190 8.804477
+<pre><code>##  Treatment emmean   SE   df lower.CL upper.CL
+##  Cage        4.40 1.35 5.99     1.09     7.70
+##  Open        4.54 1.35 5.99     1.23     7.85
+##  Shade       5.46 1.45 7.82     2.11     8.80
 ## 
 ## Degrees-of-freedom method: kenward-roger 
 ## Confidence level used: 0.95</code></pre>
 <pre class="r"><code># compare SEMs from coef table
 coef(summary(fit))</code></pre>
 <pre><code>##                 Estimate Std. Error         df   t value   Pr(&gt;|t|)
-## (Intercept)    4.3958333  1.3511474   5.987487 3.2534077 0.01744375
-## TreatmentOpen  0.1458333  0.7249249 112.000000 0.2011702 0.84093034
-## TreatmentShade 1.0625000  0.8878481 112.000000 1.1967137 0.23394520</code></pre>
+## (Intercept)    4.3958333  1.3511477   5.987482 3.2534069 0.01744379
+## TreatmentOpen  0.1458333  0.7249249 112.000001 0.2011703 0.84093034
+## TreatmentShade 1.0625000  0.8878481 112.000001 1.1967137 0.23394519</code></pre>
 </div>
 <div id="hemiptera" class="section level3">
 <h3>Hemiptera</h3>
 <pre class="r"><code>fit &lt;- lmer(hemiptera_n ~ Treatment + (1|Site), data=exp_1)
 emmeans(fit, specs=&quot;Treatment&quot;)</code></pre>
-<pre><code>##  Treatment   emmean       SE    df lower.CL upper.CL
-##  Cage      53.85417 14.10847  7.93 21.26668 86.44165
-##  Open      60.25000 14.10847  7.93 27.66251 92.83749
-##  Shade     61.70833 16.36146 14.07 26.63387 96.78280
+<pre><code>##  Treatment emmean   SE    df lower.CL upper.CL
+##  Cage        53.9 14.1  7.93     21.3     86.4
+##  Open        60.2 14.1  7.93     27.7     92.8
+##  Shade       61.7 16.4 14.07     26.6     96.8
 ## 
 ## Degrees-of-freedom method: kenward-roger 
 ## Confidence level used: 0.95</code></pre>
 <pre class="r"><code># compare SEMs from coef table
 coef(summary(fit))</code></pre>
 <pre><code>##                 Estimate Std. Error         df   t value    Pr(&gt;|t|)
-## (Intercept)    53.854167   14.10847   7.925528 3.8171507 0.005200435
-## TreatmentOpen   6.395833   11.71737 112.000000 0.5458418 0.586260220
-## TreatmentShade  7.854167   14.35079 112.000000 0.5472984 0.585262675</code></pre>
+## (Intercept)    53.854167   14.10847   7.925526 3.8171506 0.005200438
+## TreatmentOpen   6.395833   11.71737 112.000000 0.5458418 0.586260219
+## TreatmentShade  7.854167   14.35079 112.000000 0.5472984 0.585262674</code></pre>
 </div>
 <div id="coleoptera" class="section level3">
 <h3>Coleoptera</h3>
 <pre class="r"><code>fit &lt;- lmer(coleoptera_n ~ Treatment + (1|Site), data=exp_1)
 emmeans(fit, specs=&quot;Treatment&quot;)</code></pre>
-<pre><code>##  Treatment   emmean       SE   df lower.CL upper.CL
-##  Cage      3.687500 1.217957 6.10 0.719332 6.655668
-##  Open      4.416667 1.217957 6.10 1.448499 7.384835
-##  Shade     4.125000 1.310869 8.16 1.112660 7.137340
+<pre><code>##  Treatment emmean   SE   df lower.CL upper.CL
+##  Cage        3.69 1.22 6.10    0.719     6.66
+##  Open        4.42 1.22 6.10    1.448     7.38
+##  Shade       4.12 1.31 8.16    1.113     7.14
 ## 
 ## Degrees-of-freedom method: kenward-roger 
 ## Confidence level used: 0.95</code></pre>
 <pre class="r"><code># compare SEMs from coef table
 coef(summary(fit))</code></pre>
-<pre><code>##                 Estimate Std. Error         df   t value   Pr(&gt;|t|)
-## (Intercept)    3.6875000  1.2179572   6.102273 3.0276106 0.02268756
-## TreatmentOpen  0.7291667  0.6855051 112.000000 1.0636926 0.28975598
-## TreatmentShade 0.4375000  0.8395688 112.000000 0.5211008 0.60332536</code></pre>
+<pre><code>##                 Estimate Std. Error         df   t value  Pr(&gt;|t|)
+## (Intercept)    3.6875000  1.2179580   6.102257 3.0276085 0.0226877
+## TreatmentOpen  0.7291667  0.6855051 112.000004 1.0636926 0.2897560
+## TreatmentShade 0.4375000  0.8395688 112.000004 0.5211008 0.6033253</code></pre>
 </div>
 <div id="lepidoptera" class="section level3">
 <h3>Lepidoptera</h3>
 <pre class="r"><code>fit &lt;- lmer(lepidoptera_n ~ Treatment + (1|Site), data=exp_1)
 emmeans(fit, specs=&quot;Treatment&quot;)</code></pre>
-<pre><code>##  Treatment   emmean       SE    df lower.CL upper.CL
-##  Cage      8.645833 1.880967  7.14 4.215098 13.07657
-##  Open      5.875000 1.880967  7.14 1.444264 10.30574
-##  Shade     6.458333 2.121986 11.44 1.809611 11.10706
+<pre><code>##  Treatment emmean   SE    df lower.CL upper.CL
+##  Cage        8.65 1.88  7.14     4.22     13.1
+##  Open        5.88 1.88  7.14     1.44     10.3
+##  Shade       6.46 2.12 11.44     1.81     11.1
 ## 
 ## Degrees-of-freedom method: kenward-roger 
 ## Confidence level used: 0.95</code></pre>
 <pre class="r"><code># compare SEMs from coef table
 coef(summary(fit))</code></pre>
 <pre><code>##                 Estimate Std. Error         df   t value    Pr(&gt;|t|)
-## (Intercept)     8.645833   1.880967   7.135342  4.596482 0.002373935
+## (Intercept)     8.645833   1.880967   7.135343  4.596482 0.002373934
 ## TreatmentOpen  -2.770833   1.389090 112.000000 -1.994711 0.048503271
-## TreatmentShade -2.187500   1.701281 112.000000 -1.285796 0.201166380</code></pre>
+## TreatmentShade -2.187500   1.701281 112.000000 -1.285796 0.201166381</code></pre>
 </div>
 <div id="orthoptera" class="section level3">
 <h3>Orthoptera</h3>
 <pre class="r"><code>fit &lt;- lmer(orthoptera_n ~ Treatment + (1|Site), data=exp_1)
 emmeans(fit, specs=&quot;Treatment&quot;)</code></pre>
-<pre><code>##  Treatment   emmean        SE    df  lower.CL upper.CL
-##  Cage      1.520833 0.3180485  9.62 0.8083942 2.233273
-##  Open      1.208333 0.3180485  9.62 0.4958942 1.920773
-##  Shade     1.041667 0.3855323 19.95 0.2373205 1.846013
+<pre><code>##  Treatment emmean    SE    df lower.CL upper.CL
+##  Cage        1.52 0.318  9.62    0.808     2.23
+##  Open        1.21 0.318  9.62    0.496     1.92
+##  Shade       1.04 0.386 19.95    0.237     1.85
 ## 
 ## Degrees-of-freedom method: kenward-roger 
 ## Confidence level used: 0.95</code></pre>
 <pre class="r"><code># compare SEMs from coef table
 coef(summary(fit))</code></pre>
 <pre><code>##                  Estimate Std. Error         df   t value     Pr(&gt;|t|)
-## (Intercept)     1.5208333  0.3180485   9.622844  4.781766 0.0008282473
-## TreatmentOpen  -0.3125000  0.3081568 111.999999 -1.014094 0.3127236218
-## TreatmentShade -0.4791667  0.3774135 111.999999 -1.269607 0.2068564723</code></pre>
+## (Intercept)     1.5208333  0.3180486   9.622821  4.781763 0.0008282555
+## TreatmentOpen  -0.3125000  0.3081568 112.000004 -1.014094 0.3127236079
+## TreatmentShade -0.4791667  0.3774135 112.000004 -1.269607 0.2068564592</code></pre>
 </div>
 </div>
 <div id="fig-s6" class="section level2">

@@ -59,7 +59,7 @@ library(data.table)
 library(MuMIn)
 library(emmeans)
 library(cowplot)
-library(HarrellPlot)
+library(harrellplot)
 ```
 
 ```{r data}
@@ -164,7 +164,7 @@ table_list <- list()
 gg_list <- list()
 for(j in 1:length(ycols)){
   
-  res <- HarrellPlot(x="Tfluc", y=ycols[j], g="Tbar", data=dt, 
+  res <- harrellplot(x="Tfluc", y=ycols[j], g="Tbar", data=dt, 
                      add_interaction=TRUE, interaction.group = TRUE, 
                      contrasts.method='revpairwise')
   table_list[[j]] <- res$tables$contrasts

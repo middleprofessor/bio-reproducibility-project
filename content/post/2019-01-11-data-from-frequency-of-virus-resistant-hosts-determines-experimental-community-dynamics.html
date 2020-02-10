@@ -95,7 +95,7 @@ images_folder &lt;- &quot;../images&quot; # for working and not final html</code
   setnames(dt, old=colnames(dt), new=col_labels)
   
   # add Nitrogen column by guessing
-  dt[, N:=rep(rep(c(&quot;N_lim&quot;, &quot;N_rich&quot;), each=4), 2)]
+  dt[, N:=rep(rep(c(&quot;N_lim&quot;, &quot;N_rich&quot;), each=4), 4)]
   
   # cull 99.5% rows
   dt &lt;- dt[native!=99.5]
@@ -124,22 +124,50 @@ images_folder &lt;- &quot;../images&quot; # for working and not final html</code
 <pre class="r"><code># phage
 sheet_i &lt;- &quot;Phage&quot;
 range_i &lt;- &quot;A3:X34&quot; # ignores labels as the first two columns have none
-phage &lt;- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))
-phage_long &lt;- pre_process_data(phage)</code></pre>
+phage &lt;- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))</code></pre>
+<pre><code>## New names:
+## * `` -&gt; ...1
+## * `` -&gt; ...2
+## * `` -&gt; ...3
+## * `` -&gt; ...4
+## * `` -&gt; ...5
+## * … and 19 more problems</code></pre>
+<pre class="r"><code>phage_long &lt;- pre_process_data(phage)</code></pre>
 <pre class="r"><code>sheet_i &lt;- &quot;Rotifers&quot;
 range_i &lt;- &quot;A5:X36&quot; # skip double header and read only to week 20
-rotifers &lt;- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))
-rotifers_long &lt;- pre_process_data(rotifers)</code></pre>
+rotifers &lt;- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))</code></pre>
+<pre><code>## New names:
+## * `` -&gt; ...1
+## * `` -&gt; ...2
+## * `` -&gt; ...3
+## * `` -&gt; ...4
+## * `` -&gt; ...5
+## * … and 19 more problems</code></pre>
+<pre class="r"><code>rotifers_long &lt;- pre_process_data(rotifers)</code></pre>
 <pre class="r"><code>sheet_i &lt;- &quot;Chlorella&quot;
 range_i &lt;- &quot;A4:X35&quot; # skip double header and read only to week 20
 # add first two columns as in other three
-chlorella &lt;- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))
-chlorella_long &lt;- pre_process_data(chlorella)</code></pre>
+chlorella &lt;- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))</code></pre>
+<pre><code>## New names:
+## * `` -&gt; ...1
+## * `` -&gt; ...2
+## * `` -&gt; ...3
+## * `` -&gt; ...4
+## * `` -&gt; ...5
+## * … and 19 more problems</code></pre>
+<pre class="r"><code>chlorella_long &lt;- pre_process_data(chlorella)</code></pre>
 <p>Limiting to first set of data and assume that row order is the same as in other sheets</p>
 <pre class="r"><code>sheet_i &lt;- &quot;Nodularia&quot;
 range_i &lt;- &quot;A5:V36&quot; # skip double header and read only to week 20
-nodularia_part &lt;- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))
-# change colnames so not duplicate
+nodularia_part &lt;- data.table(read_excel(file_path, sheet=sheet_i, range=range_i, col_names=FALSE))</code></pre>
+<pre><code>## New names:
+## * `` -&gt; ...1
+## * `` -&gt; ...2
+## * `` -&gt; ...3
+## * `` -&gt; ...4
+## * `` -&gt; ...5
+## * … and 17 more problems</code></pre>
+<pre class="r"><code># change colnames so not duplicate
 colnames(nodularia_part) &lt;- paste(&quot;X&quot;,1:22,sep=&quot;&quot;)
 nodularia &lt;- cbind(phage[, 1:2], nodularia_part)
 nodularia_long &lt;- pre_process_data(nodularia)</code></pre>
@@ -192,6 +220,7 @@ rotifers_wide &lt;- pre_process_data(rotifers, wide=TRUE)[, .SD, .SDcols=ycols]
 ## N          1 7.360e+12 7.360e+12   0.602  0.446
 ## Residuals 21 2.566e+14 1.222e+13</code></pre>
 <pre class="r"><code>anova(lmer(count ~ N + (1|id), data=phage_long[week!=0]))</code></pre>
+<pre><code>## boundary (singular) fit: see ?isSingular</code></pre>
 <pre><code>## Warning in as_lmerModLT(model, devfun): Model may not have converged with 1
 ## eigenvalue close to zero: 4.1e-11</code></pre>
 <pre><code>## Type III Analysis of Variance Table with Satterthwaite&#39;s method
@@ -303,6 +332,7 @@ setnames(table_1, old=colnames(table_1), new=c(&quot;component&quot;, &quot;DDF&
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code>anova(lmer(count ~ resistant + (1|id), phage_long[N==&quot;N_lim&quot; &amp; week!=0]))</code></pre>
+<pre><code>## boundary (singular) fit: see ?isSingular</code></pre>
 <pre><code>## Warning in as_lmerModLT(model, devfun): Model may not have converged with 1
 ## eigenvalue close to zero: 2.7e-11</code></pre>
 <pre><code>## Type III Analysis of Variance Table with Satterthwaite&#39;s method
@@ -317,6 +347,7 @@ setnames(table_1, old=colnames(table_1), new=c(&quot;component&quot;, &quot;DDF&
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code>anova(lmer(count ~ resistant + (1|id), phage_long[N==&quot;N_rich&quot; &amp; week!=0]))</code></pre>
+<pre><code>## boundary (singular) fit: see ?isSingular</code></pre>
 <pre><code>## Warning in as_lmerModLT(model, devfun): Model may not have converged with 1
 ## eigenvalue close to zero: 1.9e-11</code></pre>
 <pre><code>## Type III Analysis of Variance Table with Satterthwaite&#39;s method
